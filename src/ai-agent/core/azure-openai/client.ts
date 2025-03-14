@@ -1,5 +1,5 @@
 import { AzureOpenAIConfig, validateConfig } from '../../config/azure-openai';
-import { RateLimiter } from 'limiter';
+import { RateLimiter } from '../rate-limiter/token-bucket';
 import { generateMeetingAnalysisPrompt } from './prompts/meeting-analysis';
 
 interface OpenAIResponse {
@@ -12,22 +12,13 @@ interface OpenAIResponse {
 
 class AzureOpenAIClient {
     private static instance: AzureOpenAIClient;
-    private tokenLimiter: RateLimiter;
-    private requestLimiter: RateLimiter;
+    private rateLimiter: RateLimiter;
 
     private constructor() {
         validateConfig();
         
-        // Initialize rate limiters
-        this.tokenLimiter = new RateLimiter({
-            tokensPerInterval: AzureOpenAIConfig.tokensPerMinute,
-            interval: 'minute'
-        });
-        
-        this.requestLimiter = new RateLimiter({
-            tokensPerInterval: AzureOpenAIConfig.requestsPerMinute,
-            interval: 'minute'
-        });
+        // Initialize our custom rate limiter
+        this.rateLimiter = RateLimiter.getInstance();
     }
 
     public static getInstance(): AzureOpenAIClient {
@@ -37,11 +28,8 @@ class AzureOpenAIClient {
         return AzureOpenAIClient.instance;
     }
 
-    private async waitForCapacity(tokens: number): Promise<void> {
-        await Promise.all([
-            this.tokenLimiter.removeTokens(tokens),
-            this.requestLimiter.removeTokens(1)
-        ]);
+    private async waitForCapacity(): Promise<void> {
+        await this.rateLimiter.acquireToken();
     }
 
     private async retryWithExponentialBackoff<T>(
@@ -51,6 +39,17 @@ class AzureOpenAIClient {
         try {
             return await operation();
         } catch (error) {
+            // Check if it's a rate limit error (429)
+            if (error instanceof Error && error.message.includes('429')) {
+                console.warn(`Rate limit exceeded, retrying after backoff (attempt ${retryCount + 1})`);
+                
+                // Use a longer backoff for rate limit errors
+                const delay = AzureOpenAIConfig.retryDelay * Math.pow(2, retryCount) * 2;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                
+                return this.retryWithExponentialBackoff(operation, retryCount + 1);
+            }
+            
             if (retryCount >= AzureOpenAIConfig.maxRetries) {
                 throw error;
             }
@@ -67,8 +66,8 @@ class AzureOpenAIClient {
         maxTokens?: number;
         model?: string;
     } = {}): Promise<string> {
-        const estimatedTokens = Math.ceil(prompt.length / 4);
-        await this.waitForCapacity(estimatedTokens);
+        // Wait for rate limiter to allow the request
+        await this.waitForCapacity();
 
         return this.retryWithExponentialBackoff(async () => {
             const response = await fetch(
@@ -109,6 +108,10 @@ class AzureOpenAIClient {
             temperature: 0.3, // Lower temperature for more focused analysis
             maxTokens: 1500  // Increased for detailed analysis
         });
+    }
+    
+    public updateRateLimit(requestsPerMinute: number): void {
+        this.rateLimiter.updateRateLimit(requestsPerMinute);
     }
 }
 
