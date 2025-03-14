@@ -203,6 +203,9 @@ export default function DashboardPage() {
   const [meetingsData, setMeetingsData] = useState<MeetingsResponse | null>(null);
   const [meetingsLoading, setMeetingsLoading] = useState(false);
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+  const [apiKeyChecked, setApiKeyChecked] = useState(false);
+  const [apiKeyLoading, setApiKeyLoading] = useState(true);
+  const [manualDialogOpen, setManualDialogOpen] = useState(false);
   const [intervalsApiKey, setIntervalsApiKey] = useState<string | null>(null);
   const [openAIStatus, setOpenAIStatus] = useState<OpenAIStatus>({
     status: 'pending',
@@ -373,24 +376,66 @@ export default function DashboardPage() {
   useEffect(() => {
     const checkApiKey = async () => {
       if (session?.user?.email) {
-        const storage = new UserStorage();
-        const apiKey = storage.getUserApiKey(session.user.email);
-        setIntervalsApiKey(apiKey);
-        
-        // Always show the dialog if there's no API key
-        if (!apiKey) {
-          console.log('No API key found for user:', session.user.email);
-          setShowApiKeyDialog(true);
-        } else {
-          console.log('Found existing API key for user:', session.user.email);
+        setApiKeyLoading(true);
+        try {
+          // First check if the API key exists on the server without showing any UI
+          const response = await fetch('/api/user/data');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.hasApiKey) {
+              // If the server confirms we have an API key, set it and don't show dialog
+              console.log('Server confirmed API key exists for user:', session.user.email);
+              setShowApiKeyDialog(false);
+              
+              // If we have the actual key value, set it
+              if (data.users && data.users.length > 0 && data.users[0].intervalsApiKey) {
+                setIntervalsApiKey(data.users[0].intervalsApiKey);
+              } else {
+                // Otherwise, fetch it separately if needed for operations
+                const storage = new UserStorage();
+                await storage.loadData();
+                const apiKey = await storage.getUserApiKey(session.user.email);
+                setIntervalsApiKey(apiKey);
+              }
+            } else {
+              // Only if the server confirms we don't have a key, show the dialog
+              console.log('No API key found for user:', session.user.email);
+              setShowApiKeyDialog(true);
+            }
+          } else {
+            // If server check fails, fall back to local check
+            const storage = new UserStorage();
+            await storage.loadData();
+            const apiKey = await storage.getUserApiKey(session.user.email);
+            setIntervalsApiKey(apiKey);
+            
+            if (!apiKey) {
+              console.log('No API key found locally for user:', session.user.email);
+              setShowApiKeyDialog(true);
+            } else {
+              console.log('Found existing API key locally for user:', session.user.email);
+              setShowApiKeyDialog(false);
+            }
+          }
+        } catch (error) {
+          console.error('Error retrieving API key:', error);
+          // Only show dialog on error if we haven't found a key
+          if (!intervalsApiKey) {
+            setShowApiKeyDialog(true);
+          }
+        } finally {
+          // Mark that we've checked for the API key
+          setApiKeyChecked(true);
+          setApiKeyLoading(false);
         }
       }
     };
 
-    if (status === 'authenticated') {
+    // Only check for API key if authenticated and not already checked
+    if (status === 'authenticated' && !apiKeyChecked) {
       checkApiKey();
     }
-  }, [status, session]);
+  }, [status, session, apiKeyChecked, intervalsApiKey]);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -421,7 +466,7 @@ export default function DashboardPage() {
 
       if (session?.user?.email) {
         const storage = new UserStorage();
-        storage.setUserApiKey(session.user.email, session.user.email, apiKey);
+        await storage.setUserApiKey(session.user.email, session.user.email, apiKey);
         setIntervalsApiKey(apiKey);
         toast("✅ Your Intervals API key has been saved successfully.");
       }
@@ -946,7 +991,7 @@ export default function DashboardPage() {
 
   const handleIntervalSettings = () => {
     setDropdownOpen(false); // Close dropdown
-    setShowApiKeyDialog(true);
+    setManualDialogOpen(true); // Use the manual dialog flag
   };
 
   return (
@@ -1032,13 +1077,19 @@ export default function DashboardPage() {
         </main>
       </div>
 
-      {/* API Key Dialog */}
-      <IntervalsKeyDialog
-        open={showApiKeyDialog}
-        onSubmit={handleApiKeySubmit}
-        onClose={() => setShowApiKeyDialog(false)}
-        existingApiKey={intervalsApiKey}
-      />
+      {/* API Key Dialog - Only render it when needed */}
+      {(showApiKeyDialog || manualDialogOpen) && (
+        <IntervalsKeyDialog
+          open={(showApiKeyDialog && !apiKeyLoading) || manualDialogOpen}
+          onSubmit={handleApiKeySubmit}
+          onClose={() => {
+            setShowApiKeyDialog(false);
+            setManualDialogOpen(false);
+          }}
+          existingApiKey={intervalsApiKey}
+          isManualOpen={manualDialogOpen}
+        />
+      )}
 
       {/* Toaster */}
       <Toaster />

@@ -19,13 +19,21 @@ interface IntervalsKeyDialogProps {
   onSubmit: (apiKey: string) => Promise<void>;
   onClose: () => void;
   existingApiKey?: string | null;
+  isManualOpen?: boolean;
 }
 
-export function IntervalsKeyDialog({ open, onSubmit, onClose, existingApiKey }: IntervalsKeyDialogProps) {
+export function IntervalsKeyDialog({ 
+  open, 
+  onSubmit, 
+  onClose, 
+  existingApiKey,
+  isManualOpen = false
+}: IntervalsKeyDialogProps) {
   const [apiKey, setApiKey] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [hasAttemptedFetch, setHasAttemptedFetch] = useState(false);
   const { toast } = useToast();
 
   // Update apiKey when existingApiKey changes
@@ -34,6 +42,44 @@ export function IntervalsKeyDialog({ open, onSubmit, onClose, existingApiKey }: 
       setApiKey(existingApiKey);
     }
   }, [existingApiKey]);
+
+  // Add a function to fetch the API key from the server only when needed
+  useEffect(() => {
+    const fetchApiKey = async () => {
+      // Only fetch if the dialog is explicitly opened, we don't have a key, and haven't tried fetching yet
+      // Don't auto-close if manually opened
+      if (open && !existingApiKey && !apiKey && !hasAttemptedFetch && !isManualOpen) {
+        setHasAttemptedFetch(true);
+        try {
+          const response = await fetch('/api/user/data');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.users && data.users.length > 0 && data.users[0].intervalsApiKey) {
+              setApiKey(data.users[0].intervalsApiKey);
+              // If we found a key and dialog wasn't manually opened, close it
+              if (data.users[0].intervalsApiKey && !isManualOpen) {
+                // Use setTimeout to avoid immediate state changes
+                setTimeout(() => {
+                  onClose();
+                }, 0);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching API key:', error);
+        }
+      }
+    };
+
+    fetchApiKey();
+  }, [open, existingApiKey, apiKey, hasAttemptedFetch, onClose, isManualOpen]);
+
+  // Reset the fetch attempt state when dialog closes
+  useEffect(() => {
+    if (!open) {
+      setHasAttemptedFetch(false);
+    }
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,15 +107,15 @@ export function IntervalsKeyDialog({ open, onSubmit, onClose, existingApiKey }: 
     <Dialog 
       open={open} 
       onOpenChange={(isOpen) => {
-        // Only allow closing if there's an existing API key
-        if (existingApiKey && !isOpen) {
+        // Allow closing if manually opened or if there's an existing API key
+        if ((isManualOpen || existingApiKey) && !isOpen) {
           onClose();
         }
       }}
     >
       <DialogContent onInteractOutside={(e) => {
-        // Prevent closing on clicking outside if no existing API key
-        if (!existingApiKey) {
+        // Prevent closing on clicking outside if no existing API key and not manually opened
+        if (!existingApiKey && !isManualOpen) {
           e.preventDefault();
         }
       }}>
@@ -139,7 +185,8 @@ export function IntervalsKeyDialog({ open, onSubmit, onClose, existingApiKey }: 
           </div>
 
           <DialogFooter>
-            {existingApiKey && (
+            {/* Show Close button if manually opened or if there's an existing key */}
+            {(existingApiKey || isManualOpen) && (
               <Button
                 type="button"
                 variant="outline"
