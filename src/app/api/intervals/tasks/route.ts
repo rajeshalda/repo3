@@ -35,7 +35,7 @@ export async function GET() {
     // Initialize storage and load data
     const storage = new UserStorage();
     await storage.loadData(); // Wait for data to load
-    const apiKey = storage.getUserApiKey(session.user.email);
+    const apiKey = await storage.getUserApiKey(session.user.email);
 
     // Add API key format validation
     if (!apiKey) {
