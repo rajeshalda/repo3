@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 relative">
       <Logo size="lg" className="mb-8" />
       <Button 
         size="lg"
@@ -14,6 +14,10 @@ export default function LoginPage() {
       >
         Sign in with Microsoft
       </Button>
+      
+      <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
+        <span className="opacity-70">v2.1.0  Powered by ChatGPT-4o  © 2025 NathCorp Inc.</span>
+      </footer>
     </div>
   );
 } 

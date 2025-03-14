@@ -721,7 +721,7 @@ export default function DashboardPage() {
                       disabled={isMatching} 
                       variant="default" 
                       size="sm"
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto bg-black hover:bg-black/80 text-white"
                     >
                       {isMatching ? (
                         <>
@@ -729,7 +729,27 @@ export default function DashboardPage() {
                           Matching...
                         </>
                       ) : (
-                        'Match Tasks'
+                        <>
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            width="16" 
+                            height="16" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            className="mr-1"
+                          >
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <path d="m9 16 2 2 4-4"></path>
+                          </svg>
+                          Match Tasks
+                        </>
                       )}
                     </Button>
                   </div>
@@ -838,9 +858,44 @@ export default function DashboardPage() {
                                     )}
                                   </TableCell>
                                   <TableCell className="px-4 py-3 text-center">
-                                    <Badge variant={meeting.attendanceRecords.some(record => record.name === session?.user?.name) ? "default" : "secondary"}>
-                                      {meeting.attendanceRecords.some(record => record.name === session?.user?.name) ? 'Attended' : 'Not attended'}
-                                    </Badge>
+                                    {meeting.attendanceRecords.some(record => record.name === session?.user?.name) ? (
+                                      <Badge variant="success" className="bg-green-100 text-green-800 border border-green-200 hover:bg-green-200">
+                                        <svg 
+                                          xmlns="http://www.w3.org/2000/svg" 
+                                          width="14" 
+                                          height="14" 
+                                          viewBox="0 0 24 24" 
+                                          fill="none" 
+                                          stroke="currentColor" 
+                                          strokeWidth="2" 
+                                          strokeLinecap="round" 
+                                          strokeLinejoin="round" 
+                                          className="mr-1"
+                                        >
+                                          <path d="M20 6 9 17l-5-5"></path>
+                                        </svg>
+                                        Attended
+                                      </Badge>
+                                    ) : (
+                                      <Badge variant="secondary" className="bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200">
+                                        <svg 
+                                          xmlns="http://www.w3.org/2000/svg" 
+                                          width="14" 
+                                          height="14" 
+                                          viewBox="0 0 24 24" 
+                                          fill="none" 
+                                          stroke="currentColor" 
+                                          strokeWidth="2" 
+                                          strokeLinecap="round" 
+                                          strokeLinejoin="round" 
+                                          className="mr-1"
+                                        >
+                                          <path d="M18 6 6 18"></path>
+                                          <path d="m6 6 12 12"></path>
+                                        </svg>
+                                        Not attended
+                                      </Badge>
+                                    )}
                                   </TableCell>
                                 </TableRow>
                               );
@@ -972,7 +1027,7 @@ export default function DashboardPage() {
             {renderCurrentView()}
           </div>
           <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
-            <span className="opacity-70">Powered by ChatGPT-4o</span>
+            <span className="opacity-70">v2.1.0  Powered by ChatGPT-4o  © 2025 NathCorp Inc.</span>
           </footer>
         </main>
       </div>

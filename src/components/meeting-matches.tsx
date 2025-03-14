@@ -232,9 +232,18 @@ function MatchRow({
   const [isLoadingTasks, setIsLoadingTasks] = useState(false);
   const [availableTasks, setAvailableTasks] = useState<Task[]>([]);
   const [isTaskSelectOpen, setIsTaskSelectOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const meetingKey = generateMeetingKey(result.meeting, session?.user?.email || '');
   const selectedTask = selectedTasks.get(meetingKey) || result.matchedTask || null;
+
+  // Filter tasks based on search query
+  const filteredTasks = searchQuery.trim() === '' 
+    ? availableTasks 
+    : availableTasks.filter(task => 
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        task.project.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
   // Fetch available tasks
   const fetchTasks = async () => {
@@ -423,7 +432,13 @@ function MatchRow({
           </Button>
         )}
         
-        <Dialog open={isTaskSelectOpen} onOpenChange={setIsTaskSelectOpen}>
+        <Dialog open={isTaskSelectOpen} onOpenChange={(open) => {
+          setIsTaskSelectOpen(open);
+          if (!open) {
+            // Reset search query when dialog is closed
+            setSearchQuery('');
+          }
+        }}>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
               <DialogTitle>
@@ -442,20 +457,20 @@ function MatchRow({
                   <input
                     className="w-full border-none bg-transparent outline-none placeholder:text-muted-foreground"
                     placeholder="Search tasks..."
+                    value={searchQuery}
                     onChange={(e) => {
-                      // Implement task filtering here if needed
-                      console.log('Search:', e.target.value);
+                      setSearchQuery(e.target.value);
                     }}
                   />
                 </div>
                 <div className="max-h-[300px] overflow-y-auto">
-                  {availableTasks.length === 0 ? (
+                  {filteredTasks.length === 0 ? (
                     <div className="p-4 text-sm text-muted-foreground">
-                      No tasks found.
+                      {availableTasks.length === 0 ? 'No tasks found.' : 'No matching tasks found.'}
                     </div>
                   ) : (
                     <div className="p-1">
-                      {availableTasks.map((task) => (
+                      {filteredTasks.map((task) => (
                         <button
                           key={task.id}
                           className="w-full rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
