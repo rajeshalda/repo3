@@ -264,9 +264,31 @@ export function AIAgentView() {
     addLog('Starting meeting processing...', 'info');
     
     try {
+      // Start a polling mechanism to show progress while the batch is processing
+      const pollingInterval = setInterval(async () => {
+        try {
+          const statusResponse = await fetch('/api/batch-status');
+          if (statusResponse.ok) {
+            const statusData = await statusResponse.json();
+            if (statusData.batchId) {
+              const { completedMeetings, totalMeetings } = statusData;
+              addLog(`Processing meetings: ${completedMeetings}/${totalMeetings} completed`, 'info');
+            }
+          }
+        } catch (error) {
+          console.error('Error polling batch status:', error);
+        }
+      }, 5000);
+      
+      // Call the API to process meetings
       const response = await fetch('/api/test-time-entry');
+      
+      // Clear the polling interval once the main request completes
+      clearInterval(pollingInterval);
+      
       if (!response.ok) {
-        throw new Error('Failed to process meetings');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to process meetings');
       }
       
       const data = await response.json();
@@ -442,14 +464,11 @@ export function AIAgentView() {
       
       // Refresh posted meetings after processing
       await fetchPostedMeetings();
-    } catch (err) {
-      console.error('Error processing meetings:', err);
-      const message = err instanceof Error ? err.message : 'Failed to process meetings';
-      error(message);
-      addLog(message, 'error');
+    } catch (error) {
+      console.error('Error processing meetings:', error);
+      addLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
     } finally {
       setIsProcessing(false);
-      addLog('Processing completed', 'info');
     }
   };
 

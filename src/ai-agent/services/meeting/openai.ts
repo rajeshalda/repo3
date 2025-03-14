@@ -1,11 +1,23 @@
 import { openAIClient } from '../../core/azure-openai/client';
 import { Meeting, MeetingAnalysis, ProcessedMeeting, AttendanceRecord } from '../../../interfaces/meetings';
 import { storageManager } from '../../data/storage/manager';
+import { QueueManager } from '../queue/queue-manager';
+import { BatchProcessor } from './batch-processor';
 
 export class MeetingService {
     private static instance: MeetingService;
+    private queueManager: QueueManager;
+    private batchProcessor: BatchProcessor;
 
-    private constructor() {}
+    private constructor() {
+        this.queueManager = QueueManager.getInstance();
+        this.batchProcessor = BatchProcessor.getInstance();
+        
+        // Set the process function in the batch processor to avoid circular dependency
+        this.batchProcessor.setProcessFunction((meeting, userId) => 
+            this.analyzeMeetingInternal(meeting, userId)
+        );
+    }
 
     public static getInstance(): MeetingService {
         if (!MeetingService.instance) {
@@ -136,12 +148,42 @@ export class MeetingService {
         }
     }
 
+    /**
+     * Analyze a single meeting - this is the public API that maintains backward compatibility
+     * It now uses the queue system internally
+     */
     public async analyzeMeeting(meeting: Meeting, userId: string): Promise<ProcessedMeeting> {
         try {
             // Check if meeting was already processed
             const existingMeeting = await storageManager.getMeeting(meeting.id);
             if (existingMeeting) {
                 console.log(`Meeting ${meeting.id} already processed, returning cached result`);
+                return existingMeeting;
+            }
+
+            // Use the queue manager to handle rate limiting
+            // Pass the analyzeMeetingInternal method as a callback to avoid circular dependency
+            return await this.queueManager.queueMeetingAnalysis(
+                meeting, 
+                userId,
+                (m, uid) => this.analyzeMeetingInternal(m, uid)
+            );
+        } catch (error: unknown) {
+            console.error('Error analyzing meeting:', error);
+            throw new Error(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+
+    /**
+     * Internal method used by the queue manager to process a meeting
+     * This contains the actual processing logic
+     */
+    public async analyzeMeetingInternal(meeting: Meeting, userId: string): Promise<ProcessedMeeting> {
+        try {
+            // Check if meeting was already processed (double-check in case it was processed while in queue)
+            const existingMeeting = await storageManager.getMeeting(meeting.id);
+            if (existingMeeting) {
+                console.log(`Meeting ${meeting.id} already processed while in queue, returning cached result`);
                 return existingMeeting;
             }
 
@@ -200,9 +242,31 @@ export class MeetingService {
 
             return processedMeeting;
         } catch (error: unknown) {
-            console.error('Error analyzing meeting:', error);
+            console.error('Error analyzing meeting internally:', error);
             throw new Error(error instanceof Error ? error.message : 'An unknown error occurred');
         }
+    }
+
+    /**
+     * New method to process multiple meetings in batches
+     */
+    public async analyzeMeetingBatch(meetings: Meeting[], userId: string): Promise<string> {
+        return this.batchProcessor.processMeetingBatch(meetings, userId);
+    }
+
+    /**
+     * Get the status of a batch processing job
+     */
+    public getBatchStatus(batchId: string) {
+        return this.batchProcessor.getBatchStatus(batchId);
+    }
+
+    /**
+     * Update the rate limit settings
+     */
+    public updateRateLimit(requestsPerMinute: number): void {
+        this.queueManager.updateRateLimit(requestsPerMinute);
+        openAIClient.updateRateLimit(requestsPerMinute);
     }
 
     public async getProcessedMeeting(meetingId: string): Promise<ProcessedMeeting | null> {
