@@ -134,19 +134,53 @@ export function AIAgentView() {
     const parts = meetingKey.split('_');
     const meetingId = parts.length >= 3 ? parts[2] : meetingKey;
     
+    console.log('Extracted meeting ID:', meetingId);
+    
     // Remove from unmatched meetings
-    setUnmatchedMeetings(prev => prev.filter(m => m.id !== meetingId));
+    setUnmatchedMeetings(prev => {
+      const filtered = prev.filter(m => m.id !== meetingId);
+      console.log(`Removed meeting from unmatched meetings. Before: ${prev.length}, After: ${filtered.length}`);
+      return filtered;
+    });
     
     // Update matchResults to remove the posted meeting based on the meeting ID
-    setMatchResults(prev => ({
-      high: prev.high.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
-      medium: prev.medium.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
-      low: prev.low.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
-      unmatched: prev.unmatched.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId)
-    }));
+    setMatchResults(prev => {
+      const updated = {
+        high: prev.high.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
+        medium: prev.medium.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
+        low: prev.low.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
+        unmatched: prev.unmatched.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId)
+      };
+      
+      console.log('Updated match results after posting:', updated);
+      return updated;
+    });
     
-    // Refresh the meetings list
-    fetchPostedMeetings();
+    // Add the meeting ID to the postedMeetings list without a full refresh
+    fetch('/api/posted-meetings')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch posted meetings');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Successfully fetched posted meetings after posting');
+        setPostedMeetings(data.meetings || []);
+        
+        // Force a refresh of the match summary counts
+        setMatchSummary(prev => {
+          const unmatched = unmatchedMeetings.length - 1; // Subtract the one we just removed
+          return {
+            ...prev,
+            unmatched: unmatched >= 0 ? unmatched : 0,
+            total: prev.highConfidence + prev.mediumConfidence + prev.lowConfidence + (unmatched >= 0 ? unmatched : 0)
+          };
+        });
+      })
+      .catch(error => {
+        console.error('Error refreshing posted meetings:', error);
+      });
   };
 
   const fetchPostedMeetings = async () => {
@@ -161,6 +195,10 @@ export function AIAgentView() {
       const data = await response.json();
       console.log('Posted meetings data:', data);
       
+      // Get the list of posted meeting IDs
+      const postedIds = new Set((data.meetings || []).map((m: PostedMeeting) => m.meetingId));
+      console.log('Posted meeting IDs:', Array.from(postedIds));
+      
       setPostedMeetings(data.meetings || []);
       setDailyCounts(data.dailyCounts || []);
       
@@ -173,8 +211,12 @@ export function AIAgentView() {
           
           // Add pending review meetings to unmatched meetings
           if (reviewsData.reviews && reviewsData.reviews.length > 0) {
-            const pendingReviews = reviewsData.reviews.filter((review: any) => review.status === 'pending');
-            console.log(`Found ${pendingReviews.length} pending reviews for current user`);
+            // Filter out reviews that are already posted
+            const pendingReviews = reviewsData.reviews
+              .filter((review: any) => review.status === 'pending')
+              .filter((review: any) => !postedIds.has(review.id));
+            
+            console.log(`Found ${pendingReviews.length} pending reviews for current user (after filtering out posted meetings)`);
             
             // Convert review meetings to unmatched meetings format
             const reviewMeetings = pendingReviews.map((review: any) => ({
@@ -185,34 +227,37 @@ export function AIAgentView() {
               reason: review.reason || 'No matching task found'
             }));
             
+            // Filter out existing unmatched meetings that are now posted
+            const filteredUnmatched = unmatchedMeetings.filter(m => !postedIds.has(m.id));
+            
             // Deduplicate meetings by ID
-            const existingIds = new Set(unmatchedMeetings.map(m => m.id));
+            const existingIds = new Set(filteredUnmatched.map(m => m.id));
             const uniqueReviewMeetings = reviewMeetings.filter((m: UnmatchedMeeting) => !existingIds.has(m.id));
             
             console.log(`Adding ${uniqueReviewMeetings.length} unique pending reviews to unmatched meetings`);
             
-            // Only add unique meetings
-            if (uniqueReviewMeetings.length > 0) {
-              setUnmatchedMeetings(prev => [...prev, ...uniqueReviewMeetings]);
-              
-              // Also add to match results for display in the UI
-              const unmatchedResults = uniqueReviewMeetings.map((meeting: UnmatchedMeeting) => {
+            // Merge existing unmatched meetings with new ones instead of replacing
+            const mergedUnmatched = [...filteredUnmatched, ...uniqueReviewMeetings];
+            setUnmatchedMeetings(mergedUnmatched);
+            
+            // Also update match results for display in the UI
+            if (mergedUnmatched.length > 0) {
+              const unmatchedResults = mergedUnmatched.map((meeting: UnmatchedMeeting): MatchResult => {
                 const startTime = new Date(meeting.startTime);
                 const endTime = new Date(startTime.getTime() + (meeting.duration * 1000));
                 
                 return {
                   meeting: {
                     subject: meeting.subject,
-                    startTime: startTime.toISOString(),
+                    startTime: meeting.startTime,
                     endTime: endTime.toISOString(),
                     isTeamsMeeting: true,
                     attendanceRecords: [{
                       name: session?.user?.name || 'User',
                       email: session?.user?.email || '',
                       duration: meeting.duration,
-                      role: 'Organizer',
                       intervals: [{
-                        joinDateTime: startTime.toISOString(),
+                        joinDateTime: meeting.startTime,
                         leaveDateTime: endTime.toISOString(),
                         durationInSeconds: meeting.duration
                       }]
@@ -229,25 +274,55 @@ export function AIAgentView() {
                     contextMatch: 0,
                     timeRelevance: 0
                   },
-                  selectedTask: null
+                  selectedTask: undefined
                 };
               });
               
-              setMatchResults(prev => ({
-                ...prev,
-                unmatched: [...prev.unmatched, ...unmatchedResults]
+              // Update match results with the new unmatched meetings
+              setMatchResults(prevResults => ({
+                ...prevResults,
+                unmatched: unmatchedResults
               }));
               
-              setMatchSummary(prev => ({
-                ...prev,
-                unmatched: prev.unmatched + uniqueReviewMeetings.length,
-                total: prev.total + uniqueReviewMeetings.length
+              // Update match summary
+              setMatchSummary(prevSummary => ({
+                ...prevSummary,
+                unmatched: unmatchedResults.length,
+                total: prevSummary.highConfidence + prevSummary.mediumConfidence + prevSummary.lowConfidence + unmatchedResults.length
+              }));
+            } else {
+              // If there are no unmatched meetings, clear the unmatched list in match results
+              setMatchResults(prevResults => ({
+                ...prevResults,
+                unmatched: []
+              }));
+              
+              // Update match summary
+              setMatchSummary(prevSummary => ({
+                ...prevSummary,
+                unmatched: 0,
+                total: prevSummary.highConfidence + prevSummary.mediumConfidence + prevSummary.lowConfidence
               }));
             }
+          } else {
+            // If there are no reviews, clear the unmatched meetings
+            setUnmatchedMeetings([]);
+            setMatchResults(prevResults => ({
+              ...prevResults,
+              unmatched: []
+            }));
+            
+            // Update match summary
+            setMatchSummary(prevSummary => ({
+              ...prevSummary,
+              unmatched: 0,
+              total: prevSummary.highConfidence + prevSummary.mediumConfidence + prevSummary.lowConfidence
+            }));
           }
         }
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
+      } catch (reviewsError) {
+        console.error('Error fetching reviews:', reviewsError);
+        // Don't throw here, just log the error and continue
       }
     } catch (err) {
       console.error('Error fetching posted meetings:', err);

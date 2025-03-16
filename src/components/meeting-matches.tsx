@@ -540,14 +540,15 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
   
   const filterMeetings = (matchResults: MatchResult[]) => {
-    console.log('Posted Meeting IDs:', postedMeetingIds);
     // Convert postedMeetingIds to a Set if it isn't already one
     const postedIds = postedMeetingIds instanceof Set ? postedMeetingIds : new Set(postedMeetingIds);
+    
     return matchResults.filter((m: MatchResult) => {
       const meetingKey = generateMeetingKey(m.meeting, userId);
+      const meetingId = m.meeting.meetingInfo?.meetingId;
       
-      // Check if meeting is already posted
-      const isPosted = postedIds.has(meetingKey);
+      // Check if meeting is already posted - check both the key and the ID
+      const isPosted = postedIds.has(meetingKey) || (meetingId && postedIds.has(meetingId));
       
       // Check if meeting has valid duration from start and end times
       let hasDuration = true;
@@ -561,11 +562,14 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       // Only include meetings that are not posted and have duration
       const isIncluded = !isPosted && hasDuration;
       
+      if (isPosted) {
+        console.log('Filtering out posted meeting:', m.meeting.subject, 'Key:', meetingKey, 'ID:', meetingId);
+      }
+      
       if (!hasDuration) {
         console.log('Filtering out meeting with zero duration:', m.meeting.subject);
       }
       
-      console.log('Meeting:', m.meeting.subject, 'Key:', meetingKey, 'Is Visible:', isIncluded);
       return isIncluded;
     });
   };
@@ -599,19 +603,46 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     }
   }, [postedMeetingIds]);
 
-  // Update handleMeetingPosted to immediately remove the meeting from UI
+  // Update handleMeetingPosted to efficiently remove the meeting from UI
   const handleMeetingPosted = (meetingId: string): void => {
+    console.log('Meeting posted with ID:', meetingId);
+    
+    // Immediately remove the meeting from all categories
+    setMeetings(prev => {
+      // Create a filter function to check both key and ID
+      const filterMeeting = (m: MatchResult) => {
+        const key = generateMeetingKey(m.meeting, userId);
+        const id = m.meeting.meetingInfo?.meetingId;
+        return key !== meetingId && id !== meetingId;
+      };
+      
+      const updated = {
+        high: prev.high.filter(filterMeeting),
+        medium: prev.medium.filter(filterMeeting),
+        low: prev.low.filter(filterMeeting),
+        unmatched: prev.unmatched.filter(filterMeeting)
+      };
+      
+      console.log('Updated meetings after posting:', updated);
+      return updated;
+    });
+    
+    // Clear the selected task for this meeting
+    const updatedTasks = new Map(selectedTasks);
+    updatedTasks.delete(meetingId);
+    setSelectedTasks(updatedTasks);
+    
+    // Remove from selected meetings
+    setSelectedMeetingKeys(prev => {
+      const next = new Set(prev);
+      next.delete(meetingId);
+      return next;
+    });
+    
+    // Call the parent component's onMeetingPosted callback
     if (onMeetingPosted) {
       onMeetingPosted(meetingId);
     }
-
-    // Immediately remove the meeting from all categories
-    setMeetings(prev => ({
-      high: prev.high.filter(m => generateMeetingKey(m.meeting, userId) !== meetingId),
-      medium: prev.medium.filter(m => generateMeetingKey(m.meeting, userId) !== meetingId),
-      low: prev.low.filter(m => generateMeetingKey(m.meeting, userId) !== meetingId),
-      unmatched: prev.unmatched.filter(m => generateMeetingKey(m.meeting, userId) !== meetingId)
-    }));
   };
 
   // Add postAllMeetings function
