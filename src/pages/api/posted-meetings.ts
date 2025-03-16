@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { AIAgentPostedMeetingsStorage } from '../../ai-agent/services/storage/posted-meetings';
+import { reviewService } from '../../ai-agent/services/review/review-service';
 
 interface UnmatchedMeeting {
     id: string;
@@ -56,8 +57,20 @@ export default async function handler(
         );
         console.log('API: Sorted meetings:', sortedMeetings);
 
-        // Get unmatched meetings from the last processing attempt
-        const unmatchedMeetings: UnmatchedMeeting[] = [];
+        // Get unmatched meetings from the review service
+        console.log('API: Getting pending reviews (unmatched meetings) for user:', userId);
+        const pendingReviews = await reviewService.getPendingReviews(userId);
+        
+        // Convert pending reviews to unmatched meetings format
+        const unmatchedMeetings: UnmatchedMeeting[] = pendingReviews.map(review => ({
+            id: review.id,
+            subject: review.subject,
+            startTime: review.startTime,
+            duration: review.duration,
+            reason: review.reason
+        }));
+        
+        console.log('API: Found unmatched meetings:', unmatchedMeetings);
 
         const response = {
             success: true,
