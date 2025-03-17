@@ -8,6 +8,7 @@ interface PostedMeeting {
     timeEntry: TimeEntryResponse;
     rawResponse: any;
     postedAt: string;
+    taskName?: string;
 }
 
 interface PostedMeetingsFile {
@@ -16,7 +17,7 @@ interface PostedMeetingsFile {
 
 export class AIAgentPostedMeetingsStorage {
     private storagePath: string;
-    private data: PostedMeetingsFile = { meetings: [] };
+    public data: PostedMeetingsFile = { meetings: [] };
 
     constructor() {
         this.storagePath = path.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json', 'ai-agent-meetings.json');
@@ -36,7 +37,8 @@ export class AIAgentPostedMeetingsStorage {
                         userId: m.userId,
                         timeEntry: m.timeEntry,
                         rawResponse: m.rawResponse,
-                        postedAt: m.postedAt || new Date().toISOString()
+                        postedAt: m.postedAt || new Date().toISOString(),
+                        taskName: m.taskName // Preserve taskName if it exists
                     }))
             };
 
@@ -74,7 +76,8 @@ export class AIAgentPostedMeetingsStorage {
             userId: postedMeeting.userId,
             timeEntry: postedMeeting.timeEntry,
             rawResponse: postedMeeting.rawResponse,
-            postedAt: postedMeeting.postedAt
+            postedAt: postedMeeting.postedAt,
+            taskName: postedMeeting.taskName
         });
 
         await this.saveData();

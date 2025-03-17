@@ -6,6 +6,8 @@ interface PostedMeeting {
     subject: string;
     meetingDate: string;
     postedDate: string;
+    taskId?: string;  // Add taskId field
+    taskName?: string;  // Add taskName field
 }
 
 interface UserMeetings {
@@ -40,7 +42,14 @@ export class PostedMeetingsStorage {
         await fs.writeFile(this.storagePath, JSON.stringify(this.data, null, 2));
     }
 
-    async addPostedMeeting(email: string, meeting: { id: string; subject: string; startTime: string; threadId?: string }) {
+    async addPostedMeeting(email: string, meeting: { 
+        id: string; 
+        subject: string; 
+        startTime: string; 
+        threadId?: string;
+        taskId?: string;
+        taskName?: string;
+    }) {
         await this.loadData();
         console.log('\n=== ADDING POSTED MEETING ===');
         
@@ -62,7 +71,9 @@ export class PostedMeetingsStorage {
             normalizedId: meetingId,
             subject: meeting.subject,
             normalizedSubject,
-            startTime: meeting.startTime
+            startTime: meeting.startTime,
+            taskId: meeting.taskId,
+            taskName: meeting.taskName
         });
 
         // Initialize user data if it doesn't exist
@@ -88,7 +99,9 @@ export class PostedMeetingsStorage {
             id: meetingId,
             subject: meeting.subject,
             meetingDate: meeting.startTime,
-            postedDate: new Date().toISOString()
+            postedDate: new Date().toISOString(),
+            taskId: meeting.taskId,
+            taskName: meeting.taskName
         });
 
         // Update last posted date

@@ -753,15 +753,6 @@ export default function DashboardPage() {
                   <h2 className="text-lg sm:text-xl font-semibold">Fetched Meetings</h2>
                   <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                     <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={handleReset}
-                      className="gap-2 w-full sm:w-auto"
-                    >
-                      <Loader2 className="h-4 w-4" />
-                      Reset Posted
-                    </Button>
-                    <Button 
                       onClick={matchMeetings} 
                       disabled={isMatching} 
                       variant="default" 
