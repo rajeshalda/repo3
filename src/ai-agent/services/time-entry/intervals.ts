@@ -24,6 +24,7 @@ interface PostedMeeting {
     timeEntry: TimeEntryResponse;
     rawResponse: any;
     postedAt: string;
+    taskName?: string;
 }
 
 interface PostedMeetingsFile {
@@ -198,7 +199,7 @@ export class IntervalsTimeEntryService {
         return dateString.split('T')[0];
     }
 
-    private async savePostedMeeting(meeting: ProcessedMeeting, timeEntry: TimeEntryResponse, rawResponse: any, userId: string): Promise<void> {
+    private async savePostedMeeting(meeting: ProcessedMeeting, timeEntry: TimeEntryResponse, rawResponse: any, userId: string, taskName: string): Promise<void> {
         try {
             console.log('Saving posted meeting with time entry...');
             
@@ -211,7 +212,8 @@ export class IntervalsTimeEntryService {
                 userId: userId,
                 timeEntry: timeEntry,
                 rawResponse: rawResponse,
-                postedAt: new Date().toISOString()
+                postedAt: new Date().toISOString(),
+                taskName: taskName
             };
 
             await storage.addPostedMeeting(userId, postedMeeting);
@@ -327,7 +329,7 @@ export class IntervalsTimeEntryService {
             const timeEntryResponse = rawResponse.time as TimeEntryResponse;
 
             // Save to posted-meetings.json
-            await this.savePostedMeeting(meeting, timeEntryResponse, rawResponse, userId);
+            await this.savePostedMeeting(meeting, timeEntryResponse, rawResponse, userId, task.taskTitle);
 
             return timeEntryResponse;
         } catch (error) {

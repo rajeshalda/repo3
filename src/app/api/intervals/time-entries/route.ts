@@ -123,12 +123,20 @@ export async function POST(request: Request) {
             // Store in both storages regardless of manual or automated post
             const postedMeetingsStorage = new PostedMeetingsStorage();
             await postedMeetingsStorage.loadData();
+            
+            // Get task details to store the task name
+            const tasks = await intervalsApi.getTasks();
+            const taskDetails = tasks.find((t: { id: string; title?: string }) => t.id === taskId);
+            const taskName = taskDetails?.title || `Task ${taskId}`;
+            
             await postedMeetingsStorage.addPostedMeeting(
                 session.user.email,
                 {
                     id: meetingId || '',
                     subject: subject || 'No subject',
-                    startTime: startTime || new Date().toISOString()
+                    startTime: startTime || new Date().toISOString(),
+                    taskId: taskId,
+                    taskName: taskName
                 }
             );
             

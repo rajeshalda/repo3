@@ -38,6 +38,7 @@ interface PostedMeeting {
     module: string;
   };
   postedAt: string;
+  taskName?: string;
 }
 
 interface DailyCount {
@@ -737,6 +738,7 @@ export function AIAgentView() {
                 <TableRow>
                   <TableHead>Date</TableHead>
                   <TableHead>Description</TableHead>
+                  <TableHead>Task Name</TableHead>
                   <TableHead>Duration</TableHead>
                   <TableHead>Module</TableHead>
                   <TableHead>Work Type</TableHead>
@@ -747,6 +749,13 @@ export function AIAgentView() {
                   <TableRow key={meeting.meetingId}>
                     <TableCell>{meeting.timeEntry.date}</TableCell>
                     <TableCell>{meeting.timeEntry.description}</TableCell>
+                    <TableCell>
+                      {meeting.taskName || (
+                        <span className="text-muted-foreground">
+                          {`Loading task name...`}
+                        </span>
+                      )}
+                    </TableCell>
                     <TableCell>{meeting.timeEntry.time}h</TableCell>
                     <TableCell>{meeting.timeEntry.module}</TableCell>
                     <TableCell>{meeting.timeEntry.worktype}</TableCell>

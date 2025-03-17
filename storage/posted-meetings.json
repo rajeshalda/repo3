@@ -55,37 +55,15 @@
   },
   "ramesh@m365x65088219.onmicrosoft.com": {
     "email": "ramesh@m365x65088219.onmicrosoft.com",
-    "lastPostedDate": "2025-03-16T08:33:19.958Z",
+    "lastPostedDate": "2025-03-17T11:01:22.722Z",
     "meetings": [
-      {
-        "id": "ramesh@m365x65088219.onmicrosoft.com_umg meeting_umg meeting_2025-03-06T11:00:00.0000000",
-        "subject": "umg meeting",
-        "meetingDate": "2025-03-06T11:00:00.0000000",
-        "postedDate": "2025-03-07T06:33:40.445Z"
-      },
-      {
-        "id": "ramesh@m365x65088219.onmicrosoft.com_call me_call me_2025-03-06T14:30:00.0000000",
-        "subject": "call me",
-        "meetingDate": "2025-03-06T14:30:00.0000000",
-        "postedDate": "2025-03-14T09:43:07.821Z"
-      },
-      {
-        "id": "ramesh@m365x65088219.onmicrosoft.com_call me_call me_2025-03-10T03:30:00.000Z",
-        "subject": "call me",
-        "meetingDate": "2025-03-10T03:30:00.000Z",
-        "postedDate": "2025-03-14T18:01:17.616Z"
-      },
       {
         "id": "ramesh@m365x65088219.onmicrosoft.com_Nokia Project Discussion_Nokia Project Discussion_2025-03-12T08:00:00.0000000",
         "subject": "Nokia Project Discussion",
         "meetingDate": "2025-03-12T08:00:00.0000000",
-        "postedDate": "2025-03-16T08:20:20.504Z"
-      },
-      {
-        "id": "ramesh@m365x65088219.onmicrosoft.com_call me_call me_2025-03-10T09:00:00.0000000",
-        "subject": "call me",
-        "meetingDate": "2025-03-10T09:00:00.0000000",
-        "postedDate": "2025-03-16T08:33:19.958Z"
+        "postedDate": "2025-03-17T11:01:22.722Z",
+        "taskId": "16537629",
+        "taskName": "Daily Status Report"
       }
     ]
   }

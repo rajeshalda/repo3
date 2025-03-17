@@ -295,6 +295,27 @@ export class TaskService {
             task.reason
         );
     }
+
+    // Add a method to get task name by taskId
+    async getTaskNameById(taskId: string, apiKey: string): Promise<string | null> {
+        try {
+            console.log(`Fetching task name for taskId: ${taskId}`);
+            const intervalsApi = new IntervalsAPI(apiKey);
+            const tasks = await intervalsApi.getTasks();
+            
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                console.log(`Found task name: ${task.title} for taskId: ${taskId}`);
+                return task.title;
+            }
+            
+            console.log(`No task found for taskId: ${taskId}`);
+            return null;
+        } catch (error) {
+            console.error(`Error fetching task name for taskId ${taskId}:`, error);
+            return null;
+        }
+    }
 }
 
 export const taskService = TaskService.getInstance(); 

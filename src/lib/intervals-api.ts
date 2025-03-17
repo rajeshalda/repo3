@@ -200,6 +200,21 @@ export class IntervalsAPI {
         return response.task;
     }
 
+    // Get task details by ID
+    async getTaskDetails(taskId: string) {
+        try {
+            const response = await this.request(`task/${taskId}`);
+            if (!response || !response.task) {
+                console.warn(`No task found with ID ${taskId}`);
+                return null;
+            }
+            return response.task;
+        } catch (error) {
+            console.error('Error fetching task details:', error instanceof Error ? error.message : 'Unknown error');
+            return null;
+        }
+    }
+
     // Get project information
     async getProject(projectId: string | number) {
         try {
