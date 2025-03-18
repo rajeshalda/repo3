@@ -1,0 +1,1466 @@
+PS C:\Users\vishalkumar\Documents\GitHub\repo3> npm run dev
+
+> meeting-time-tracker@2.1.0 dev
+> next dev -p 8080
+
+   ▲ Next.js 15.1.5
+   - Local:        http://localhost:8080
+   - Network:      http://10.0.0.6:8080
+   - Environments: .env.local
+
+ ✓ Starting...
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'serverOptions'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 2.4s
+ ○ Compiling / ...
+ ✓ Compiled / in 1466ms (701 modules)
+ GET / 200 in 1877ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 797ms (383 modules)
+ ✓ Compiled in 650ms (334 modules)
+ GET /favicon.ico 200 in 1912ms
+ GET /api/auth/providers 200 in 2182ms
+ GET /api/auth/session 200 in 2582ms
+ GET /api/auth/csrf 200 in 325ms
+ POST /api/auth/signin/azure-ad 200 in 769ms
+ GET /api/auth/callback/azure-ad?code=1.AXEB4ZqupUc8cEu5LKw6Dv_8atAcxJ6MrtVNvISjrupL2lRxAQBxAQ.AgABBAIAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P_cmxaRXA0jWyDH4fXpn8tYUVz8e5yKS9-zQuNxwuaDfsHQHoiA2Hw8CKtm7SFm_gTVuHLXlLYXZcanux-IaFcgbc2KEaMcS9GmP9s8VSIPFFE3-AjRH5LJuaefFQUukMU_YutRHPD6FTkP285FNvvAaU2o3OOOwmqSH0iqa2FhWjVDZbvVJmilNOTJCsagBdXS6nFqbqV_l-MFCSUelqrGogS7t4A5fI-on1ekSSwwZLALXO9UEbtKz5jPcc943ZYpswwBqP6jw0UEtsUAYVETtGxow97kqHMlaAE7vYemX7OqPKDKPlmuiVCt8U_CvZCFxqjpz1I4uXuHLnSPxveLbNduvxcCigAZq_L7DiaC14jEROT30ZcZpwNTkTl1u7hR49-L1lfFrZeXbjRMLHUyHEUcfxP1BfISdq88OjUzWKkors6cn0qqO7OlINV7CLexNv39jvZsdD6b9VJ2dr0dJkAkD3z3UI8a7A0wsClTRFNerPEuByT0fT2n_vKRpJBopjssX2fyP17THovlLfB8kZdRiuhePj8Ychxz2E8kJiUT3NUYO_0VC7tyu3otr1sqHXZldVUM975uh6aCUff3sRAqP05Xx652aY3TBP5o-CJ-5x2RSD1TjAVQ5pTYZnXXhSF7xaylPEBlor-GyLoc3x5BcOC87E_gQw2jFc9j5thvUyX5uWrjIqvv9kCJVRJlQiTzM9iXYA6_G8_XuKjEW9l1c-a5vR-kpJKx0Q5BKpPY9UVTigLuJmoc&state=VCzAga9hOJhJPyXVxq67d7755Htm04aJeY-WpFgRUd4&session_state=003066b9-85b4-d053-7acd-68bec3eb4d5d 302 in 2771ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1874ms (2874 modules)
+ GET /dashboard 200 in 2262ms
+ ○ Compiling /api/openai-status ...
+ ✓ Compiled /api/openai-status in 746ms (2877 modules)
+Azure OpenAI Config: { endpoint: 'Set', apiKey: 'Set', deployment: 'Set' }
+Making request to: https://meeting-endpoints.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2023-12-01-preview
+ GET /api/auth/session 200 in 969ms
+ ○ Compiling /api/meetings/posted ...
+ ✓ Compiled /api/meetings/posted in 815ms (2883 modules)
+Getting posted meetings: {
+  email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+  hasData: true,
+  totalMeetings: 1
+}
+ GET /api/meetings/posted 200 in 906ms
+Getting API key for user: vishalkumar@m365x65088219.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '4e33dn74hbz',
+    lastSync: '2025-02-03T20:00:50.112Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-03-17T11:52:51.986Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  }
+]
+Found user: Yes
+ GET /api/user/data 200 in 914ms
+ ✓ Compiled /api/intervals/tasks in 372ms (2886 modules)
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'vishal kumar',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    image: 'data:image/jpeg;base64, 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'
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6Imd3b0t0VVlsZDZSOW5vTmVyOURmaFZ5WnNmUnJaY1ZUbU54RzU0eWpLbFkiLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQyMjc5MTQ0LCJuYmYiOjE3NDIyNzkxNDQsImV4cCI6MTc0MjI4NDI3MSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVlRQWUvOFpBQUFBS2RlZjhzNGhraldNTktKaVphT0lhY3VFTTF1WnBBWjRiUUtPd3I0V282bWpIZjlVeS9MazdVYlNuQXc4NXpxVUt5N2VCOHpVbk5lY2t6QkpOZ3RxNldEck9uWVMyRENGK3Q3cFR1YTZOaFpRNnhRRjNmSHlJaE54bHFaNVFLYms4Y1Nram9BZHlKZnJnMzNHOFlRM0dzTDM3c0doOEhwcS9LUWorc0tpUXZJPSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwX2Rpc3BsYXluYW1lIjoiQ2FsZW5kZXIgQXBwIiwiYXBwaWQiOiI5ZWM0MWNkMC1hZThjLTRkZDUtYmM4NC1hM2FlZWE0YmRhNTQiLCJhcHBpZGFjciI6IjEiLCJpZHR5cCI6InVzZXIiLCJpcGFkZHIiOiI0LjIxMy4xNjQuMjUxIiwibmFtZSI6InZpc2hhbCBrdW1hciIsIm9pZCI6ImM4MjI5ODVlLTZlZDMtNDdkMC1hMTE3LTg0ZjBiYWE4MzEzOCIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDMyMkM1MUNGIiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFSTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMDY2YjktODViNC1kMDUzLTdhY2QtNjhiZWMzZWI0ZDVkIiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoiS3F6ZnhGZGtERlczV25naXdhRVV1V3ZJOVNWc3FDbThZZGRuUHRvOVVDSSIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoidmlzaGFsa3VtYXJATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1cG4iOiJ2aXNoYWxrdW1hckBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6InlsWE9HN0RfV1VDQlNCZE1USkZtQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdLCJ4bXNfZnRkIjoiSzJtSWl1QVdQV1VrMEJFYnJWWnhRUm1pTVlnNjJ2MWZSRlE0YmFWTGRWdyIsInhtc19pZHJlbCI6IjEyIDEiLCJ4bXNfc3QiOnsic3ViIjoiS2w5X0U5eFBtRm1rUWdEZE52Z2RvY01XaXNBUDYxUXJKOVRIMWdKUzFTNCJ9LCJ4bXNfdGNkdCI6MTczMTIxNTYzM30.FbdflE0tOhspZbn2AlbNg4dtZjL-DZ7Rzl4QqvgtwyIOUeIgCUitMmE0ZdyuRvUmpujKNr-YCi6-R-0PwAU_S_z_bOjffnbpt-jIAWh7URDVj48NOwUpkKOSmmcGNW5q8rwG5Ryt_Ndql0L7Dy1qvODYlJECiZUy84kxRFJl8pdlLuhW5N7ayYddMPpzFTgIHaXEPCuTz1gNoVF3LwKtotqFK1_ayKrpD5GW2IrrQ_xcf8ANGoJebN1oLTpErWAuCu5LXVmuBoSGWvOS-3LBSTKHTGh4MFKq4y-jGOcCZmRm7v3ffBTexVdFgASfB8dD_2A1tEt6fIi8u5soCNLEZg'
+}
+Session user email: vishalkumar@m365x65088219.onmicrosoft.com
+Getting API key for user: vishalkumar@m365x65088219.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '4e33dn74hbz',
+    lastSync: '2025-02-03T20:00:50.112Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-03-17T11:52:51.986Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Verifying API connection...
+ GET /api/openai-status 200 in 2440ms
+Successfully connected to Intervals as user: undefined undefined
+Fetching tasks from Intervals...
+Successfully fetched 10 tasks
+ GET /api/intervals/tasks 200 in 1853ms
+ ○ Compiling /api/meetings ...
+ ✓ Compiled /api/meetings in 1459ms (3277 modules)
+
+=== DATE RANGE DEBUG ===
+Original from: 2025-02-28T18:30:00.000Z
+Original to: 2025-03-20T18:30:00.000Z
+Parsed start date UTC: 2025-02-28T00:00:00.000Z
+Parsed end date UTC: 2025-03-20T23:59:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+Start date IST: 28/02/2025, 11:00 am IST
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+End date IST: 21/03/2025, 10:59 am IST
+======================
+
+Meetings Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('c822985e-6ed3-47d0-a117-84f0baa83138')/events(id,subject,start,end,onlineMeeting,bodyPreview,organizer)",    
+  "value": [
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz+Yw==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIryAAA=",
+      "subject": "Monitoring & Logging Review",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 281 272 140 879\r\nPasscode: RP9Bt74g\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-18T15:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-18T16:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDQxNGU3NzQtZTc0Yi00YjlkLTgzYzMtZDNiOTM0OTMzZTQy%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "773617453",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz+XA==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrxAAA=",
+      "subject": "Kubernetes Deployment Strategy",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 284 503 702 744\r\nPasscode: Jh2gJ7ei\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-18T14:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-18T15:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjUyZDFhZTctMTZkMi00Y2RiLWFkMjEtNDhmNTBhNzI1MDEy%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "166613701",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz+DQ==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrwAAA=",
+      "subject": "Incident Management Discussion",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 236 504 474 443\r\nPasscode: Vp3Nd7gA\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-18T11:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-18T11:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzU1MGExODAtNDZkMS00ZDI4LWI1ZWItMWI5MmJiN2Y4ZGNk%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "991608113",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz+CQ==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrvAAA=",
+      "subject": "System Update Planning",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 267 794 028 921\r\nPasscode: zq6AS6ih\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-18T10:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-18T11:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZmQxOTBmNDUtYjk5MC00ODZhLWFkMjktMTUzYWIwM2VkMDQ4%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "13649425",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz99g==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIruAAA=",
+      "subject": "Helpdesk Ticket Review",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 287 322 301 360\r\nPasscode: kq9EH9oy\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-18T09:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-18T10:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjQ1ODY5Y2UtMzE3YS00ZGQyLTlmNDAtOTc3OGQ4NjUxNTMw%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "979534731",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz9iQ==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrtAAA=",
+      "subject": "Data Center Management",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 269 628 234 035\r\nPasscode: NS9tQ2iD\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-17T13:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-17T13:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzFlZDBlMGYtNTQzYS00YjNhLTljMzktY2EyZDgyZTdkOTZh%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",
+        "conferenceId": "330975699",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz9Yg==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrsAAA=",
+      "subject": "\"Infrastructure Scalability Planning",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 218 709 205 849\r\nPasscode: Sf2pt7sL\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-17T12:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-17T13:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDJjODc4ZmEtMDYxZS00YzkxLTllNzAtMzgyZGQwODNmMjdh%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "951521710",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz9VQ==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrrAAA=",
+      "subject": "Cloud Resource Optimization",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 285 601 550 890\r\nPasscode: WS2zk35G\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-17T11:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-17T12:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDA5MmViNjAtMjZiNi00MjgzLTk3Y2MtNDFlYjRkZTJlMzM5%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "940728505",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz9Og==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrqAAA=",
+      "subject": "Network Security Review",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 216 859 387 24\r\nPasscode: T9Vj35sn\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,,",
+      "start": {
+        "dateTime": "2025-03-17T10:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-17T11:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWIxNDM5YWUtMjhjZS00NDM5LTg1YTktYTdiZmY1YjM1NTc2%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "168476634",
+        "tollNumber": "+1 872-215-6291"
+      }
+    },
+    {
+      "@odata.etag": "W/\"MLWaIU0/TES2LR6J+E1oYAAAKUz9Cg==\"",
+      "id": "AAMkAGJjNDE2MTIwLTFhOTgtNDVmNS1hM2MxLTg5OTc1NDkyMjJmNgBGAAAAAAAiAXeJHkbmTbcdfI_l8Y1rBwAwtZohTT9MRLYtHon4TWhgAAAAAAENAAAwtZohTT9MRLYtHon4TWhgAAApWIrpAAA=",
+      "subject": "Server Maintenance",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 287 322 946 310\r\nPasscode: FW2sk9Tr\r\n________________________________\r\nDial in by phone\r\n+1 872-215-6291,",
+      "start": {
+        "dateTime": "2025-03-17T09:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-03-17T10:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "pushkar",
+          "address": "pushkar@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZGI5ZTcyM2QtYzg0MS00YWViLWI4NmUtNGYzMjE4ODQzNGFl%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d",     
+        "conferenceId": "62289032",
+        "tollNumber": "+1 872-215-6291"
+      }
+    }
+  ],
+  "@odata.nextLink": "https://graph.microsoft.com/v1.0/me/events?%24filter=start%2fdateTime+ge+%272025-02-28T00%3a00%3a00.000Z%27+and+end%2fdateTime+le+%272025-03-20T23%3a59%3a59.999Z%27&%24select=id%2csubject%2cstart%2cend%2conlineMeeting%2cbodyPreview%2corganizer&%24top=10&%24skip=10"
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDQxNGU3NzQtZTc0Yi00YjlkLTgzYzMtZDNiOTM0OTMzZTQy%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 281 272 140 879\r\n' +
+    'Passcode: RP9Bt74g\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '281272140879',
+  threadId: 'NDQxNGU3NzQtZTc0Yi00YjlkLTgzYzMtZDNiOTM0OTMzZTQy',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'NDQxNGU3NzQtZTc0Yi00YjlkLTgzYzMtZDNiOTM0OTMzZTQy',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_NDQxNGU3NzQtZTc0Yi00YjlkLTgzYzMtZDNiOTM0OTMzZTQy@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ORFF4TkdVM056UXRaVGMwWWkwMFlqbGtMVGd6WXpNdFpETmlPVE0wT1RNelpUUXlAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ORFF4TkdVM056UXRaVGMwWWkwMFlqbGtMVGd6WXpNdFpETmlPVE0wT1RNelpUUXlAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjUyZDFhZTctMTZkMi00Y2RiLWFkMjEtNDhmNTBhNzI1MDEy%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 284 503 702 744\r\n' +
+    'Passcode: Jh2gJ7ei\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '284503702744',
+  threadId: 'MjUyZDFhZTctMTZkMi00Y2RiLWFkMjEtNDhmNTBhNzI1MDEy',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'MjUyZDFhZTctMTZkMi00Y2RiLWFkMjEtNDhmNTBhNzI1MDEy',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_MjUyZDFhZTctMTZkMi00Y2RiLWFkMjEtNDhmNTBhNzI1MDEy@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NalV5WkRGaFpUY3RNVFprTWkwMFkyUmlMV0ZrTWpFdE5EaG1OVEJoTnpJMU1ERXlAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NalV5WkRGaFpUY3RNVFprTWkwMFkyUmlMV0ZrTWpFdE5EaG1OVEJoTnpJMU1ERXlAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzU1MGExODAtNDZkMS00ZDI4LWI1ZWItMWI5MmJiN2Y4ZGNk%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 236 504 474 443\r\n' +
+    'Passcode: Vp3Nd7gA\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '236504474443',
+  threadId: 'MzU1MGExODAtNDZkMS00ZDI4LWI1ZWItMWI5MmJiN2Y4ZGNk',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'MzU1MGExODAtNDZkMS00ZDI4LWI1ZWItMWI5MmJiN2Y4ZGNk',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_MzU1MGExODAtNDZkMS00ZDI4LWI1ZWItMWI5MmJiN2Y4ZGNk@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NelUxTUdFeE9EQXRORFprTVMwMFpESTRMV0kxWldJdE1XSTVNbUppTjJZNFpHTmtAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NelUxTUdFeE9EQXRORFprTVMwMFpESTRMV0kxWldJdE1XSTVNbUppTjJZNFpHTmtAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZmQxOTBmNDUtYjk5MC00ODZhLWFkMjktMTUzYWIwM2VkMDQ4%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 267 794 028 921\r\n' +
+    'Passcode: zq6AS6ih\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '267794028921',
+  threadId: 'ZmQxOTBmNDUtYjk5MC00ODZhLWFkMjktMTUzYWIwM2VkMDQ4',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'ZmQxOTBmNDUtYjk5MC00ODZhLWFkMjktMTUzYWIwM2VkMDQ4',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_ZmQxOTBmNDUtYjk5MC00ODZhLWFkMjktMTUzYWIwM2VkMDQ4@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19abVF4T1RCbU5EVXRZams1TUMwME9EWmhMV0ZrTWprdE1UVXpZV0l3TTJWa01EUTRAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19abVF4T1RCbU5EVXRZams1TUMwME9EWmhMV0ZrTWprdE1UVXpZV0l3TTJWa01EUTRAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjQ1ODY5Y2UtMzE3YS00ZGQyLTlmNDAtOTc3OGQ4NjUxNTMw%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 287 322 301 360\r\n' +
+    'Passcode: kq9EH9oy\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '287322301360',
+  threadId: 'NjQ1ODY5Y2UtMzE3YS00ZGQyLTlmNDAtOTc3OGQ4NjUxNTMw',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'NjQ1ODY5Y2UtMzE3YS00ZGQyLTlmNDAtOTc3OGQ4NjUxNTMw',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_NjQ1ODY5Y2UtMzE3YS00ZGQyLTlmNDAtOTc3OGQ4NjUxNTMw@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OalExT0RZNVkyVXRNekUzWVMwMFpHUXlMVGxtTkRBdE9UYzNPR1E0TmpVeE5UTXdAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OalExT0RZNVkyVXRNekUzWVMwMFpHUXlMVGxtTkRBdE9UYzNPR1E0TmpVeE5UTXdAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzFlZDBlMGYtNTQzYS00YjNhLTljMzktY2EyZDgyZTdkOTZh%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 269 628 234 035\r\n' +
+    'Passcode: NS9tQ2iD\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '269628234035',
+  threadId: 'MzFlZDBlMGYtNTQzYS00YjNhLTljMzktY2EyZDgyZTdkOTZh',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'MzFlZDBlMGYtNTQzYS00YjNhLTljMzktY2EyZDgyZTdkOTZh',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_MzFlZDBlMGYtNTQzYS00YjNhLTljMzktY2EyZDgyZTdkOTZh@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NekZsWkRCbE1HWXROVFF6WVMwMFlqTmhMVGxqTXprdFkyRXlaRGd5WlRka09UWmhAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NekZsWkRCbE1HWXROVFF6WVMwMFlqTmhMVGxqTXprdFkyRXlaRGd5WlRka09UWmhAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDJjODc4ZmEtMDYxZS00YzkxLTllNzAtMzgyZGQwODNmMjdh%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 218 709 205 849\r\n' +
+    'Passcode: Sf2pt7sL\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '218709205849',
+  threadId: 'NDJjODc4ZmEtMDYxZS00YzkxLTllNzAtMzgyZGQwODNmMjdh',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'NDJjODc4ZmEtMDYxZS00YzkxLTllNzAtMzgyZGQwODNmMjdh',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_NDJjODc4ZmEtMDYxZS00YzkxLTllNzAtMzgyZGQwODNmMjdh@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREpqT0RjNFptRXRNRFl4WlMwMFl6a3hMVGxsTnpBdE16Z3laR1F3T0RObU1qZGhAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREpqT0RjNFptRXRNRFl4WlMwMFl6a3hMVGxsTnpBdE16Z3laR1F3T0RObU1qZGhAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDA5MmViNjAtMjZiNi00MjgzLTk3Y2MtNDFlYjRkZTJlMzM5%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 285 601 550 890\r\n' +
+    'Passcode: WS2zk35G\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '285601550890',
+  threadId: 'NDA5MmViNjAtMjZiNi00MjgzLTk3Y2MtNDFlYjRkZTJlMzM5',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'NDA5MmViNjAtMjZiNi00MjgzLTk3Y2MtNDFlYjRkZTJlMzM5',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_NDA5MmViNjAtMjZiNi00MjgzLTk3Y2MtNDFlYjRkZTJlMzM5@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREE1TW1WaU5qQXRNalppTmkwME1qZ3pMVGszWTJNdE5ERmxZalJrWlRKbE16TTVAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREE1TW1WaU5qQXRNalppTmkwME1qZ3pMVGszWTJNdE5ERmxZalJrWlRKbE16TTVAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWIxNDM5YWUtMjhjZS00NDM5LTg1YTktYTdiZmY1YjM1NTc2%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 216 859 387 24\r\n' +
+    'Passcode: T9Vj35sn\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,,'
+}
+Extracted: {
+  meetingId: null,
+  threadId: 'YWIxNDM5YWUtMjhjZS00NDM5LTg1YTktYTdiZmY1YjM1NTc2',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'YWIxNDM5YWUtMjhjZS00NDM5LTg1YTktYTdiZmY1YjM1NTc2',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_YWIxNDM5YWUtMjhjZS00NDM5LTg1YTktYTdiZmY1YjM1NTc2@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ZV0l4TkRNNVlXVXRNamhqWlMwME5ETTVMVGcxWVRrdFlUZGlabVkxWWpNMU5UYzJAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ZV0l4TkRNNVlXVXRNamhqWlMwME5ETTVMVGcxWVRrdFlUZGlabVkxWWpNMU5UYzJAdGhyZWFkLnYy'
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZGI5ZTcyM2QtYzg0MS00YWViLWI4NmUtNGYzMjE4ODQzNGFl%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%22ef78ced0-1a58-417e-abc9-120969b1430f%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 287 322 946 310\r\n' +
+    'Passcode: FW2sk9Tr\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 872-215-6291,'
+}
+Extracted: {
+  meetingId: '287322946310',
+  threadId: 'ZGI5ZTcyM2QtYzg0MS00YWViLWI4NmUtNGYzMjE4ODQzNGFl',
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  threadId: 'ZGI5ZTcyM2QtYzg0MS00YWViLWI4NmUtNGYzMjE4ODQzNGFl',
+  formattedString: '1*ef78ced0-1a58-417e-abc9-120969b1430f*0**19:meeting_ZGI5ZTcyM2QtYzg0MS00YWViLWI4NmUtNGYzMjE4ODQzNGFl@thread.v2',
+  base64MeetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19aR0k1WlRjeU0yUXRZemcwTVMwMFlXVmlMV0k0Tm1VdE5HWXpNakU0T0RRek5HRmxAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: 'ef78ced0-1a58-417e-abc9-120969b1430f',
+  meetingId: 'MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19aR0k1WlRjeU0yUXRZemcwTVMwMFlXVmlMV0k0Tm1VdE5HWXpNakU0T0RRek5HRmxAdGhyZWFkLnYy'
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19abVF4T1RCbU5EVXRZams1TUMwME9EWmhMV0ZrTWprdE1UVXpZV0l3TTJWa01EUTRAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "1ecb89f5-0cf5-4446-b406-745ba08b03d8",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:40:36.346Z",
+      "meetingEndDateTime": "2025-03-18T04:41:32.609Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NalV5WkRGaFpUY3RNVFprTWkwMFkyUmlMV0ZrTWpFdE5EaG1OVEJoTnpJMU1ERXlAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "e2e02202-f98d-480c-bf8b-de70be7c3347",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:47:23.496Z",
+      "meetingEndDateTime": "2025-03-18T04:48:22.391Z"
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19abVF4T1RCbU5EVXRZams1TUMwME9EWmhMV0ZrTWprdE1UVXpZV0l3TTJWa01EUTRAdGhyZWFkLnYy')/attendanceReports('1ecb89f5-0cf5-4446-b406-745ba08b03d8')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 53,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:40:39.3435073Z",
+          "leaveDateTime": "2025-03-18T04:41:32.6097017Z",
+          "durationInSeconds": 53
+        }
+      ]
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREE1TW1WaU5qQXRNalppTmkwME1qZ3pMVGszWTJNdE5ERmxZalJrWlRKbE16TTVAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "30034954-eb2a-461a-9368-85ecfeb1af3d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:18:44.901Z",
+      "meetingEndDateTime": "2025-03-18T04:20:29.407Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREpqT0RjNFptRXRNRFl4WlMwMFl6a3hMVGxsTnpBdE16Z3laR1F3T0RObU1qZGhAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "acf8d1ee-b67f-4325-b153-285234d3d100",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:20:35.444Z",
+      "meetingEndDateTime": "2025-03-18T04:23:12.696Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OalExT0RZNVkyVXRNekUzWVMwMFpHUXlMVGxtTkRBdE9UYzNPR1E0TmpVeE5UTXdAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "6d3c1054-6915-4f4c-b885-511407d86189",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:38:49.535Z",
+      "meetingEndDateTime": "2025-03-18T04:40:00.699Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ZV0l4TkRNNVlXVXRNamhqWlMwME5ETTVMVGcxWVRrdFlUZGlabVkxWWpNMU5UYzJAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "d7baa6a5-2586-4819-b04e-bb605891e664",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:16:55.398Z",
+      "meetingEndDateTime": "2025-03-18T04:18:37.251Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19aR0k1WlRjeU0yUXRZemcwTVMwMFlXVmlMV0k0Tm1VdE5HWXpNakU0T0RRek5HRmxAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "a9d70bd1-b63a-4409-a5e7-2ab9f3973c90",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:15:05.525Z",
+      "meetingEndDateTime": "2025-03-18T04:16:39.392Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NelUxTUdFeE9EQXRORFprTVMwMFpESTRMV0kxWldJdE1XSTVNbUppTjJZNFpHTmtAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "6796f96e-12fa-460a-8916-1de6818ad7d0",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:41:36.56Z",
+      "meetingEndDateTime": "2025-03-18T04:42:49.321Z"
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ORFF4TkdVM056UXRaVGMwWWkwMFlqbGtMVGd6WXpNdFpETmlPVE0wT1RNelpUUXlAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "a356d223-a923-4125-b966-60ec42cbdafa",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-18T04:48:27.716Z",
+      "meetingEndDateTime": "2025-03-18T04:49:28.591Z"
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREE1TW1WaU5qQXRNalppTmkwME1qZ3pMVGszWTJNdE5ERmxZalJrWlRKbE16TTVAdGhyZWFkLnYy')/attendanceReports('30034954-eb2a-461a-9368-85ecfeb1af3d')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 101,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:18:47.8579827Z",
+          "leaveDateTime": "2025-03-18T04:20:29.4076498Z",
+          "durationInSeconds": 101
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19aR0k1WlRjeU0yUXRZemcwTVMwMFlXVmlMV0k0Tm1VdE5HWXpNakU0T0RRek5HRmxAdGhyZWFkLnYy')/attendanceReports('a9d70bd1-b63a-4409-a5e7-2ab9f3973c90')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 90,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:15:08.8114318Z",
+          "leaveDateTime": "2025-03-18T04:16:39.3928761Z",
+          "durationInSeconds": 90
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NalV5WkRGaFpUY3RNVFprTWkwMFkyUmlMV0ZrTWpFdE5EaG1OVEJoTnpJMU1ERXlAdGhyZWFkLnYy')/attendanceReports('e2e02202-f98d-480c-bf8b-de70be7c3347')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 56,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:47:26.3528024Z",
+          "leaveDateTime": "2025-03-18T04:48:22.3912233Z",
+          "durationInSeconds": 56
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OREpqT0RjNFptRXRNRFl4WlMwMFl6a3hMVGxsTnpBdE16Z3laR1F3T0RObU1qZGhAdGhyZWFkLnYy')/attendanceReports('acf8d1ee-b67f-4325-b153-285234d3d100')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 152,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:20:39.7631705Z",
+          "leaveDateTime": "2025-03-18T04:23:12.6969264Z",
+          "durationInSeconds": 152
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ZV0l4TkRNNVlXVXRNamhqWlMwME5ETTVMVGcxWVRrdFlUZGlabVkxWWpNMU5UYzJAdGhyZWFkLnYy')/attendanceReports('d7baa6a5-2586-4819-b04e-bb605891e664')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 98,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:16:58.5417974Z",
+          "leaveDateTime": "2025-03-18T04:18:37.2518554Z",
+          "durationInSeconds": 98
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19OalExT0RZNVkyVXRNekUzWVMwMFpHUXlMVGxtTkRBdE9UYzNPR1E0TmpVeE5UTXdAdGhyZWFkLnYy')/attendanceReports('6d3c1054-6915-4f4c-b885-511407d86189')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 68,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:38:52.4051305Z",
+          "leaveDateTime": "2025-03-18T04:40:00.6990607Z",
+          "durationInSeconds": 68
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NelUxTUdFeE9EQXRORFprTVMwMFpESTRMV0kxWldJdE1XSTVNbUppTjJZNFpHTmtAdGhyZWFkLnYy')/attendanceReports('6796f96e-12fa-460a-8916-1de6818ad7d0')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 69,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:41:39.7097882Z",
+          "leaveDateTime": "2025-03-18T04:42:49.3212086Z",
+          "durationInSeconds": 69
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19ORFF4TkdVM056UXRaVGMwWWkwMFlqbGtMVGd6WXpNdFpETmlPVE0wT1RNelpUUXlAdGhyZWFkLnYy')/attendanceReports('a356d223-a923-4125-b966-60ec42cbdafa')/attendanceRecords",      
+  "value": [
+    {
+      "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+      "emailAddress": "pushkar@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 58,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "ef78ced0-1a58-417e-abc9-120969b1430f",
+        "displayName": "pushkar",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-18T04:48:30.5271516Z",
+          "leaveDateTime": "2025-03-18T04:49:28.5915423Z",
+          "durationInSeconds": 58
+        }
+      ]
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('ef78ced0-1a58-417e-abc9-120969b1430f')/onlineMeetings('MSplZjc4Y2VkMC0xYTU4LTQxN2UtYWJjOS0xMjA5NjliMTQzMGYqMCoqMTk6bWVldGluZ19NekZsWkRCbE1HWXROVFF6WVMwMFlqTmhMVGxqTXprdFkyRXlaRGd5WlRka09UWmhAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T10:00:00.000Z
+After adding 5:30 hours: 2025-03-18T15:30:00.000Z
+Formatted IST result: 18/03/2025, 09:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Monitoring & Logging Review',
+  originalStartTime: '2025-03-18T15:30:00.0000000',
+  meetingDateUTC: '2025-03-18T10:00:00.000Z',
+  meetingDateIST: '18/03/2025, 09:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T09:00:00.000Z
+After adding 5:30 hours: 2025-03-18T14:30:00.000Z
+Formatted IST result: 18/03/2025, 08:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Kubernetes Deployment Strategy',
+  originalStartTime: '2025-03-18T14:30:00.0000000',
+  meetingDateUTC: '2025-03-18T09:00:00.000Z',
+  meetingDateIST: '18/03/2025, 08:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T05:30:00.000Z
+After adding 5:30 hours: 2025-03-18T11:00:00.000Z
+Formatted IST result: 18/03/2025, 04:30 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Incident Management Discussion',
+  originalStartTime: '2025-03-18T11:00:00.0000000',
+  meetingDateUTC: '2025-03-18T05:30:00.000Z',
+  meetingDateIST: '18/03/2025, 04:30 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T05:00:00.000Z
+After adding 5:30 hours: 2025-03-18T10:30:00.000Z
+Formatted IST result: 18/03/2025, 04:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'System Update Planning',
+  originalStartTime: '2025-03-18T10:30:00.0000000',
+  meetingDateUTC: '2025-03-18T05:00:00.000Z',
+  meetingDateIST: '18/03/2025, 04:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T04:00:00.000Z
+After adding 5:30 hours: 2025-03-18T09:30:00.000Z
+Formatted IST result: 18/03/2025, 03:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Helpdesk Ticket Review',
+  originalStartTime: '2025-03-18T09:30:00.0000000',
+  meetingDateUTC: '2025-03-18T04:00:00.000Z',
+  meetingDateIST: '18/03/2025, 03:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-17T07:30:00.000Z
+After adding 5:30 hours: 2025-03-17T13:00:00.000Z
+Formatted IST result: 17/03/2025, 06:30 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Data Center Management',
+  originalStartTime: '2025-03-17T13:00:00.0000000',
+  meetingDateUTC: '2025-03-17T07:30:00.000Z',
+  meetingDateIST: '17/03/2025, 06:30 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-17T07:00:00.000Z
+After adding 5:30 hours: 2025-03-17T12:30:00.000Z
+Formatted IST result: 17/03/2025, 06:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: '"Infrastructure Scalability Planning',
+  originalStartTime: '2025-03-17T12:30:00.0000000',
+  meetingDateUTC: '2025-03-17T07:00:00.000Z',
+  meetingDateIST: '17/03/2025, 06:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-17T06:00:00.000Z
+After adding 5:30 hours: 2025-03-17T11:30:00.000Z
+Formatted IST result: 17/03/2025, 05:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Cloud Resource Optimization',
+  originalStartTime: '2025-03-17T11:30:00.0000000',
+  meetingDateUTC: '2025-03-17T06:00:00.000Z',
+  meetingDateIST: '17/03/2025, 05:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-17T05:00:00.000Z
+After adding 5:30 hours: 2025-03-17T10:30:00.000Z
+Formatted IST result: 17/03/2025, 04:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Network Security Review',
+  originalStartTime: '2025-03-17T10:30:00.0000000',
+  meetingDateUTC: '2025-03-17T05:00:00.000Z',
+  meetingDateIST: '17/03/2025, 04:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+=== MEETING FILTER DEBUG ===
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-17T04:00:00.000Z
+After adding 5:30 hours: 2025-03-17T09:30:00.000Z
+Formatted IST result: 17/03/2025, 03:00 pm IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Meeting: {
+  subject: 'Server Maintenance',
+  originalStartTime: '2025-03-17T09:30:00.0000000',
+  meetingDateUTC: '2025-03-17T04:00:00.000Z',
+  meetingDateIST: '17/03/2025, 03:00 pm IST',
+  startDateIST: '28/02/2025, 11:00 am IST',
+  endDateIST: '21/03/2025, 10:59 am IST',
+  isInRange: true
+}
+=========================
+
+
+Filtered 10 meetings to 10 within date range
+Getting posted meetings: {
+  email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+  hasData: true,
+  totalMeetings: 1
+}
+
+==== MEETINGS FILTERING DEBUG ====
+User Email: vishalkumar@m365x65088219.onmicrosoft.com
+Total meetings fetched: 10
+Total posted meetings: 1
+
+Processing current meetings:
+Meeting: Monitoring & Logging Review ID: vishalkumar@m365x65088219.onmicrosoft.com_Monitoring  Logging Review_Monitoring  Logging Review_2025-03-18T15:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Kubernetes Deployment Strategy ID: vishalkumar@m365x65088219.onmicrosoft.com_Kubernetes Deployment Strategy_Kubernetes Deployment Strategy_2025-03-18T14:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Incident Management Discussion ID: vishalkumar@m365x65088219.onmicrosoft.com_Incident Management Discussion_Incident Management Discussion_2025-03-18T11:00:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: System Update Planning ID: vishalkumar@m365x65088219.onmicrosoft.com_System Update Planning_System Update Planning_2025-03-18T10:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Helpdesk Ticket Review ID: vishalkumar@m365x65088219.onmicrosoft.com_Helpdesk Ticket Review_Helpdesk Ticket Review_2025-03-18T09:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Data Center Management ID: vishalkumar@m365x65088219.onmicrosoft.com_Data Center Management_Data Center Management_2025-03-17T13:00:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: "Infrastructure Scalability Planning ID: vishalkumar@m365x65088219.onmicrosoft.com_Infrastructure Scalability Planning_Infrastructure Scalability Planning_2025-03-17T12:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Cloud Resource Optimization ID: vishalkumar@m365x65088219.onmicrosoft.com_Cloud Resource Optimization_Cloud Resource Optimization_2025-03-17T11:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Network Security Review ID: vishalkumar@m365x65088219.onmicrosoft.com_Network Security Review_Network Security Review_2025-03-17T10:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+Meeting: Server Maintenance ID: vishalkumar@m365x65088219.onmicrosoft.com_Server Maintenance_Server Maintenance_2025-03-17T09:30:00.0000000 Is Posted: false
+Adding to filtered meetings list
+
+=== FINAL RESPONSE DEBUG ===
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-02-28T00:00:00.000Z
+Parsed as Date: 2025-02-28T00:00:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+Final IST result: 28/02/2025, 11:00 am IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-03-20T23:59:59.999Z
+Parsed as Date: 2025-03-20T23:59:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Final IST result: 21/03/2025, 10:59 am IST
+================================
+
+Time range: {
+  fromIST: '28/02/2025, 11:00 am IST',
+  toIST: '21/03/2025, 10:59 am IST',
+  fromUTC: '2025-02-28T00:00:00.000Z',
+  toUTC: '2025-03-20T23:59:59.999Z'
+}
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-03-18T15:30:00.0000000
+Parsed as Date: 2025-03-18T10:00:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T10:00:00.000Z
+After adding 5:30 hours: 2025-03-18T15:30:00.000Z
+Formatted IST result: 18/03/2025, 09:00 pm IST
+===========================
+
+Final IST result: 18/03/2025, 09:00 pm IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-03-18T16:00:00.0000000
+Parsed as Date: 2025-03-18T10:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-18T10:30:00.000Z
+After adding 5:30 hours: 2025-03-18T16:00:00.000Z
+Formatted IST result: 18/03/2025, 09:30 pm IST
+===========================
+
+Final IST result: 18/03/2025, 09:30 pm IST
+================================
+
+First meeting times (if any): {
+  subject: 'Monitoring & Logging Review',
+  displayStartTime: '18/03/2025, 09:00 pm IST',
+  displayEndTime: '18/03/2025, 09:30 pm IST'
+}
+===========================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-02-28T00:00:00.000Z
+Parsed as Date: 2025-02-28T00:00:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-02-28T00:00:00.000Z
+After adding 5:30 hours: 2025-02-28T05:30:00.000Z
+Formatted IST result: 28/02/2025, 11:00 am IST
+===========================
+
+Final IST result: 28/02/2025, 11:00 am IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-03-20T23:59:59.999Z
+Parsed as Date: 2025-03-20T23:59:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-03-20T23:59:59.999Z
+After adding 5:30 hours: 2025-03-21T05:29:59.999Z
+Formatted IST result: 21/03/2025, 10:59 am IST
+===========================
+
+Final IST result: 21/03/2025, 10:59 am IST
+================================
+
+ GET /api/meetings?from=2025-02-28T18%3A30%3A00.000Z&to=2025-03-20T18%3A30%3A00.000Z 200 in 4330ms

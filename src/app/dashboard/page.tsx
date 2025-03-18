@@ -807,9 +807,12 @@ export default function DashboardPage() {
                           {meetingsLoading ? (
                             <TableRow>
                               <TableCell colSpan={5} className="text-center py-8">
-                                <div className="flex items-center justify-center">
-                                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
-                                  <span>Loading meetings...</span>
+                                <div className="flex flex-col items-center justify-center gap-2">
+                                  <div className="flex items-center">
+                                    <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                                    <span>Loading meetings...</span>
+                                  </div>
+                                  <span className="text-sm text-muted-foreground">This might take a moment if you have many meetings</span>
                                 </div>
                               </TableCell>
                             </TableRow>
@@ -824,7 +827,9 @@ export default function DashboardPage() {
                               <TableCell colSpan={5} className="text-center py-8">
                                 <div className="flex flex-col items-center justify-center gap-2">
                                   <p className="text-muted-foreground">All meetings in this date range have been posted</p>
-                                  <p className="text-sm text-muted-foreground">Total meetings posted: {rawMeetingsData.meetings.length}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    Total meetings in range: {rawMeetingsData.meetings.length}
+                                  </p>
                                 </div>
                               </TableCell>
                             </TableRow>
