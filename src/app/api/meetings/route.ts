@@ -153,29 +153,34 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
     `start/dateTime ge '${startDate.toISOString()}' and end/dateTime le '${endDate.toISOString()}'`
   );
 
-  const response = await fetch(
-    `https://graph.microsoft.com/v1.0/me/events?$filter=${filter}&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer`,
-    {
+  let allMeetings: any[] = [];
+  let nextLink = `https://graph.microsoft.com/v1.0/me/events?$filter=${filter}&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer`;
+
+  while (nextLink) {
+    const response = await fetch(nextLink, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
         'Prefer': `outlook.timezone="${IST_TIMEZONE}"`
       },
-    }
-  );
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    console.error('Graph API Error:', errorData);
-    throw new Error(`Failed to fetch meetings: ${response.status}`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Graph API Error:', errorData);
+      throw new Error(`Failed to fetch meetings: ${response.status}`);
+    }
+
+    const data = await response.json();
+    allMeetings = [...allMeetings, ...data.value];
+    nextLink = data['@odata.nextLink'] || '';
   }
 
-  const data = await response.json();
-  console.log('Meetings Data:', JSON.stringify(data, null, 2));
+  console.log('Total meetings fetched:', allMeetings.length);
   
   // Fetch attendance for each meeting
   const meetingsWithAttendance = await Promise.all(
-    data.value.map(async (meeting: GraphMeeting) => {
+    allMeetings.map(async (meeting: GraphMeeting) => {
       const meetingData: MeetingData = {
         subject: meeting.subject,
         startTime: meeting.start.dateTime,
