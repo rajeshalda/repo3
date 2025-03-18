@@ -77,11 +77,42 @@ async function processMeetingBatch(
         const response = await openai.getCompletion(prompt);
         const matchData = JSON.parse(response);
 
-        const matchedTask = tasks.find(t => t.title === matchData.matchedTaskTitle);
+        // Analyze the reason text for confidence adjustment
+        let adjustedConfidence = matchData.confidence;
+        const reasonLower = matchData.reason.toLowerCase();
+        
+        // Boost confidence based on strong indicators in the reason
+        if (reasonLower.includes('strongly aligns') || 
+            reasonLower.includes('direct match') || 
+            reasonLower.includes('most relevant match')) {
+            adjustedConfidence = Math.min(adjustedConfidence + 0.2, 1.0);
+        }
+        
+        // Boost confidence for infrastructure-related matches
+        if ((meeting.subject.toLowerCase().includes('infrastructure') || 
+             meeting.subject.toLowerCase().includes('system') ||
+             meeting.subject.toLowerCase().includes('server')) &&
+            reasonLower.includes('infrastructure')) {
+            adjustedConfidence = Math.min(adjustedConfidence + 0.1, 1.0);
+        }
+
+        // Find the best matching task
+        let matchedTask: Task | null = null;
+        if (matchData.matchedTaskTitle) {
+            const foundTask = tasks.find(t => 
+                t.title.toLowerCase() === matchData.matchedTaskTitle.toLowerCase() ||
+                (t.title.toLowerCase().includes('infra') && 
+                 reasonLower.includes('infrastructure'))
+            );
+            if (foundTask) {
+                matchedTask = foundTask;
+            }
+        }
+        
         results.push({
           meeting,
-          matchedTask: matchedTask || null,
-          confidence: matchData.confidence,
+          matchedTask: matchedTask,
+          confidence: matchedTask ? adjustedConfidence : 0,
           reason: matchData.reason
         });
 
@@ -149,12 +180,13 @@ export async function POST(request: Request) {
     const storage = new UserStorage();
     await storage.loadData();
     const apiKey = storage.getUserApiKey(session.user.email);
-    if (!apiKey) {
-      return NextResponse.json({ error: 'Intervals API key not configured' }, { status: 400 });
-    }
 
     // Get tasks directly using IntervalsAPI
-    const intervalsApi = new IntervalsAPI(apiKey);
+    const apiKeyValue = await apiKey;
+    if (!apiKeyValue) {
+      return NextResponse.json({ error: 'Intervals API key not configured' }, { status: 400 });
+    }
+    const intervalsApi = new IntervalsAPI(apiKeyValue);
     console.log('Fetching tasks using Intervals API...');
     const tasks = await intervalsApi.getTasks();
     console.log('Available tasks for matching:', tasks.length);
@@ -165,11 +197,11 @@ export async function POST(request: Request) {
     // Process meetings in batches
     const { results, nextIndex } = await processMeetingBatch(meetings, tasks, openai, startIndex);
 
-    // Categorize results
-    const highConfidence = results.filter(r => r.confidence >= 0.8);
-    const mediumConfidence = results.filter(r => r.confidence >= 0.5 && r.confidence < 0.8);
-    const lowConfidence = results.filter(r => r.confidence > 0 && r.confidence < 0.5);
-    const unmatched = results.filter(r => r.confidence === 0 || !r.matchedTask);
+    // Categorize results - only consider meetings with actual task matches
+    const highConfidence = results.filter(r => r.matchedTask && r.confidence >= 0.8);
+    const mediumConfidence = results.filter(r => r.matchedTask && r.confidence >= 0.5 && r.confidence < 0.8);
+    const lowConfidence = results.filter(r => r.matchedTask && r.confidence > 0 && r.confidence < 0.5);
+    const unmatched = results.filter(r => !r.matchedTask);
 
     return NextResponse.json({
       matches: {

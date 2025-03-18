@@ -84,7 +84,7 @@
         "project": "",
         "module": "",
         "confidence": 0.4,
-        "reason": "The meeting subject is vague and does not provide clear evidence for a specific task. However, the word 'fix' suggests a potential development-related discussion. Defaulting to 'Dev Task' based on company context and matching rules for vague subjects."
+        "reason": "The meeting subject is vague but includes the word 'fix,' which often relates to development tasks. There is no explicit mention of QA or testing beyond the word 'test,' which is insufficient evidence to prioritize a QA task. Defaulting to 'Dev Task' as per company context and matching rules."
       }
     ],
     "status": "pending",
