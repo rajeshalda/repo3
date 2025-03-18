@@ -535,7 +535,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const userId = session?.user?.email || '';
   const [selectedMeetings, setSelectedMeetings] = useState<Record<string, boolean>>({});
   const [isPostingMultiple, setIsPostingMultiple] = useState(false);
-  const [activeTab] = useState('unmatched');
+  const [activeTab, setActiveTab] = useState('matched');
   const [selectedTasks, setSelectedTasks] = useState<Map<string, Task>>(new Map());
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
   
@@ -645,7 +645,30 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     }
   };
 
-  // Add postAllMeetings function
+  // Update getPostableMeetingsCount function to be more specific
+  const getPostableMeetingsCount = () => {
+    if (activeTab === 'matched') {
+      return meetings.high.filter(m => {
+        const hasAttendance = m.meeting.attendanceRecords.some(
+          record => record.name === session?.user?.name && record.duration > 0
+        );
+        const meetingKey = generateMeetingKey(m.meeting, userId);
+        const hasMatchedTask = m.matchedTask !== null;
+        return hasMatchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
+      }).length;
+    } else {
+      return meetings.unmatched.filter(m => {
+        const hasAttendance = m.meeting.attendanceRecords.some(
+          record => record.name === session?.user?.name && record.duration > 0
+        );
+        const meetingKey = generateMeetingKey(m.meeting, userId);
+        const hasSelectedTask = selectedTasks.has(meetingKey);
+        return hasSelectedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
+      }).length;
+    }
+  };
+
+  // Update postAllMeetings function to handle both sections
   const postAllMeetings = async () => {
     setIsPostingMultiple(true);
     let successCount = 0;
@@ -656,11 +679,17 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       const meetingsToPost = activeTab === 'matched' 
         ? meetings.high.filter(m => {
             const meetingKey = generateMeetingKey(m.meeting, userId);
-            return m.matchedTask && selectedMeetingKeys.has(meetingKey);
+            const hasAttendance = m.meeting.attendanceRecords.some(
+              record => record.name === session?.user?.name && record.duration > 0
+            );
+            return m.matchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
           })
         : meetings.unmatched.filter(m => {
             const meetingKey = generateMeetingKey(m.meeting, userId);
-            return selectedTasks.has(meetingKey) && selectedMeetingKeys.has(meetingKey);
+            const hasAttendance = m.meeting.attendanceRecords.some(
+              record => record.name === session?.user?.name && record.duration > 0
+            );
+            return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
           });
 
       const postedIds = new Set<string>();
@@ -671,14 +700,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             record => record.name === session?.user?.name
           );
 
-          if (!userAttendance) {
-            failCount++;
-            continue;
-          }
-
-          // Skip meetings with zero duration
-          if (!userAttendance.duration || userAttendance.duration <= 0) {
-            console.log(`Skipping meeting "${result.meeting.subject}" due to zero duration`);
+          if (!userAttendance || !userAttendance.duration || userAttendance.duration <= 0) {
+            console.log(`Skipping meeting "${result.meeting.subject}" due to invalid attendance`);
             failCount++;
             continue;
           }
@@ -718,22 +741,9 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         }
       }
 
-      // Update the meetings state to remove posted meetings
-      setMeetings(prev => ({
-        ...prev,
-        [activeTab === 'matched' ? 'high' : 'unmatched']: 
-          prev[activeTab === 'matched' ? 'high' : 'unmatched']
-            .filter(m => !postedIds.has(generateMeetingKey(m.meeting, userId)))
-      }));
-
-      // Clear selected tasks for posted meetings
-      const updatedSelectedTasks = new Map(selectedTasks);
-      postedIds.forEach(id => updatedSelectedTasks.delete(id));
-      setSelectedTasks(updatedSelectedTasks);
-
-      // Show notifications sequentially
+      // Show notifications
       if (successCount > 0) {
-        toast.success(`Successfully posted ${successCount} meetings`, {
+        toast.success(`Successfully posted ${successCount} ${activeTab} meetings`, {
           position: "top-center",
           duration: 3000,
           style: {
@@ -744,62 +754,27 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             padding: "12px 24px"
           }
         });
-
-        // Wait for success notification to complete before showing failure
-      if (failCount > 0) {
-          setTimeout(() => {
-            toast.error(`Failed to post ${failCount} meetings`, {
-              position: "top-center",
-              duration: 4000,
-              style: {
-                backgroundColor: "#ef4444",
-                color: "white",
-                fontSize: "16px",
-                borderRadius: "8px",
-                padding: "12px 24px"
-              }
-            });
-          }, 3500); // Wait for success notification to finish (3000ms) plus a small gap (500ms)
-        }
-      } else if (failCount > 0) {
-        // If no success, show failure immediately
-        toast.error(`Failed to post ${failCount} meetings`, {
-          position: "top-center",
-          duration: 4000,
-          style: {
-            backgroundColor: "#ef4444",
-            color: "white",
-            fontSize: "16px",
-            borderRadius: "8px",
-            padding: "12px 24px"
-          }
-        });
       }
+
+      if (failCount > 0) {
+        setTimeout(() => {
+          toast.error(`Failed to post ${failCount} ${activeTab} meetings`, {
+            position: "top-center",
+            duration: 4000,
+            style: {
+              backgroundColor: "#ef4444",
+              color: "white",
+              fontSize: "16px",
+              borderRadius: "8px",
+              padding: "12px 24px"
+            }
+          });
+        }, successCount > 0 ? 3500 : 0);
+      }
+
     } finally {
       setIsPostingMultiple(false);
     }
-  };
-
-  // Update getPostableMeetingsCount function
-  const getPostableMeetingsCount = () => {
-    if (activeTab === 'matched') {
-      return meetings.high.filter(m => {
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        return m.matchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      }).length;
-    } else if (activeTab === 'unmatched') {
-      return meetings.unmatched.filter(m => {
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      }).length;
-    }
-    return 0;
   };
 
   // Add useEffect to initialize selected meetings
@@ -853,33 +828,11 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
   return (
     <div className="bg-background">
-      {/* Header with Post All button */}
-      <div className="border-b">
-        <div className="flex items-center justify-end px-6 py-2">
-          {getPostableMeetingsCount() > 0 && (
-            <Button
-              onClick={postAllMeetings}
-              disabled={isPostingMultiple}
-              size="sm"
-            >
-              {isPostingMultiple ? (
-                <>
-                  <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
-                  Posting...
-                </>
-              ) : (
-                <>Post All ({getPostableMeetingsCount()})</>
-              )}
-            </Button>
-          )}
-        </div>
-      </div>
-
       {/* Content */}
       <div className="p-0">
-        <Tabs defaultValue="matched" className="w-full">
+        <Tabs defaultValue="matched" className="w-full" onValueChange={(value) => setActiveTab(value)}>
           <div className="border-b">
-            <div className="px-4">
+            <div className="px-4 flex justify-between items-center">
               <TabsList className="h-10 bg-transparent gap-4">
                 <TabsTrigger 
                   value="matched"
@@ -894,6 +847,24 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                   Unmatched ({meetings.unmatched.length})
                 </TabsTrigger>
               </TabsList>
+              {/* Post All button for each section */}
+              {getPostableMeetingsCount() > 0 && (
+                <Button
+                  onClick={postAllMeetings}
+                  disabled={isPostingMultiple}
+                  size="sm"
+                  className="mr-4"
+                >
+                  {isPostingMultiple ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                      Posting...
+                    </>
+                  ) : (
+                    <>Post All {activeTab === "matched" ? "Matched" : "Unmatched"} ({getPostableMeetingsCount()})</>
+                  )}
+                </Button>
+              )}
             </div>
           </div>
 
