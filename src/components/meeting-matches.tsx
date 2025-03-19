@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, type ReactElement } from 'react';
+import React, { useState, useEffect, type ReactElement, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from "@/components/ui/button";
 import {
@@ -539,6 +539,52 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const [selectedTasks, setSelectedTasks] = useState<Map<string, Task>>(new Map());
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
   
+  // Add a matchesRef to detect actual changes in matches data
+  const matchesRef = useRef(matches);
+
+  // Clear all states when matches change
+  const clearAllStates = useCallback(() => {
+    setSelectedMeetings({});
+    setSelectedTasks(new Map());
+    setSelectedMeetingKeys(new Set());
+    setMeetings({
+      high: [],
+      medium: [],
+      low: [],
+      unmatched: []
+    });
+  }, []);
+
+  // Check if matches have actually changed
+  const haveMeetingsChanged = useCallback((newMatches: typeof matches, oldMatches: typeof matches) => {
+    const getMeetingIds = (matchList: MatchResult[]) => 
+      new Set(matchList.map(m => m.meeting.meetingInfo?.meetingId || m.meeting.subject));
+
+    return (
+      JSON.stringify(getMeetingIds(newMatches.high)) !== JSON.stringify(getMeetingIds(oldMatches.high)) ||
+      JSON.stringify(getMeetingIds(newMatches.medium)) !== JSON.stringify(getMeetingIds(oldMatches.medium)) ||
+      JSON.stringify(getMeetingIds(newMatches.low)) !== JSON.stringify(getMeetingIds(oldMatches.low)) ||
+      JSON.stringify(getMeetingIds(newMatches.unmatched)) !== JSON.stringify(getMeetingIds(oldMatches.unmatched))
+    );
+  }, []);
+
+  // Update meetings when matches prop changes
+  useEffect(() => {
+    if (haveMeetingsChanged(matches, matchesRef.current)) {
+      console.log('Matches changed, clearing all states');
+      clearAllStates();
+      matchesRef.current = matches;
+      
+      // After clearing, set the new filtered meetings
+      setMeetings({
+        high: filterMeetings(matches.high),
+        medium: filterMeetings(matches.medium),
+        low: filterMeetings(matches.low),
+        unmatched: filterMeetings(matches.unmatched)
+      });
+    }
+  }, [matches, clearAllStates, haveMeetingsChanged]);
+
   const filterMeetings = (matchResults: MatchResult[]) => {
     // Convert postedMeetingIds to a Set if it isn't already one
     const postedIds = postedMeetingIds instanceof Set ? postedMeetingIds : new Set(postedMeetingIds);
@@ -579,10 +625,10 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   };
 
   const [meetings, setMeetings] = useState<MatchGroups>(() => ({
-      high: filterMeetings(matches.high),
-      medium: filterMeetings(matches.medium),
-      low: filterMeetings(matches.low),
-      unmatched: filterMeetings(matches.unmatched)
+    high: filterMeetings(matches.high),
+    medium: filterMeetings(matches.medium),
+    low: filterMeetings(matches.low),
+    unmatched: filterMeetings(matches.unmatched)
   }));
 
   // Update meetings when props change
