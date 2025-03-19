@@ -228,6 +228,7 @@ export default function DashboardPage() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [totalAttendanceSeconds, setTotalAttendanceSeconds] = useState(0);
   const [rawMeetingsData, setRawMeetingsData] = useState<MeetingsResponse | null>(null);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const fetchMeetings = useCallback(async () => {
     try {
@@ -982,19 +983,40 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <Sidebar 
         className="hidden lg:flex" 
         currentView={currentView}
         onViewChange={setCurrentView}
       />
 
+      {/* Mobile Sidebar */}
+      {showMobileSidebar && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="fixed inset-0 bg-gray-800/40" onClick={() => setShowMobileSidebar(false)} />
+          <div className="fixed inset-y-0 left-0 w-64 bg-background border-r">
+            <Sidebar 
+              currentView={currentView}
+              onViewChange={(view) => {
+                setCurrentView(view);
+                setShowMobileSidebar(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="border-b bg-background">
           <div className="flex h-16 items-center gap-4 px-4 sm:px-6">
-            <Button variant="ghost" size="icon" className="lg:hidden">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="lg:hidden"
+              onClick={() => setShowMobileSidebar(true)}
+            >
               <Menu className="h-5 w-5" />
             </Button>
             
