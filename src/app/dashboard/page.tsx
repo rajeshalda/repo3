@@ -311,11 +311,15 @@ export default function DashboardPage() {
   // Add handler for date range changes
   const handleDateRangeChange = (newRange: DateRange | undefined) => {
     setDateRange(newRange);
+    // Clear match results when date range changes
+    setMatchResults(null);
     if (newRange?.from && newRange?.to) {
       localStorage.setItem('meetingsDateRange', JSON.stringify({
         from: newRange.from.toISOString(),
         to: newRange.to.toISOString()
       }));
+      // Also clear from localStorage
+      localStorage.removeItem('taskMatches');
     }
   };
 
