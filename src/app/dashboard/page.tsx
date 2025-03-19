@@ -959,20 +959,6 @@ export default function DashboardPage() {
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <h2 className="text-lg sm:text-xl font-semibold">Task Matches</h2>
-                  <div className="flex flex-wrap gap-2 text-sm">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
-                      <span className="text-muted-foreground">High: {matchResults.summary.highConfidence}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                      <span className="text-muted-foreground">Medium: {matchResults.summary.mediumConfidence}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-red-500" />
-                      <span className="text-muted-foreground">Low: {matchResults.summary.lowConfidence}</span>
-                    </div>
-                  </div>
                 </div>
                 <div className="overflow-hidden rounded-lg border">
                   <MeetingMatches 
