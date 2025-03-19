@@ -800,12 +800,13 @@ export default function DashboardPage() {
                     <div className="border rounded-lg overflow-hidden">
                       <Table>
                         <TableHeader>
-                          <TableRow>
-                            <TableHead className="whitespace-nowrap bg-gray-50/75 px-4 py-3">Meeting</TableHead>
-                            <TableHead className="whitespace-nowrap bg-gray-50/75 px-4 py-3 hidden md:table-cell">Time</TableHead>
-                            <TableHead className="whitespace-nowrap bg-gray-50/75 px-4 py-3 hidden sm:table-cell">Duration</TableHead>
-                            <TableHead className="whitespace-nowrap bg-gray-50/75 px-4 py-3">Attendance</TableHead>
-                            <TableHead className="whitespace-nowrap bg-gray-50/75 px-4 py-3 text-center">Status</TableHead>
+                          <TableRow className="border-b">
+                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Date</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Description</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Task Name</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Duration</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Module</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Work Type</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>

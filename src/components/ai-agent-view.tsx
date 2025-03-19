@@ -735,13 +735,13 @@ export function AIAgentView() {
           ) : postedMeetings.length > 0 ? (
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Task Name</TableHead>
-                  <TableHead>Duration</TableHead>
-                  <TableHead>Module</TableHead>
-                  <TableHead>Work Type</TableHead>
+                <TableRow className="border-b">
+                  <TableHead className="bg-muted/50 font-semibold py-4 px-6 whitespace-nowrap">Date</TableHead>
+                  <TableHead className="bg-muted/50 font-semibold py-4 px-6">Description</TableHead>
+                  <TableHead className="bg-muted/50 font-semibold py-4 px-6">Task Name</TableHead>
+                  <TableHead className="bg-muted/50 font-semibold py-4 px-6 whitespace-nowrap">Duration</TableHead>
+                  <TableHead className="bg-muted/50 font-semibold py-4 px-6">Module</TableHead>
+                  <TableHead className="bg-muted/50 font-semibold py-4 px-6">Work Type</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

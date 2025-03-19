@@ -65,11 +65,11 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40%]">Meeting Subject</TableHead>
-                <TableHead className="hidden sm:table-cell">Meeting Date</TableHead>
-                <TableHead className="hidden md:table-cell">Task Name</TableHead>
-                <TableHead>Posted</TableHead>
+              <TableRow className="border-b">
+                <TableHead className="w-[40%] bg-muted/50 font-semibold py-4 px-6">Meeting Subject</TableHead>
+                <TableHead className="hidden sm:table-cell bg-muted/50 font-semibold py-4 px-6">Meeting Date</TableHead>
+                <TableHead className="hidden md:table-cell bg-muted/50 font-semibold py-4 px-6">Task Name</TableHead>
+                <TableHead className="bg-muted/50 font-semibold py-4 px-6">Posted</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
