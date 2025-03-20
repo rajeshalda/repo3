@@ -800,13 +800,12 @@ export default function DashboardPage() {
                     <div className="border rounded-lg overflow-hidden">
                       <Table>
                         <TableHeader>
-                          <TableRow className="border-b">
-                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Date</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Description</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Task Name</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Duration</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Module</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-4 px-6">Work Type</TableHead>
+                          <TableRow>
+                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Meeting</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Date and Time</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Schedule Duration</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Actual Duration</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Attendance</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -894,14 +893,21 @@ export default function DashboardPage() {
                                           .filter(record => record.name === session?.user?.name)
                                           .map((record, index) => (
                                             <div key={index} className="text-sm">
-                                              <span className="text-muted-foreground">
-                                                {formatDuration(record.duration)}
-                                              </span>
+                                              {record && record.duration > 0 ? (
+                                                <span className="text-muted-foreground">
+                                                  {formatDuration(record.duration)}
+                                                </span>
+                                              ) : (
+                                                <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Not Attended</span>
+                                              )}
                                             </div>
                                           ))}
+                                        {meeting.attendanceRecords.filter(record => record.name === session?.user?.name).length === 0 && (
+                                          <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Not Attended</span>
+                                        )}
                                       </div>
                                     ) : (
-                                      <span className="text-sm text-muted-foreground">Not attended</span>
+                                      <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">Meeting did not start</span>
                                     )}
                                   </TableCell>
                                   <TableCell className="px-4 py-3 text-center">
