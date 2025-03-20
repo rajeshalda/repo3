@@ -1,71 +1,15 @@
 {
   "vishalkumar@m365x65088219.onmicrosoft.com": {
     "email": "vishalkumar@m365x65088219.onmicrosoft.com",
-    "lastPostedDate": "2025-03-19T10:46:02.749Z",
+    "lastPostedDate": "2025-03-20T10:58:10.025Z",
     "meetings": [
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_test meeting infra_test meeting infra_2025-03-13T15:00:00.0000000",
-        "subject": "test meeting infra",
-        "meetingDate": "2025-03-13T15:00:00.0000000",
-        "postedDate": "2025-03-17T12:01:49.478Z",
-        "taskId": "16550165",
-        "taskName": "QA Meeting"
-      },
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_Infra test meeting_Infra test meeting_2025-03-07T10:30:00.0000000",
-        "subject": "Infra test meeting",
-        "meetingDate": "2025-03-07T10:30:00.0000000",
-        "postedDate": "2025-03-18T06:47:19.580Z",
-        "taskId": "16550165",
-        "taskName": "QA Meeting"
-      },
       {
         "id": "vishalkumar@m365x65088219.onmicrosoft.com_current date fix test again_current date fix test again_2025-03-17T16:45:00.0000000",
         "subject": "current date fix test again",
         "meetingDate": "2025-03-17T16:45:00.0000000",
-        "postedDate": "2025-03-18T11:52:15.466Z",
+        "postedDate": "2025-03-20T10:58:10.025Z",
         "taskId": "16537629",
         "taskName": "Daily Status Report"
-      },
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_current date test sandisk_current date test sandisk_2025-03-17T16:10:00.0000000",
-        "subject": "current date test sandisk",
-        "meetingDate": "2025-03-17T16:10:00.0000000",
-        "postedDate": "2025-03-18T11:52:17.467Z",
-        "taskId": "16537633",
-        "taskName": "Sandisk Task"
-      },
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_meeting for agent bug fix_meeting for agent bug fix_2025-03-12T17:00:00.0000000",
-        "subject": "meeting for agent bug fix",
-        "meetingDate": "2025-03-12T17:00:00.0000000",
-        "postedDate": "2025-03-18T11:52:20.703Z",
-        "taskId": "16550165",
-        "taskName": "QA Meeting"
-      },
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_sandisk discussion second_sandisk discussion second_2025-03-10T17:30:00.0000000",
-        "subject": "sandisk discussion second",
-        "meetingDate": "2025-03-10T17:30:00.0000000",
-        "postedDate": "2025-03-18T11:52:22.666Z",
-        "taskId": "16537633",
-        "taskName": "Sandisk Task"
-      },
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_Test unmatched meeting_Test unmatched meeting_2025-03-07T16:00:00.0000000",
-        "subject": "Test unmatched meeting ",
-        "meetingDate": "2025-03-07T16:00:00.0000000",
-        "postedDate": "2025-03-18T12:00:08.334Z",
-        "taskId": "16550165",
-        "taskName": "QA Meeting"
-      },
-      {
-        "id": "vishalkumar@m365x65088219.onmicrosoft.com_moon walking_moon walking_2025-03-18T17:33:00.0000000",
-        "subject": "moon walking",
-        "meetingDate": "2025-03-18T17:33:00.0000000",
-        "postedDate": "2025-03-19T10:46:02.749Z",
-        "taskId": "16537631",
-        "taskName": "UMG Task"
       }
     ]
   },
