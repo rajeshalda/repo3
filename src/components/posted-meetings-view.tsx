@@ -61,7 +61,7 @@ export function PostedMeetingsView() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Posted Meetings</h2>
+        <h2 className="text-2xl font-semibold">Manually Posted Meetings</h2>
         <div className="flex items-center gap-4">
           <div className="text-sm text-muted-foreground">
             Total Posted: {postedMeetings.length}

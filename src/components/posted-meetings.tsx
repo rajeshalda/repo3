@@ -59,7 +59,7 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
         <CardHeader className="sm:block hidden">
           <CardTitle>Posted Meetings</CardTitle>
           <CardDescription>
-            Meetings that have been posted to Intervals
+            Meetings that have been manually posted to Intervals
           </CardDescription>
         </CardHeader>
         <CardContent>
