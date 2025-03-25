@@ -28,7 +28,7 @@ export default function LoginPage() {
           </svg>
           Sign in with NathCorp Organization ID
         </button>
-        <p className="text-sm text-muted-foreground/80">Version 2.1.0</p>
+        <p className="text-sm text-muted-foreground/80"></p>
       </div>
     </div>
   );
