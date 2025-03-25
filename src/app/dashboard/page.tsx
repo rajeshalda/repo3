@@ -28,6 +28,7 @@ import { PostedMeetings } from "@/components/posted-meetings";
 import { useTheme } from "next-themes";
 import { Sidebar } from '@/components/ui/sidebar';
 import { PostedMeetingsView } from '@/components/posted-meetings-view';
+import { SessionWarning } from '@/components/session-warning';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +38,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AIAgentView } from '@/components/ai-agent-view';
+import { handleApiResponse } from '@/lib/api-helpers';
 
 interface RawAttendanceRecord {
   identity: {
@@ -242,9 +244,8 @@ export default function DashboardPage() {
       }
       
       const response = await fetch(`/api/meetings?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch meetings');
-      }
+      await handleApiResponse(response);
+      
       const rawData = await response.json();
       
       // Store raw data before filtering
@@ -257,13 +258,15 @@ export default function DashboardPage() {
       };
       
       setMeetingsData(filteredMeetings);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to fetch meetings:', err);
-      toast("❌ Failed to fetch meetings");
+      if (err instanceof Error && err.message !== 'Session expired') {
+        toast("❌ Failed to fetch meetings");
+      }
     } finally {
       setMeetingsLoading(false);
     }
-  }, [dateRange, toast, session?.user?.name]);
+  }, [dateRange, toast]);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -801,7 +804,7 @@ export default function DashboardPage() {
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Meeting</TableHead>
+                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Meeting Name</TableHead>
                             <TableHead className="bg-muted/50 font-semibold py-3 px-4">Date and Time</TableHead>
                             <TableHead className="bg-muted/50 font-semibold py-3 px-4">Schedule Duration</TableHead>
                             <TableHead className="bg-muted/50 font-semibold py-3 px-4">Actual Duration</TableHead>
@@ -990,6 +993,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-screen overflow-hidden">
+      <SessionWarning />
       {/* Desktop Sidebar */}
       <Sidebar 
         className="hidden lg:flex" 
@@ -1093,7 +1097,7 @@ export default function DashboardPage() {
             {renderCurrentView()}
           </div>
           <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
-            <span className="opacity-70">v2.1.0  Powered by ChatGPT-4o  © 2025 NathCorp Inc.</span>
+            <span className="opacity-70">v2.1.1  Powered by ChatGPT-4o  © 2025 NathCorp Inc.</span>
           </footer>
         </main>
       </div>
