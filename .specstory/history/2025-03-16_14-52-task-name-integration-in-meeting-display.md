@@ -1760,7 +1760,144 @@ button succefully visible in Posted Meetings section but that previous button st
 
 _**Assistant**_
 
+I see the issue. The "Reset Posted" button is now visible in the Posted Meetings section, but the original button is still present elsewhere in the UI. Let's find and remove the original button.
 
+Let's check the dashboard page where the original button is likely located:
+
+---
+
+Read file: src/app/dashboard/page.tsx
+
+---
+
+Let's search for the "Reset Posted" button in the dashboard page:
+
+---
+
+<details>
+            <summary>Grep search for "Reset Posted" • **7** files</summary>
+        
+| File | Line | Match |
+|------|------|-------|
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/src/components/posted-meetings-view.tsx` | L80 | `Reset Posted` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/src/app/dashboard/page.tsx` | L761 | `Reset Posted` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-14_13-01-ui-improvement-for-match-tasks-button.md` | L112 | `⟪ 101 characters skipped ⟫ion-project.md` | L593 | `3. Moved the "Reset Posted Meetings" button next to the "Match Tasks" button above the meetings table` |` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-14_13-01-ui-improvement-for-match-tasks-button.md` | L116 | `⟪ 97 characters skipped ⟫duction-project.md` | L6127 | `- Added "Reset Posted" and "Match Tasks" buttons` |` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-14_13-01-ui-improvement-for-match-tasks-button.md` | L118 | `⟪ 104 characters skipped ⟫-project.md` | L6492 | `1. Removed the "Reset Posted" and "Match Tasks" buttons` |` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1415 | `can you move this reset posted button to posted meeting` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1421 | `I'll move the "Reset Posted" button from its current location to the Posted Meetings section. Let's update the PostedMeetingsView component:` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1429 | `Now, let's update the PostedMeetingsView component to include the Reset Posted button:` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1537 | `+               Reset Posted` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1734 | `Perfect! I've successfully moved the "Reset Posted" button to the Posted Meetings section. Here's what I did:` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1736 | `1. Added the Reset Posted button to the PostedMeetingsView component:` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/checking-for-missing-project-dependencies.md` | L24617 | `Reset Posted Meetings` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/checking-for-missing-project-dependencies.md` | L24780 | `I've added a "Reset Posted Meetings" button that will:` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/checking-for-missing-project-dependencies.md` | L24794 | `1. Click "Reset Posted Meetings"` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L562 | `Reset Posted Meetings` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L593 | `3. Moved the "Reset Posted Meetings" button next to the "Match Tasks" button above the meetings table` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L800 | `Reset Posted` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L1360 | `Reset Posted` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L5939 | `Reset Posted` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L6127 | `- Added "Reset Posted" and "Match Tasks" buttons` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L6323 | `remove the Task Matches txt from inside box and also remove high medium low iteams and also remove the reset posted and match task from Task Matches box` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L6492 | `1. Removed the "Reset Posted" and "Match Tasks" buttons` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-11_10-18-remove-calendar-from-ai-agent-page.md` | L190 | `This would be similar to the existing "Reset Posted" functionality in the main dashboard, but specifically for the AI Agent's posted meetings history.` |
+
+</details>
+
+---
+
+Let's look at line 761 in the dashboard page:
+
+---
+
+Read file: src/app/dashboard/page.tsx
+
+---
+
+Now let's remove the original "Reset Posted" button from the dashboard page:
+
+---
+
+```diff
+                    <h2 className="text-lg sm:text-xl font-semibold">Fetched Meetings</h2>
+                    <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+-                     <Button 
+-                       variant="outline" 
+-                       size="sm"
+-                       onClick={handleReset}
+-                       className="gap-2 w-full sm:w-auto"
+-                     >
+-                       <Loader2 className="h-4 w-4" />
+-                       Reset Posted
+-                     </Button>
+                      <Button 
+                        onClick={matchMeetings} 
+```
+
+---
+
+Now we need to check if the `handleReset` function is used elsewhere or if we can remove it:
+
+---
+
+<details>
+            <summary>Grep search for "handleReset" • **7** files</summary>
+        
+| File | Line | Match |
+|------|------|-------|
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/src/components/posted-meetings-view.tsx` | L37 | `const handleResetPosted = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/src/components/posted-meetings-view.tsx` | L72 | `onClick={handleResetPosted}` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/src/app/dashboard/page.tsx` | L594 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L558 | `onClick={handleReset}` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L796 | `onClick={handleReset}` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/setting-up-localhost-for-production-project.md` | L1356 | `onClick={handleReset}` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/disabling-eslint-rules-in-next-js.md` | L1115 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/disabling-eslint-rules-in-next-js.md` | L1444 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/disabling-eslint-rules-in-next-js.md` | L1850 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/disabling-eslint-rules-in-next-js.md` | L2194 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/checking-for-missing-project-dependencies.md` | L24569 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/checking-for-missing-project-dependencies.md` | L24613 | `onClick={handleReset}` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/checking-for-missing-project-dependencies.md` | L24661 | `const handleReset = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1480 | `+   const handleResetPosted = async () => {` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/.specstory/history/2025-03-16_14-52-task-name-integration-in-meeting-display.md` | L1529 | `+               onClick={handleResetPosted}` |
+| `file:///c%3A/Users/Rajesh.alda/Downloads/repo3/src/app/dashboard/page.tsx` | L594 | `const handleReset = async () => {` |
+
+</details>
+
+---
+
+Let's check the `handleReset` function in the dashboard page:
+
+---
+
+Read file: src/app/dashboard/page.tsx
+
+---
+
+Since we've moved the reset functionality to the PostedMeetingsView component, we can keep the handleReset function in the dashboard page for now, as it might be used elsewhere or for other purposes.
+
+Let's check if there are any other references to the "Reset Posted" button in the dashboard page:
+
+---
+
+<details>
+            <summary>Grep search for "Reset Posted" • **0** files</summary>
+        
+No results found
+</details>
+
+---
+
+Great! I've successfully removed the original "Reset Posted" button from the dashboard page while keeping the new one in the Posted Meetings section. The button is now only visible in the Posted Meetings section, which is a more logical location for this functionality.
+
+The changes I made:
+
+1. Removed the original "Reset Posted" button from the dashboard page
+2. Kept the handleReset function in the dashboard page as it might be used elsewhere
+3. The new "Reset Posted" button in the PostedMeetingsView component is now the only one visible in the UI
+
+This completes the task of moving the "Reset Posted" button to the Posted Meetings section.
 
 ---
 

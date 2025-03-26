@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useState, useEffect, useRef } from "react";
-import { Loader2, Bot, Calendar, AlertCircle, Power, Trash2 } from "lucide-react";
+import { Loader2, Calendar, AlertCircle, Power, Trash2, X, Clock } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -104,6 +104,8 @@ export function AIAgentView() {
   });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { error, success } = useToast();
+  const [isCancelling, setIsCancelling] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -333,6 +335,18 @@ export function AIAgentView() {
     }
   };
 
+  const cancelProcessing = () => {
+    if (abortControllerRef.current) {
+      setIsCancelling(true);
+      addLog('Cancelling processing...', 'info');
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      
+      // Update localStorage to reflect disabled state
+      localStorage.setItem('aiAgentEnabled', 'false');
+    }
+  };
+
   const processMeetings = async () => {
     if (isProcessing) return; // Prevent multiple simultaneous processing
     
@@ -356,11 +370,25 @@ export function AIAgentView() {
         }
       }, 5000);
       
+      // Create a new AbortController for this processing session
+      abortControllerRef.current = new AbortController();
+      
       // Call the API to process meetings
-      const response = await fetch('/api/test-time-entry');
+      const response = await fetch('/api/test-time-entry', {
+        signal: abortControllerRef.current.signal
+      });
       
       // Clear the polling interval once the main request completes
       clearInterval(pollingInterval);
+      
+      if (response.status === 499) {
+        // This is a cancelled request response
+        addLog('Processing was cancelled', 'info');
+        success('Processing cancelled successfully');
+        // Set agent to disabled when cancelled
+        setAgentEnabled(false);
+        return;
+      }
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -541,10 +569,25 @@ export function AIAgentView() {
       // Refresh posted meetings after processing
       await fetchPostedMeetings();
     } catch (error) {
-      console.error('Error processing meetings:', error);
-      addLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
+      // Don't show error if it was a cancellation
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        console.error('Error processing meetings:', error);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        addLog(`Error: ${message}`, 'error');
+      } else {
+        addLog('Processing was cancelled by user', 'info');
+        // Set agent to disabled when cancelled via AbortError
+        setAgentEnabled(false);
+      }
     } finally {
       setIsProcessing(false);
+      setIsCancelling(false);
+      abortControllerRef.current = null;
+      
+      // If cancellation occurred but agentEnabled is still true, update it
+      if (!intervalRef.current && agentEnabled) {
+        setAgentEnabled(false);
+      }
     }
   };
 
@@ -564,6 +607,12 @@ export function AIAgentView() {
   }, []);
 
   const toggleAgent = (enabled: boolean) => {
+    // If we're currently processing and trying to disable, we should cancel
+    if (isProcessing && !enabled) {
+      cancelProcessing();
+      return; // Don't actually toggle the state yet - wait for cancel to complete
+    }
+    
     setAgentEnabled(enabled);
     
     // Store the state in localStorage
@@ -642,11 +691,29 @@ export function AIAgentView() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">AI Agent Dashboard</CardTitle>
-          <Bot className="h-8 w-8 text-blue-500" />
+          <div className="h-10 w-10 flex items-center justify-center border-2 border-blue-500 rounded-md relative">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-blue-500 font-bold text-sm">AI</span>
+            </div>
+            {/* Chip pins */}
+            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-3/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-3/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-3/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-3/4"></div>
+          </div>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
             Automatically process your meetings and create time entries using AI.
+            <span className="block mt-1 text-xs">Fetches meetings from the past 7 days.</span>
           </p>
         </CardContent>
       </Card>
@@ -660,36 +727,54 @@ export function AIAgentView() {
           <div className="flex flex-col space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Power className={`h-4 w-4 ${agentEnabled ? 'text-green-500' : 'text-gray-400'}`} />
-                <span>Enable AI Agent</span>
+                {isProcessing ? (
+                  <X className={`h-4 w-4 text-red-500 ${isCancelling ? "animate-pulse" : ""}`} />
+                ) : (
+                  <Power className={`h-4 w-4 ${agentEnabled ? 'text-green-500' : 'text-gray-400'}`} />
+                )}
+                <span className={`${isProcessing ? "text-red-500 font-medium" : ""} ${isCancelling ? "animate-pulse" : ""}`}>
+                  {isCancelling ? "Cancelling..." : isProcessing ? "Stop AI Agent" : "Enable AI Agent"}
+                </span>
               </div>
               <Switch 
                 checked={agentEnabled} 
                 onCheckedChange={toggleAgent}
-                disabled={isProcessing}
               />
             </div>
             <div className="text-sm text-muted-foreground">
-              When enabled, the AI Agent will automatically check for new meetings every 5 minutes.
+              {isCancelling
+                ? "Cancelling the current process..."
+                : isProcessing 
+                  ? "Click the toggle to stop the currently running process."
+                  : "When enabled, the AI Agent will automatically check for new meetings every 5 minutes."}
             </div>
             
             <div className="border-t pt-4 mt-2">
               <Button 
                 className="w-full sm:w-auto"
-                onClick={handleProcessMeetings}
-                disabled={isProcessing || agentEnabled}
+                onClick={isProcessing ? cancelProcessing : handleProcessMeetings}
+                disabled={agentEnabled && !isProcessing || isCancelling}
               >
-                {isProcessing ? (
+                {isCancelling ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing Meetings...
+                    Cancelling...
+                  </>
+                ) : isProcessing ? (
+                  <>
+                    <X className="mr-2 h-4 w-4" />
+                    Cancel Processing
                   </>
                 ) : (
                   'Process Meetings Now'
                 )}
               </Button>
               <div className="text-sm text-muted-foreground mt-2">
-                Manually process your recent meetings and create time entries.
+                {isCancelling
+                  ? "Cancelling the operation. This may take a moment..."
+                  : isProcessing 
+                    ? "Cancel the current processing operation."
+                    : "Manually process your recent meetings and create time entries."}
               </div>
             </div>
           </div>

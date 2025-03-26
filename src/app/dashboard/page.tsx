@@ -231,6 +231,7 @@ export default function DashboardPage() {
   const [totalAttendanceSeconds, setTotalAttendanceSeconds] = useState(0);
   const [rawMeetingsData, setRawMeetingsData] = useState<MeetingsResponse | null>(null);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const fetchMeetings = useCallback(async () => {
     try {
@@ -329,8 +330,9 @@ export default function DashboardPage() {
 
   // Clear saved date range on logout
   const handleSignOut = () => {
+    setIsLoggingOut(true);
     localStorage.removeItem('meetingsDateRange');
-    signOut();
+    signOut({ callbackUrl: '/' });
   };
 
   const fetchPostedMeetings = async () => {
@@ -631,10 +633,26 @@ export default function DashboardPage() {
     return postedMeetings[postedMeetings.length - 1].postedDate;
   };
 
-  if (status === 'loading') {
+  // Add a loading screen during logout
+  if (isLoggingOut) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-500">Loading...</p>
+      <div className="h-screen w-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center space-y-4">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <p className="text-lg font-medium">Signing out...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status !== 'authenticated') {
+    // Show loading state instead of Dashboard until we're fully authenticated
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center space-y-4">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <p className="text-lg font-medium">Loading...</p>
+        </div>
       </div>
     );
   }
