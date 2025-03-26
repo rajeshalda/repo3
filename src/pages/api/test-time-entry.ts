@@ -8,13 +8,36 @@ import { meetingComparisonService } from '../../ai-agent/services/meeting/compar
 import { BatchProcessor } from '../../ai-agent/services/meeting/batch-processor';
 import { setCurrentBatchId } from './batch-status';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// Enhanced version of delay that respects AbortSignal
+const delay = (ms: number, signal?: AbortSignal) => new Promise<void>((resolve, reject) => {
+    // If signal already aborted, reject immediately
+    if (signal?.aborted) {
+        reject(new DOMException('Operation aborted', 'AbortError'));
+        return;
+    }
+    
+    const timer = setTimeout(() => resolve(), ms);
+    
+    // If signal exists, listen for abort event
+    if (signal) {
+        signal.addEventListener('abort', () => {
+            clearTimeout(timer);
+            reject(new DOMException('Operation aborted', 'AbortError'));
+        }, { once: true });
+    }
+});
 
 // Helper function to poll batch status
-async function pollBatchStatus(batchId: string, timeoutMs: number = 300000): Promise<boolean> {
+async function pollBatchStatus(batchId: string, timeoutMs: number = 300000, signal?: AbortSignal): Promise<boolean> {
     const startTime = Date.now();
     
     while (Date.now() - startTime < timeoutMs) {
+        // Check if operation was aborted
+        if (signal?.aborted) {
+            console.log('Batch status polling aborted by client');
+            throw new DOMException('Operation aborted', 'AbortError');
+        }
+        
         try {
             const status = meetingService.getBatchStatus(batchId);
             
@@ -31,11 +54,16 @@ async function pollBatchStatus(batchId: string, timeoutMs: number = 300000): Pro
                 return true;
             }
             
-            // Wait before checking again
-            await delay(5000);
+            // Wait before checking again (with abort support)
+            await delay(5000, signal);
         } catch (error) {
+            // If aborted, rethrow
+            if (error instanceof DOMException && error.name === 'AbortError') {
+                throw error;
+            }
+            
             console.error('Error polling batch status:', error);
-            await delay(5000); // Still wait before retrying
+            await delay(5000, signal); // Still wait before retrying
         }
     }
     
@@ -47,9 +75,20 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    // Handle CORS preflight for AbortController support
+    if (req.method === 'OPTIONS') {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        return res.status(200).end();
+    }
+    
     // Set proper content type
     res.setHeader('Content-Type', 'application/json');
 
+    // Enable AbortController support
+    res.setHeader('Connection', 'keep-alive');
+    
     if (req.method !== 'GET') {
         return res.status(405).json({ 
             success: false,
@@ -57,6 +96,9 @@ export default async function handler(
             message: 'Only GET requests are allowed'
         });
     }
+
+    // Store the response to check for client disconnection
+    const clientClosed = () => res.writableEnded;
 
     try {
         const session = await getSession({ req });
@@ -118,11 +160,22 @@ export default async function handler(
                 const processedMeetings = [];
                 for (const meeting of meetings) {
                     try {
+                        // Check if client has disconnected
+                        if (clientClosed()) {
+                            console.log('Client disconnected, aborting operation');
+                            throw new DOMException('Operation aborted', 'AbortError');
+                        }
+                        
                         const processed = await meetingService.getProcessedMeeting(meeting.id);
                         if (processed) {
                             processedMeetings.push(processed);
                         }
                     } catch (error) {
+                        // If aborted, rethrow
+                        if (error instanceof DOMException && error.name === 'AbortError') {
+                            throw error;
+                        }
+                        
                         console.error(`Error getting processed meeting ${meeting.id}:`, error);
                     }
                 }
@@ -208,6 +261,12 @@ export default async function handler(
                 console.log('Creating time entries...');
                 const timeEntries = [];
                 for (const result of matchResults) {
+                    // Check if client has disconnected
+                    if (clientClosed()) {
+                        console.log('Client disconnected, aborting operation');
+                        throw new DOMException('Operation aborted', 'AbortError');
+                    }
+                    
                     // Skip meetings that need review or had errors
                     if (result.needsReview || result.error) {
                         console.log(`Skipping time entry creation for meeting: ${result.meetingSubject} - ${result.needsReview ? 'Needs review' : 'Has error'}`);
@@ -235,6 +294,11 @@ export default async function handler(
                                 console.log(`Successfully created time entry for: ${meeting.subject}`);
                                 await delay(2000); // Add delay between calls
                             } catch (error) {
+                                // If aborted, rethrow
+                                if (error instanceof DOMException && error.name === 'AbortError') {
+                                    throw error;
+                                }
+                                
                                 console.error('Error creating time entry:', error);
                                 timeEntries.push({
                                     meetingId: meeting.id,
@@ -266,6 +330,19 @@ export default async function handler(
                     }
                 });
             } catch (batchError) {
+                // Handle client cancellations differently
+                if (batchError instanceof DOMException && batchError.name === 'AbortError') {
+                    console.log('Operation cancelled by client');
+                    // Clear the current batch ID
+                    setCurrentBatchId('');
+                    return res.status(499).json({ // 499 is "Client Closed Request"
+                        success: false,
+                        error: 'Operation Cancelled',
+                        message: 'The operation was cancelled by the client',
+                        cancelled: true
+                    });
+                }
+                
                 console.error('Error in batch processing:', batchError);
                 // Clear the current batch ID
                 setCurrentBatchId('');
@@ -276,6 +353,17 @@ export default async function handler(
                 });
             }
         } catch (meetingsError) {
+            // Handle client cancellations
+            if (meetingsError instanceof DOMException && meetingsError.name === 'AbortError') {
+                console.log('Operation cancelled by client');
+                return res.status(499).json({
+                    success: false,
+                    error: 'Operation Cancelled',
+                    message: 'The operation was cancelled by the client',
+                    cancelled: true
+                });
+            }
+            
             console.error('Error fetching meetings:', meetingsError);
             return res.status(500).json({ 
                 success: false,
@@ -284,6 +372,17 @@ export default async function handler(
             });
         }
     } catch (error: unknown) {
+        // Handle client cancellations
+        if (error instanceof DOMException && error.name === 'AbortError') {
+            console.log('Operation cancelled by client');
+            return res.status(499).json({
+                success: false,
+                error: 'Operation Cancelled',
+                message: 'The operation was cancelled by the client',
+                cancelled: true
+            });
+        }
+        
         console.error('API error:', error);
         return res.status(500).json({ 
             success: false,

@@ -3,6 +3,28 @@ import { Button } from './button';
 import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, ChevronRight, FileCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+// Custom AIChipIcon component
+const AIChipIcon = ({ className }: { className?: string }) => (
+  <div className={cn("relative w-4 h-4", className)}>
+    <div className="absolute inset-0 border border-current rounded-sm flex items-center justify-center">
+      <span className="text-[8px] font-bold">AI</span>
+    </div>
+    {/* Chip pins */}
+    <div className="absolute w-[2px] h-[2px] bg-current -left-[1px] top-1/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -left-[1px] top-2/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -left-[1px] top-3/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -right-[1px] top-1/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -right-[1px] top-2/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -right-[1px] top-3/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -top-[1px] left-1/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -top-[1px] left-2/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -top-[1px] left-3/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -bottom-[1px] left-1/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -bottom-[1px] left-2/4"></div>
+    <div className="absolute w-[2px] h-[2px] bg-current -bottom-[1px] left-3/4"></div>
+  </div>
+);
+
 interface SidebarProps {
   className?: string;
   currentView: string;
@@ -25,7 +47,7 @@ export function Sidebar({ className, currentView, onViewChange }: SidebarProps) 
     },
     {
       name: 'AI Agent',
-      icon: FileCheck,
+      icon: AIChipIcon,
       view: 'ai-agent'
     }
   ];

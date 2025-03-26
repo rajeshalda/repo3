@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Bot, Calendar, AlertCircle, Power } from "lucide-react";
+import { Loader2, Calendar, AlertCircle, Power, X, Clock } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -65,6 +65,7 @@ interface AIAgentViewProps {
 
 export function AIAgentView({ userId }: AIAgentViewProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [postedMeetings, setPostedMeetings] = useState<PostedMeeting[]>([]);
   const [dailyCounts, setDailyCounts] = useState<DailyCount[]>([]);
@@ -75,6 +76,7 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
   const [agentEnabled, setAgentEnabled] = useState(false);
   const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { error, success } = useToast();
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
@@ -134,12 +136,29 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
       // Set unmatched meetings
       setUnmatchedMeetings(data.unmatchedMeetings || []);
     } catch (err) {
-      console.error('Error fetching posted meetings:', err);
-      const message = err instanceof Error ? err.message : 'Failed to fetch meetings';
-      error('Failed to fetch meetings');
-      addLog(message, 'error');
+      // Don't show error if it was a cancellation
+      if (!(err instanceof DOMException && err.name === 'AbortError')) {
+        console.error('Error fetching posted meetings:', err);
+        const message = err instanceof Error ? err.message : 'Failed to fetch meetings';
+        error('Failed to fetch meetings');
+        addLog(message, 'error');
+      } else {
+        addLog('Fetching meetings was cancelled', 'info');
+      }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const cancelProcessing = () => {
+    if (abortControllerRef.current) {
+      setIsCancelling(true);
+      addLog('Cancelling processing...', 'info');
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      
+      // Update localStorage to reflect disabled state
+      localStorage.setItem('aiAgentEnabled', 'false');
     }
   };
 
@@ -149,8 +168,23 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
     setIsProcessing(true);
     addLog('Starting meeting processing...', 'info');
     
+    // Create a new AbortController for this processing session
+    abortControllerRef.current = new AbortController();
+    
     try {
-      const response = await fetch('/api/test-time-entry');
+      const response = await fetch('/api/test-time-entry', {
+        signal: abortControllerRef.current.signal
+      });
+      
+      if (response.status === 499) {
+        // This is a cancelled request response
+        addLog('Processing was cancelled', 'info');
+        success('Processing cancelled successfully');
+        // Set agent to disabled when cancelled
+        setAgentEnabled(false);
+        return;
+      }
+      
       if (!response.ok) {
         throw new Error('Failed to process meetings');
       }
@@ -198,17 +232,37 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
       
       await fetchPostedMeetings();
     } catch (err) {
-      console.error('Error processing meetings:', err);
-      const message = err instanceof Error ? err.message : 'Failed to process meetings';
-      error('Failed to process meetings');
-      addLog(message, 'error');
+      // Don't show error if it was a cancellation
+      if (!(err instanceof DOMException && err.name === 'AbortError')) {
+        console.error('Error processing meetings:', err);
+        const message = err instanceof Error ? err.message : 'Failed to process meetings';
+        error('Failed to process meetings');
+        addLog(message, 'error');
+      } else {
+        addLog('Processing was cancelled by user', 'info');
+        // Set agent to disabled when cancelled via AbortError
+        setAgentEnabled(false);
+      }
     } finally {
       setIsProcessing(false);
-      addLog('Processing completed', 'info');
+      setIsCancelling(false);
+      abortControllerRef.current = null;
+      addLog('Processing completed or cancelled', 'info');
+      
+      // If cancellation occurred but agentEnabled is still true, update it
+      if (!intervalRef.current && agentEnabled) {
+        setAgentEnabled(false);
+      }
     }
   };
 
   const toggleAgent = (enabled: boolean) => {
+    // If we're currently processing and trying to disable, we should cancel
+    if (isProcessing && !enabled) {
+      cancelProcessing();
+      return; // Don't actually toggle the state yet - wait for cancel to complete
+    }
+    
     setAgentEnabled(enabled);
     localStorage.setItem('aiAgentEnabled', enabled.toString());
     
@@ -273,11 +327,29 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">AI Agent Dashboard</CardTitle>
-          <Bot className="h-8 w-8 text-blue-500" />
+          <div className="h-10 w-10 flex items-center justify-center border-2 border-blue-500 rounded-md relative">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-blue-500 font-bold text-sm">AI</span>
+            </div>
+            {/* Chip pins */}
+            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-3/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-3/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-3/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-1/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-2/4"></div>
+            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-3/4"></div>
+          </div>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
             Automatically process your meetings and create time entries using AI.
+            <span className="block mt-1 text-xs">Fetches meetings from the past 7 days.</span>
           </p>
         </CardContent>
       </Card>
@@ -292,36 +364,54 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
             <div className="flex flex-col space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Power className={`h-4 w-4 ${agentEnabled ? 'text-green-500' : 'text-gray-400'}`} />
-                  <span>Enable AI Agent</span>
+                  {isProcessing ? (
+                    <X className={`h-4 w-4 text-red-500 ${isCancelling ? "animate-pulse" : ""}`} />
+                  ) : (
+                    <Power className={`h-4 w-4 ${agentEnabled ? 'text-green-500' : 'text-gray-400'}`} />
+                  )}
+                  <span className={`${isProcessing ? "text-red-500 font-medium" : ""} ${isCancelling ? "animate-pulse" : ""}`}>
+                    {isCancelling ? "Cancelling..." : isProcessing ? "Stop AI Agent" : "Enable AI Agent"}
+                  </span>
                 </div>
                 <Switch 
                   checked={agentEnabled} 
                   onCheckedChange={toggleAgent}
-                  disabled={isProcessing}
                 />
               </div>
               <div className="text-sm text-muted-foreground">
-                When enabled, the AI Agent will automatically check for new meetings every 5 minutes.
+                {isCancelling
+                  ? "Cancelling the current process..."
+                  : isProcessing 
+                    ? "Click the toggle to stop the currently running process."
+                    : "When enabled, the AI Agent will automatically check for new meetings every 5 minutes."}
               </div>
               
               <div className="border-t pt-4 mt-2">
                 <Button 
                   className="w-full sm:w-auto"
-                  onClick={handleProcessMeetings}
-                  disabled={isProcessing || agentEnabled}
+                  onClick={isProcessing ? cancelProcessing : handleProcessMeetings}
+                  disabled={agentEnabled && !isProcessing || isCancelling}
                 >
-                  {isProcessing ? (
+                  {isCancelling ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Processing Meetings...
+                      Cancelling...
+                    </>
+                  ) : isProcessing ? (
+                    <>
+                      <X className="mr-2 h-4 w-4" />
+                      Cancel Processing
                     </>
                   ) : (
                     'Process Meetings Now'
                   )}
                 </Button>
                 <div className="text-sm text-muted-foreground mt-2">
-                  Manually process your recent meetings and create time entries.
+                  {isCancelling
+                    ? "Cancelling the operation. This may take a moment..."
+                    : isProcessing 
+                      ? "Cancel the current processing operation."
+                      : "Manually process your recent meetings and create time entries."}
                 </div>
               </div>
             </div>

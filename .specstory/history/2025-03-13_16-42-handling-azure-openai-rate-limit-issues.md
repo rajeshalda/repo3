@@ -2218,7 +2218,7 @@ Would you like me to add any additional details or make any changes to the docum
 
 _**User**_
 
-kindly check why manual fetch meeting wont work src/app
+
 
 
 ---
@@ -2333,11 +2333,120 @@ I see the issue. The auth configuration needs to be updated to include the corre
 
 ---
 
+```diff
+  declare module "next-auth" {
+    interface Session extends DefaultSession {
+-     accessToken?: string;
++     user: {
++       accessToken?: string;
++     } & DefaultSession["user"]
+    }
+  }
+        clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
+        tenantId: process.env.AZURE_AD_TENANT_ID,
++       authorization: {
++         params: {
++           scope: 'openid profile email User.Read Calendars.Read'
++         }
++       }
+      }),
+    ],
+      async session({ session, token }) {
+        if (session?.user) {
+-         session.accessToken = token.accessToken;
++         session.user.accessToken = token.accessToken;
+        }
+        return session;
+      },
+    },
++   pages: {
++     signIn: '/',
++     signOut: '/',
++     error: '/',
++   }
+  }; 
+```
+
+---
+
+Now let's update the meetings route to properly handle the session and access token:
+
 
 
 ---
 
+```diff
+  import { getServerSession } from 'next-auth';
+  import { NextResponse } from 'next/server';
+- import { authOptions } from '@/lib/auth';
++ import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
+  import { getAppGraphToken } from '@/lib/graph-app-auth';
+  import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
+  export async function GET(request: Request) {
+    try {
+-     const session = await getServerSession(authOptions) as ExtendedSession;
++     const session = await getServerSession(authOptions);
+      
+-     if (!session?.user?.email) {
+-       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
++     if (!session?.user?.email || !session?.user?.accessToken) {
++       return NextResponse.json({ 
++         error: 'Unauthorized',
++         message: 'User not authenticated or missing access token'
++       }, { status: 401 });
+      }
+  
+  
+      if (!from || !to) {
+-       return NextResponse.json({ error: 'Date range is required' }, { status: 400 });
++       return NextResponse.json({ 
++         error: 'Bad Request',
++         message: 'Date range is required'
++       }, { status: 400 });
+      }
+  
+      console.log('End date IST:', formatToIST(endDate));
+      console.log('======================\n');
+- 
+-     // Get access token
+-     const accessToken = session.user.accessToken;
+-     if (!accessToken) {
+-       return NextResponse.json({ error: 'No access token found' }, { status: 401 });
+-     }
+  
+      // Get meetings data
+-     const meetingsData = await getMeetings(accessToken, startDate, endDate);
++     const meetingsData = await getMeetings(session.user.accessToken, startDate, endDate);
+  
+      // Filter meetings by date range first
+      console.error('Error fetching meetings:', error);
+      return NextResponse.json(
+-       { error: error instanceof Error ? error.message : 'Failed to fetch meetings' },
++       { 
++         error: 'Failed to fetch meetings',
++         message: error instanceof Error ? error.message : 'Unknown error'
++       },
+        { status: 500 }
+      );
+```
 
+---
+
+The changes I've made should fix the 401 error by:
+
+1. Properly configuring the Azure AD provider with the correct scopes
+2. Ensuring the access token is properly stored in the session
+3. Adding better error handling and validation
+4. Improving the type safety of the session object
+
+To test these changes:
+
+1. Sign out of the application
+2. Clear your browser cookies
+3. Sign in again - you should see the Microsoft login page with the correct permissions
+4. Try fetching meetings again
+
+The 401 error should now be resolved. If you still encounter any issues, please let me know and I can help you debug further.
 
 ---
 

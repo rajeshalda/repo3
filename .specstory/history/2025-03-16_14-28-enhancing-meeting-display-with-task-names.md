@@ -673,8 +673,6 @@ Read file: src/app/api/intervals/tasks/route.ts
 
 ---
 
-
-
 Now, let's create a new API endpoint to fetch task details by ID:
 
 ---
