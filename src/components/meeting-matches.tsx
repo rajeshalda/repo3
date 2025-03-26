@@ -942,8 +942,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         }}
                       />
                     </TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Meeting</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Task</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Action</TableHead>
                   </TableRow>
@@ -1020,8 +1020,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         }}
                       />
                     </TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Meeting</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Task</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Action</TableHead>
                   </TableRow>
