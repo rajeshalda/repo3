@@ -726,6 +726,18 @@ export function AIAgentView() {
     return `${hours}h ${minutes}m`;
   };
 
+  // Add a date formatter function near the other utility functions
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   // Add clearPostedMeetings handler
   const clearPostedMeetings = async () => {
     try {
@@ -992,13 +1004,13 @@ export function AIAgentView() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Description</TableHead>
+                    <TableHead>Meeting Date</TableHead>
+                    <TableHead>Meeting Name</TableHead>
                     <TableHead>Task Name</TableHead>
                     <TableHead>Duration</TableHead>
                     <TableHead>Module</TableHead>
                     <TableHead>Work Type</TableHead>
-                    <TableHead>Posted Date</TableHead>
+                    <TableHead>Posted Date & Time</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1016,7 +1028,7 @@ export function AIAgentView() {
                       <TableCell>{meeting.timeEntry.time}h</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.worktype)}</TableCell>
-                      <TableCell>{meeting.postedAt}</TableCell>
+                      <TableCell>{formatDateTime(meeting.timeEntry.datemodified)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

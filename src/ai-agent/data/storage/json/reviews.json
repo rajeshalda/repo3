@@ -110,7 +110,7 @@
         "reason": "The meeting subject ('neha') is vague and does not provide specific evidence to match with a particular task. Based on company context and matching rules, defaulting to a development-related task ('DevOps Task') with low confidence."
       }
     ],
-    "status": "pending",
+    "status": "approved",
     "confidence": 0.3,
     "reason": "Low confidence match"
   },
@@ -135,7 +135,7 @@
         "reason": "The meeting subject 'anjani' is vague and does not provide any concrete evidence to match specific tasks. Defaulting to a general development-related task (DevOps Task) based on IT company context and matching rules."
       }
     ],
-    "status": "pending",
+    "status": "approved",
     "confidence": 0.3,
     "reason": "Low confidence match"
   },
@@ -246,7 +246,7 @@
         "project": "",
         "module": "",
         "confidence": 0.5,
-        "reason": "The meeting subject explicitly mentions 'Dev', which aligns with development-related tasks. However, there is no specific keyword match to any task title, and the analysis lacks key points or patterns. Defaulting to a general development-related task with medium confidence."
+        "reason": "The meeting subject mentions both 'QA' and 'Dev,' which suggests a development-related task. However, there is no explicit evidence to prioritize QA over development, and no specific keywords match any task directly. Defaulting to a general development-related task with medium confidence."
       }
     ],
     "status": "approved",
