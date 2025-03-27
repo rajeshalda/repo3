@@ -1,19 +1,7 @@
 {
   "meetings": [
     {
-      "meetingId": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAAA-ss1yAAA=",
-      "userId": "neha@m365x65088219.onmicrosoft.com",
-      "timeEntry": {
-        "id": "107070511",
-        "projectid": "1422052",
-        "moduleid": "550082",
-        "taskid": "16537629",
-        "worktypeid": "802279",
-        "personid": "422721",
-        "date": "2025-03-21",
-        "datemodified": "2025-03-26 09:53:39",
-        "time": "0.03",
-        "description": "neha",
+
         "billable": "t",
         "worktype": "India-Meeting",
         "milestoneid": null,
@@ -21,20 +9,7 @@
         "module": "Development"
       },
       "rawResponse": {
-        "personid": 422721,
-        "status": "Created",
-        "code": 201,
-        "time": {
-          "id": "107070511",
-          "projectid": "1422052",
-          "moduleid": "550082",
-          "taskid": "16537629",
-          "worktypeid": "802279",
-          "personid": "422721",
-          "date": "2025-03-21",
-          "datemodified": "2025-03-26 09:53:39",
-          "time": "0.03",
-          "description": "neha",
+
           "billable": "t",
           "worktype": "India-Meeting",
           "milestoneid": null,
@@ -42,53 +17,7 @@
           "module": "Development"
         }
       },
-      "postedAt": "2025-03-21",
-      "taskName": "Daily Status Report"
-    },
-    {
-      "meetingId": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAAQnFAAA=",
-      "userId": "neha@m365x65088219.onmicrosoft.com",
-      "timeEntry": {
-        "id": "107070616",
-        "projectid": "1423717",
-        "moduleid": "550081",
-        "taskid": "16553303",
-        "worktypeid": "802279",
-        "personid": "422721",
-        "date": "2025-03-25",
-        "datemodified": "2025-03-26 09:59:24",
-        "time": "0.04",
-        "description": "anjani",
-        "billable": "t",
-        "worktype": "India-Meeting",
-        "milestoneid": null,
-        "ogmilestoneid": null,
-        "module": "Production"
-      },
-      "rawResponse": {
-        "personid": 422721,
-        "status": "Created",
-        "code": 201,
-        "time": {
-          "id": "107070616",
-          "projectid": "1423717",
-          "moduleid": "550081",
-          "taskid": "16553303",
-          "worktypeid": "802279",
-          "personid": "422721",
-          "date": "2025-03-25",
-          "datemodified": "2025-03-26 09:59:24",
-          "time": "0.04",
-          "description": "anjani",
-          "billable": "t",
-          "worktype": "India-Meeting",
-          "milestoneid": null,
-          "ogmilestoneid": null,
-          "module": "Production"
-        }
-      },
-      "postedAt": "2025-03-25",
-      "taskName": "DevOps Task"
+
     }
   ]
 }
