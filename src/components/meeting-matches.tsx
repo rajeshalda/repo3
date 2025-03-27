@@ -918,7 +918,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         </div>
       </div>
 
-          <div className="h-[calc(100vh-180px)] overflow-y-auto">
+          <div className="h-auto overflow-y-auto">
             <TabsContent value="matched" className="p-0 h-full">
               <div className="rounded-md">
                 {meetings.high.length > 0 ? (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from './button';
-import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, ChevronRight, FileCheck } from 'lucide-react';
+import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, ChevronRight, FileCheck, Book } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Custom AIChipIcon component
@@ -36,8 +36,8 @@ export function Sidebar({ className, currentView, onViewChange }: SidebarProps) 
 
   const navigationItems = [
     {
-      name: 'Dashboard',
-      icon: LayoutDashboard,
+      name: 'Manual',
+      icon: Book,
       view: 'dashboard'
     },
     {

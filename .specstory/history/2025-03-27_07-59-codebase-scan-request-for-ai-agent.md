@@ -285,6 +285,272 @@ I'll help you fix these issues in the `ai-agent-view.tsx` file:
 
 ---
 
+```diff
+      return `${hours}h ${minutes}m`;
+    };
++ 
++   // Add a date formatter function near the other utility functions
++   const formatDateTime = (dateString: string) => {
++     const date = new Date(dateString);
++     return date.toLocaleString('en-US', {
++       year: 'numeric',
++       month: 'short',
++       day: 'numeric',
++       hour: '2-digit',
++       minute: '2-digit'
++     });
++   };
+  
+    // Add clearPostedMeetings handler
+                  <TableHeader>
+                    <TableRow>
+-                     <TableHead>Date</TableHead>
+-                     <TableHead>Description</TableHead>
++                     <TableHead>Meeting Date</TableHead>
++                     <TableHead>Meeting Name</TableHead>
+                      <TableHead>Task Name</TableHead>
+                      <TableHead>Duration</TableHead>
+                      <TableHead>Module</TableHead>
+                      <TableHead>Work Type</TableHead>
+-                     <TableHead>Posted Date</TableHead>
++                     <TableHead>Posted Date & Time</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                        <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
+                        <TableCell>{decodeHtmlEntities(meeting.timeEntry.worktype)}</TableCell>
+-                       <TableCell>{meeting.postedAt}</TableCell>
++                       <TableCell>{formatDateTime(meeting.timeEntry.datemodified)}</TableCell>
+                      </TableRow>
+                    ))}
+```
+
+---
+
+I've made the following changes:
+
+1. Added a new `formatDateTime` function that formats dates to show both date and time in a user-friendly format
+2. Renamed the table headers:
+   - "Date" → "Meeting Date"
+   - "Description" → "Meeting Name"
+   - "Posted Date" → "Posted Date & Time"
+3. Changed the posted date column to use `meeting.timeEntry.datemodified` instead of `meeting.postedAt` and formatted it using the new `formatDateTime` function
+
+Now the table will show:
+- More descriptive column headers
+- The actual modification timestamp from the data
+- Formatted date and time (e.g., "Mar 27, 2025, 11:15 AM")
+
+The posted date will now correctly reflect the `datemodified` field from the JSON data, which contains the actual timestamp when the meeting was posted. For example, for the meeting "Project Kickoff - QA & Dev", it will show "Mar 27, 2025, 11:16 AM" instead of just the date "2025-03-26".
+
+Would you like me to make any adjustments to the date/time format or any other aspects of these changes?
+
+---
+
+_**User**_
+
+
+1. show me the list how many tasks has been fetched 
+2. show the proper interval fetched details for matching the tasks
+
+dont write code@logs2.txt 
+
+---
+
+_**Assistant**_
+
+Looking at the logs2.txt file, I can analyze the task fetching and interval details:
+
+1. **Tasks Fetched:**
+   - The logs show that the system fetched 7 reviews for the user "neha@m365x65088219.onmicrosoft.com"
+   - The summary shows: `summary: { total: 0, unmatched: 5 }`
+   - This indicates there were 5 unmatched meetings/tasks
+
+2. **Interval Details from the Meetings:**
+   Here are the meetings with their intervals:
+
+   Meeting 1:
+   - Start Time: 2025-03-17T11:15:00.0000000
+   - Duration: 66 minutes
+   - Status: Low confidence match
+
+   Meeting 2:
+   - Subject: "Rajesh"
+   - Start Time: 2025-03-13T07:30:00.0000000
+   - Duration: 168 minutes
+   - Status: Low confidence match
+
+The logs indicate some potential issues:
+1. The matching confidence is low for these meetings
+2. The API calls are showing:
+   - `/api/posted-meetings` took 882ms to respond
+   - `/api/reviews` took 342ms to respond
+   - `/api/auth/session` took 73ms to respond
+
+Recommendations for improvement:
+1. The matching algorithm might need tuning since we're seeing multiple "Low confidence match" results
+2. The interval fetching could be optimized as the response times (882ms for posted meetings) is relatively high
+3. The system should better handle the mismatch between total (0) and unmatched (5) in the summary
+
+Would you like me to help improve any of these aspects of the system?
+
+---
+
+_**User**_
+
+can you show me the task list coe from api
+
+---
+
+_**Assistant**_
+
+From the logs, I can see the tasks fetched from the Intervals API. Here are the 10 tasks that were fetched:
+
+```typescript
+Found 10 tasks in Intervals: 
+1. Daily Status Report (ID: 16537629)
+2. WD Task (ID: 16537630)
+3. UMG Task (ID: 16537631)
+4. Infra Task (ID: 16537632)
+5. Sandisk Task (ID: 16537633)
+6. DevOps Task (ID: 16553303)
+7. Infra Task (ID: 16567104)
+8. Infra Task (ID: 16567116)
+9. DevOps Task (ID: 16567207)
+10. DevOps Task (ID: 16567210)
+```
+
+Each task has the following structure in the API:
+```typescript
+{
+  "id": string,
+  "title": string,
+  "status": "Unknown",
+  "matchingContext": {
+    "isActive": false,
+    "hasPriority": false,
+    "hasDescription": false
+  }
+}
+```
+
+The tasks are being used for matching with meetings, but currently showing low confidence matches. This could be because:
+1. Multiple tasks have the same name (e.g., multiple "Infra Task" and "DevOps Task" entries)
+2. The matching context fields (isActive, hasPriority, hasDescription) are all false
+3. The status is "Unknown" for all tasks
+
+Would you like me to help improve the task matching logic or suggest ways to enhance the task metadata to get better matches?
+
+---
+
+_**User**_
+
+we have to modifed this part why:
+1. ai-agent matching with all task which is wrong as most of the task not assigned to me !
+we have to match only task which i assigned to me 
+2. before changing any thing i want tell you that we are using interval proxy @route.ts to hide api key 
+3. before changing anything do scan proper things okay better is scan the codebase
+
+---
+
+_**Assistant**_
+
+I'll help analyze this issue. Let me scan the codebase first to understand the complete flow of task matching and assignments.
+
+---
+
+<details>
+            <summary>Searched codebase "intervals api task matching or task fetching logic" • **25** results</summary>
+        
+| File | Lines |
+|------|-------|
+| `.specstory/history/ai-driven-meeting-management-feasibility.md` | L9497-9548 |
+| `workflow.md` | L318-364 |
+| `src/ai-agent/services/task/intervals.ts` | L14-58 |
+| `src/pages/api/test-task-matching.ts` | L67-89 |
+| `intervals-api.js` | L124-139 |
+| `src/pages/api/test-task-matching.ts` | L32-67 |
+| `src/lib/intervals-api.ts` | L176-191 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L5843-5929 |
+| `src/ai-agent/services/task/openai.ts` | L123-154 |
+| `.specstory/history/understanding-azure-openai-client-request-handling.md` | L187-213 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L9790-9844 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L12230-12291 |
+| `src/ai-agent/services/task/openai.ts` | L1-21 |
+| `src/lib/intervals-api.js` | L117-126 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L13718-13781 |
+| `intervals-api-work.ts` | L190-205 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L16526-16565 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L11934-12001 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L13240-13305 |
+| `.specstory/history/setting-up-localhost-for-production-project.md` | L3315-3354 |
+| `src/lib/intervals-api.js` | L164-223 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L7718-7772 |
+| `.specstory/history/checking-for-missing-project-dependencies.md` | L11468-11519 |
+| `.specstory/history/2025-03-27_07-59-codebase-scan-request-for-ai-agent.md` | L600-659 |
+| `src/app/api/intervals/tasks/route.ts` | L60-116 |
+
+</details>
+
+---
+
+After scanning the codebase, I can see that the issue is in the task fetching logic. Currently, the system is fetching all tasks from Intervals without filtering for tasks assigned to the current user. Let's fix this by modifying the task fetching logic.
+
+The key files we need to modify are:
+
+1. `src/lib/intervals-api.ts` - This is where the base API calls are made
+2. `src/app/api/intervals/tasks/route.ts` - This is where we fetch tasks for the AI agent
+
+Here's what we need to do:
+
+---
+
+```diff
+  
+      // Get all tasks
+-     async getTasks() {
+-         const response = await this.request('task');
+-         if (!response || !response.task || !Array.isArray(response.task)) {
+-             console.warn('No tasks found or invalid response format');
++     async getTasks(): Promise<Task[]> {
++         try {
++             // First get the current user's personid
++             const currentUser = await this.getCurrentUser();
++             if (!currentUser) {
++                 console.error('Could not get current user information');
++                 return [];
++             }
++ 
++             // Fetch tasks with filter for the current user
++             const response = await this.request(`task/?assignedto=${currentUser.personid}&status=open`);
++             if (!response || !response.task || !Array.isArray(response.task)) {
++                 console.warn('No tasks found or invalid response format');
++                 return [];
++             }
++ 
++             // Transform and return only relevant task data
++             return response.task.map(task => ({
++                 id: task.id,
++                 title: task.title || 'Untitled Task',
++                 project: task.project?.name || 'No Project',
++                 module: task.module?.name || 'No Module',
++                 status: task.status?.name || 'Unknown',
++                 assignedTo: task.assignedto?.name || 'Unassigned'
++             }));
++         } catch (error) {
++             console.error('Error fetching tasks:', error instanceof Error ? error.message : 'Unknown error');
+              return [];
+          }
+-         return response.task;
+      }
+  
+```
+
+---
+
+Let me fix the TypeScript type error:
+
+---
+
 Cancelled
 
 ---

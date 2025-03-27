@@ -56,7 +56,12 @@ export class IntervalsTimeEntryService {
             'x-user-id': userId
         };
 
-        const response = await fetch('/api/intervals-proxy', {
+        // Use an absolute URL format that works in both browser and Node.js environments
+        const apiUrl = typeof window !== 'undefined' 
+            ? window.location.origin 
+            : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+            
+        const response = await fetch(`${apiUrl}/api/intervals-proxy`, {
             method: 'POST',
             headers,
             body: JSON.stringify({

@@ -869,7 +869,7 @@ export function AIAgentView() {
         <CardHeader>
           <CardTitle>Meeting Review</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="max-h-[350px] overflow-auto">
           <MeetingMatches
             summary={matchSummary}
             matches={matchResults}

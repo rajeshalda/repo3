@@ -1,109 +1,19 @@
 {
   "meetings": [
     {
-      "meetingId": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAAA-ss1yAAA=",
+      "meetingId": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=",
       "userId": "neha@m365x65088219.onmicrosoft.com",
       "timeEntry": {
-        "id": "107094297",
-        "projectid": "1422052",
+        "id": "107102451",
+        "projectid": "1422051",
         "moduleid": "550082",
-        "taskid": "16537629",
-        "worktypeid": "802279",
-        "personid": "422721",
-        "date": "2025-03-21",
-        "datemodified": "2025-03-27 11:15:10",
-        "time": "0.03",
-        "description": "neha",
-        "billable": "t",
-        "worktype": "India-Meeting",
-        "milestoneid": null,
-        "ogmilestoneid": null,
-        "module": "Development"
-      },
-      "rawResponse": {
-        "personid": 422721,
-        "status": "Created",
-        "code": 201,
-        "time": {
-          "id": "107094297",
-          "projectid": "1422052",
-          "moduleid": "550082",
-          "taskid": "16537629",
-          "worktypeid": "802279",
-          "personid": "422721",
-          "date": "2025-03-21",
-          "datemodified": "2025-03-27 11:15:10",
-          "time": "0.03",
-          "description": "neha",
-          "billable": "t",
-          "worktype": "India-Meeting",
-          "milestoneid": null,
-          "ogmilestoneid": null,
-          "module": "Development"
-        }
-      },
-      "postedAt": "2025-03-21",
-      "taskName": "Daily Status Report"
-    },
-    {
-      "meetingId": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZKAAA=",
-      "userId": "neha@m365x65088219.onmicrosoft.com",
-      "timeEntry": {
-        "id": "107094317",
-        "projectid": "1422052",
-        "moduleid": "550082",
-        "taskid": "16537629",
-        "worktypeid": "802279",
-        "personid": "422721",
-        "date": "2025-03-26",
-        "datemodified": "2025-03-27 11:16:47",
-        "time": "0.06",
-        "description": "&quot;Project Kickoff - QA &amp; Dev&quot;",
-        "billable": "t",
-        "worktype": "India-Meeting",
-        "milestoneid": null,
-        "ogmilestoneid": null,
-        "module": "Development"
-      },
-      "rawResponse": {
-        "personid": 422721,
-        "status": "Created",
-        "code": 201,
-        "time": {
-          "id": "107094317",
-          "projectid": "1422052",
-          "moduleid": "550082",
-          "taskid": "16537629",
-          "worktypeid": "802279",
-          "personid": "422721",
-          "date": "2025-03-26",
-          "datemodified": "2025-03-27 11:16:47",
-          "time": "0.06",
-          "description": "&quot;Project Kickoff - QA &amp; Dev&quot;",
-          "billable": "t",
-          "worktype": "India-Meeting",
-          "milestoneid": null,
-          "ogmilestoneid": null,
-          "module": "Development"
-        }
-      },
-      "postedAt": "2025-03-26",
-      "taskName": "Daily Status Report"
-    },
-    {
-      "meetingId": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAAQnFAAA=",
-      "userId": "neha@m365x65088219.onmicrosoft.com",
-      "timeEntry": {
-        "id": "107094589",
-        "projectid": "1422052",
-        "moduleid": "550082",
-        "taskid": "16537629",
+        "taskid": "16537632",
         "worktypeid": "802279",
         "personid": "422721",
         "date": "2025-03-25",
-        "datemodified": "2025-03-27 11:32:42",
-        "time": "0.04",
-        "description": "anjani",
+        "datemodified": "2025-03-27 17:08:30",
+        "time": "0.09",
+        "description": "Infra Device",
         "billable": "t",
         "worktype": "India-Meeting",
         "milestoneid": null,
@@ -115,16 +25,16 @@
         "status": "Created",
         "code": 201,
         "time": {
-          "id": "107094589",
-          "projectid": "1422052",
+          "id": "107102451",
+          "projectid": "1422051",
           "moduleid": "550082",
-          "taskid": "16537629",
+          "taskid": "16537632",
           "worktypeid": "802279",
           "personid": "422721",
           "date": "2025-03-25",
-          "datemodified": "2025-03-27 11:32:42",
-          "time": "0.04",
-          "description": "anjani",
+          "datemodified": "2025-03-27 17:08:30",
+          "time": "0.09",
+          "description": "Infra Device",
           "billable": "t",
           "worktype": "India-Meeting",
           "milestoneid": null,
@@ -132,8 +42,8 @@
           "module": "Development"
         }
       },
-      "postedAt": "2025-03-25",
-      "taskName": "Daily Status Report"
+      "postedAt": "2025-03-27T17:08:30.961Z",
+      "taskName": "Infra  Task"
     }
   ]
 }
