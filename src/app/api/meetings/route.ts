@@ -409,7 +409,18 @@ export async function GET(request: Request) {
         fromUTC: startDate.toISOString(),
         toUTC: endDate.toISOString()
       },
-      meetings: filteredMeetings
+      meetings: filteredMeetings,
+      totalMeetingsInPeriod: dateFilteredMeetings.length,
+      totalTimeInPeriod: dateFilteredMeetings.reduce((acc, meeting) => {
+        const userEmail = session?.user?.email;
+        if (meeting.attendanceRecords?.length && userEmail) {
+          const userRecord = meeting.attendanceRecords.find(record => 
+            record.email.toLowerCase() === userEmail.toLowerCase()
+          );
+          return acc + (userRecord?.duration || 0);
+        }
+        return acc;
+      }, 0)
     });
   } catch (error) {
     console.error('Error fetching meetings:', error);
