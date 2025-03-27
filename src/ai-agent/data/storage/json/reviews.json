@@ -157,7 +157,7 @@
         "project": "",
         "module": "",
         "confidence": 0.3,
-        "reason": "The meeting subject 'rahul' is vague and does not provide any concrete evidence of a specific task or category. Based on company context and matching rules, defaulting to a general development-related task (DevOps Task) with low confidence."
+        "reason": "The meeting subject ('rahul') is vague and does not provide concrete evidence for a specific task. Based on company context and matching rules, defaulting to a general development-related task ('DevOps Task')."
       }
     ],
     "status": "pending",
@@ -177,12 +177,12 @@
     "keyPoints": [],
     "suggestedTasks": [
       {
-        "id": "16553303",
+        "id": "16567207",
         "title": "DevOps Task",
         "project": "",
         "module": "",
         "confidence": 0.3,
-        "reason": "The meeting subject ('ramesh') is vague and does not provide specific evidence for matching to a particular task. Based on company context and matching rules, defaulting to a general development-related task ('DevOps Task') with low confidence."
+        "reason": "The meeting subject ('ramesh') is vague and does not provide specific evidence for matching to a particular task. Based on company context and matching rules, defaulting to a development-related task ('DevOps Task') with low confidence due to lack of concrete evidence."
       }
     ],
     "status": "pending",
@@ -207,7 +207,7 @@
         "project": "",
         "module": "",
         "confidence": 0.6,
-        "reason": "The meeting subject 'infra device' contains the keyword 'infra', which directly matches the task title 'Infra Task'. While the analysis lacks additional context, the keyword match provides moderate confidence."
+        "reason": "The meeting subject contains the keyword 'infra', which directly matches the task title 'Infra Task'. While the analysis lacks detailed context, the keyword match provides moderate evidence for relevance."
       },
       {
         "id": "16567116",
@@ -215,7 +215,15 @@
         "project": "",
         "module": "",
         "confidence": 0.6,
-        "reason": "The meeting subject 'infra device' contains the keyword 'infra', which directly matches the task title 'Infra Task'. While the analysis lacks additional context, the keyword match provides moderate confidence."
+        "reason": "The meeting subject includes 'infra', which aligns with the task title 'Infra Task'. Despite the lack of detailed analysis, the keyword match provides moderate confidence in the relevance of this task."
+      },
+      {
+        "id": "16553303",
+        "title": "DevOps Task",
+        "project": "",
+        "module": "",
+        "confidence": 0.4,
+        "reason": "While the meeting subject does not explicitly mention DevOps, 'infra device' could imply infrastructure-related discussions, which often overlap with DevOps tasks. Confidence is lower due to the lack of explicit evidence."
       }
     ],
     "status": "pending",

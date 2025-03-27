@@ -2069,7 +2069,352 @@ I'll help you add the same filtering functionality to the Manually Posted Meetin
 
 ---
 
-I see that the Manually Poste
+I see that the Manually Posted Meetings section is implemented in `src/components/posted-meetings-view.tsx` and `src/components/posted-meetings.tsx`. I'll add the same filtering functionality to these components.
+
+---
+
+```diff
+  import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+  import { Button } from "./ui/button";
+- import { RefreshCw } from "lucide-react";
++ import { RefreshCw, Filter, Search } from "lucide-react";
+  import { useToast } from "./ui/use-toast";
++ import { Input } from "@/components/ui/input";
++ import {
++   Select,
++   SelectContent,
++   SelectItem,
++   SelectTrigger,
++   SelectValue,
++ } from "@/components/ui/select";
++ import {
++   Popover,
++   PopoverContent,
++   PopoverTrigger,
++ } from "@/components/ui/popover";
+  
+  interface PostedMeeting {
+    const [isResetting, setIsResetting] = useState(false);
+    const { success, error } = useToast();
++ 
++   // Add state for filtering
++   const [filterText, setFilterText] = useState("");
++   const [dateFilter, setDateFilter] = useState<string>("all");
++   const [taskFilter, setTaskFilter] = useState<string>("all");
++   const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
++ 
++   // Extract unique dates and tasks for filter dropdowns
++   const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => 
++     new Date(meeting.meetingDate).toLocaleDateString('en-US', {
++       year: 'numeric',
++       month: 'short',
++       day: 'numeric'
++     })
++   )));
++   const uniqueTasks = Array.from(new Set(postedMeetings.map(meeting => meeting.taskName || 'Unassigned')));
++ 
++   // Update filtered meetings whenever filters or meetings change
++   useEffect(() => {
++     let filtered = [...postedMeetings];
++     
++     // Filter by search text
++     if (filterText) {
++       const searchLower = filterText.toLowerCase();
++       filtered = filtered.filter(meeting => 
++         meeting.subject.toLowerCase().includes(searchLower) ||
++         (meeting.taskName && meeting.taskName.toLowerCase().includes(searchLower))
++       );
++     }
++     
++     // Filter by date
++     if (dateFilter !== "all") {
++       filtered = filtered.filter(meeting => 
++         new Date(meeting.meetingDate).toLocaleDateString('en-US', {
++           year: 'numeric',
++           month: 'short',
++           day: 'numeric'
++         }) === dateFilter
++       );
++     }
++     
++     // Filter by task
++     if (taskFilter !== "all") {
++       filtered = filtered.filter(meeting => 
++         (meeting.taskName || 'Unassigned') === taskFilter
++       );
++     }
++     
++     setFilteredMeetings(filtered);
++   }, [postedMeetings, filterText, dateFilter, taskFilter]);
+  
+    const fetchPostedMeetings = async () => {
+          const data = await response.json();
+          setPostedMeetings(data.meetings || []);
++         setFilteredMeetings(data.meetings || []); // Initialize filtered meetings
+        }
+      } catch (error) {
+        if (response.ok) {
+          setPostedMeetings([]);
++         setFilteredMeetings([]);
+          success("Posted meetings history has been cleared");
+        } else {
+-         error("Failed to clear posted meetings");
++         error("Failed to clear meetings");
+        }
+      } catch (err) {
+-       console.error('Error clearing posted meetings:', err);
+-       error("Failed to clear posted meetings");
++       console.error('Error clearing meetings:', err);
++       error("Failed to clear meetings");
+      } finally {
+        setIsResetting(false);
+      }
+    };
++ 
++   // Add clearFilters function
++   const clearFilters = () => {
++     setFilterText("");
++     setDateFilter("all");
++     setTaskFilter("all");
++   };
+  
+    return (
+            </div>
+            {postedMeetings.length > 0 && (
++             <div className="flex space-x-2">
++               <Popover>
++                 <PopoverTrigger asChild>
++                   <Button
++                     variant="outline"
++                     size="sm"
++                     className="h-8"
++                   >
++                     <Filter className="h-4 w-4 mr-2" />
++                     Filters
++                   </Button>
++                 </PopoverTrigger>
++                 <PopoverContent className="w-80">
++                   <div className="space-y-4">
++                     <h4 className="font-medium">Filter Meetings</h4>
++                     <div className="space-y-2">
++                       <div>
++                         <label className="text-sm font-medium">Date</label>
++                         <Select
++                           value={dateFilter}
++                           onValueChange={setDateFilter}
++                         >
++                           <SelectTrigger>
++                             <SelectValue placeholder="Select date" />
++                           </SelectTrigger>
++                           <SelectContent>
++                             <SelectItem value="all">All Dates</SelectItem>
++                             {uniqueDates.map(date => (
++                               <SelectItem key={date} value={date}>{date}</SelectItem>
++                             ))}
++                           </SelectContent>
++                         </Select>
++                       </div>
++                       <div>
++                         <label className="text-sm font-medium">Task</label>
++                         <Select
++                           value={taskFilter}
++                           onValueChange={setTaskFilter}
++                         >
++                           <SelectTrigger>
++                             <SelectValue placeholder="Select task" />
++                           </SelectTrigger>
++                           <SelectContent>
++                             <SelectItem value="all">All Tasks</SelectItem>
++                             {uniqueTasks.map(task => (
++                               <SelectItem key={task} value={task}>{task}</SelectItem>
++                             ))}
++                           </SelectContent>
++                         </Select>
++                       </div>
++                     </div>
++                     <Button onClick={clearFilters} variant="outline" size="sm" className="w-full">
++                       Clear Filters
++                     </Button>
++                   </div>
++                 </PopoverContent>
++               </Popover>
++               <div className="relative h-8">
++                 <Search className="h-4 w-4 absolute left-2 top-2 text-muted-foreground" />
++                 <Input
++                   placeholder="Search meetings..."
++                   value={filterText}
++                   onChange={(e) => setFilterText(e.target.value)}
++                   className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
++                 />
++               </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleResetPosted}
+                  disabled={isResetting}
++                 className="h-8"
+                >
+                  {isResetting ? (
+                  Reset Posted
+                </Button>
++             </div>
+            )}
+          </div>
+          <CardHeader>
+            <CardTitle>Meeting History</CardTitle>
++           {(filterText || dateFilter !== "all" || taskFilter !== "all") && (
++             <div className="text-xs text-muted-foreground mt-1">
++               Showing {filteredMeetings.length} of {postedMeetings.length} meetings
++               <Button
++                 variant="link"
++                 size="sm"
++                 onClick={clearFilters}
++                 className="h-6 p-0 ml-2"
++               >
++                 Clear filters
++               </Button>
++             </div>
++           )}
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-hidden rounded-lg border">
+              <div className="overflow-x-auto">
+                <div className="inline-block min-w-full align-middle">
+-                 <PostedMeetings meetings={postedMeetings} />
++                 <PostedMeetings meetings={filteredMeetings} />
+                </div>
+              </div>
+```
+
+---
+
+I've added the filtering functionality to the Manually Posted Meetings section. Here's what's been implemented:
+
+1. **Search Filter**: A search box that filters meetings by subject or task name
+2. **Dropdown Filters**: 
+   - Date filter - to filter meetings by specific dates
+   - Task filter - to filter by task names (including an "Unassigned" option for meetings without tasks)
+
+3. **Filter Management**:
+   - A count showing how many meetings are displayed after filtering
+   - A "Clear filters" button to reset all filters at once
+   - The filters are accessible through a popover triggered by a button with a filter icon
+
+4. **Responsive Design**: 
+   - The search field adapts to different screen sizes
+   - All filter controls are properly sized for mobile and desktop views
+
+5. **Filter State**:
+   - The filtered meetings are maintained in a separate state
+   - Filters are applied in real-time as users type or select options
+   - The filtered results are passed to the `PostedMeetings` component for display
+
+The filtering functionality matches the style and behavior of the AI Agent dashboard's filtering system, providing a consistent user experience across both sections. Users can now easily search and filter their manually posted meetings by date, task, or by searching for specific text in the meeting subject or task name.
+
+---
+
+_**User**_
+
+check the logs and tell me why infra device is failed to match with infra tasks ? dont write code
+
+---
+
+_**Assistant**_
+
+Let me search through the logs to understand why infra device tasks are failing to match.
+
+---
+
+<details>
+            <summary>Searched codebase "logs matching infra device task matching debug" • **25** results</summary>
+        
+| File | Lines |
+|------|-------|
+| `log details.txt` | L1550-1585 |
+| `tasknamelog.txt` | L1061-1152 |
+| `log details.txt` | L1585-1635 |
+| `log details.txt` | L1253-1295 |
+| `log details.txt` | L1074-1112 |
+| `log details.txt` | L1202-1253 |
+| `log details.txt` | L1344-1409 |
+| `log details.txt` | L1009-1074 |
+| `log1.txt` | L1053-1144 |
+| `log details.txt` | L1409-1460 |
+| `tasknamelog.txt` | L1204-1295 |
+| `.specstory/history/2025-03-07_05-26-resolving-matching-issue-discussion.md` | L165-210 |
+| `log details.txt` | L1635-1709 |
+| `log.txt` | L1147-1212 |
+| `tasknamelog.txt` | L991-1025 |
+| `log details.txt` | L1915-1996 |
+| `log details.txt` | L1460-1550 |
+| `log details.txt` | L1112-1202 |
+| `src/ai-agent/data/storage/json/reviews.json` | L192-225 |
+| `src/ai-agent/services/task/openai.ts` | L251-284 |
+| `log.txt` | L1058-1098 |
+| `log.txt` | L1263-1353 |
+| `tasknamelog.txt` | L1152-1204 |
+| `tasknamelog.txt` | L1469-1516 |
+| `log details.txt` | L907-973 |
+
+</details>
+
+---
+
+Based on the logs, I can see that the infra device meetings are actually being matched with the Infra Task, but there might be some issues with the confidence scores and task matching logic. Here's what I found:
+
+1. For the meeting "infra device", the system found multiple potential Infra Tasks:
+```
+"suggestedTasks": [
+  {
+    "id": "16567104",
+    "title": "Infra Task",
+    "confidence": 0.6,
+    "reason": "The meeting subject contains the keyword 'infra'..."
+  },
+  {
+    "id": "16567116",
+    "title": "Infra Task",
+    "confidence": 0.6,
+    "reason": "The meeting subject contains the keyword 'infra'..."
+  },
+  {
+    "id": "16537632",
+    "title": "Infra  Task",
+    "confidence": 0.6,
+    "reason": "The meeting subject contains the keyword 'infra'..."
+  }
+]
+```
+
+The issues appear to be:
+
+1. **Multiple Similar Tasks**: There are multiple tasks with almost identical titles ("Infra Task" and "Infra  Task"), which is causing confusion in the matching logic.
+
+2. **Low Confidence Scores**: The confidence scores are only 0.6 for these matches, which might be too low for automatic matching. This is happening because:
+   - The matching is only based on the keyword "infra"
+   - There's no additional context being considered (like project details or descriptions)
+   - The system might be being too conservative in its confidence scoring
+
+3. **Task Context Missing**: In the task data, we can see that the matching context is empty for all tasks:
+```json
+"matchingContext": {
+  "isActive": false,
+  "hasPriority": false,
+  "hasDescription": false
+}
+```
+This lack of context makes it harder for the system to make confident matches.
+
+4. **Successful Matches**: However, for meetings with clearer infra-related subjects, like "Infra Demo" and "infra meeting test", the system successfully matched them with the Infra Task with a higher confidence of 0.8.
+
+To improve the matching for infra device meetings, you could:
+
+1. Consolidate duplicate Infra tasks to avoid confusion
+2. Add more context to the tasks (descriptions, project details, etc.)
+3. Consider adjusting the confidence threshold for matches
+4. Add more matching criteria beyond just keyword matching
+
+Would you like me to help you implement any of these improvements?
 
 ---
 

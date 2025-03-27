@@ -64,35 +64,17 @@ export class UserStorage {
         console.error('Error importing fs modules:', error);
       }
     } else {
-      // Client-side: We'll only use localStorage for posted meetings, not API keys
+      // Client-side: Only load posted meetings
       try {
         const data = localStorage.getItem(this.STORAGE_KEY);
         if (data) {
           const parsedData = JSON.parse(data);
-          // Only use localStorage for posted meetings, not for user API keys
           this.data.postedMeetings = parsedData.postedMeetings || [];
         }
-        
-        // For API keys, we'll make a server request to get them
-        await this.fetchUserDataFromServer();
         this.isDataLoaded = true;
       } catch (error) {
         console.error('Error reading from localStorage:', error);
       }
-    }
-  }
-
-  private async fetchUserDataFromServer(): Promise<void> {
-    try {
-      const response = await fetch('/api/user/data');
-      if (response.ok) {
-        const userData = await response.json();
-        if (userData.users) {
-          this.data.users = userData.users;
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching user data from server:', error);
     }
   }
 
@@ -123,19 +105,12 @@ export class UserStorage {
         console.error('Error saving to file:', error);
       }
     } else {
-      // Client-side: Only save posted meetings to localStorage
+      // Client-side: Only save posted meetings
       try {
-        // Get the latest user data from server first
-        await this.fetchUserDataFromServer();
-        
-        // Then save only the posted meetings to localStorage
         const localData = {
           postedMeetings: this.data.postedMeetings
         };
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(localData));
-        
-        // For API keys, we'll make a server request to save them
-        // This is handled in the setUserApiKey method
       } catch (error) {
         console.error('Error saving to localStorage:', error);
       }
@@ -143,36 +118,47 @@ export class UserStorage {
   }
 
   async getUserApiKey(userId: string): Promise<string | null> {
-    console.log('Getting API key for user:', userId);
+    // Client-side: Make API request to get user data
+    if (typeof window !== 'undefined') {
+      try {
+        const response = await fetch('/api/user/data');
+        if (response.ok) {
+          const userData = await response.json();
+          const user = userData.users?.find((u: UserData) => u.userId === userId || u.email === userId);
+          return user?.intervalsApiKey || null;
+        }
+        return null;
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        return null;
+      }
+    }
     
-    // Ensure data is loaded
+    // Server-side: Read from file
     if (!this.isDataLoaded) {
       await this.loadData();
     }
     
-    // If we're on the client side, fetch the latest user data
-    if (typeof window !== 'undefined') {
-      try {
-        await this.fetchUserDataFromServer();
-      } catch (error) {
-        console.error('Error fetching user data from server:', error);
-        // If we can't fetch from server but have local data, use that
-        if (this.data.users.length === 0) {
-          return null;
-        }
-      }
-    }
-    
-    console.log('Current users in storage:', this.data.users);
     const user = this.data.users.find(u => u.userId === userId || u.email === userId);
-    console.log('Found user:', user ? 'Yes' : 'No');
     return user?.intervalsApiKey || null;
   }
 
   async setUserApiKey(userId: string, email: string, apiKey: string): Promise<void> {
-    console.log('Setting API key for user:', { userId, email });
+    // Client-side: Make API request to save API key
+    if (typeof window !== 'undefined') {
+      const response = await fetch('/api/user/save-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, email, apiKey })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save API key');
+      }
+      return;
+    }
     
-    // Ensure data is loaded
+    // Server-side: Save to file
     if (!this.isDataLoaded) {
       await this.loadData();
     }
@@ -186,35 +172,12 @@ export class UserStorage {
     };
 
     if (existingUserIndex >= 0) {
-      console.log('Updating existing user');
       this.data.users[existingUserIndex] = userData;
     } else {
-      console.log('Adding new user');
       this.data.users.push(userData);
     }
 
-    // If we're on the client side, make a server request to save the API key
-    if (typeof window !== 'undefined') {
-      try {
-        const response = await fetch('/api/user/save-key', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, email, apiKey })
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to save API key on server');
-        }
-      } catch (error) {
-        console.error('Error saving API key to server:', error);
-        throw error;
-      }
-    } else {
-      // On server side, save directly to file
-      await this.saveData();
-    }
-    
-    console.log('Current users after save:', this.data.users);
+    await this.saveData();
   }
 
   addPostedMeeting(meeting: PostedMeeting): void {
