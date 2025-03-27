@@ -132,6 +132,13 @@ export function AIAgentView() {
   const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.worktype)));
   const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.date)));
 
+  // Add helper function to decode HTML entities
+  const decodeHtmlEntities = (text: string) => {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+  };
+
   // Update filtered meetings whenever filters or meetings change
   useEffect(() => {
     let filtered = [...postedMeetings];
@@ -998,17 +1005,17 @@ export function AIAgentView() {
                   {filteredMeetings.map((meeting) => (
                     <TableRow key={meeting.meetingId}>
                       <TableCell>{meeting.timeEntry.date}</TableCell>
-                      <TableCell>{meeting.timeEntry.description}</TableCell>
+                      <TableCell>{decodeHtmlEntities(meeting.timeEntry.description)}</TableCell>
                       <TableCell>
-                        {meeting.taskName || (
+                        {meeting.taskName ? decodeHtmlEntities(meeting.taskName) : (
                           <span className="text-muted-foreground">
                             {`Loading task name...`}
                           </span>
                         )}
                       </TableCell>
                       <TableCell>{meeting.timeEntry.time}h</TableCell>
-                      <TableCell>{meeting.timeEntry.module}</TableCell>
-                      <TableCell>{meeting.timeEntry.worktype}</TableCell>
+                      <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
+                      <TableCell>{decodeHtmlEntities(meeting.timeEntry.worktype)}</TableCell>
                       <TableCell>{meeting.postedAt}</TableCell>
                     </TableRow>
                   ))}

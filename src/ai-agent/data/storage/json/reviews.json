@@ -102,15 +102,15 @@
     "keyPoints": [],
     "suggestedTasks": [
       {
-        "id": "16567207",
+        "id": "16553303",
         "title": "DevOps Task",
         "project": "",
         "module": "",
         "confidence": 0.3,
-        "reason": "The meeting subject ('neha') is vague and does not provide concrete evidence for a specific task. Defaulting to a development-related task based on company context and matching rules."
+        "reason": "The meeting subject ('neha') is vague and does not provide specific evidence to match with a particular task. Based on company context and matching rules, defaulting to a development-related task ('DevOps Task') with low confidence."
       }
     ],
-    "status": "approved",
+    "status": "pending",
     "confidence": 0.3,
     "reason": "Low confidence match"
   },
@@ -132,10 +132,10 @@
         "project": "",
         "module": "",
         "confidence": 0.3,
-        "reason": "The meeting subject 'anjani' is vague and does not provide specific context or keywords to match any particular task. Defaulting to a general development-related task based on IT company context and matching rules."
+        "reason": "The meeting subject 'anjani' is vague and does not provide any concrete evidence to match specific tasks. Defaulting to a general development-related task (DevOps Task) based on IT company context and matching rules."
       }
     ],
-    "status": "approved",
+    "status": "pending",
     "confidence": 0.3,
     "reason": "Low confidence match"
   },
@@ -228,6 +228,29 @@
     ],
     "status": "approved",
     "confidence": 0.6,
+    "reason": "Low confidence match"
+  },
+  {
+    "id": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZKAAA=",
+    "userId": "neha@m365x65088219.onmicrosoft.com",
+    "subject": "\"Project Kickoff - QA & Dev\"",
+    "startTime": "2025-03-26T09:30:00.0000000",
+    "endTime": "2025-03-26T10:00:00.0000000",
+    "duration": 217,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [
+      {
+        "id": "16553303",
+        "title": "DevOps Task",
+        "project": "",
+        "module": "",
+        "confidence": 0.5,
+        "reason": "The meeting subject explicitly mentions 'Dev', which aligns with development-related tasks. However, there is no specific keyword match to any task title, and the analysis lacks key points or patterns. Defaulting to a general development-related task with medium confidence."
+      }
+    ],
+    "status": "approved",
+    "confidence": 0.5,
     "reason": "Low confidence match"
   }
 ]
