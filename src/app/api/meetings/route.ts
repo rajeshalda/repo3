@@ -149,8 +149,12 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
 }
 
 async function getMeetings(accessToken: string, startDate: Date, endDate: Date) {
+  // Add one day to endDate to include the full end date
+  const adjustedEndDate = new Date(endDate);
+  adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
+  
   const filter = encodeURIComponent(
-    `start/dateTime ge '${startDate.toISOString()}' and end/dateTime le '${endDate.toISOString()}'`
+    `start/dateTime ge '${startDate.toISOString()}' and start/dateTime lt '${adjustedEndDate.toISOString()}'`
   );
 
   let allMeetings: any[] = [];
@@ -322,7 +326,13 @@ export async function GET(request: Request) {
     // Filter meetings by date range first
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
         const meetingDate = new Date(meeting.startTime);
-        const isInRange = meetingDate >= startDate && meetingDate <= endDate;
+        
+        // Compare only the date parts without time
+        const meetingDateOnly = new Date(meetingDate.getFullYear(), meetingDate.getMonth(), meetingDate.getDate());
+        const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+        const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+        
+        const isInRange = meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
         
         console.log('\n=== MEETING FILTER DEBUG ===');
         console.log('Meeting:', {
@@ -332,6 +342,9 @@ export async function GET(request: Request) {
             meetingDateIST: formatToIST(meetingDate),
             startDateIST: formatToIST(startDate),
             endDateIST: formatToIST(endDate),
+            meetingDateOnly: meetingDateOnly.toISOString().split('T')[0],
+            startDateOnly: startDateOnly.toISOString().split('T')[0],
+            endDateOnly: endDateOnly.toISOString().split('T')[0],
             isInRange
         });
         console.log('=========================\n');

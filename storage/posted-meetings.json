@@ -1,8 +1,17 @@
 {
   "vishalkumar@m365x65088219.onmicrosoft.com": {
     "email": "vishalkumar@m365x65088219.onmicrosoft.com",
-    "lastPostedDate": "2025-03-26T06:42:12.932Z",
-    "meetings": []
+    "lastPostedDate": "2025-03-27T06:24:52.764Z",
+    "meetings": [
+      {
+        "id": "vishalkumar@m365x65088219.onmicrosoft.com_Test User Attendance_Test User Attendance_2025-03-20T12:30:00.0000000",
+        "subject": "Test User Attendance",
+        "meetingDate": "2025-03-20T12:30:00.0000000",
+        "postedDate": "2025-03-27T06:24:52.764Z",
+        "taskId": "16537630",
+        "taskName": "WD Task"
+      }
+    ]
   },
   "ramesh@m365x65088219.onmicrosoft.com": {
     "email": "ramesh@m365x65088219.onmicrosoft.com",
