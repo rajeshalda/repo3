@@ -102,6 +102,8 @@ interface MeetingsResponse {
     end: string;
   };
   meetings: Meeting[];
+  totalMeetingsInPeriod: number;
+  totalTimeInPeriod: number;
 }
 
 interface MatchDetails {
@@ -695,7 +697,7 @@ export default function DashboardPage() {
                   <div className="mt-2 pt-2 border-t">
                     <p className="text-xs text-muted-foreground flex justify-between items-center">
                       <span>Total meetings in period:</span>
-                      <span className="font-medium">{rawMeetingsData?.meetings.length || 0}</span>
+                      <span className="font-medium">{meetingsData?.totalMeetingsInPeriod || 0}</span>
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {getDateRangeText()}
@@ -728,13 +730,7 @@ export default function DashboardPage() {
                   <div className="mt-2 pt-2 border-t">
                     <p className="text-xs text-muted-foreground flex justify-between items-center">
                       <span>Total time in all meetings:</span>
-                      <span className="font-medium">{formatDuration(rawMeetingsData?.meetings.reduce((acc, meeting) => {
-                        if (meeting.attendanceRecords?.length) {
-                          const userRecord = meeting.attendanceRecords.find(record => record.name === session?.user?.name);
-                          return acc + (userRecord?.duration || 0);
-                        }
-                        return acc;
-                      }, 0) || 0)}</span>
+                      <span className="font-medium">{formatDuration(meetingsData?.totalTimeInPeriod || 0)}</span>
                     </p>
                   </div>
                 </CardContent>
@@ -742,7 +738,7 @@ export default function DashboardPage() {
 
               <Card className="w-full">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
-                  <CardTitle className="text-sm font-medium">Last Update</CardTitle>
+                  <CardTitle className="text-sm font-medium">Last Update Made On</CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
                   <div className="text-xl sm:text-2xl font-bold">
@@ -755,7 +751,7 @@ export default function DashboardPage() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Most recent meeting posted to Intervals
+                   
                   </p>
                 </CardContent>
               </Card>
