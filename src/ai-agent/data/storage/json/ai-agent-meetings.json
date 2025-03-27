@@ -1,19 +1,7 @@
 {
   "meetings": [
     {
-      "meetingId": "296563988451",
-      "userId": "vishalkumar@m365x65088219.onmicrosoft.com",
-      "timeEntry": {
-        "id": "107090000",
-        "projectid": "1422049",
-        "moduleid": "550082",
-        "taskid": "16537630",
-        "worktypeid": "802279",
-        "personid": "421945",
-        "date": "2025-03-20",
-        "datemodified": "2025-03-27 06:24:52",
-        "time": "0.02",
-        "description": "Test User Attendance",
+
         "billable": "t",
         "worktype": "India-Meeting",
         "milestoneid": null,
@@ -21,20 +9,7 @@
         "module": "Development"
       },
       "rawResponse": {
-        "personid": 421945,
-        "status": "Created",
-        "code": 201,
-        "time": {
-          "id": "107090000",
-          "projectid": "1422049",
-          "moduleid": "550082",
-          "taskid": "16537630",
-          "worktypeid": "802279",
-          "personid": "421945",
-          "date": "2025-03-20",
-          "datemodified": "2025-03-27 06:24:52",
-          "time": "0.02",
-          "description": "Test User Attendance",
+
           "billable": "t",
           "worktype": "India-Meeting",
           "milestoneid": null,
@@ -42,6 +17,7 @@
           "module": "Development"
         }
       },
+<<<<<<< HEAD
       "postedAt": "2025-03-20"
     },
     {
@@ -219,6 +195,9 @@
         }
       },
       "postedAt": "2025-03-18"
+=======
+
+>>>>>>> a7770cbb9a1dffc5db8100c531b2e4431d4d3543
     }
   ]
 }

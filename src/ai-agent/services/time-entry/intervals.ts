@@ -40,15 +40,8 @@ interface TimeEntryErrorResponse {
 
 export class IntervalsTimeEntryService {
     private static instance: IntervalsTimeEntryService;
-    private baseUrl: string;
-    private headers: Record<string, string>;
-    private postedMeetingsPath: string;
 
-    private constructor() {
-        this.baseUrl = 'https://api.myintervals.com';
-        this.headers = {}; // Will be set when API key is loaded
-        this.postedMeetingsPath = path.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json', 'ai-agent-meetings.json');
-    }
+    private constructor() {}
 
     public static getInstance(): IntervalsTimeEntryService {
         if (!IntervalsTimeEntryService.instance) {
@@ -57,52 +50,39 @@ export class IntervalsTimeEntryService {
         return IntervalsTimeEntryService.instance;
     }
 
-    private async initializeHeaders(userId: string): Promise<void> {
-        const apiKey = await this.getUserIntervalsApiKey(userId);
-        this.headers = {
-            'Authorization': `Basic ${Buffer.from(apiKey + ':X').toString('base64')}`,
-            'Content-Type': 'application/json'
+    private async makeRequest(endpoint: string, options: RequestInit = {}, userId: string) {
+        const headers = {
+            'Content-Type': 'application/json',
+            'x-user-id': userId
         };
-    }
 
-    private async getUserIntervalsApiKey(userId: string): Promise<string> {
-        try {
-            const userDataPath = path.join(process.cwd(), '.data', 'user-data.json');
-            const userData = JSON.parse(await fs.readFile(userDataPath, 'utf-8')) as UserDataFile;
-            
-            const user = userData.users.find(u => u.userId === userId);
-            if (!user?.intervalsApiKey) {
-                throw new Error(`No Intervals API key found for user ${userId}`);
-            }
-            
-            return user.intervalsApiKey;
-        } catch (error) {
-            console.error('Error getting Intervals API key:', error);
-            throw new Error('Failed to get Intervals API key');
+        const response = await fetch('/api/intervals-proxy', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                endpoint,
+                method: options.method || 'GET',
+                data: options.body ? JSON.parse(options.body as string) : null
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to make request: ${response.status} ${response.statusText}`);
         }
+
+        return response.json();
     }
 
-    private async getPersonInfo(): Promise<Person> {
+    private async getPersonInfo(userId: string): Promise<Person> {
         try {
-            const response = await fetch(`${this.baseUrl}/me/`, {
-                method: 'GET',
-                headers: this.headers
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch person info: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            console.log('Person info response:', JSON.stringify(data, null, 2));
-
-            // Make sure we get the personid from the response
+            const data = await this.makeRequest('/me/', {}, userId);
+            
             if (!data.personid) {
                 throw new Error('Person ID not found in response');
             }
 
             return {
-                id: data.personid,  // Use personid instead of id
+                id: data.personid,
                 firstname: data.firstname || '',
                 lastname: data.lastname || '',
                 email: data.email || ''
@@ -113,19 +93,9 @@ export class IntervalsTimeEntryService {
         }
     }
 
-    private async getTaskDetails(taskId: string): Promise<Task> {
+    private async getTaskDetails(taskId: string, userId: string): Promise<Task> {
         try {
-            const response = await fetch(`${this.baseUrl}/task/${taskId}`, {
-                method: 'GET',
-                headers: this.headers
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch task details: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            console.log('Task details response:', JSON.stringify(data, null, 2));
+            const data = await this.makeRequest(`/task/${taskId}`, {}, userId);
 
             if (!data.task || data.status !== 'OK') {
                 throw new Error('Invalid task response format or task not found');
@@ -151,19 +121,9 @@ export class IntervalsTimeEntryService {
         }
     }
 
-    private async getProjectWorkTypes(projectId: string): Promise<WorkType[]> {
+    private async getProjectWorkTypes(projectId: string, userId: string): Promise<WorkType[]> {
         try {
-            const response = await fetch(`${this.baseUrl}/projectworktype/`, {
-                method: 'GET',
-                headers: this.headers
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch work types: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            console.log('Work types response:', JSON.stringify(data, null, 2));
+            const data = await this.makeRequest('/projectworktype/', {}, userId);
 
             if (!data.projectworktype || !Array.isArray(data.projectworktype)) {
                 throw new Error('Invalid work types response format');
@@ -173,11 +133,11 @@ export class IntervalsTimeEntryService {
             const projectWorkTypes = data.projectworktype
                 .filter((wt: ProjectWorkType) => wt.projectid === projectId && wt.active === 't')
                 .map((wt: ProjectWorkType) => ({
-                    id: wt.worktypeid,         // Use worktypeid instead of id
+                    id: wt.worktypeid,
                     name: wt.worktype,
                     projectId: wt.projectid,
                     workTypeId: wt.worktypeid,
-                    projectWorkTypeId: wt.id    // Store the projectworktype id separately if needed
+                    projectWorkTypeId: wt.id
                 }));
 
             console.log(`Found ${projectWorkTypes.length} work types for project ${projectId}:`, projectWorkTypes);
@@ -231,13 +191,10 @@ export class IntervalsTimeEntryService {
         userId: string
     ): Promise<TimeEntryResponse | TimeEntryErrorResponse> {
         try {
-            // Initialize headers with API key
-            await this.initializeHeaders(userId);
-
             // Get person info and task details
             const [person, taskDetails] = await Promise.all([
-                this.getPersonInfo(),
-                this.getTaskDetails(task.taskId)
+                this.getPersonInfo(userId),
+                this.getTaskDetails(task.taskId, userId)
             ]);
 
             console.log('Person info:', { id: person.id, email: person.email });
@@ -253,11 +210,11 @@ export class IntervalsTimeEntryService {
             }
 
             // Get work types for the project
-            const workTypes = await this.getProjectWorkTypes(taskDetails.projectid);
+            const workTypes = await this.getProjectWorkTypes(taskDetails.projectid, userId);
             
             // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
             console.log('Using hardcoded worktype ID 802279 for India-Meeting');
-            const worktypeId = '802279'; // Hardcoded ID for India-Meeting
+            const worktypeId = '802279';
 
             // Find the current user's attendance record
             let userDuration = 0;
@@ -275,7 +232,7 @@ export class IntervalsTimeEntryService {
                         success: false,
                         error: `User ${userId} did not attend this meeting. No attendance record found.`,
                         meetingId: meeting.id
-                    } as TimeEntryErrorResponse;
+                    };
                 }
             } else {
                 console.log(`No attendance records found for meeting "${meeting.subject}"`);
@@ -290,17 +247,17 @@ export class IntervalsTimeEntryService {
                     success: false,
                     error: `User ${userId} has zero duration for this meeting. The meeting may not have been attended.`,
                     meetingId: meeting.id
-                } as TimeEntryErrorResponse;
+                };
             }
 
-            // Prepare time entry data according to the TimeEntry interface
+            // Prepare time entry data
             const timeEntry: TimeEntry = {
                 projectid: taskDetails.projectid,
                 moduleid: taskDetails.moduleid,
                 taskid: taskDetails.id,
-                worktypeid: worktypeId, // Use hardcoded worktype ID instead of indiaMeetingType.id
+                worktypeid: worktypeId,
                 personid: person.id,
-                date: this.formatDate(meeting.start.dateTime), // Use start.dateTime from Meeting interface
+                date: this.formatDate(meeting.start.dateTime),
                 time: timeInHours,
                 description: meeting.subject,
                 billable: true
@@ -308,21 +265,12 @@ export class IntervalsTimeEntryService {
 
             console.log('Creating time entry with data:', JSON.stringify(timeEntry, null, 2));
 
-            // Create time entry
-            const response = await fetch(`${this.baseUrl}/time/`, {
+            // Create time entry using proxy
+            const rawResponse = await this.makeRequest('/time', {
                 method: 'POST',
-                headers: this.headers,
                 body: JSON.stringify(timeEntry)
-            });
+            }, userId);
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Time entry creation failed. Response:', errorText);
-                throw new Error(`Failed to create time entry: ${response.status} ${response.statusText}\n${errorText}`);
-            }
-
-            // Get the raw response data
-            const rawResponse = await response.json();
             console.log('Time entry creation successful. Response:', JSON.stringify(rawResponse, null, 2));
 
             // Parse as TimeEntryResponse
@@ -334,7 +282,11 @@ export class IntervalsTimeEntryService {
             return timeEntryResponse;
         } catch (error) {
             console.error('Error creating time entry:', error);
-            throw error;
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error',
+                meetingId: meeting.id
+            };
         }
     }
 }
