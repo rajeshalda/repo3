@@ -991,6 +991,7 @@ export function AIAgentView() {
                     <TableHead>Duration</TableHead>
                     <TableHead>Module</TableHead>
                     <TableHead>Work Type</TableHead>
+                    <TableHead>Posted Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1008,6 +1009,7 @@ export function AIAgentView() {
                       <TableCell>{meeting.timeEntry.time}h</TableCell>
                       <TableCell>{meeting.timeEntry.module}</TableCell>
                       <TableCell>{meeting.timeEntry.worktype}</TableCell>
+                      <TableCell>{meeting.postedAt}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

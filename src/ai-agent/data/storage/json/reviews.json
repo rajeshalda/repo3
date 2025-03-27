@@ -160,7 +160,7 @@
         "reason": "The meeting subject ('rahul') is vague and does not provide concrete evidence for a specific task. Based on company context and matching rules, defaulting to a general development-related task ('DevOps Task')."
       }
     ],
-    "status": "pending",
+    "status": "approved",
     "confidence": 0.3,
     "reason": "Low confidence match"
   },
@@ -185,7 +185,7 @@
         "reason": "The meeting subject ('ramesh') is vague and does not provide specific evidence for matching to a particular task. Based on company context and matching rules, defaulting to a development-related task ('DevOps Task') with low confidence due to lack of concrete evidence."
       }
     ],
-    "status": "pending",
+    "status": "approved",
     "confidence": 0.3,
     "reason": "Low confidence match"
   },
@@ -226,7 +226,7 @@
         "reason": "While the meeting subject does not explicitly mention DevOps, 'infra device' could imply infrastructure-related discussions, which often overlap with DevOps tasks. Confidence is lower due to the lack of explicit evidence."
       }
     ],
-    "status": "pending",
+    "status": "approved",
     "confidence": 0.6,
     "reason": "Low confidence match"
   }
