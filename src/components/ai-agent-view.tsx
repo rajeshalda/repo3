@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useState, useEffect, useRef } from "react";
-import { Loader2, Calendar, AlertCircle, Power, Trash2, X, Clock } from "lucide-react";
+import { Loader2, Calendar, AlertCircle, Power, Trash2, X, Clock, Filter, Search } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -16,6 +16,19 @@ import { Switch } from "@/components/ui/switch";
 import { MeetingMatches } from "./meeting-matches";
 import type { MatchResult } from "@/lib/types";
 import { useSession } from "next-auth/react";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface PostedMeeting {
   meetingId: string;
@@ -106,6 +119,49 @@ export function AIAgentView() {
   const { error, success } = useToast();
   const [isCancelling, setIsCancelling] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Add new state for filtering
+  const [filterText, setFilterText] = useState("");
+  const [moduleFilter, setModuleFilter] = useState<string>("all");
+  const [workTypeFilter, setWorkTypeFilter] = useState<string>("all");
+  const [dateFilter, setDateFilter] = useState<string>("all");
+  const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
+  
+  // Extract unique modules and work types for filter dropdowns
+  const uniqueModules = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.module)));
+  const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.worktype)));
+  const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.date)));
+
+  // Update filtered meetings whenever filters or meetings change
+  useEffect(() => {
+    let filtered = [...postedMeetings];
+    
+    // Filter by search text
+    if (filterText) {
+      const searchLower = filterText.toLowerCase();
+      filtered = filtered.filter(meeting => 
+        meeting.timeEntry.description.toLowerCase().includes(searchLower) ||
+        (meeting.taskName && meeting.taskName.toLowerCase().includes(searchLower))
+      );
+    }
+    
+    // Filter by module
+    if (moduleFilter !== "all") {
+      filtered = filtered.filter(meeting => meeting.timeEntry.module === moduleFilter);
+    }
+    
+    // Filter by work type
+    if (workTypeFilter !== "all") {
+      filtered = filtered.filter(meeting => meeting.timeEntry.worktype === workTypeFilter);
+    }
+    
+    // Filter by date
+    if (dateFilter !== "all") {
+      filtered = filtered.filter(meeting => meeting.timeEntry.date === dateFilter);
+    }
+    
+    setFilteredMeetings(filtered);
+  }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter]);
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -685,6 +741,14 @@ export function AIAgentView() {
     }
   };
 
+  // Add clearFilters function
+  const clearFilters = () => {
+    setFilterText("");
+    setModuleFilter("all");
+    setWorkTypeFilter("all");
+    setDateFilter("all");
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Card */}
@@ -800,17 +864,103 @@ export function AIAgentView() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle>Recently Posted Meetings</CardTitle>
-          {postedMeetings.length > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearPostedMeetings}
-              className="h-8"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Clear History
-            </Button>
-          )}
+          <div className="flex space-x-2">
+            {postedMeetings.length > 0 && (
+              <>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8"
+                    >
+                      <Filter className="h-4 w-4 mr-2" />
+                      Filters
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80">
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Filter Meetings</h4>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-sm font-medium">Date</label>
+                          <Select
+                            value={dateFilter}
+                            onValueChange={setDateFilter}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select date" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Dates</SelectItem>
+                              {uniqueDates.map(date => (
+                                <SelectItem key={date} value={date}>{date}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Module</label>
+                          <Select
+                            value={moduleFilter}
+                            onValueChange={setModuleFilter}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select module" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Modules</SelectItem>
+                              {uniqueModules.map(module => (
+                                <SelectItem key={module} value={module}>{module}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Work Type</label>
+                          <Select
+                            value={workTypeFilter}
+                            onValueChange={setWorkTypeFilter}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select work type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Work Types</SelectItem>
+                              {uniqueWorkTypes.map(type => (
+                                <SelectItem key={type} value={type}>{type}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <Button onClick={clearFilters} variant="outline" size="sm" className="w-full">
+                        Clear Filters
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <div className="relative h-8">
+                  <Search className="h-4 w-4 absolute left-2 top-2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search meetings..."
+                    value={filterText}
+                    onChange={(e) => setFilterText(e.target.value)}
+                    className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearPostedMeetings}
+                  className="h-8"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear History
+                </Button>
+              </>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -818,36 +968,51 @@ export function AIAgentView() {
               <Loader2 className="h-6 w-6 animate-spin" />
             </div>
           ) : postedMeetings.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Task Name</TableHead>
-                  <TableHead>Duration</TableHead>
-                  <TableHead>Module</TableHead>
-                  <TableHead>Work Type</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {postedMeetings.map((meeting) => (
-                  <TableRow key={meeting.meetingId}>
-                    <TableCell>{meeting.timeEntry.date}</TableCell>
-                    <TableCell>{meeting.timeEntry.description}</TableCell>
-                    <TableCell>
-                      {meeting.taskName || (
-                        <span className="text-muted-foreground">
-                          {`Loading task name...`}
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell>{meeting.timeEntry.time}h</TableCell>
-                    <TableCell>{meeting.timeEntry.module}</TableCell>
-                    <TableCell>{meeting.timeEntry.worktype}</TableCell>
+            <>
+              <div className="text-xs text-muted-foreground mb-2">
+                Showing {filteredMeetings.length} of {postedMeetings.length} meetings
+                {(filterText || moduleFilter !== "all" || workTypeFilter !== "all" || dateFilter !== "all") && (
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="h-6 p-0 ml-2"
+                  >
+                    Clear filters
+                  </Button>
+                )}
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Task Name</TableHead>
+                    <TableHead>Duration</TableHead>
+                    <TableHead>Module</TableHead>
+                    <TableHead>Work Type</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredMeetings.map((meeting) => (
+                    <TableRow key={meeting.meetingId}>
+                      <TableCell>{meeting.timeEntry.date}</TableCell>
+                      <TableCell>{meeting.timeEntry.description}</TableCell>
+                      <TableCell>
+                        {meeting.taskName || (
+                          <span className="text-muted-foreground">
+                            {`Loading task name...`}
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell>{meeting.timeEntry.time}h</TableCell>
+                      <TableCell>{meeting.timeEntry.module}</TableCell>
+                      <TableCell>{meeting.timeEntry.worktype}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
           ) : (
             <div className="text-center py-4 text-muted-foreground">
               No meetings posted yet

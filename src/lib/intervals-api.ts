@@ -55,27 +55,27 @@ interface TimeEntryRequest {
 }
 
 export class IntervalsAPI {
-    private apiKey: string;
-    private baseUrl = 'https://api.myintervals.com/';
+    private userId: string;
 
-    constructor(apiKey: string) {
-        this.apiKey = apiKey;
+    constructor(userId: string) {
+        this.userId = userId;
     }
 
     private async request(endpoint: string, options: RequestInit = {}) {
-        const url = `${this.baseUrl}${endpoint}`;
+        const url = '/api/intervals-proxy';
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${Buffer.from(this.apiKey + ':X').toString('base64')}`,
-            'Accept': 'application/json'
+            'x-user-id': this.userId
         };
 
         const response = await fetch(url, {
-            ...options,
-            headers: {
-                ...headers,
-                ...options.headers
-            }
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                endpoint,
+                method: options.method || 'GET',
+                data: options.body ? JSON.parse(options.body as string) : null
+            })
         });
 
         if (!response.ok) {
@@ -94,21 +94,7 @@ export class IntervalsAPI {
     // Get data from any Intervals endpoint
     private async getData(endpoint: string) {
         try {
-            const response = await fetch(`${this.baseUrl}${endpoint}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Basic ${Buffer.from(this.apiKey + ':X').toString('base64')}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-            }
-
-            return await response.json();
+            return await this.request(endpoint);
         } catch (error) {
             console.error(`Error fetching data from ${endpoint}:`, error instanceof Error ? error.message : 'Unknown error');
             return null;
@@ -166,22 +152,11 @@ export class IntervalsAPI {
 
             console.log('Posting time entry:', timeEntry);
 
-            const response = await fetch(`${this.baseUrl}/time`, {
+            const result = await this.request('/time', {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Basic ${Buffer.from(this.apiKey + ':X').toString('base64')}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
                 body: JSON.stringify(timeEntry)
             });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-            }
-
-            const result = await response.json();
             console.log(`Successfully posted time entry (${timeEntry.time} hours)`);
             return result;
         } catch (error) {
@@ -278,48 +253,9 @@ export class IntervalsAPI {
         }
         console.log('Task details:', task);
 
-        /* 
-        // First try project-specific work types
-        let workTypes = await this.getProjectWorkTypes(task.projectid);
-        console.log('===== DEBUG: PROJECT WORK TYPES =====');
-        workTypes.forEach((wt: WorkType) => {
-            console.log(`Work Type: "${wt.worktype}", ID: ${wt.worktypeid}, Project ID: ${wt.projectid}`);
-        });
-        
-        // Look for India-Meeting in project work types
-        let indiaMeetingType = workTypes.find((wt: WorkType) => 
-            wt.worktype.toLowerCase() === 'india-meeting'.toLowerCase()
-        );
-        
-        // If not found in project work types, get global work types
-        if (!indiaMeetingType) {
-            console.log('India-Meeting not found in project work types, fetching global work types');
-            const globalWorkTypes = await this.getGlobalWorkTypes();
-            
-            // Look for India-Meeting in global work types
-            indiaMeetingType = globalWorkTypes.find((wt: WorkType) => 
-                wt.worktype.toLowerCase() === 'india-meeting'.toLowerCase()
-            );
-            
-            if (indiaMeetingType) {
-                console.log('Found India-Meeting in global work types:', indiaMeetingType);
-                // Associate it with the current project
-                indiaMeetingType.projectid = task.projectid;
-            }
-        }
-        
-        if (!indiaMeetingType) {
-            console.log('Work type we are looking for: India-Meeting');
-            console.log('Available project work types:', workTypes.map((wt: WorkType) => wt.worktype).join(', '));
-            throw new Error('India-Meeting work type not found. Please ensure this work type is available in your Intervals account.');
-        }
-        
-        console.log('Using India-Meeting work type:', indiaMeetingType);
-        */
-
         // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
         console.log('Using hardcoded worktype ID 802279 for India-Meeting');
-        const worktypeId = '802279'; // Hardcoded ID for India-Meeting
+        const worktypeId = '802279';
 
         const requestBody = {
             personid: user.personid,
@@ -329,34 +265,18 @@ export class IntervalsAPI {
             date: payload.date,
             time: payload.time,
             description: payload.description,
-            worktypeid: worktypeId, // Use hardcoded worktype ID
+            worktypeid: worktypeId,
             billable: payload.billable ?? true
         };
 
         console.log('Posting time entry with request body:', requestBody);
 
         try {
-            const response = await fetch(`${this.baseUrl}time`, {
+            const result = await this.request('/time', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Basic ${Buffer.from(this.apiKey + ':X').toString('base64')}`,
-                    'Accept': 'application/json'
-                },
                 body: JSON.stringify(requestBody)
             });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Error response from Intervals:', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    body: errorText
-                });
-                throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-            }
-
-            const result = await response.json();
             console.log('Successfully created time entry:', result);
             return result;
         } catch (error) {
