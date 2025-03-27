@@ -49,6 +49,8 @@ interface PostedMeeting {
     milestoneid: string | null;
     ogmilestoneid: string | null;
     module: string;
+    client?: string;
+    project?: string;
   };
   postedAt: string;
   taskName?: string;
@@ -125,12 +127,17 @@ export function AIAgentView() {
   const [moduleFilter, setModuleFilter] = useState<string>("all");
   const [workTypeFilter, setWorkTypeFilter] = useState<string>("all");
   const [dateFilter, setDateFilter] = useState<string>("all");
+  const [clientFilter, setClientFilter] = useState<string>("all");
+  const [projectFilter, setProjectFilter] = useState<string>("all");
   const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
   
   // Extract unique modules and work types for filter dropdowns
   const uniqueModules = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.module)));
   const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.worktype)));
   const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.date)));
+  const uniqueClients = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.client).filter(Boolean))) as string[];
+  const uniqueProjects = Array.from(new Set(postedMeetings.map(meeting => 
+    meeting.timeEntry.project || meeting.timeEntry.projectid).filter(Boolean))) as string[];
 
   // Add helper function to decode HTML entities
   const decodeHtmlEntities = (text: string) => {
@@ -167,8 +174,20 @@ export function AIAgentView() {
       filtered = filtered.filter(meeting => meeting.timeEntry.date === dateFilter);
     }
     
+    // Filter by client
+    if (clientFilter !== "all") {
+      filtered = filtered.filter(meeting => meeting.timeEntry.client === clientFilter);
+    }
+    
+    // Filter by project
+    if (projectFilter !== "all") {
+      filtered = filtered.filter(meeting => 
+        meeting.timeEntry.project === projectFilter || meeting.timeEntry.projectid === projectFilter
+      );
+    }
+    
     setFilteredMeetings(filtered);
-  }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter]);
+  }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter]);
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -766,6 +785,8 @@ export function AIAgentView() {
     setModuleFilter("all");
     setWorkTypeFilter("all");
     setDateFilter("all");
+    setClientFilter("all");
+    setProjectFilter("all");
   };
 
   return (
@@ -919,6 +940,40 @@ export function AIAgentView() {
                           </Select>
                         </div>
                         <div>
+                          <label className="text-sm font-medium">Client</label>
+                          <Select
+                            value={clientFilter}
+                            onValueChange={setClientFilter}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select client" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Clients</SelectItem>
+                              {uniqueClients.map(client => (
+                                <SelectItem key={client} value={client}>{client}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Project</label>
+                          <Select
+                            value={projectFilter}
+                            onValueChange={setProjectFilter}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select project" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Projects</SelectItem>
+                              {uniqueProjects.map(project => (
+                                <SelectItem key={project} value={project}>{project}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
                           <label className="text-sm font-medium">Module</label>
                           <Select
                             value={moduleFilter}
@@ -990,7 +1045,7 @@ export function AIAgentView() {
             <>
               <div className="text-xs text-muted-foreground mb-2">
                 Showing {filteredMeetings.length} of {postedMeetings.length} meetings
-                {(filterText || moduleFilter !== "all" || workTypeFilter !== "all" || dateFilter !== "all") && (
+                {(filterText || moduleFilter !== "all" || workTypeFilter !== "all" || dateFilter !== "all" || clientFilter !== "all" || projectFilter !== "all") && (
                   <Button
                     variant="link"
                     size="sm"
@@ -1008,8 +1063,11 @@ export function AIAgentView() {
                     <TableHead>Meeting Name</TableHead>
                     <TableHead>Task Name</TableHead>
                     <TableHead>Duration</TableHead>
+                    <TableHead>Client</TableHead>
+                    <TableHead>Project</TableHead>
                     <TableHead>Module</TableHead>
                     <TableHead>Work Type</TableHead>
+                    <TableHead>Billable</TableHead>
                     <TableHead>Posted Date & Time</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -1026,8 +1084,11 @@ export function AIAgentView() {
                         )}
                       </TableCell>
                       <TableCell>{meeting.timeEntry.time}h</TableCell>
+                      <TableCell>{meeting.timeEntry.client || "N/A"}</TableCell>
+                      <TableCell>{meeting.timeEntry.project || meeting.timeEntry.projectid || "N/A"}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.worktype)}</TableCell>
+                      <TableCell>{meeting.timeEntry.billable === 't' ? 'Yes' : 'No'}</TableCell>
                       <TableCell>{formatDateTime(meeting.timeEntry.datemodified)}</TableCell>
                     </TableRow>
                   ))}

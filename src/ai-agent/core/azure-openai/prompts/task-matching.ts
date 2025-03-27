@@ -20,20 +20,23 @@ MATCHING RULES:
 4. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
 5. Developer names in meeting titles typically indicate development discussions, not QA
 6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
-7. If no assigned tasks match well, return an empty matchedTasks array
+7. NEVER match with tasks that have a "Closed" status
+8. If the client is "Nathcorp", note that these are internal non-billable tasks
+9. If no assigned tasks match well, return an empty matchedTasks array
 
 CONFIDENCE SCORE GUIDELINES:
 - Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
 - Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
 - High (0.7-0.9): Strong evidence with clear technical keyword matches
 - Perfect (1.0): Exact match between meeting subject and technical task
-- Score of 0: Task is not assigned to the user
+- Score of 0: Task is not assigned to the user or task is closed
 
 EXAMPLES:
 ✓ GOOD: Meeting "API Integration Discussion" matches task "Dev Task" with confidence 0.8 (when assigned to user)
 ✓ GOOD: Meeting "John" matches task "Dev Task" with confidence 0.3 (when assigned to user)
 ✗ BAD: Meeting "Sarah" matches task "QA Meeting" with confidence 0.7 (no evidence of QA activity)
 ✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
+✗ BAD: Any match with a task that has status "Closed" (should be excluded)
 
 Analyze the meeting and tasks, then provide your response in the following JSON format:
 
@@ -62,7 +65,7 @@ Notes:
 5. Include all required fields for each task
 6. The actualDuration should be taken from the attendance records and is in seconds
 7. If no task has a confidence score above 0.4, return an empty matchedTasks array
-8. If a task is not assigned to the user (check assigneeid), do not include it in matchedTasks
+8. Tasks with status "Closed" should NEVER be included in matchedTasks
 `.trim();
 
 export const generateTaskMatchingPrompt = (meetingAnalysis: string, tasksData: string): string => {

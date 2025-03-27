@@ -112,14 +112,29 @@ export class IntervalsAPI {
                 return [];
             }
 
-            // Filter tasks where the current user's ID is in the assigneeid list
+            // Filter tasks by three criteria:
+            // 1. The current user's ID is in the assigneeid list
+            // 2. Task is not closed (status !== "Closed")
             const userTasks = data.task.filter((task: IntervalsTaskResponse) => {
+                // Check if task is assigned to user
                 if (!task.assigneeid) return false;
                 const assignees = task.assigneeid.split(',');
-                return assignees.includes(currentUser.personid);
+                const isAssignedToUser = assignees.includes(currentUser.personid);
+                
+                // Check if task is not closed
+                const isNotClosed = task.status !== "Closed";
+                
+                // Log filtering decisions for debugging
+                if (!isAssignedToUser) {
+                    console.log(`Task ${task.id} (${task.title}) skipped: Not assigned to current user`);
+                } else if (!isNotClosed) {
+                    console.log(`Task ${task.id} (${task.title}) skipped: Task is closed`);
+                }
+                
+                return isAssignedToUser && isNotClosed;
             });
 
-            console.log(`Found ${userTasks.length} tasks assigned to user ${currentUser.personid}`);
+            console.log(`Found ${userTasks.length} open tasks assigned to user ${currentUser.personid}`);
 
             return userTasks.map((task: IntervalsTaskResponse) => ({
                 id: task.id,
