@@ -56,21 +56,49 @@ export class IntervalsTimeEntryService {
             'x-user-id': userId
         };
 
-        const response = await fetch('/api/intervals-proxy', {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                endpoint,
-                method: options.method || 'GET',
-                data: options.body ? JSON.parse(options.body as string) : null
-            })
-        });
+        // Use an absolute URL format that works in both browser and Node.js environments
+        const apiUrl = typeof window !== 'undefined' 
+            ? window.location.origin 
+            : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+            
+        try {
+            const response = await fetch(`${apiUrl}/api/intervals-proxy`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    endpoint,
+                    method: options.method || 'GET',
+                    data: options.body ? JSON.parse(options.body as string) : null
+                })
+            });
 
-        if (!response.ok) {
-            throw new Error(`Failed to make request: ${response.status} ${response.statusText}`);
+            const responseText = await response.text();
+            let responseData;
+            
+            try {
+                responseData = JSON.parse(responseText);
+            } catch (parseError) {
+                console.error('Failed to parse response as JSON:', responseText);
+                throw new Error(`Invalid JSON response: ${responseText}`);
+            }
+
+            if (!response.ok) {
+                console.error(`API Error (${response.status}):`, responseData);
+                if (responseData && responseData.error) {
+                    // If error is an object, stringify it for better error messages
+                    const errorMessage = typeof responseData.error === 'object' 
+                        ? JSON.stringify(responseData.error)
+                        : responseData.error.toString();
+                    throw new Error(`API Error: ${errorMessage}`);
+                }
+                throw new Error(`Failed to make request: ${response.status} ${response.statusText}`);
+            }
+
+            return responseData;
+        } catch (error) {
+            console.error(`Error in makeRequest to ${endpoint}:`, error);
+            throw error;
         }
-
-        return response.json();
     }
 
     private async getPersonInfo(userId: string): Promise<Person> {
@@ -102,7 +130,9 @@ export class IntervalsTimeEntryService {
             }
 
             const taskData = data.task;
-            return {
+            
+            // Create a proper task object with all necessary fields
+            const task: Task = {
                 id: taskData.id,
                 title: taskData.title || '',
                 description: taskData.summary || '',
@@ -113,8 +143,20 @@ export class IntervalsTimeEntryService {
                 clientid: taskData.clientid || '',
                 client: taskData.client || '',
                 moduleid: taskData.moduleid || '',
-                module: taskData.module || ''
+                module: taskData.module || '',
+                assigneeid: taskData.assigneeid || ''
             };
+            
+            // Log task detail information for debugging
+            console.log('Retrieved task details:', {
+                id: task.id,
+                title: task.title,
+                status: task.status,
+                client: task.client,
+                assigneeid: task.assigneeid
+            });
+            
+            return task;
         } catch (error) {
             console.error('Error fetching task details:', error);
             throw error;
@@ -202,11 +244,39 @@ export class IntervalsTimeEntryService {
                 id: taskDetails.id,
                 projectid: taskDetails.projectid,
                 moduleid: taskDetails.moduleid,
-                assignees: taskDetails.assigneeid
+                assignees: taskDetails.assigneeid,
+                client: taskDetails.client,
+                project: taskDetails.project,
+                status: taskDetails.status
             });
 
-            if (!taskDetails.projectid || !taskDetails.moduleid) {
-                throw new Error('Task is missing required project ID or module ID');
+            // Verify all required fields are present
+            if (!taskDetails.projectid) {
+                console.error('Task is missing projectid');
+                return {
+                    success: false,
+                    error: 'Task is missing required project ID',
+                    meetingId: meeting.id
+                };
+            }
+            
+            if (!taskDetails.moduleid) {
+                console.error('Task is missing moduleid');
+                return {
+                    success: false,
+                    error: 'Task is missing required module ID',
+                    meetingId: meeting.id
+                };
+            }
+
+            // Check if task is closed
+            if (taskDetails.status === 'Closed') {
+                console.log(`Task ${taskDetails.id} (${taskDetails.title}) is closed. Cannot create time entry.`);
+                return {
+                    success: false,
+                    error: `The selected task "${taskDetails.title}" is closed. Please select an open task.`,
+                    meetingId: meeting.id
+                };
             }
 
             // Get work types for the project
@@ -250,6 +320,11 @@ export class IntervalsTimeEntryService {
                 };
             }
 
+            // Determine if the time entry should be billable based on client
+            // If client is Nathcorp, it's non-billable; otherwise, it's billable
+            const isBillable = taskDetails.client?.toLowerCase() !== 'nathcorp';
+            console.log(`Client: ${taskDetails.client}, Setting billable flag to: ${isBillable ? 'true' : 'false'}`);
+
             // Prepare time entry data
             const timeEntry: TimeEntry = {
                 projectid: taskDetails.projectid,
@@ -260,26 +335,46 @@ export class IntervalsTimeEntryService {
                 date: this.formatDate(meeting.start.dateTime),
                 time: timeInHours,
                 description: meeting.subject,
-                billable: true
+                billable: isBillable ? 't' : 'f'
             };
 
             console.log('Creating time entry with data:', JSON.stringify(timeEntry, null, 2));
 
-            // Create time entry using proxy
-            const rawResponse = await this.makeRequest('/time', {
-                method: 'POST',
-                body: JSON.stringify(timeEntry)
-            }, userId);
+            try {
+                // Create time entry using proxy
+                const rawResponse = await this.makeRequest('/time', {
+                    method: 'POST',
+                    body: JSON.stringify(timeEntry)
+                }, userId);
 
-            console.log('Time entry creation successful. Response:', JSON.stringify(rawResponse, null, 2));
+                console.log('Time entry creation successful. Response:', JSON.stringify(rawResponse, null, 2));
 
-            // Parse as TimeEntryResponse
-            const timeEntryResponse = rawResponse.time as TimeEntryResponse;
+                // Parse as TimeEntryResponse
+                const timeEntryResponse = rawResponse.time as TimeEntryResponse;
 
-            // Save to posted-meetings.json
-            await this.savePostedMeeting(meeting, timeEntryResponse, rawResponse, userId, task.taskTitle);
+                // Add client and project information to the response
+                const enhancedTimeEntryResponse = {
+                    ...timeEntryResponse,
+                    client: taskDetails.client || undefined,
+                    project: taskDetails.project || undefined
+                } as TimeEntryResponse;
 
-            return timeEntryResponse;
+                console.log('Enhanced time entry with client/project:', JSON.stringify(enhancedTimeEntryResponse, null, 2));
+
+                // Save to posted-meetings.json
+                await this.savePostedMeeting(meeting, enhancedTimeEntryResponse, rawResponse, userId, task.taskTitle);
+
+                return enhancedTimeEntryResponse;
+            } catch (apiError) {
+                console.error('Error from Intervals API:', apiError);
+                return {
+                    success: false,
+                    error: apiError instanceof Error 
+                        ? `Intervals API error: ${apiError.message}` 
+                        : 'Unknown error from Intervals API',
+                    meetingId: meeting.id
+                };
+            }
         } catch (error) {
             console.error('Error creating time entry:', error);
             return {

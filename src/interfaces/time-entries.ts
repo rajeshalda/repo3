@@ -31,8 +31,10 @@ export interface TimeEntry {
     date: string;           // YYYY-MM-DD format
     time: number;           // Decimal hours (e.g., 0.5 for 30 minutes)
     description: string;
-    billable: boolean;
+    billable: boolean | string;  // Can be boolean or string ('t' or 'f') for Intervals API
     datemodified?: string;   // Optional for initial creation
+    client?: string | null;  // Client name (optional or null)
+    project?: string | null; // Project name (optional or null)
 }
 
 export interface TimeEntryResponse extends TimeEntry {

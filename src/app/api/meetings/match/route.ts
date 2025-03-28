@@ -187,9 +187,45 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Intervals API key not configured' }, { status: 400 });
     }
     const intervalsApi = new IntervalsAPI(apiKeyValue);
+    
+    // Get current user information for filtering tasks
+    console.log('Getting current user information...');
+    const currentUser = await intervalsApi.getCurrentUser();
+    console.log('Current user information:', currentUser);
+    
+    // Fetch all tasks first
     console.log('Fetching tasks using Intervals API...');
-    const tasks = await intervalsApi.getTasks();
-    console.log('Available tasks for matching:', tasks.length);
+    const allTasks = await intervalsApi.getTasks();
+    console.log('Total available tasks:', allTasks.length);
+    
+    // Filter tasks to only show those assigned to the current user and not closed
+    console.log(`Filtering tasks for user with personid: ${currentUser.personid}`);
+    const tasks = allTasks.filter((task: any) => {
+      // Check if task is not closed
+      const isNotClosed = task.status !== "Closed";
+      if (!isNotClosed) {
+        return false;
+      }
+      
+      // Skip tasks with no assigneeid
+      if (!task.assigneeid) {
+        return false;
+      }
+      
+      // Check if assigneeid is a string containing the user's personid
+      const assignees = task.assigneeid.split(',');
+      
+      // Try different matching methods for personid comparison
+      const isAssignedToUser = assignees.some((id: string) => {
+        return id.trim() === currentUser.personid || 
+               id.trim() === String(currentUser.personid) || 
+               Number(id.trim()) === Number(currentUser.personid);
+      });
+      
+      return isAssignedToUser;
+    });
+    
+    console.log(`Filtered from ${allTasks.length} to ${tasks.length} tasks assigned to the current user and not closed`);
 
     // Initialize Azure OpenAI
     const openai = new AzureOpenAIClient();
