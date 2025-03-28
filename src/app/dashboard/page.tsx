@@ -39,6 +39,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AIAgentView } from '@/components/ai-agent-view';
 import { handleApiResponse } from '@/lib/api-helpers';
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs";
 
 interface RawAttendanceRecord {
   identity: {
@@ -689,7 +695,7 @@ export default function DashboardPage() {
         return (
           <>
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <Card className="w-full">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
                   <CardTitle className="text-sm font-medium">Meetings Overview</CardTitle>
@@ -761,14 +767,10 @@ export default function DashboardPage() {
                       'No posts yet'
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                   
-                  </p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Meetings Section */}
             {!dateRange?.from || !dateRange?.to ? (
               <div className="flex flex-col items-center justify-center py-12 space-y-4">
                 <div className="text-center space-y-2">
@@ -781,59 +783,80 @@ export default function DashboardPage() {
                 />
               </div>
             ) : (
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <h2 className="text-lg sm:text-xl font-semibold">Fetched Meetings</h2>
-                  <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                    <Button 
-                      onClick={matchMeetings} 
-                      disabled={isMatching} 
-                      variant="default" 
-                      size="sm"
-                      className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-2.5 rounded-lg flex items-center justify-center gap-2"
-                    >
-                      {isMatching ? (
-                        <>
-                          <Loader2 className="h-5 w-5 animate-spin" />
-                          Matching...
-                        </>
-                      ) : (
-                        <>
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            width="20" 
-                            height="20" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            strokeWidth="2" 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            className="opacity-90"
-                          >
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                            <path d="m9 16 2 2 4-4"></path>
-                          </svg>
-                          Match Tasks
-                        </>
-                      )}
-                    </Button>
+              <div className="space-y-6">
+                <Tabs defaultValue="fetched-meetings" className="w-full">
+                  <div className="flex items-center justify-between mb-4">
+                    <TabsList>
+                      <TabsTrigger value="fetched-meetings" className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                          <line x1="16" y1="2" x2="16" y2="6" />
+                          <line x1="8" y1="2" x2="8" y2="6" />
+                          <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                        Fetched Meetings
+                      </TabsTrigger>
+                      <TabsTrigger value="task-matches" className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="m16 6 4 14" />
+                          <path d="M12 6v14" />
+                          <path d="M8 8v12" />
+                          <path d="M4 4v16" />
+                        </svg>
+                        Task Matches
+                      </TabsTrigger>
+                    </TabsList>
+                    {/* Match Tasks button for Fetched Meetings tab */}
+                    <TabsContent value="fetched-meetings" className="m-0">
+                      <Button 
+                        onClick={matchMeetings} 
+                        disabled={isMatching} 
+                        variant="default" 
+                        size="sm"
+                        className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-2.5 rounded-lg flex items-center justify-center gap-2"
+                      >
+                        {isMatching ? (
+                          <>
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            Matching...
+                          </>
+                        ) : (
+                          <>
+                            <svg 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              width="20" 
+                              height="20" 
+                              viewBox="0 0 24 24" 
+                              fill="none" 
+                              stroke="currentColor" 
+                              strokeWidth="2" 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              className="opacity-90"
+                            >
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                              <line x1="16" y1="2" x2="16" y2="6"></line>
+                              <line x1="8" y1="2" x2="8" y2="6"></line>
+                              <line x1="3" y1="10" x2="21" y2="10"></line>
+                              <path d="m9 16 2 2 4-4"></path>
+                            </svg>
+                            Match Tasks
+                          </>
+                        )}
+                      </Button>
+                    </TabsContent>
                   </div>
-                </div>
-                <div className="overflow-x-auto -mx-4 sm:mx-0">
-                  <div className="inline-block min-w-full align-middle px-4 sm:px-0">
-                    <div className="border rounded-lg overflow-hidden">
+
+                  <TabsContent value="fetched-meetings" className="mt-0">
+                    <div className="rounded-lg border">
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Meeting Name</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Date and Time</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Schedule Duration</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Actual Duration</TableHead>
-                            <TableHead className="bg-muted/50 font-semibold py-3 px-4">Attendance</TableHead>
+                            <TableHead>Meeting Name</TableHead>
+                            <TableHead>Date and Time</TableHead>
+                            <TableHead>Schedule Duration</TableHead>
+                            <TableHead>Actual Duration</TableHead>
+                            <TableHead>Attendance</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -985,25 +1008,21 @@ export default function DashboardPage() {
                         </TableBody>
                       </Table>
                     </div>
-                  </div>
-                </div>
-              </div>
-            )}
+                  </TabsContent>
 
-            {/* Task Matches */}
-            {matchResults && dateRange?.from && dateRange?.to && (
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <h2 className="text-lg sm:text-xl font-semibold">Task Matches</h2>
-                </div>
-                <div className="overflow-hidden rounded-lg border">
-                  <MeetingMatches 
-                    summary={matchResults.summary} 
-                    matches={matchResults.matches}
-                    onMeetingPosted={handleMeetingPosted}
-                    postedMeetingIds={postedMeetingIds}
-                  />
-                </div>
+                  <TabsContent value="task-matches" className="mt-0">
+                    {matchResults && (
+                      <div className="rounded-lg border">
+                        <MeetingMatches 
+                          summary={matchResults.summary} 
+                          matches={matchResults.matches}
+                          onMeetingPosted={handleMeetingPosted}
+                          postedMeetingIds={postedMeetingIds}
+                        />
+                      </div>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </div>
             )}
           </>

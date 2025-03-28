@@ -1,21 +1,3 @@
 {
-  "meetings": [
-    {
-        "billable": "t",
-        "worktype": "India-Meeting",
-        "milestoneid": null,
-        "ogmilestoneid": null,
-        "module": "Development"
-      },
-      "rawResponse": {
-          "billable": "t",
-          "worktype": "India-Meeting",
-          "milestoneid": null,
-          "ogmilestoneid": null,
-          "module": "Development"
-        }
-      },
-
-    }
-  ]
+  "meetings": []
 }
