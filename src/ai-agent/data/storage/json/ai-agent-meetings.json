@@ -1,3 +1,48 @@
 {
-  "meetings": []
+  "meetings": [
+    {
+      "meetingId": "262115768195",
+      "userId": "vishalkumar@m365x65088219.onmicrosoft.com",
+      "timeEntry": {
+        "id": "107116423",
+        "projectid": "1422048",
+        "moduleid": "550082",
+        "taskid": "16537631",
+        "worktypeid": "802279",
+        "personid": "421945",
+        "date": "2025-03-12",
+        "datemodified": "2025-03-28 07:07:18",
+        "time": "0.03",
+        "description": "meeting for agent bug fix",
+        "billable": "t",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Development"
+      },
+      "rawResponse": {
+        "personid": 421945,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "107116423",
+          "projectid": "1422048",
+          "moduleid": "550082",
+          "taskid": "16537631",
+          "worktypeid": "802279",
+          "personid": "421945",
+          "date": "2025-03-12",
+          "datemodified": "2025-03-28 07:07:18",
+          "time": "0.03",
+          "description": "meeting for agent bug fix",
+          "billable": "t",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Development"
+        }
+      },
+      "postedAt": "2025-03-12"
+    }
+  ]
 }
