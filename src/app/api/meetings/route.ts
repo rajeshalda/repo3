@@ -149,7 +149,9 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
 }
 
 async function getMeetings(accessToken: string, startDate: Date, endDate: Date) {
-  // Add one day to endDate to include the full end date
+  // Add one day to endDate to include the full end date in the Graph API call
+  // Note: This will potentially return meetings outside our exact date range
+  // so we need to filter the results afterward to match the exact requested range
   const adjustedEndDate = new Date(endDate);
   adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
   
@@ -327,12 +329,35 @@ export async function GET(request: Request) {
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
         const meetingDate = new Date(meeting.startTime);
         
-        // Compare only the date parts without time
-        const meetingDateOnly = new Date(meetingDate.getFullYear(), meetingDate.getMonth(), meetingDate.getDate());
-        const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-        const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+        // First check using precise UTC time comparison
+        const isInRangeByTime = meetingDate >= startDate && meetingDate <= endDate;
         
-        const isInRange = meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
+        // Also compare only the date parts without time as a backup
+        const meetingDateOnly = new Date(
+            meetingDate.getFullYear(), 
+            meetingDate.getMonth(), 
+            meetingDate.getDate()
+        );
+        const startDateOnly = new Date(
+            startDate.getFullYear(), 
+            startDate.getMonth(), 
+            startDate.getDate()
+        );
+        const endDateOnly = new Date(
+            endDate.getFullYear(), 
+            endDate.getMonth(), 
+            endDate.getDate()
+        );
+        
+        // Strict date range comparison - must be within the user's selected range
+        const isInRangeByDate = 
+            meetingDateOnly >= startDateOnly && 
+            meetingDateOnly <= endDateOnly;
+            
+        // A meeting is in range if either condition is true
+        // In practice, we should prefer the date-only comparison as it's more reliable
+        // for filtering out unwanted dates
+        const isInRange = isInRangeByDate;
         
         console.log('\n=== MEETING FILTER DEBUG ===');
         console.log('Meeting:', {
@@ -345,14 +370,25 @@ export async function GET(request: Request) {
             meetingDateOnly: meetingDateOnly.toISOString().split('T')[0],
             startDateOnly: startDateOnly.toISOString().split('T')[0],
             endDateOnly: endDateOnly.toISOString().split('T')[0],
+            isInRangeByTime,
+            isInRangeByDate,
             isInRange
         });
+        
+        // Additional debugging for excluded meetings
+        if (!isInRange) {
+            console.log(`EXCLUDED: Meeting "${meeting.subject}" on ${meetingDateOnly.toISOString().split('T')[0]} is outside requested range of ${startDateOnly.toISOString().split('T')[0]} to ${endDateOnly.toISOString().split('T')[0]}`);
+        }
+        
         console.log('=========================\n');
         
         return isInRange;
     });
 
     console.log(`\nFiltered ${meetingsData.meetings.length} meetings to ${dateFilteredMeetings.length} within date range`);
+    if (meetingsData.meetings.length !== dateFilteredMeetings.length) {
+        console.log(`\n⚠️ WARNING: ${meetingsData.meetings.length - dateFilteredMeetings.length} meetings were filtered out for being outside the requested date range`);
+    }
 
     // Get posted meetings storage
     const postedMeetingsStorage = new PostedMeetingsStorage();
