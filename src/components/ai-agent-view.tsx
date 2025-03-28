@@ -896,6 +896,7 @@ export function AIAgentView() {
             matches={matchResults}
             onMeetingPosted={handleMeetingPosted}
             postedMeetingIds={postedMeetings.map(m => m.meetingId)}
+            source="ai-agent"
           />
         </CardContent>
       </Card>

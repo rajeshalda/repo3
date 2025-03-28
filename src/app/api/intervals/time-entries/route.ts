@@ -120,38 +120,44 @@ export async function POST(request: Request) {
                 billable: billable ?? true
             });
 
-            // Store in both storages regardless of manual or automated post
-            const postedMeetingsStorage = new PostedMeetingsStorage();
-            await postedMeetingsStorage.loadData();
-            
-            // Get task details to store the task name
-            const tasks = await intervalsApi.getTasks();
-            const taskDetails = tasks.find((t: { id: string; title?: string }) => t.id === taskId);
-            const taskName = taskDetails?.title || `Task ${taskId}`;
-            
-            await postedMeetingsStorage.addPostedMeeting(
-                session.user.email,
-                {
-                    id: meetingId || '',
-                    subject: subject || 'No subject',
-                    startTime: startTime || new Date().toISOString(),
-                    taskId: taskId,
-                    taskName: taskName
-                }
-            );
-            
-            // Also store in AI agent storage
-            const aiAgentStorage = new AIAgentPostedMeetingsStorage();
-            await aiAgentStorage.addPostedMeeting(
-                session.user.email,
-                {
-                    meetingId: meetingId || '',
-                    userId: session.user.email,
-                    timeEntry: result.time,
-                    rawResponse: result,
-                    postedAt: date // Use the actual meeting date
-                }
-            );
+            // Store in the appropriate storage system based on the source
+            // Use isManualPost to determine storage destination
+            if (isManualPost) {
+                // For manual posts, store only in the PostedMeetingsStorage
+                const postedMeetingsStorage = new PostedMeetingsStorage();
+                await postedMeetingsStorage.loadData();
+                
+                // Get task details to store the task name
+                const tasks = await intervalsApi.getTasks();
+                const taskDetails = tasks.find((t: { id: string; title?: string }) => t.id === taskId);
+                const taskName = taskDetails?.title || `Task ${taskId}`;
+                
+                await postedMeetingsStorage.addPostedMeeting(
+                    session.user.email,
+                    {
+                        id: meetingId || '',
+                        subject: subject || 'No subject',
+                        startTime: startTime || new Date().toISOString(),
+                        taskId: taskId,
+                        taskName: taskName
+                    }
+                );
+                console.log('Meeting stored in Manual App storage');
+            } else {
+                // For AI agent posts, store only in AIAgentPostedMeetingsStorage
+                const aiAgentStorage = new AIAgentPostedMeetingsStorage();
+                await aiAgentStorage.addPostedMeeting(
+                    session.user.email,
+                    {
+                        meetingId: meetingId || '',
+                        userId: session.user.email,
+                        timeEntry: result.time,
+                        rawResponse: result,
+                        postedAt: date // Use the actual meeting date
+                    }
+                );
+                console.log('Meeting stored in AI Agent storage');
+            }
             
             // Remove the meeting from reviews.json after successful posting
             try {

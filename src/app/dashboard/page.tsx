@@ -1000,6 +1000,7 @@ export default function DashboardPage() {
                           matches={matchResults.matches}
                           onMeetingPosted={handleMeetingPosted}
                           postedMeetingIds={postedMeetingIds}
+                          source="manual"
                         />
                       </div>
                     )}

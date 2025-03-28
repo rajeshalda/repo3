@@ -1,332 +1,6 @@
-PS C:\Users\Rajesh.alda\Downloads\repo3> npm run dev
-
-> meeting-time-tracker@2.1.0 dev
-> next dev -p 8080
-
-   ▲ Next.js 15.1.5
-   - Local:        http://localhost:8080
-   - Network:      http://172.22.64.1:8080
-   - Environments: .env.local
-
- ✓ Starting...
- ⚠ Invalid next.config.ts options detected: 
- ⚠     Unrecognized key(s) in object: 'serverOptions'
- ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
- ✓ Ready in 3.2s
- ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 5.7s (2878 modules)
- GET /api/auth/session 200 in 10364ms
- GET /dashboard 200 in 10612ms
- POST /api/auth/_log 200 in 277ms
- ○ Compiling /favicon.ico ...
- ✓ Compiled /api/openai-status in 2.6s (1584 modules)
- ✓ Compiled in 3s (1321 modules)
- GET /favicon.ico 200 in 5948ms
-Azure OpenAI Config: { endpoint: 'Set', apiKey: 'Set', deployment: 'Set' }
-Making request to: https://meeting-endpoints.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2023-12-01-preview
- GET /api/auth/session 200 in 4532ms
- GET /dashboard 200 in 863ms
- ○ Compiling /api/meetings/posted ...
- ✓ Compiled /api/meetings/posted in 1758ms (2900 modules)
- GET /api/openai-status 200 in 6119ms
-Getting posted meetings: {
-  email: 'neha@m365x65088219.onmicrosoft.com',
-  hasData: true,
-  totalMeetings: 1
-}
- GET /api/meetings/posted 200 in 1182ms
-Getting API key for user: neha@m365x65088219.onmicrosoft.com
-Current users in storage: [
-  {
-    userId: 'vijay@m365x65088219.onmicrosoft.com',
-    email: 'vijay@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '1lk81z2y709',
-    lastSync: '2025-03-07T14:42:27.411Z'
-  },
-  {
-    userId: 'rajesh.alda@nathcorp.com',
-    email: 'rajesh.alda@nathcorp.com',
-    intervalsApiKey: '9bf2smemqha',
-    lastSync: '2025-01-20T19:09:47.297Z'
-  },
-  {
-    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
-    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '05tynt2z0ps',
-    lastSync: '2025-03-17T11:52:51.986Z'
-  },
-  {
-    userId: 'ramesh@m365x65088219.onmicrosoft.com',
-    email: 'ramesh@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '1o8wmcmz99b',
-    lastSync: '2025-03-17T11:14:26.238Z'
-  },
-  {
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    email: 'neha@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '4jfrv8d8ecf',
-    lastSync: '2025-03-26T15:22:18.995Z'
-  }
-]
-Found user: Yes
- GET /api/user/data 200 in 1194ms
- GET /dashboard 200 in 317ms
- ○ Compiling /api/intervals/tasks ...
- ✓ Compiled /api/intervals/tasks in 640ms (2903 modules)
-Starting tasks endpoint...
-Session: {
-  user: {
-    name: 'neha',
-    email: 'neha@m365x65088219.onmicrosoft.com',
-    image: null
-  },
-  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6InZFazdlVlNHZV9Od0pnNVN3UEdqZ1h3LWZ0VFZuX3ptdUl0ZjljYTJfZ1EiLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTA1ODk0LCJuYmYiOjE3NDMxMDU4OTQsImV4cCI6MTc0MzExMDA0NSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBaHE1Vk5RSURjVnZsYjZ0dHBXSVNzMEJJZ083aGpRbDdlRFRXYWtIV2dYMXV2TEk1dzU1RXZGWjlTY2FnRFdOUFI2RkVQaGh0Nm9jSDJNc0FtUExwc3N1VXJ2ZU5uZ21ueUpBSk9TL1dlVk5EVEt0V3Z6R254ZXRXejdWbWRQRGMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMjQwNToyMDE6YTQyNDo1ODUwOjRkZmE6NjZjNjo1NGNhOmU5MDAiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJuNGx4SFBGVGFFR09DY3pfMXdVM0FBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6Imk0cDJUaDZSTFI0YnBSTjk0cXdUNkFKSkhGNVlUVDdfbU81RUpyRmVZUzgiLCJ4bXNfaWRyZWwiOiIxIDIyIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.iBx11cUHczpXoBv2PLX-mpHNz6YQ8CpkxHQ9wYRdVst5Jwa20NMdKIibDu0siBSgN2OswOjoPRgdQGgagWfzXB7jR6C4JOlsHbNFZwvxhMbo1L5Rrqm93ykikWtAjlxEQF1BvNY-Me4NwMlzBX545qt_urCW4SSJwbC7gpiXRDAl0qyyYNQE77TThxV-msnD2EM3EQMDsnsvTREnb_x01k0UT36xMnfEUbaZfp3xf0K6IJ3atOoay1-GWnL9vhu3y7Znq6aF_pJUG7NkJEMk8C6OQRTBIh9JwYyC9ZZUo6SfLMbgj4Qzs44-XY-WaVdwLHZx4UyBOXY6SkJ24ZOUUQ'
-}
-Session user email: neha@m365x65088219.onmicrosoft.com
-Getting API key for user: neha@m365x65088219.onmicrosoft.com
-Current users in storage: [
-  {
-    userId: 'vijay@m365x65088219.onmicrosoft.com',
-    email: 'vijay@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '1lk81z2y709',
-    lastSync: '2025-03-07T14:42:27.411Z'
-  },
-  {
-    userId: 'rajesh.alda@nathcorp.com',
-    email: 'rajesh.alda@nathcorp.com',
-    intervalsApiKey: '9bf2smemqha',
-    lastSync: '2025-01-20T19:09:47.297Z'
-  },
-  {
-    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
-    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '05tynt2z0ps',
-    lastSync: '2025-03-17T11:52:51.986Z'
-  },
-  {
-    userId: 'ramesh@m365x65088219.onmicrosoft.com',
-    email: 'ramesh@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '1o8wmcmz99b',
-    lastSync: '2025-03-17T11:14:26.238Z'
-  },
-  {
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    email: 'neha@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '4jfrv8d8ecf',
-    lastSync: '2025-03-26T15:22:18.995Z'
-  }
-]
-Found user: Yes
-Using API key: From storage
-Initializing Intervals API with key...
-Verifying API connection...
-Successfully connected to Intervals as user: undefined undefined
-Fetching tasks from Intervals...
-Successfully fetched 10 tasks
- GET /api/intervals/tasks 200 in 2198ms
- ○ Compiling /api/posted-meetings ...
- ✓ Compiled /api/posted-meetings in 1080ms (1670 modules)
-API: /api/posted-meetings called
-API: Getting session...
- GET /api/auth/session 200 in 147ms
-API: Session: {
-  user: {
-    name: 'neha',
-    email: 'neha@m365x65088219.onmicrosoft.com',
-    image: null
-  },
-  expires: '2025-04-26T20:56:33.439Z',
-  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6InZFazdlVlNHZV9Od0pnNVN3UEdqZ1h3LWZ0VFZuX3ptdUl0ZjljYTJfZ1EiLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTA1ODk0LCJuYmYiOjE3NDMxMDU4OTQsImV4cCI6MTc0MzExMDA0NSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBaHE1Vk5RSURjVnZsYjZ0dHBXSVNzMEJJZ083aGpRbDdlRFRXYWtIV2dYMXV2TEk1dzU1RXZGWjlTY2FnRFdOUFI2RkVQaGh0Nm9jSDJNc0FtUExwc3N1VXJ2ZU5uZ21ueUpBSk9TL1dlVk5EVEt0V3Z6R254ZXRXejdWbWRQRGMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMjQwNToyMDE6YTQyNDo1ODUwOjRkZmE6NjZjNjo1NGNhOmU5MDAiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJuNGx4SFBGVGFFR09DY3pfMXdVM0FBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6Imk0cDJUaDZSTFI0YnBSTjk0cXdUNkFKSkhGNVlUVDdfbU81RUpyRmVZUzgiLCJ4bXNfaWRyZWwiOiIxIDIyIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.iBx11cUHczpXoBv2PLX-mpHNz6YQ8CpkxHQ9wYRdVst5Jwa20NMdKIibDu0siBSgN2OswOjoPRgdQGgagWfzXB7jR6C4JOlsHbNFZwvxhMbo1L5Rrqm93ykikWtAjlxEQF1BvNY-Me4NwMlzBX545qt_urCW4SSJwbC7gpiXRDAl0qyyYNQE77TThxV-msnD2EM3EQMDsnsvTREnb_x01k0UT36xMnfEUbaZfp3xf0K6IJ3atOoay1-GWnL9vhu3y7Znq6aF_pJUG7NkJEMk8C6OQRTBIh9JwYyC9ZZUo6SfLMbgj4Qzs44-XY-WaVdwLHZx4UyBOXY6SkJ24ZOUUQ'
-}
-API: User ID: neha@m365x65088219.onmicrosoft.com
-API: Creating storage instance...
-API: Loading data...
-API: Getting posted meetings for user: neha@m365x65088219.onmicrosoft.com
-API: Found posted meetings: [
-  {
-    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    timeEntry: {
-      id: '107106022',
-      projectid: '1423717',
-      moduleid: '550082',
-      taskid: '16537632',
-      worktypeid: '802279',
-      personid: '422721',
-      date: '2025-03-24',
-      datemodified: '2025-03-27 20:23:18',
-      time: '0.05',
-      description: 'neha',
-      billable: 't',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Development'
-    },
-    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-24'
-  }
-]
-Fetching task name for taskId: 16537632
-Current user personid: 422721
-Task 16537633 (Sandisk Task) skipped: Task is closed
-Task 16567104 (Infra Task) skipped: Not assigned to current user
-Task 16567116 (Infra Task) skipped: Not assigned to current user
-Task 16567207 (DevOps Task) skipped: Not assigned to current user
-Task 16567210 (DevOps Task) skipped: Not assigned to current user
-Found 4 open tasks assigned to user 422721
-Found task name: Infra  Task for taskId: 16537632
-API: Sorted meetings: [
-  {
-    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    timeEntry: {
-      id: '107106022',
-      projectid: '1423717',
-      moduleid: '550082',
-      taskid: '16537632',
-      worktypeid: '802279',
-      personid: '422721',
-      date: '2025-03-24',
-      datemodified: '2025-03-27 20:23:18',
-      time: '0.05',
-      description: 'neha',
-      billable: 't',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Development'
-    },
-    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-24',
-    taskName: 'Infra  Task'
-  }
-]
-API: Getting pending reviews (unmatched meetings) for user: neha@m365x65088219.onmicrosoft.com
-API: Found unmatched meetings: []
-API: Sending response: {
-  success: true,
-  meetings: [
-    {
-      meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-      userId: 'neha@m365x65088219.onmicrosoft.com',
-      timeEntry: [Object],
-      rawResponse: [Object],
-      postedAt: '2025-03-24',
-      taskName: 'Infra  Task'
-    }
-  ],
-  unmatchedMeetings: [],
-  summary: { total: 1, unmatched: 0 }
-}
- GET /api/posted-meetings 200 in 3104ms
-API: /api/posted-meetings called
-API: Getting session...
- ○ Compiling /api/reviews ...
- ✓ Compiled /api/reviews in 528ms (1672 modules)
- GET /api/auth/session 200 in 1104ms
-API: Session: {
-  user: {
-    name: 'neha',
-    email: 'neha@m365x65088219.onmicrosoft.com',
-    image: null
-  },
-  expires: '2025-04-26T20:56:36.154Z',
-  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6InZFazdlVlNHZV9Od0pnNVN3UEdqZ1h3LWZ0VFZuX3ptdUl0ZjljYTJfZ1EiLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTA1ODk0LCJuYmYiOjE3NDMxMDU4OTQsImV4cCI6MTc0MzExMDA0NSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBaHE1Vk5RSURjVnZsYjZ0dHBXSVNzMEJJZ083aGpRbDdlRFRXYWtIV2dYMXV2TEk1dzU1RXZGWjlTY2FnRFdOUFI2RkVQaGh0Nm9jSDJNc0FtUExwc3N1VXJ2ZU5uZ21ueUpBSk9TL1dlVk5EVEt0V3Z6R254ZXRXejdWbWRQRGMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMjQwNToyMDE6YTQyNDo1ODUwOjRkZmE6NjZjNjo1NGNhOmU5MDAiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJuNGx4SFBGVGFFR09DY3pfMXdVM0FBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6Imk0cDJUaDZSTFI0YnBSTjk0cXdUNkFKSkhGNVlUVDdfbU81RUpyRmVZUzgiLCJ4bXNfaWRyZWwiOiIxIDIyIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.iBx11cUHczpXoBv2PLX-mpHNz6YQ8CpkxHQ9wYRdVst5Jwa20NMdKIibDu0siBSgN2OswOjoPRgdQGgagWfzXB7jR6C4JOlsHbNFZwvxhMbo1L5Rrqm93ykikWtAjlxEQF1BvNY-Me4NwMlzBX545qt_urCW4SSJwbC7gpiXRDAl0qyyYNQE77TThxV-msnD2EM3EQMDsnsvTREnb_x01k0UT36xMnfEUbaZfp3xf0K6IJ3atOoay1-GWnL9vhu3y7Znq6aF_pJUG7NkJEMk8C6OQRTBIh9JwYyC9ZZUo6SfLMbgj4Qzs44-XY-WaVdwLHZx4UyBOXY6SkJ24ZOUUQ'
-}
-API: User ID: neha@m365x65088219.onmicrosoft.com
-API: Creating storage instance...
-API: Loading data...
-API: Getting posted meetings for user: neha@m365x65088219.onmicrosoft.com
- GET /api/auth/session 200 in 25ms
-Fetched 1 reviews for user neha@m365x65088219.onmicrosoft.com
- GET /api/reviews 304 in 1146ms
-API: Found posted meetings: [
-  {
-    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    timeEntry: {
-      id: '107106022',
-      projectid: '1423717',
-      moduleid: '550082',
-      taskid: '16537632',
-      worktypeid: '802279',
-      personid: '422721',
-      date: '2025-03-24',
-      datemodified: '2025-03-27 20:23:18',
-      time: '0.05',
-      description: 'neha',
-      billable: 't',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Development'
-    },
-    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-24'
-  }
-]
-Fetching task name for taskId: 16537632
-Current user personid: 422721
-Task 16537633 (Sandisk Task) skipped: Task is closed
-Task 16567104 (Infra Task) skipped: Not assigned to current user
-Task 16567116 (Infra Task) skipped: Not assigned to current user
-Task 16567207 (DevOps Task) skipped: Not assigned to current user
-Task 16567210 (DevOps Task) skipped: Not assigned to current user
-Found 4 open tasks assigned to user 422721
-Found task name: Infra  Task for taskId: 16537632
-API: Sorted meetings: [
-  {
-    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    timeEntry: {
-      id: '107106022',
-      projectid: '1423717',
-      moduleid: '550082',
-      taskid: '16537632',
-      worktypeid: '802279',
-      personid: '422721',
-      date: '2025-03-24',
-      datemodified: '2025-03-27 20:23:18',
-      time: '0.05',
-      description: 'neha',
-      billable: 't',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Development'
-    },
-    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-24',
-    taskName: 'Infra  Task'
-  }
-]
-API: Getting pending reviews (unmatched meetings) for user: neha@m365x65088219.onmicrosoft.com
-API: Found unmatched meetings: []
-API: Sending response: {
-  success: true,
-  meetings: [
-    {
-      meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-      userId: 'neha@m365x65088219.onmicrosoft.com',
-      timeEntry: [Object],
-      rawResponse: [Object],
-      postedAt: '2025-03-24',
-      taskName: 'Infra  Task'
-    }
-  ],
-  unmatchedMeetings: [],
-  summary: { total: 1, unmatched: 0 }
-}
- GET /api/posted-meetings 304 in 2112ms
- GET /api/auth/session 200 in 37ms
-Fetched 1 reviews for user neha@m365x65088219.onmicrosoft.com
- GET /api/reviews 304 in 55ms
- ✓ Compiled /api/test-time-entry in 469ms (1681 modules)
- GET /api/auth/session 200 in 95ms
 Fetching meetings for user: neha@m365x65088219.onmicrosoft.com
-Fetching meetings between: 2025-03-20T20:56:41.331Z and 2025-03-27T20:56:41.331Z
-Fetching meetings from URL: https://graph.microsoft.com/v1.0/users/neha@m365x65088219.onmicrosoft.com/events?$filter=start%2FdateTime%20ge%20'2025-03-20T20%3A56%3A41.331Z'%20and%20end%2FdateTime%20le%20'2025-03-27T20%3A56%3A41.331Z'&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc
+Fetching meetings between: 2025-03-21T06:10:19.342Z and 2025-03-28T06:10:19.342Z
+Fetching meetings from URL: https://graph.microsoft.com/v1.0/users/neha@m365x65088219.onmicrosoft.com/events?$filter=start%2FdateTime%20ge%20'2025-03-21T06%3A10%3A19.342Z'%20and%20end%2FdateTime%20le%20'2025-03-28T06%3A10%3A19.342Z'&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc
 Received meetings data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('neha%40m365x65088219.onmicrosoft.com')/events(id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting)",
   "value": [
@@ -359,6 +33,34 @@ Received meetings data: {
       }
     },
     {
+      "@odata.etag": "W/\"Zd1zkv4lwE2IxROSLH1yowAAQXuGVg==\"",
+      "id": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABBfbNzAAA=",
+      "categories": [],
+      "subject": "wd issue",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 226 379 388 438\r\nPasscode: MG6TV9TW\r\n________________________________\r\nFor organizers: Meeting options\r\n_",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "start": {
+        "dateTime": "2025-03-25T07:30:00.0000000",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2025-03-25T08:00:00.0000000",
+        "timeZone": "UTC"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "neha",
+          "address": "neha@M365x65088219.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDhkMDc4N2MtMTRjYi00MDI5LWE3ZmEtOGRkZDc5NjU5NDAx%40thread.v2/0?context=%7b%22Tid%22%3a%22a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a%22%2c%22Oid%22%3a%2270cf419a-117a-48e5-b35c-a3eece8a2d7f%22%7d"
+      }
+    },
+    {
       "@odata.etag": "W/\"Zd1zkv4lwE2IxROSLH1yowAAQMBHHQ==\"",
       "id": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=",
       "categories": [],
@@ -388,11 +90,16 @@ Received meetings data: {
     }
   ]
 }
-Found 2 meetings from past 7 days: [
+Found 3 meetings from past 7 days: [
   {
     subject: 'Infra',
     start: '2025-03-25T08:30:00.0000000',
     end: '2025-03-25T09:00:00.0000000'
+  },
+  {
+    subject: 'wd issue',
+    start: '2025-03-25T07:30:00.0000000',
+    end: '2025-03-25T08:00:00.0000000'
   },
   {
     subject: 'neha',
@@ -441,14 +148,53 @@ Records data: {
     }
   ]
 }
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MDhkMDc4N2MtMTRjYi00MDI5LWE3ZmEtOGRkZDc5NjU5NDAx@thread.v2/0?context={"Tid":"a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a","Oid":"70cf419a-117a-48e5-b35c-a3eece8a2d7f"}
+Extracted Meeting ID: 19:meeting_MDhkMDc4N2MtMTRjYi00MDI5LWE3ZmEtOGRkZDc5NjU5NDAx@thread.v2
+Extracted Organizer ID: 70cf419a-117a-48e5-b35c-a3eece8a2d7f
+Formatted string: 1*70cf419a-117a-48e5-b35c-a3eece8a2d7f*0**19:meeting_MDhkMDc4N2MtMTRjYi00MDI5LWE3ZmEtOGRkZDc5NjU5NDAx@thread.v2
+Base64 Meeting ID: MSo3MGNmNDE5YS0xMTdhLTQ4ZTUtYjM1Yy1hM2VlY2U4YTJkN2YqMCoqMTk6bWVldGluZ19NRGhrTURjNE4yTXRNVFJqWWkwME1ESTVMV0UzWm1FdE9HUmtaRGM1TmpVNU5EQXhAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('70cf419a-117a-48e5-b35c-a3eece8a2d7f')/onlineMeetings('MSo3MGNmNDE5YS0xMTdhLTQ4ZTUtYjM1Yy1hM2VlY2U4YTJkN2YqMCoqMTk6bWVldGluZ19NRGhrTURjNE4yTXRNVFJqWWkwME1ESTVMV0UzWm1FdE9HUmtaRGM1TmpVNU5EQXhAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "a4a60374-8715-4f12-82d7-4b95c0197123",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-03-28T06:09:49.439Z",
+      "meetingEndDateTime": "2025-03-28T06:10:10.33Z"
+    }
+  ]
+}
+Report ID: a4a60374-8715-4f12-82d7-4b95c0197123
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('70cf419a-117a-48e5-b35c-a3eece8a2d7f')/onlineMeetings('MSo3MGNmNDE5YS0xMTdhLTQ4ZTUtYjM1Yy1hM2VlY2U4YTJkN2YqMCoqMTk6bWVldGluZ19NRGhrTURjNE4yTXRNVFJqWWkwME1ESTVMV0UzWm1FdE9HUmtaRGM1TmpVNU5EQXhAdGhyZWFkLnYy')/attendanceReports('a4a60374-8715-4f12-82d7-4b95c0197123')/attendanceRecords",
+  "value": [
+    {
+      "id": "70cf419a-117a-48e5-b35c-a3eece8a2d7f",
+      "emailAddress": "neha@M365x65088219.onmicrosoft.com",
+      "totalAttendanceInSeconds": 15,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "70cf419a-117a-48e5-b35c-a3eece8a2d7f",
+        "displayName": "neha",
+        "tenantId": "a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-03-28T06:09:54.757882Z",
+          "leaveDateTime": "2025-03-28T06:10:10.3306719Z",
+          "durationInSeconds": 15
+        }
+      ]
+    }
+  ]
+}
 Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NjE1YjFiNWQtZWIzZC00ODE4LTg3NzAtOTEzNzkwYjk0NzE0@thread.v2/0?context={"Tid":"a5ae9ae1-3c47-4b70-b92c-ac3a0efffc6a","Oid":"70cf419a-117a-48e5-b35c-a3eece8a2d7f"}
 Extracted Meeting ID: 19:meeting_NjE1YjFiNWQtZWIzZC00ODE4LTg3NzAtOTEzNzkwYjk0NzE0@thread.v2
 Extracted Organizer ID: 70cf419a-117a-48e5-b35c-a3eece8a2d7f
 Formatted string: 1*70cf419a-117a-48e5-b35c-a3eece8a2d7f*0**19:meeting_NjE1YjFiNWQtZWIzZC00ODE4LTg3NzAtOTEzNzkwYjk0NzE0@thread.v2
 Base64 Meeting ID: MSo3MGNmNDE5YS0xMTdhLTQ4ZTUtYjM1Yy1hM2VlY2U4YTJkN2YqMCoqMTk6bWVldGluZ19OakUxWWpGaU5XUXRaV0l6WkMwME9ERTRMVGczTnpBdE9URXpOemt3WWprME56RTBAdGhyZWFkLnYy
- ✓ Compiled /api/batch-status in 358ms (1682 modules)
- GET /api/auth/session 200 in 98ms
- GET /api/batch-status 304 in 508ms
+ ✓ Compiled /api/batch-status in 350ms (1657 modules)
 Reports data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('70cf419a-117a-48e5-b35c-a3eece8a2d7f')/onlineMeetings('MSo3MGNmNDE5YS0xMTdhLTQ4ZTUtYjM1Yy1hM2VlY2U4YTJkN2YqMCoqMTk6bWVldGluZ19OakUxWWpGaU5XUXRaV0l6WkMwME9ERTRMVGczTnpBdE9URXpOemt3WWprME56RTBAdGhyZWFkLnYy')/attendanceReports",
   "value": [
@@ -461,6 +207,8 @@ Reports data: {
   ]
 }
 Report ID: 041376a4-4140-41fa-969e-41dc9efb0e36
+ GET /api/auth/session 200 in 95ms
+ GET /api/batch-status 304 in 495ms
 Records data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('70cf419a-117a-48e5-b35c-a3eece8a2d7f')/onlineMeetings('MSo3MGNmNDE5YS0xMTdhLTQ4ZTUtYjM1Yy1hM2VlY2U4YTJkN2YqMCoqMTk6bWVldGluZ19OakUxWWpGaU5XUXRaV0l6WkMwME9ERTRMVGczTnpBdE9URXpOemt3WWprME56RTBAdGhyZWFkLnYy')/attendanceReports('041376a4-4140-41fa-969e-41dc9efb0e36')/attendanceRecords",
   "value": [
@@ -485,51 +233,59 @@ Records data: {
     }
   ]
 }
-Found 2 meetings: [ 'Infra', 'neha' ]
+Found 3 meetings: [ 'Infra', 'wd issue', 'neha' ]
 Processing meetings with AI analysis using batch processor...
-Starting batch processing for 2 meetings with batch ID: 1743109006014
-Processing chunk 1 of 1, size: 2
+Starting batch processing for 3 meetings with batch ID: 1743142223228
+Processing chunk 1 of 1, size: 3
 Meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA= added to queue. Queue length: 1
 Processing meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA= from queue. Remaining: 0
-Meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA= added to queue. Queue length: 1
- GET /api/auth/session 200 in 49ms
- GET /api/batch-status 304 in 79ms
+Meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABBfbNzAAA= added to queue. Queue length: 1
+Meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA= added to queue. Queue length: 2
+ GET /api/auth/session 200 in 25ms
+ GET /api/batch-status 304 in 54ms
+Processing meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABBfbNzAAA= from queue. Remaining: 1
+ GET /api/auth/session 200 in 22ms
+ GET /api/batch-status 304 in 46ms
+ GET /api/auth/session 200 in 30ms
 Processing meeting AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA= from queue. Remaining: 0
- GET /api/auth/session 200 in 57ms
- GET /api/batch-status 304 in 94ms
-Batch processing started with ID: 1743109006014
-Progress: 2/2 meetings processed
+ GET /api/auth/session 200 in 18ms
+ GET /api/batch-status 304 in 31ms
+Batch processing started with ID: 1743142223228
+Progress: 3/3 meetings processed
 All meetings processed
-Successfully processed 2 meetings
+Successfully processed 3 meetings
 Filtering out already processed meetings and meetings the user didn't attend...
-Starting comparison of 2 meetings against posted meetings...
+Starting comparison of 3 meetings against posted meetings...
 Processing batch 1 of 1
-Batch 1 results: { total: 2, duplicates: 1, unique: 1 }
+Batch 1 results: { total: 3, duplicates: 1, unique: 2 }
 Filtered 1 duplicate meetings
-Proceeding with 1 unique meetings
-User neha@m365x65088219.onmicrosoft.com attended meeting "Infra" for 310 seconds
-Found 1 unique meetings, 1 of which were attended by the user
+Proceeding with 2 unique meetings
+User neha@m365x65088219.onmicrosoft.com attended meeting "wd issue" for 15 seconds
+User neha@m365x65088219.onmicrosoft.com attended meeting "neha" for 182 seconds
+Found 2 unique meetings, 2 of which were attended by the user
 Matching tasks to attended meetings...
-Matching tasks for meeting: Infra
-Found user's attendance record with duration: 310 seconds
+Matching tasks for meeting: wd issue
+Found user's attendance record with duration: 15 seconds
 Fetching tasks from Intervals for user: neha@m365x65088219.onmicrosoft.com
+ GET /api/auth/session 200 in 28ms
+ GET /api/batch-status 304 in 53ms
 Current user personid: 422721
-Task 16537633 (Sandisk Task) skipped: Task is closed
 Task 16567104 (Infra Task) skipped: Not assigned to current user
 Task 16567116 (Infra Task) skipped: Not assigned to current user
 Task 16567207 (DevOps Task) skipped: Not assigned to current user
 Task 16567210 (DevOps Task) skipped: Not assigned to current user
-Found 4 open tasks assigned to user 422721
-Found 4 tasks in Intervals:
+Found 5 open tasks assigned to user 422721
+Found 5 tasks in Intervals:
 - Daily Status Report (16537629)
 - WD Task (16537630)
 - UMG Task (16537631)
 - Infra  Task (16537632)
+- Sandisk Task (16537633)
 Meeting analysis for matching: {
-  "subject": "Infra",
-  "startTime": "2025-03-25T08:30:00.0000000",
-  "endTime": "2025-03-25T09:00:00.0000000",
-  "duration": 310,
+  "subject": "wd issue",
+  "startTime": "2025-03-25T07:30:00.0000000",
+  "endTime": "2025-03-25T08:00:00.0000000",
+  "duration": 15,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -543,20 +299,20 @@ Meeting analysis for matching: {
       {
         "name": "neha",
         "email": "neha@M365x65088219.onmicrosoft.com",
-        "duration": 310,
+        "duration": 15,
         "role": "Organizer",
         "attendanceIntervals": [
           {
-            "joinDateTime": "2025-03-27T12:01:59.7756594Z",
-            "leaveDateTime": "2025-03-27T12:07:10.3479545Z",
-            "durationInSeconds": 310
+            "joinDateTime": "2025-03-28T06:09:54.757882Z",
+            "leaveDateTime": "2025-03-28T06:10:10.3306719Z",
+            "durationInSeconds": 15
           }
         ]
       }
     ],
     "summary": {
-      "totalDuration": 310,
-      "averageDuration": 310,
+      "totalDuration": 15,
+      "averageDuration": 15,
       "totalParticipants": 1
     }
   }
@@ -637,16 +393,35 @@ Tasks data for matching: [
       "hasDescription": false,
       "projectContext": "Internal"
     }
+  },
+  {
+    "id": "16537633",
+    "title": "Sandisk Task",
+    "projectid": "1422050",
+    "project": "SanDisk App Migration",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390506",
+    "client": "SanDisk",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk App Migration"
+    }
   }
 ]
 Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
 
 Meeting Details:
 {
-  "subject": "Infra",
-  "startTime": "2025-03-25T08:30:00.0000000",
-  "endTime": "2025-03-25T09:00:00.0000000",
-  "duration": 310,
+  "subject": "wd issue",
+  "startTime": "2025-03-25T07:30:00.0000000",
+  "endTime": "2025-03-25T08:00:00.0000000",
+  "duration": 15,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -660,20 +435,20 @@ Meeting Details:
       {
         "name": "neha",
         "email": "neha@M365x65088219.onmicrosoft.com",
-        "duration": 310,
+        "duration": 15,
         "role": "Organizer",
         "attendanceIntervals": [
           {
-            "joinDateTime": "2025-03-27T12:01:59.7756594Z",
-            "leaveDateTime": "2025-03-27T12:07:10.3479545Z",
-            "durationInSeconds": 310
+            "joinDateTime": "2025-03-28T06:09:54.757882Z",
+            "leaveDateTime": "2025-03-28T06:10:10.3306719Z",
+            "durationInSeconds": 15
           }
         ]
       }
     ],
     "summary": {
-      "totalDuration": 310,
-      "averageDuration": 310,
+      "totalDuration": 15,
+      "averageDuration": 15,
       "totalParticipants": 1
     }
   }
@@ -756,6 +531,25 @@ Available Tasks:
       "hasDescription": false,
       "projectContext": "Internal"
     }
+  },
+  {
+    "id": "16537633",
+    "title": "Sandisk Task",
+    "projectid": "1422050",
+    "project": "SanDisk App Migration",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390506",
+    "client": "SanDisk",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk App Migration"
+    }
   }
 ]
 
@@ -786,7 +580,7 @@ CONFIDENCE SCORE GUIDELINES:
 EXAMPLES:
 ✓ GOOD: Meeting "API Integration Discussion" matches task "Dev Task" with confidence 0.8 (when assigned to user)
 ✓ GOOD: Meeting "John" matches task "Dev Task" with confidence 0.3 (when assigned to user)
-✗ BAD: Meeting "Sarah" matches task "QA Meeting" with confidence 0.7 (no evidence of QA activity)      
+✗ BAD: Meeting "Sarah" matches task "QA Meeting" with confidence 0.7 (no evidence of QA activity)
 ✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
 ✗ BAD: Any match with a task that has status "Closed" (should be excluded)
 
@@ -801,7 +595,7 @@ Analyze the meeting and tasks, then provide your response in the following JSON 
                 "subject": "string",
                 "startTime": "string",
                 "endTime": "string",
-                "actualDuration": number  // Use the duration from attendance records in seconds       
+                "actualDuration": number  // Use the duration from attendance records in seconds
             },
             "confidence": number,
             "reason": "string"
@@ -818,20 +612,21 @@ Notes:
 6. The actualDuration should be taken from the attendance records and is in seconds
 7. If no task has a confidence score above 0.4, return an empty matchedTasks array
 8. Tasks with status "Closed" should NEVER be included in matchedTasks
+ GET /api/auth/session 200 in 29ms
 OpenAI response: ```json
 {
     "matchedTasks": [
         {
-            "taskId": "16537632",
-            "taskTitle": "Infra  Task",
+            "taskId": "16537630",
+            "taskTitle": "WD Task",
             "meetingDetails": {
-                "subject": "Infra",
-                "startTime": "2025-03-25T08:30:00.0000000",
-                "endTime": "2025-03-25T09:00:00.0000000",
-                "actualDuration": 310
+                "subject": "wd issue",
+                "startTime": "2025-03-25T07:30:00.0000000",
+                "endTime": "2025-03-25T08:00:00.0000000",
+                "actualDuration": 15
             },
             "confidence": 0.7,
-            "reason": "The meeting subject 'Infra' directly matches the keyword 'Infra' in the task title. Additionally, the task is assigned to the relevant users and has an 'Open' status. While the analysis lacks detailed context, the keyword match provides strong evidence for relevance."
+            "reason": "The meeting subject 'wd issue' directly matches the client name 'WD' in the task 'WD Task', and the task is open and assigned to the user. This provides strong evidence for relevance."
         }
     ]
 }
@@ -840,16 +635,16 @@ Raw OpenAI response: ```json
 {
     "matchedTasks": [
         {
-            "taskId": "16537632",
-            "taskTitle": "Infra  Task",
+            "taskId": "16537630",
+            "taskTitle": "WD Task",
             "meetingDetails": {
-                "subject": "Infra",
-                "startTime": "2025-03-25T08:30:00.0000000",
-                "endTime": "2025-03-25T09:00:00.0000000",
-                "actualDuration": 310
+                "subject": "wd issue",
+                "startTime": "2025-03-25T07:30:00.0000000",
+                "endTime": "2025-03-25T08:00:00.0000000",
+                "actualDuration": 15
             },
             "confidence": 0.7,
-            "reason": "The meeting subject 'Infra' directly matches the keyword 'Infra' in the task title. Additionally, the task is assigned to the relevant users and has an 'Open' status. While the analysis lacks detailed context, the keyword match provides strong evidence for relevance."
+            "reason": "The meeting subject 'wd issue' directly matches the client name 'WD' in the task 'WD Task', and the task is open and assigned to the user. This provides strong evidence for relevance."
         }
     ]
 }
@@ -857,141 +652,541 @@ Raw OpenAI response: ```json
 Extracted JSON: {
     "matchedTasks": [
         {
-            "taskId": "16537632",
-            "taskTitle": "Infra  Task",
+            "taskId": "16537630",
+            "taskTitle": "WD Task",
             "meetingDetails": {
-                "subject": "Infra",
-                "startTime": "2025-03-25T08:30:00.0000000",
-                "endTime": "2025-03-25T09:00:00.0000000",
-                "actualDuration": 310
+                "subject": "wd issue",
+                "startTime": "2025-03-25T07:30:00.0000000",
+                "endTime": "2025-03-25T08:00:00.0000000",
+                "actualDuration": 15
             },
             "confidence": 0.7,
-            "reason": "The meeting subject 'Infra' directly matches the keyword 'Infra' in the task title. Additionally, the task is assigned to the relevant users and has an 'Open' status. While the analysis lacks detailed context, the keyword match provides strong evidence for relevance."
+            "reason": "The meeting subject 'wd issue' directly matches the client name 'WD' in the task 'WD Task', and the task is open and assigned to the user. This provides strong evidence for relevance."
         }
     ]
 }
 Parsed tasks: [
   {
-    "taskId": "16537632",
-    "taskTitle": "Infra  Task",
+    "taskId": "16537630",
+    "taskTitle": "WD Task",
     "meetingDetails": {
-      "subject": "Infra",
-      "startTime": "2025-03-25T08:30:00.0000000",
-      "endTime": "2025-03-25T09:00:00.0000000",
-      "actualDuration": 310
+      "subject": "wd issue",
+      "startTime": "2025-03-25T07:30:00.0000000",
+      "endTime": "2025-03-25T08:00:00.0000000",
+      "actualDuration": 15
     },
     "confidence": 0.7,
-    "reason": "The meeting subject 'Infra' directly matches the keyword 'Infra' in the task title. Additionally, the task is assigned to the relevant users and has an 'Open' status. While the analysis lacks detailed context, the keyword match provides strong evidence for relevance."
+    "reason": "The meeting subject 'wd issue' directly matches the client name 'WD' in the task 'WD Task', and the task is open and assigned to the user. This provides strong evidence for relevance."
   }
 ]
 Parsed matching result: {
-  "meetingSubject": "Infra",
+  "meetingSubject": "wd issue",
   "matchedTasks": [
     {
-      "taskId": "16537632",
-      "taskTitle": "Infra  Task",
+      "taskId": "16537630",
+      "taskTitle": "WD Task",
       "meetingDetails": {
-        "subject": "Infra",
-        "startTime": "2025-03-25T08:30:00.0000000",
-        "endTime": "2025-03-25T09:00:00.0000000",
-        "actualDuration": 310
+        "subject": "wd issue",
+        "startTime": "2025-03-25T07:30:00.0000000",
+        "endTime": "2025-03-25T08:00:00.0000000",
+        "actualDuration": 15
       },
       "confidence": 0.7,
-      "reason": "The meeting subject 'Infra' directly matches the keyword 'Infra' in the task title. Additionally, the task is assigned to the relevant users and has an 'Open' status. While the analysis lacks detailed context, the keyword match provides strong evidence for relevance."
+      "reason": "The meeting subject 'wd issue' directly matches the client name 'WD' in the task 'WD Task', and the task is open and assigned to the user. This provides strong evidence for relevance."
     }
   ]
 }
-Found 1 matches for meeting: Infra
- GET /api/auth/session 200 in 67ms
- GET /api/batch-status 304 in 112ms
+Found 1 matches for meeting: wd issue
+ GET /api/auth/session 200 in 26ms
+ GET /api/batch-status 304 in 52ms
+Matching tasks for meeting: neha
+Found user's attendance record with duration: 182 seconds
+Fetching tasks from Intervals for user: neha@m365x65088219.onmicrosoft.com
+ GET /api/auth/session 200 in 31ms
+Current user personid: 422721
+Task 16567104 (Infra Task) skipped: Not assigned to current user
+Task 16567116 (Infra Task) skipped: Not assigned to current user
+Task 16567207 (DevOps Task) skipped: Not assigned to current user
+Task 16567210 (DevOps Task) skipped: Not assigned to current user
+Found 5 open tasks assigned to user 422721
+Found 5 tasks in Intervals:
+- Daily Status Report (16537629)
+- WD Task (16537630)
+- UMG Task (16537631)
+- Infra  Task (16537632)
+- Sandisk Task (16537633)
+Meeting analysis for matching: {
+  "subject": "neha",
+  "startTime": "2025-03-24T07:00:00.0000000",
+  "endTime": "2025-03-24T07:30:00.0000000",
+  "duration": 182,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "neha",
+        "email": "neha@M365x65088219.onmicrosoft.com",
+        "duration": 182,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-03-27T17:51:23.8675668Z",
+            "leaveDateTime": "2025-03-27T17:54:26.8636007Z",
+            "durationInSeconds": 182
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 182,
+      "averageDuration": 182,
+      "totalParticipants": 1
+    }
+  }
+}
+Tasks data for matching: [
+  {
+    "id": "16537629",
+    "title": "Daily Status Report",
+    "projectid": "1422052",
+    "project": "Daily Status Report",
+    "status": "Open",
+    "priority": "3",
+    "clientid": null,
+    "client": null,
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Daily Status Report"
+    }
+  },
+  {
+    "id": "16537630",
+    "title": "WD Task",
+    "projectid": "1422049",
+    "project": "WD Domain Separation Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390505",
+    "client": "WD",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "WD Domain Separation Project"
+    }
+  },
+  {
+    "id": "16537631",
+    "title": "UMG Task",
+    "projectid": "1422048",
+    "project": "UMG Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390504",
+    "client": "UMG",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "UMG Project"
+    }
+  },
+  {
+    "id": "16537632",
+    "title": "Infra  Task",
+    "projectid": "1423717",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390776",
+    "client": "Nathcorp",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  },
+  {
+    "id": "16537633",
+    "title": "Sandisk Task",
+    "projectid": "1422050",
+    "project": "SanDisk App Migration",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390506",
+    "client": "SanDisk",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk App Migration"
+    }
+  }
+]
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
+
+Meeting Details:
+{
+  "subject": "neha",
+  "startTime": "2025-03-24T07:00:00.0000000",
+  "endTime": "2025-03-24T07:30:00.0000000",
+  "duration": 182,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "neha",
+        "email": "neha@M365x65088219.onmicrosoft.com",
+        "duration": 182,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-03-27T17:51:23.8675668Z",
+            "leaveDateTime": "2025-03-27T17:54:26.8636007Z",
+            "durationInSeconds": 182
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 182,
+      "averageDuration": 182,
+      "totalParticipants": 1
+    }
+  }
+}
+
+Available Tasks:
+[
+  {
+    "id": "16537629",
+    "title": "Daily Status Report",
+    "projectid": "1422052",
+    "project": "Daily Status Report",
+    "status": "Open",
+    "priority": "3",
+    "clientid": null,
+    "client": null,
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Daily Status Report"
+    }
+  },
+  {
+    "id": "16537630",
+    "title": "WD Task",
+    "projectid": "1422049",
+    "project": "WD Domain Separation Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390505",
+    "client": "WD",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "WD Domain Separation Project"
+    }
+  },
+  {
+    "id": "16537631",
+    "title": "UMG Task",
+    "projectid": "1422048",
+    "project": "UMG Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390504",
+    "client": "UMG",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "UMG Project"
+    }
+  },
+  {
+    "id": "16537632",
+    "title": "Infra  Task",
+    "projectid": "1423717",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390776",
+    "client": "Nathcorp",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  },
+  {
+    "id": "16537633",
+    "title": "Sandisk Task",
+    "projectid": "1422050",
+    "project": "SanDisk App Migration",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "390506",
+    "client": "SanDisk",
+    "moduleid": "550082",
+    "module": "Development",
+    "assigneeid": "422721,422096,421946,421947,422066,421945",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk App Migration"
+    }
+  }
+]
+
+IT COMPANY CONTEXT:
+- We are a software development company with projects across various technologies
+- Most meetings relate to development, code reviews, planning, or technical discussions
+- Default to Development module tasks unless there's clear evidence for another department
+- Technical staff often have meetings about development tasks even if the subject is vague
+
+MATCHING RULES:
+1. Prioritize tasks with direct keyword matches to the meeting subject or description
+2. When the meeting subject is just a person's name or vague (e.g., "call me"), default to "Dev Task" or similar development tasks
+3. Only match to QA/Testing tasks when there's explicit mention of testing, quality, or QA
+4. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
+5. Developer names in meeting titles typically indicate development discussions, not QA
+6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
+7. NEVER match with tasks that have a "Closed" status
+8. If the client is "Nathcorp", note that these are internal non-billable tasks
+9. If no assigned tasks match well, return an empty matchedTasks array
+
+CONFIDENCE SCORE GUIDELINES:
+- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
+- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
+- High (0.7-0.9): Strong evidence with clear technical keyword matches
+- Perfect (1.0): Exact match between meeting subject and technical task
+- Score of 0: Task is not assigned to the user or task is closed
+
+EXAMPLES:
+✓ GOOD: Meeting "API Integration Discussion" matches task "Dev Task" with confidence 0.8 (when assigned to user)
+✓ GOOD: Meeting "John" matches task "Dev Task" with confidence 0.3 (when assigned to user)
+✗ BAD: Meeting "Sarah" matches task "QA Meeting" with confidence 0.7 (no evidence of QA activity)
+✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
+✗ BAD: Any match with a task that has status "Closed" (should be excluded)
+
+Analyze the meeting and tasks, then provide your response in the following JSON format:
+
+{
+    "matchedTasks": [
+        {
+            "taskId": "string",
+            "taskTitle": "string",
+            "meetingDetails": {
+                "subject": "string",
+                "startTime": "string",
+                "endTime": "string",
+                "actualDuration": number  // Use the duration from attendance records in seconds
+            },
+            "confidence": number,
+            "reason": "string"
+        }
+    ]
+}
+
+Notes:
+1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
+2. Confidence should be a number between 0 and 1
+3. Provide clear reasons for each match based on specific evidence
+4. Return valid JSON that can be parsed directly
+5. Include all required fields for each task
+6. The actualDuration should be taken from the attendance records and is in seconds
+7. If no task has a confidence score above 0.4, return an empty matchedTasks array
+8. Tasks with status "Closed" should NEVER be included in matchedTasks
+Rate limit exceeded, retrying after backoff (attempt 1)
+ GET /api/auth/session 200 in 36ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/batch-status 304 in 35ms
+Rate limit exceeded, retrying after backoff (attempt 2)
+Rate limit exceeded, retrying after backoff (attempt 3)
+ GET /api/auth/session 200 in 24ms
+ GET /api/batch-status 304 in 36ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/batch-status 304 in 35ms
+Rate limit exceeded, retrying after backoff (attempt 4)
+ GET /api/auth/session 200 in 22ms
+ GET /api/batch-status 304 in 34ms
+ GET /api/auth/session 200 in 19ms
+ GET /api/batch-status 304 in 30ms
+ GET /api/auth/session 200 in 25ms
+ GET /api/batch-status 304 in 40ms
+ GET /api/auth/session 200 in 45ms
+ GET /api/batch-status 304 in 76ms
+Rate limit exceeded, retrying after backoff (attempt 5)
+ GET /api/auth/session 200 in 47ms
+ GET /api/auth/session 200 in 37ms
+ GET /api/batch-status 304 in 75ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 28ms
+ GET /api/batch-status 304 in 50ms
+ GET /api/auth/session 200 in 19ms
+ GET /api/batch-status 304 in 34ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/batch-status 304 in 50ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/batch-status 304 in 42ms
+ GET /api/auth/session 200 in 32ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/batch-status 304 in 25ms
+ GET /api/auth/session 200 in 24ms
+ GET /api/batch-status 304 in 46ms
+ GET /api/auth/session 200 in 26ms
+OpenAI response: ```json
+{
+    "matchedTasks": []
+}
+```
+
+### Explanation:
+1. **Meeting Subject**: The subject "neha" is vague and does not provide any technical context or keywords to match with specific tasks.
+2. **Analysis**: The meeting analysis contains no key points, suggested categories, or patterns, and the confidence level is only 0.5. This provides no concrete evidence to match with any task.
+3. **Attendance**: The meeting had only one participant (Neha), who is the organizer. There is no indication of a technical discussion or specific project context.
+4. **Task Matching**:
+   - None of the tasks have direct keyword matches to the meeting subject or description.
+   - All tasks are assigned to multiple users, but there is no indication that Neha is one of the assignees.
+   - Defaulting to development tasks is not applicable here due to the lack of evidence connecting the meeting to any specific technical area.
+5. **Confidence**: No task has a confidence score above 0.4 due to the absence of meaningful relevance or evidence.
+
+### Conclusion:
+Based on the provided rules and evidence, no tasks are relevant enough to be matched to this meeting. Therefore, the `matchedTasks` array is empty.
+Raw OpenAI response: ```json
+{
+    "matchedTasks": []
+}
+```
+
+### Explanation:
+1. **Meeting Subject**: The subject "neha" is vague and does not provide any technical context or keywords to match with specific tasks.
+2. **Analysis**: The meeting analysis contains no key points, suggested categories, or patterns, and the confidence level is only 0.5. This provides no concrete evidence to match with any task.
+3. **Attendance**: The meeting had only one participant (Neha), who is the organizer. There is no indication of a technical discussion or specific project context.
+4. **Task Matching**:
+   - None of the tasks have direct keyword matches to the meeting subject or description.
+   - All tasks are assigned to multiple users, but there is no indication that Neha is one of the assignees.
+   - Defaulting to development tasks is not applicable here due to the lack of evidence connecting the meeting to any specific technical area.
+5. **Confidence**: No task has a confidence score above 0.4 due to the absence of meaningful relevance or evidence.
+
+### Conclusion:
+Based on the provided rules and evidence, no tasks are relevant enough to be matched to this meeting. Therefore, the `matchedTasks` array is empty.
+Extracted JSON: {
+    "matchedTasks": []
+}
+Parsed tasks: []
+Parsed matching result: {
+  "meetingSubject": "neha",
+  "matchedTasks": []
+}
+No matches found for meeting: neha, queueing for review
+Found user's attendance record with duration: 182 seconds
+Meeting with ID AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA= already exists in reviews, updating instead of adding duplicate
+Meeting queued for review: AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA= - neha
+Meeting queued for review: AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA= - neha
+ GET /api/auth/session 200 in 19ms
+ GET /api/batch-status 304 in 36ms
 Creating time entries...
-Creating time entry for meeting: Infra
+Creating time entry for meeting: wd issue
  ○ Compiling /api/intervals-proxy ...
- ✓ Compiled /api/intervals-proxy in 1248ms (3187 modules)
- GET /dashboard 200 in 198ms
- GET /dashboard 200 in 22ms
- POST /api/intervals-proxy 200 in 2433ms
- POST /api/intervals-proxy 200 in 2551ms
+ ✓ Compiled /api/intervals-proxy in 518ms (1661 modules)
+ POST /api/intervals-proxy 200 in 1867ms
+ POST /api/intervals-proxy 200 in 2023ms
 Retrieved task details: {
-  id: '16537632',
-  title: 'Infra  Task',
+  id: '16537630',
+  title: 'WD Task',
   status: 'Open',
-  client: 'Nathcorp',
+  client: 'WD',
   assigneeid: '422721,422096,421946,421947,422066,421945'
 }
 Person info: { id: 422721, email: '' }
 Task details: {
-  id: '16537632',
-  projectid: '1423717',
+  id: '16537630',
+  projectid: '1422049',
   moduleid: '550082',
   assignees: '422721,422096,421946,421947,422066,421945',
-  client: 'Nathcorp',
+  client: 'WD',
+  project: 'WD Domain Separation Project',
   status: 'Open'
 }
- POST /api/intervals-proxy 200 in 509ms
-Found 1 work types for project 1423717: [
+ POST /api/intervals-proxy 200 in 497ms
+Found 1 work types for project 1422049: [
   {
     id: '802269',
     name: 'Admin',
-    projectId: '1423717',
+    projectId: '1422049',
     workTypeId: '802269',
-    projectWorkTypeId: '31225370'
+    projectWorkTypeId: '31153507'
   }
 ]
 Using hardcoded worktype ID 802279 for India-Meeting
-Found user's attendance record with duration: 310 seconds
-Client: Nathcorp, Setting billable flag to: false
-Creating time entry with data: {
-  "projectid": "1423717",
-  "moduleid": "550082",
-  "taskid": "16537632",
-  "worktypeid": "802279",
-  "personid": 422721,
-  "date": "2025-03-25",
-  "time": 0.09,
-  "description": "Infra",
-  "billable": "f"
-}
- GET /api/auth/session 200 in 159ms
- GET /api/batch-status 304 in 216ms
- POST /api/intervals-proxy 200 in 828ms
-Time entry creation successful. Response: {
-  "personid": 422721,
-  "status": "Created",
-  "code": 201,
-  "time": {
-    "id": "107106799",
-    "projectid": "1423717",
-    "moduleid": "550082",
-    "taskid": "16537632",
-    "worktypeid": "802279",
-    "personid": "422721",
-    "date": "2025-03-25",
-    "datemodified": "2025-03-27 20:57:05",
-    "time": "0.09",
-    "description": "Infra",
-    "billable": "f",
-    "worktype": "India-Meeting",
-    "milestoneid": null,
-    "ogmilestoneid": null,
-    "module": "Development"
-  }
-}
-Saving posted meeting with time entry...
-Successfully saved posted meeting with time entry
-Successfully created time entry for: Infra
- GET /api/test-time-entry 200 in 28086ms
+Found user's attendance record with duration: 15 seconds
+User neha@m365x65088219.onmicrosoft.com has zero duration for meeting "wd issue". Skipping time entry creation.
+Successfully created time entry for: wd issue
+Skipping time entry creation for meeting: neha - Needs review
+ GET /api/test-time-entry 200 in 110453ms
+ ✓ Compiled /api/posted-meetings in 190ms (1668 modules)
 API: /api/posted-meetings called
 API: Getting session...
- GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 71ms
 API: Session: {
   user: {
     name: 'neha',
     email: 'neha@m365x65088219.onmicrosoft.com',
     image: null
   },
-  expires: '2025-04-26T20:57:08.339Z',
-  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6InZFazdlVlNHZV9Od0pnNVN3UEdqZ1h3LWZ0VFZuX3ptdUl0ZjljYTJfZ1EiLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTA1ODk0LCJuYmYiOjE3NDMxMDU4OTQsImV4cCI6MTc0MzExMDA0NSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBaHE1Vk5RSURjVnZsYjZ0dHBXSVNzMEJJZ083aGpRbDdlRFRXYWtIV2dYMXV2TEk1dzU1RXZGWjlTY2FnRFdOUFI2RkVQaGh0Nm9jSDJNc0FtUExwc3N1VXJ2ZU5uZ21ueUpBSk9TL1dlVk5EVEt0V3Z6R254ZXRXejdWbWRQRGMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMjQwNToyMDE6YTQyNDo1ODUwOjRkZmE6NjZjNjo1NGNhOmU5MDAiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJuNGx4SFBGVGFFR09DY3pfMXdVM0FBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6Imk0cDJUaDZSTFI0YnBSTjk0cXdUNkFKSkhGNVlUVDdfbU81RUpyRmVZUzgiLCJ4bXNfaWRyZWwiOiIxIDIyIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.iBx11cUHczpXoBv2PLX-mpHNz6YQ8CpkxHQ9wYRdVst5Jwa20NMdKIibDu0siBSgN2OswOjoPRgdQGgagWfzXB7jR6C4JOlsHbNFZwvxhMbo1L5Rrqm93ykikWtAjlxEQF1BvNY-Me4NwMlzBX545qt_urCW4SSJwbC7gpiXRDAl0qyyYNQE77TThxV-msnD2EM3EQMDsnsvTREnb_x01k0UT36xMnfEUbaZfp3xf0K6IJ3atOoay1-GWnL9vhu3y7Znq6aF_pJUG7NkJEMk8C6OQRTBIh9JwYyC9ZZUo6SfLMbgj4Qzs44-XY-WaVdwLHZx4UyBOXY6SkJ24ZOUUQ'
+  expires: '2025-04-27T06:12:07.689Z',
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlAzSnIzbW9Vbm96VjFjdUpxbk43OGxXaU1NRGJFWXdwT0IwcXJLZk9IZ2ciLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTQxNjQyLCJuYmYiOjE3NDMxNDE2NDIsImV4cCI6MTc0MzE0Njc4MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBdnNJbWwyYXpyczhOK2ZyQ0dsSmNHVFRTdmtLenFqVGFVY1p6WWdQM2hHVUR3R25wb3o5aWhhYWJBUFI3STRMK0pQU2pNNUlKQUdxU3hxdUZ1UExDVVUrSlh3akt3V0NCTGd6YUIxREVQVnB1ZjhpVG9SUk1HZWNNcFd1cUw4T2oiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTAzLjExNy4yMDIuMTgiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJ1UVJqY2s5TU9rdThuZzFjNkp0RkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlZrbHZqZ0pYZ095b3pEY09OcjRrYVFCXzhZS3J2MFppaHBLTG9INENsQWciLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.T4F85Sn_fCj_3ftWD_jPiycpqtQnS9OPMpKY_784NWWQGM8vJWitvn2U83vCh4R3FUh8DrAUul1r-shY129QXWPyaUE4qdEnEiB6efRxy3Cuu6eAgqpNf1V8NlZhqmo2Y4a7mJ6Ypi0ADQU08cJoUMLrNCqne_EEYt3XwI3k0M2UuJT1ELnWqF8jtmA1oOiiuUYRydPl0vs6-u25moyiiSG9dS_vHsqQJI7oYTY52TUxrkN60dmPUi-wiNXhMpv9JVwX2k6PZZrV782Mn85LsxGCIUCfsKsaW6vRzX-DU4HotbFCZ9tdmCGlupbkBOO_t1P7zdZmOBcFxe1EZ6ttRA'
 }
 API: User ID: neha@m365x65088219.onmicrosoft.com
 API: Creating storage instance...
@@ -999,122 +1194,77 @@ API: Loading data...
 API: Getting posted meetings for user: neha@m365x65088219.onmicrosoft.com
 API: Found posted meetings: [
   {
-    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    timeEntry: {
-      id: '107106022',
-      projectid: '1423717',
-      moduleid: '550082',
-      taskid: '16537632',
-      worktypeid: '802279',
-      personid: '422721',
-      date: '2025-03-24',
-      datemodified: '2025-03-27 20:23:18',
-      time: '0.05',
-      description: 'neha',
-      billable: 't',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Development'
-    },
-    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-24'
-  },
-  {
     meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
     userId: 'neha@m365x65088219.onmicrosoft.com',
     timeEntry: {
-      id: '107106799',
+      id: '107115195',
       projectid: '1423717',
       moduleid: '550082',
       taskid: '16537632',
       worktypeid: '802279',
       personid: '422721',
       date: '2025-03-25',
-      datemodified: '2025-03-27 20:57:05',
+      datemodified: '2025-03-28 06:09:02',
       time: '0.09',
       description: 'Infra',
       billable: 'f',
       worktype: 'India-Meeting',
       milestoneid: null,
       ogmilestoneid: null,
-      module: 'Development'
+      module: 'Development',
+      client: 'Nathcorp',
+      project: 'Internal'
     },
     rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-27T20:57:06.259Z'
+    postedAt: '2025-03-28T06:09:02.959Z'
   }
 ]
 Fetching task name for taskId: 16537632
-Fetching task name for taskId: 16537632
 Current user personid: 422721
-Current user personid: 422721
-Task 16537633 (Sandisk Task) skipped: Task is closed
 Task 16567104 (Infra Task) skipped: Not assigned to current user
 Task 16567116 (Infra Task) skipped: Not assigned to current user
 Task 16567207 (DevOps Task) skipped: Not assigned to current user
 Task 16567210 (DevOps Task) skipped: Not assigned to current user
-Found 4 open tasks assigned to user 422721
-Found task name: Infra  Task for taskId: 16537632
-Task 16537633 (Sandisk Task) skipped: Task is closed
-Task 16567104 (Infra Task) skipped: Not assigned to current user
-Task 16567116 (Infra Task) skipped: Not assigned to current user
-Task 16567207 (DevOps Task) skipped: Not assigned to current user
-Task 16567210 (DevOps Task) skipped: Not assigned to current user
-Found 4 open tasks assigned to user 422721
+Found 5 open tasks assigned to user 422721
 Found task name: Infra  Task for taskId: 16537632
 API: Sorted meetings: [
   {
     meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
     userId: 'neha@m365x65088219.onmicrosoft.com',
     timeEntry: {
-      id: '107106799',
+      id: '107115195',
       projectid: '1423717',
       moduleid: '550082',
       taskid: '16537632',
       worktypeid: '802279',
       personid: '422721',
       date: '2025-03-25',
-      datemodified: '2025-03-27 20:57:05',
+      datemodified: '2025-03-28 06:09:02',
       time: '0.09',
       description: 'Infra',
       billable: 'f',
       worktype: 'India-Meeting',
       milestoneid: null,
       ogmilestoneid: null,
-      module: 'Development'
+      module: 'Development',
+      client: 'Nathcorp',
+      project: 'Internal'
     },
     rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-27T20:57:06.259Z',
-    taskName: 'Infra  Task'
-  },
-  {
-    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    timeEntry: {
-      id: '107106022',
-      projectid: '1423717',
-      moduleid: '550082',
-      taskid: '16537632',
-      worktypeid: '802279',
-      personid: '422721',
-      date: '2025-03-24',
-      datemodified: '2025-03-27 20:23:18',
-      time: '0.05',
-      description: 'neha',
-      billable: 't',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Development'
-    },
-    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-03-24',
+    postedAt: '2025-03-28T06:09:02.959Z',
     taskName: 'Infra  Task'
   }
 ]
 API: Getting pending reviews (unmatched meetings) for user: neha@m365x65088219.onmicrosoft.com
-API: Found unmatched meetings: []
+API: Found unmatched meetings: [
+  {
+    id: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
+    subject: 'neha',
+    startTime: '2025-03-24T07:00:00.0000000',
+    duration: 182,
+    reason: 'No matching tasks found'
+  }
+]
 API: Sending response: {
   success: true,
   meetings: [
@@ -1123,22 +1273,659 @@ API: Sending response: {
       userId: 'neha@m365x65088219.onmicrosoft.com',
       timeEntry: [Object],
       rawResponse: [Object],
-      postedAt: '2025-03-27T20:57:06.259Z',
-      taskName: 'Infra  Task'
-    },
-    {
-      meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
-      userId: 'neha@m365x65088219.onmicrosoft.com',
-      timeEntry: [Object],
-      rawResponse: [Object],
-      postedAt: '2025-03-24',
+      postedAt: '2025-03-28T06:09:02.959Z',
       taskName: 'Infra  Task'
     }
   ],
-  unmatchedMeetings: [],
-  summary: { total: 2, unmatched: 0 }
+  unmatchedMeetings: [
+    {
+      id: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
+      subject: 'neha',
+      startTime: '2025-03-24T07:00:00.0000000',
+      duration: 182,
+      reason: 'No matching tasks found'
+    }
+  ],
+  summary: { total: 1, unmatched: 1 }
 }
- GET /api/posted-meetings 200 in 905ms
- GET /api/auth/session 200 in 23ms
+ GET /api/posted-meetings 304 in 1234ms
+ ✓ Compiled /api/reviews in 329ms (1670 modules)
+ GET /api/auth/session 200 in 55ms
 Fetched 1 reviews for user neha@m365x65088219.onmicrosoft.com
- GET /api/reviews 304 in 38ms
+ GET /api/reviews 304 in 418ms
+ GET /api/auth/session 200 in 34ms
+ GET /api/auth/session 200 in 37ms
+ ✓ Compiled /api/intervals/tasks in 464ms (1674 modules)
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'neha',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    image: null
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlAzSnIzbW9Vbm96VjFjdUpxbk43OGxXaU1NRGJFWXdwT0IwcXJLZk9IZ2ciLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTQxNjQyLCJuYmYiOjE3NDMxNDE2NDIsImV4cCI6MTc0MzE0Njc4MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBdnNJbWwyYXpyczhOK2ZyQ0dsSmNHVFRTdmtLenFqVGFVY1p6WWdQM2hHVUR3R25wb3o5aWhhYWJBUFI3STRMK0pQU2pNNUlKQUdxU3hxdUZ1UExDVVUrSlh3akt3V0NCTGd6YUIxREVQVnB1ZjhpVG9SUk1HZWNNcFd1cUw4T2oiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTAzLjExNy4yMDIuMTgiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJ1UVJqY2s5TU9rdThuZzFjNkp0RkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlZrbHZqZ0pYZ095b3pEY09OcjRrYVFCXzhZS3J2MFppaHBLTG9INENsQWciLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.T4F85Sn_fCj_3ftWD_jPiycpqtQnS9OPMpKY_784NWWQGM8vJWitvn2U83vCh4R3FUh8DrAUul1r-shY129QXWPyaUE4qdEnEiB6efRxy3Cuu6eAgqpNf1V8NlZhqmo2Y4a7mJ6Ypi0ADQU08cJoUMLrNCqne_EEYt3XwI3k0M2UuJT1ELnWqF8jtmA1oOiiuUYRydPl0vs6-u25moyiiSG9dS_vHsqQJI7oYTY52TUxrkN60dmPUi-wiNXhMpv9JVwX2k6PZZrV782Mn85LsxGCIUCfsKsaW6vRzX-DU4HotbFCZ9tdmCGlupbkBOO_t1P7zdZmOBcFxe1EZ6ttRA'
+}
+Session user email: neha@m365x65088219.onmicrosoft.com
+Getting API key for user: neha@m365x65088219.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-03-17T11:52:51.986Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '4jfrv8d8ecf',
+    lastSync: '2025-03-26T15:22:18.995Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Fetching tasks from Intervals...
+Getting current user to filter tasks...
+Current user information: {
+  personid: 422721,
+  status: 'OK',
+  code: 200,
+  listcount: 7,
+  person: [
+    {
+      id: '421944',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '422721',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'neha',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '422096',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'pushkar',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '421946',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'ramesh',
+      lastname: 'bari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '421947',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'richa',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '422066',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'Vijay',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '421945',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'vishal',
+      lastname: 'kumar',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Filtering tasks for user with personid: 422721
+Task 16537629: "Daily Status Report" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open   
+Task 16537630: "WD Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16537631: "UMG Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16537632: "Infra  Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16537633: "Sandisk Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16553303: "DevOps Task" - Assignees: none, Status: Open
+Task 16567104: "Infra Task" - Assignees: 422096, Status: Open
+Task 16567116: "Infra Task" - Assignees: 422096, Status: Open
+Task 16567207: "DevOps Task" - Assignees: 421947,421945, Status: Closed
+Task 16567210: "DevOps Task" - Assignees: 421946,422066, Status: Open
+Task 16537629 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537629 is assigned to current user
+Task 16537630 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537630 is assigned to current user
+Task 16537631 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537631 is assigned to current user
+Task 16537632 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537632 is assigned to current user
+Task 16537633 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537633 is assigned to current user
+Skipping unassigned task: 16553303 - DevOps Task
+Task 16567104 assignees: [ '422096' ] Current user personid: 422721
+Task 16567116 assignees: [ '422096' ] Current user personid: 422721
+Task 16567210 assignees: [ '421946', '422066' ] Current user personid: 422721
+Filtered from 10 to 5 tasks assigned to the current user and not closed
+Successfully fetched 5 tasks for the current user
+ GET /api/intervals/tasks 200 in 2298ms
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'neha',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    image: null
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlAzSnIzbW9Vbm96VjFjdUpxbk43OGxXaU1NRGJFWXdwT0IwcXJLZk9IZ2ciLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTQxNjQyLCJuYmYiOjE3NDMxNDE2NDIsImV4cCI6MTc0MzE0Njc4MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBdnNJbWwyYXpyczhOK2ZyQ0dsSmNHVFRTdmtLenFqVGFVY1p6WWdQM2hHVUR3R25wb3o5aWhhYWJBUFI3STRMK0pQU2pNNUlKQUdxU3hxdUZ1UExDVVUrSlh3akt3V0NCTGd6YUIxREVQVnB1ZjhpVG9SUk1HZWNNcFd1cUw4T2oiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTAzLjExNy4yMDIuMTgiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJ1UVJqY2s5TU9rdThuZzFjNkp0RkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlZrbHZqZ0pYZ095b3pEY09OcjRrYVFCXzhZS3J2MFppaHBLTG9INENsQWciLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.T4F85Sn_fCj_3ftWD_jPiycpqtQnS9OPMpKY_784NWWQGM8vJWitvn2U83vCh4R3FUh8DrAUul1r-shY129QXWPyaUE4qdEnEiB6efRxy3Cuu6eAgqpNf1V8NlZhqmo2Y4a7mJ6Ypi0ADQU08cJoUMLrNCqne_EEYt3XwI3k0M2UuJT1ELnWqF8jtmA1oOiiuUYRydPl0vs6-u25moyiiSG9dS_vHsqQJI7oYTY52TUxrkN60dmPUi-wiNXhMpv9JVwX2k6PZZrV782Mn85LsxGCIUCfsKsaW6vRzX-DU4HotbFCZ9tdmCGlupbkBOO_t1P7zdZmOBcFxe1EZ6ttRA'
+}
+Session user email: neha@m365x65088219.onmicrosoft.com
+Getting API key for user: neha@m365x65088219.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-03-17T11:52:51.986Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '4jfrv8d8ecf',
+    lastSync: '2025-03-26T15:22:18.995Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Fetching tasks from Intervals...
+Getting current user to filter tasks...
+Current user information: {
+  personid: 422721,
+  status: 'OK',
+  code: 200,
+  listcount: 7,
+  person: [
+    {
+      id: '421944',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '422721',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'neha',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '422096',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'pushkar',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '421946',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'ramesh',
+      lastname: 'bari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '421947',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'richa',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '422066',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'Vijay',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '421945',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'vishal',
+      lastname: 'kumar',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Filtering tasks for user with personid: 422721
+Task 16537629: "Daily Status Report" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open   
+Task 16537630: "WD Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16537631: "UMG Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16537632: "Infra  Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16537633: "Sandisk Task" - Assignees: 422721,422096,421946,421947,422066,421945, Status: Open
+Task 16553303: "DevOps Task" - Assignees: none, Status: Open
+Task 16567104: "Infra Task" - Assignees: 422096, Status: Open
+Task 16567116: "Infra Task" - Assignees: 422096, Status: Open
+Task 16567207: "DevOps Task" - Assignees: 421947,421945, Status: Closed
+Task 16567210: "DevOps Task" - Assignees: 421946,422066, Status: Open
+Task 16537629 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537629 is assigned to current user
+Task 16537630 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537630 is assigned to current user
+Task 16537631 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537631 is assigned to current user
+Task 16537632 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537632 is assigned to current user
+Task 16537633 assignees: [ '422721', '422096', '421946', '421947', '422066', '421945' ] Current user personid: 422721
+Task 16537633 is assigned to current user
+Skipping unassigned task: 16553303 - DevOps Task
+Task 16567104 assignees: [ '422096' ] Current user personid: 422721
+Task 16567116 assignees: [ '422096' ] Current user personid: 422721
+Task 16567210 assignees: [ '421946', '422066' ] Current user personid: 422721
+Filtered from 10 to 5 tasks assigned to the current user and not closed
+Successfully fetched 5 tasks for the current user
+ GET /api/intervals/tasks 200 in 1018ms
+ ✓ Compiled /api/meetings/posted in 401ms (1677 modules)
+Getting posted meetings: {
+  email: 'neha@m365x65088219.onmicrosoft.com',
+  hasData: true,
+  totalMeetings: 2
+}
+ GET /api/meetings/posted 200 in 501ms
+Getting posted meetings: {
+  email: 'neha@m365x65088219.onmicrosoft.com',
+  hasData: true,
+  totalMeetings: 2
+}
+ GET /api/meetings/posted 200 in 16ms
+API: /api/posted-meetings called
+API: Getting session...
+ GET /api/auth/session 200 in 34ms
+API: Session: {
+  user: {
+    name: 'neha',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    image: null
+  },
+  expires: '2025-04-27T06:12:41.115Z',
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlAzSnIzbW9Vbm96VjFjdUpxbk43OGxXaU1NRGJFWXdwT0IwcXJLZk9IZ2ciLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTQxNjQyLCJuYmYiOjE3NDMxNDE2NDIsImV4cCI6MTc0MzE0Njc4MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBdnNJbWwyYXpyczhOK2ZyQ0dsSmNHVFRTdmtLenFqVGFVY1p6WWdQM2hHVUR3R25wb3o5aWhhYWJBUFI3STRMK0pQU2pNNUlKQUdxU3hxdUZ1UExDVVUrSlh3akt3V0NCTGd6YUIxREVQVnB1ZjhpVG9SUk1HZWNNcFd1cUw4T2oiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTAzLjExNy4yMDIuMTgiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJ1UVJqY2s5TU9rdThuZzFjNkp0RkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlZrbHZqZ0pYZ095b3pEY09OcjRrYVFCXzhZS3J2MFppaHBLTG9INENsQWciLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.T4F85Sn_fCj_3ftWD_jPiycpqtQnS9OPMpKY_784NWWQGM8vJWitvn2U83vCh4R3FUh8DrAUul1r-shY129QXWPyaUE4qdEnEiB6efRxy3Cuu6eAgqpNf1V8NlZhqmo2Y4a7mJ6Ypi0ADQU08cJoUMLrNCqne_EEYt3XwI3k0M2UuJT1ELnWqF8jtmA1oOiiuUYRydPl0vs6-u25moyiiSG9dS_vHsqQJI7oYTY52TUxrkN60dmPUi-wiNXhMpv9JVwX2k6PZZrV782Mn85LsxGCIUCfsKsaW6vRzX-DU4HotbFCZ9tdmCGlupbkBOO_t1P7zdZmOBcFxe1EZ6ttRA'
+}
+API: User ID: neha@m365x65088219.onmicrosoft.com
+API: Creating storage instance...
+API: Loading data...
+API: Getting posted meetings for user: neha@m365x65088219.onmicrosoft.com
+API: Found posted meetings: [
+  {
+    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    timeEntry: {
+      id: '107115195',
+      projectid: '1423717',
+      moduleid: '550082',
+      taskid: '16537632',
+      worktypeid: '802279',
+      personid: '422721',
+      date: '2025-03-25',
+      datemodified: '2025-03-28 06:09:02',
+      time: '0.09',
+      description: 'Infra',
+      billable: 'f',
+      worktype: 'India-Meeting',
+      milestoneid: null,
+      ogmilestoneid: null,
+      module: 'Development',
+      client: 'Nathcorp',
+      project: 'Internal'
+    },
+    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
+    postedAt: '2025-03-28T06:09:02.959Z'
+  }
+]
+Fetching task name for taskId: 16537632
+Current user personid: 422721
+Task 16567104 (Infra Task) skipped: Not assigned to current user
+Task 16567116 (Infra Task) skipped: Not assigned to current user
+Task 16567207 (DevOps Task) skipped: Not assigned to current user
+Task 16567210 (DevOps Task) skipped: Not assigned to current user
+Found 5 open tasks assigned to user 422721
+Found task name: Infra  Task for taskId: 16537632
+API: Sorted meetings: [
+  {
+    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    timeEntry: {
+      id: '107115195',
+      projectid: '1423717',
+      moduleid: '550082',
+      taskid: '16537632',
+      worktypeid: '802279',
+      personid: '422721',
+      date: '2025-03-25',
+      datemodified: '2025-03-28 06:09:02',
+      time: '0.09',
+      description: 'Infra',
+      billable: 'f',
+      worktype: 'India-Meeting',
+      milestoneid: null,
+      ogmilestoneid: null,
+      module: 'Development',
+      client: 'Nathcorp',
+      project: 'Internal'
+    },
+    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
+    postedAt: '2025-03-28T06:09:02.959Z',
+    taskName: 'Infra  Task'
+  }
+]
+API: Getting pending reviews (unmatched meetings) for user: neha@m365x65088219.onmicrosoft.com
+API: Found unmatched meetings: [
+  {
+    id: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
+    subject: 'neha',
+    startTime: '2025-03-24T07:00:00.0000000',
+    duration: 182,
+    reason: 'No matching tasks found'
+  }
+]
+API: Sending response: {
+  success: true,
+  meetings: [
+    {
+      meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
+      userId: 'neha@m365x65088219.onmicrosoft.com',
+      timeEntry: [Object],
+      rawResponse: [Object],
+      postedAt: '2025-03-28T06:09:02.959Z',
+      taskName: 'Infra  Task'
+    }
+  ],
+  unmatchedMeetings: [
+    {
+      id: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
+      subject: 'neha',
+      startTime: '2025-03-24T07:00:00.0000000',
+      duration: 182,
+      reason: 'No matching tasks found'
+    }
+  ],
+  summary: { total: 1, unmatched: 1 }
+}
+ GET /api/posted-meetings 304 in 947ms
+API: /api/posted-meetings called
+API: Getting session...
+ GET /api/auth/session 200 in 36ms
+API: Session: {
+  user: {
+    name: 'neha',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    image: null
+  },
+  expires: '2025-04-27T06:12:42.079Z',
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlAzSnIzbW9Vbm96VjFjdUpxbk43OGxXaU1NRGJFWXdwT0IwcXJLZk9IZ2ciLCJhbGciOiJSUzI1NiIsIng1dCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSIsImtpZCI6IkpETmFfNGk0cjdGZ2lnTDNzSElsSTN4Vi1JVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hNWFlOWFlMS0zYzQ3LTRiNzAtYjkyYy1hYzNhMGVmZmZjNmEvIiwiaWF0IjoxNzQzMTQxNjQyLCJuYmYiOjE3NDMxNDE2NDIsImV4cCI6MTc0MzE0Njc4MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBdnNJbWwyYXpyczhOK2ZyQ0dsSmNHVFRTdmtLenFqVGFVY1p6WWdQM2hHVUR3R25wb3o5aWhhYWJBUFI3STRMK0pQU2pNNUlKQUdxU3hxdUZ1UExDVVUrSlh3akt3V0NCTGd6YUIxREVQVnB1ZjhpVG9SUk1HZWNNcFd1cUw4T2oiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGVyIEFwcCIsImFwcGlkIjoiOWVjNDFjZDAtYWU4Yy00ZGQ1LWJjODQtYTNhZWVhNGJkYTU0IiwiYXBwaWRhY3IiOiIxIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTAzLjExNy4yMDIuMTgiLCJuYW1lIjoibmVoYSIsIm9pZCI6IjcwY2Y0MTlhLTExN2EtNDhlNS1iMzVjLWEzZWVjZThhMmQ3ZiIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwNDIwNjEyMkQ4IiwicmgiOiIxLkFYRUI0WnF1cFVjOGNFdTVMS3c2RHZfOGFnTUFBQUFBQUFBQXdBQUFBQUFBQUFCeEFXTnhBUS4iLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBHcm91cC5SZWFkLkFsbCBPbmxpbmVNZWV0aW5ncy5SZWFkIFJlcG9ydHMuUmVhZC5BbGwgVXNlci5SZWFkIHByb2ZpbGUgb3BlbmlkIGVtYWlsIiwic2lkIjoiMDAzMWVkNTktN2I1ZC0zYTBmLTE1MmYtZWM5OGVkOGVlNjI2Iiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoibXg5a0huTzU0Z2J2OGEyVkRSYWhpRHhfWlNEUkFlaDE2THc4SEVfVlNtNCIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJOQSIsInRpZCI6ImE1YWU5YWUxLTNjNDctNGI3MC1iOTJjLWFjM2EwZWZmZmM2YSIsInVuaXF1ZV9uYW1lIjoibmVoYUBNMzY1eDY1MDg4MjE5Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im5laGFATTM2NXg2NTA4ODIxOS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJ1UVJqY2s5TU9rdThuZzFjNkp0RkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlZrbHZqZ0pYZ095b3pEY09OcjRrYVFCXzhZS3J2MFppaHBLTG9INENsQWciLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6InczQVZyTFVCRFJOemJETno3Y2ZvTFBvcTh3REp4WGk4YUdlcGhpX1JWWnMifSwieG1zX3RjZHQiOjE3MzEyMTU2MzN9.T4F85Sn_fCj_3ftWD_jPiycpqtQnS9OPMpKY_784NWWQGM8vJWitvn2U83vCh4R3FUh8DrAUul1r-shY129QXWPyaUE4qdEnEiB6efRxy3Cuu6eAgqpNf1V8NlZhqmo2Y4a7mJ6Ypi0ADQU08cJoUMLrNCqne_EEYt3XwI3k0M2UuJT1ELnWqF8jtmA1oOiiuUYRydPl0vs6-u25moyiiSG9dS_vHsqQJI7oYTY52TUxrkN60dmPUi-wiNXhMpv9JVwX2k6PZZrV782Mn85LsxGCIUCfsKsaW6vRzX-DU4HotbFCZ9tdmCGlupbkBOO_t1P7zdZmOBcFxe1EZ6ttRA'
+}
+API: User ID: neha@m365x65088219.onmicrosoft.com
+API: Creating storage instance...
+API: Loading data...
+ GET /api/auth/session 200 in 36ms
+Fetched 1 reviews for user neha@m365x65088219.onmicrosoft.com
+ GET /api/reviews 304 in 77ms
+API: Getting posted meetings for user: neha@m365x65088219.onmicrosoft.com
+API: Found posted meetings: [
+  {
+    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    timeEntry: {
+      id: '107115195',
+      projectid: '1423717',
+      moduleid: '550082',
+      taskid: '16537632',
+      worktypeid: '802279',
+      personid: '422721',
+      date: '2025-03-25',
+      datemodified: '2025-03-28 06:09:02',
+      time: '0.09',
+      description: 'Infra',
+      billable: 'f',
+      worktype: 'India-Meeting',
+      milestoneid: null,
+      ogmilestoneid: null,
+      module: 'Development',
+      client: 'Nathcorp',
+      project: 'Internal'
+    },
+    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
+    postedAt: '2025-03-28T06:09:02.959Z'
+  }
+]
+Fetching task name for taskId: 16537632
+Current user personid: 422721
+Task 16567104 (Infra Task) skipped: Not assigned to current user
+Task 16567116 (Infra Task) skipped: Not assigned to current user
+Task 16567207 (DevOps Task) skipped: Not assigned to current user
+Task 16567210 (DevOps Task) skipped: Not assigned to current user
+Found 5 open tasks assigned to user 422721
+Found task name: Infra  Task for taskId: 16537632
+API: Sorted meetings: [
+  {
+    meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    timeEntry: {
+      id: '107115195',
+      projectid: '1423717',
+      moduleid: '550082',
+      taskid: '16537632',
+      worktypeid: '802279',
+      personid: '422721',
+      date: '2025-03-25',
+      datemodified: '2025-03-28 06:09:02',
+      time: '0.09',
+      description: 'Infra',
+      billable: 'f',
+      worktype: 'India-Meeting',
+      milestoneid: null,
+      ogmilestoneid: null,
+      module: 'Development',
+      client: 'Nathcorp',
+      project: 'Internal'
+    },
+    rawResponse: { personid: 422721, status: 'Created', code: 201, time: [Object] },
+    postedAt: '2025-03-28T06:09:02.959Z',
+    taskName: 'Infra  Task'
+  }
+]
+API: Getting pending reviews (unmatched meetings) for user: neha@m365x65088219.onmicrosoft.com
+API: Found unmatched meetings: [
+  {
+    id: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
+    subject: 'neha',
+    startTime: '2025-03-24T07:00:00.0000000',
+    duration: 182,
+    reason: 'No matching tasks found'
+  }
+]
+API: Sending response: {
+  success: true,
+  meetings: [
+    {
+      meetingId: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZMAAA=',
+      userId: 'neha@m365x65088219.onmicrosoft.com',
+      timeEntry: [Object],
+      rawResponse: [Object],
+      postedAt: '2025-03-28T06:09:02.959Z',
+      taskName: 'Infra  Task'
+    }
+  ],
+  unmatchedMeetings: [
+    {
+      id: 'AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABAwhZNAAA=',
+      subject: 'neha',
+      startTime: '2025-03-24T07:00:00.0000000',
+      duration: 182,
+      reason: 'No matching tasks found'
+    }
+  ],
+  summary: { total: 1, unmatched: 1 }
+}

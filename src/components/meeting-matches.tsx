@@ -106,6 +106,7 @@ interface MeetingMatchesProps {
   };
   onMeetingPosted: (meetingId: string) => void;
   postedMeetingIds: Set<string> | string[];
+  source?: 'ai-agent' | 'manual';
 }
 
 interface MatchDetailsBarProps {
@@ -165,6 +166,7 @@ interface MatchRowProps {
   onTaskSelect: (task: Task | null) => void;
   isSelected: boolean;
   onSelectChange: (selected: boolean) => void;
+  source?: 'ai-agent' | 'manual';
 }
 
 // Helper function to convert seconds to decimal hours with proper rounding
@@ -224,7 +226,8 @@ function MatchRow({
   selectedTasks, 
   onTaskSelect,
   isSelected,
-  onSelectChange 
+  onSelectChange,
+  source
 }: MatchRowProps) {
   const { data: session } = useSession();
   const { toast } = useToast();
@@ -282,50 +285,27 @@ function MatchRow({
   };
 
   const handlePostToIntervals = async () => {
-    if (!selectedTask) {
-      toast("Please select a task first");
-      return;
-    }
-
-    setIsPosting(true);
     try {
+      setIsPosting(true);
       const userAttendance = result.meeting.attendanceRecords.find(
         record => record.name === session?.user?.name
       );
 
       if (!userAttendance) {
-        toast.error("You were not present in this meeting", {
-          position: "top-center",
-          duration: 4000,
-          style: {
-            backgroundColor: "#ef4444",
-            color: "white",
-            fontSize: "16px",
-            borderRadius: "8px",
-            padding: "12px 24px"
-          }
-        });
+        toast("No attendance record found for this meeting");
         return;
       }
 
-      if (!userAttendance.duration || userAttendance.duration <= 0) {
-        toast.error("Invalid meeting duration. Must be greater than 0 seconds.", {
-          position: "top-center",
-          duration: 4000,
-          style: {
-            backgroundColor: "#ef4444",
-            color: "white",
-            fontSize: "16px",
-            borderRadius: "8px",
-            padding: "12px 24px"
-          }
-        });
+      // Check if selectedTask is available
+      if (!selectedTask) {
+        toast("Please select a task first");
         return;
       }
 
       const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
       const durationInSeconds = userAttendance.duration;
-      
+      const meetingKey = generateMeetingKey(result.meeting, session?.user?.email || '');
+
       const response = await fetch('/api/intervals/time-entries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -338,7 +318,8 @@ function MatchRow({
           subject: result.meeting.subject,
           startTime: result.meeting.startTime,
           confidence: result.confidence,
-          isManualPost: true
+          // Set isManualPost based on the source prop
+          isManualPost: source !== 'ai-agent'
         }),
       });
 
@@ -529,7 +510,7 @@ function MatchRow({
   );
 }
 
-export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetingIds }: MeetingMatchesProps): ReactElement {
+export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetingIds, source }: MeetingMatchesProps): ReactElement {
   const { data: session } = useSession();
   const { toast } = useToast();
   const userId = session?.user?.email || '';
@@ -773,7 +754,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
               subject: result.meeting.subject,
               startTime: result.meeting.startTime,
               confidence: result.confidence,
-              isManualPost: true
+              // Set isManualPost based on the source prop
+              isManualPost: source !== 'ai-agent'
             }),
           });
 
@@ -956,6 +938,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                       onMeetingPosted={handleMeetingPosted}
                       postedMeetingIds={Array.from(postedMeetingIds)}
                       selectedTasks={selectedTasks}
+                      source={source}
                       onTaskSelect={(task) => {
                         const meetingKey = generateMeetingKey(result.meeting, userId);
                         const updatedTasks = new Map(selectedTasks);
@@ -1034,6 +1017,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                       onMeetingPosted={handleMeetingPosted}
                       postedMeetingIds={Array.from(postedMeetingIds)}
                       selectedTasks={selectedTasks}
+                      source={source}
                       onTaskSelect={(task) => {
                         const meetingKey = generateMeetingKey(result.meeting, userId);
                         const updatedTasks = new Map(selectedTasks);
