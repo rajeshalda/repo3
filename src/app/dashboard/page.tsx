@@ -235,6 +235,17 @@ export default function DashboardPage() {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  // Add effect to update document title based on current view
+  useEffect(() => {
+    let title = 'Dashboard | Meeting Time Tracker';
+    if (currentView === 'ai-agent') {
+      title = 'AI Agent | Meeting Time Tracker';
+    } else if (currentView === 'posted-meetings') {
+      title = 'Posted Meetings | Meeting Time Tracker';
+    }
+    document.title = title;
+  }, [currentView]);
+
   const fetchMeetings = useCallback(async () => {
     try {
       setMeetingsLoading(true);

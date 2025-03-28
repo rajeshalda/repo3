@@ -1,0 +1,49 @@
+{
+  "meetings": [
+    {
+      "meetingId": "292287722648",
+      "userId": "vishalkumar@m365x65088219.onmicrosoft.com",
+      "timeEntry": {
+        "id": "107113994",
+        "projectid": "1422049",
+        "moduleid": "550082",
+        "taskid": "16567104",
+        "worktypeid": "802279",
+        "personid": "421945",
+        "date": "2025-03-13",
+        "datemodified": "2025-03-28 05:27:27",
+        "time": "0.04",
+        "description": "test meeting infra",
+        "billable": "t",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Development"
+      },
+      "rawResponse": {
+        "personid": 421945,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "107113994",
+          "projectid": "1422049",
+          "moduleid": "550082",
+          "taskid": "16567104",
+          "worktypeid": "802279",
+          "personid": "421945",
+          "date": "2025-03-13",
+          "datemodified": "2025-03-28 05:27:27",
+          "time": "0.04",
+          "description": "test meeting infra",
+          "billable": "t",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Development"
+        }
+      },
+      "postedAt": "2025-03-13",
+      "taskName": "Infra Task"
+    }
+  ]
+}

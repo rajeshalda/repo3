@@ -5,7 +5,10 @@ import { Providers } from './providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Meeting Time Tracker',
+  title: {
+    template: '%s | Meeting Time Tracker',
+    default: 'Meeting Time Tracker'
+  },
   description: 'Track and analyze your Microsoft Teams meetings',
 };
 
