@@ -2,7 +2,7 @@ import { PostedMeetings } from "./posted-meetings";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { RefreshCw, Filter, Search } from "lucide-react";
+import { RefreshCw, Filter, Search, Trash2 } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { Input } from "@/components/ui/input";
 import {
@@ -132,103 +132,103 @@ export function PostedMeetingsView() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Manually Posted Meetings</h2>
-        <div className="flex items-center gap-4">
-          <div className="text-sm text-muted-foreground">
-            Total Posted: {postedMeetings.length}
-          </div>
-          {postedMeetings.length > 0 && (
-            <div className="flex space-x-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8"
-                  >
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filters
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <div className="space-y-4">
-                    <h4 className="font-medium">Filter Meetings</h4>
-                    <div className="space-y-2">
-                      <div>
-                        <label className="text-sm font-medium">Date</label>
-                        <Select
-                          value={dateFilter}
-                          onValueChange={setDateFilter}
+      <Card>
+        <CardHeader className="border-b">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Manually Posted Meetings</h2>
+            <div className="flex items-center gap-4">
+              {postedMeetings.length > 0 && (
+                <>
+                  <div className="text-sm text-muted-foreground">
+                    Total Posted: {postedMeetings.length}
+                  </div>
+                  <div className="flex space-x-2">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8"
                         >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select date" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Dates</SelectItem>
-                            {uniqueDates.map(date => (
-                              <SelectItem key={date} value={date}>{date}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium">Task</label>
-                        <Select
-                          value={taskFilter}
-                          onValueChange={setTaskFilter}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select task" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Tasks</SelectItem>
-                            {uniqueTasks.map(task => (
-                              <SelectItem key={task} value={task}>{task}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                          <Filter className="h-4 w-4 mr-2" />
+                          Filters
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-80">
+                        <div className="space-y-4">
+                          <h4 className="font-medium">Filter Meetings</h4>
+                          <div className="space-y-2">
+                            <div>
+                              <label className="text-sm font-medium">Date</label>
+                              <Select
+                                value={dateFilter}
+                                onValueChange={setDateFilter}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select date" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Dates</SelectItem>
+                                  {uniqueDates.map(date => (
+                                    <SelectItem key={date} value={date}>{date}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium">Task</label>
+                              <Select
+                                value={taskFilter}
+                                onValueChange={setTaskFilter}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select task" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Tasks</SelectItem>
+                                  {uniqueTasks.map(task => (
+                                    <SelectItem key={task} value={task}>{task}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          <Button onClick={clearFilters} variant="outline" size="sm" className="w-full">
+                            Clear Filters
+                          </Button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    <div className="relative h-8">
+                      <Search className="h-4 w-4 absolute left-2 top-2 text-muted-foreground" />
+                      <Input
+                        placeholder="Search meetings..."
+                        value={filterText}
+                        onChange={(e) => setFilterText(e.target.value)}
+                        className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
+                      />
                     </div>
-                    <Button onClick={clearFilters} variant="outline" size="sm" className="w-full">
-                      Clear Filters
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={handleResetPosted}
+                      disabled={isResetting}
+                      className="h-8"
+                    >
+                      {isResetting ? (
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4 mr-2" />
+                      )}
+                      Clear History
                     </Button>
                   </div>
-                </PopoverContent>
-              </Popover>
-              <div className="relative h-8">
-                <Search className="h-4 w-4 absolute left-2 top-2 text-muted-foreground" />
-                <Input
-                  placeholder="Search meetings..."
-                  value={filterText}
-                  onChange={(e) => setFilterText(e.target.value)}
-                  className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
-                />
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleResetPosted}
-                disabled={isResetting}
-                className="h-8"
-              >
-                {isResetting ? (
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                )}
-                Reset Posted
-              </Button>
+                </>
+              )}
             </div>
-          )}
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Meeting History</CardTitle>
+          </div>
           {(filterText || dateFilter !== "all" || taskFilter !== "all") && (
-            <div className="text-xs text-muted-foreground mt-1">
+            <div className="text-sm text-muted-foreground mt-4">
               Showing {filteredMeetings.length} of {postedMeetings.length} meetings
               <Button
                 variant="link"
@@ -241,14 +241,8 @@ export function PostedMeetingsView() {
             </div>
           )}
         </CardHeader>
-        <CardContent>
-          <div className="overflow-hidden rounded-lg border">
-            <div className="overflow-x-auto">
-              <div className="inline-block min-w-full align-middle">
-                <PostedMeetings meetings={filteredMeetings} />
-              </div>
-            </div>
-          </div>
+        <CardContent className="p-6">
+          <PostedMeetings meetings={filteredMeetings} />
         </CardContent>
       </Card>
     </div>

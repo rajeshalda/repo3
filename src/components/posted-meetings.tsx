@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
     Table,
     TableBody,
     TableCell,
@@ -54,51 +47,39 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader className="sm:block hidden">
-          <CardTitle>Posted Meetings</CardTitle>
-          <CardDescription>
-            Meetings that have been manually posted to Intervals
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40%] bg-muted/50 font-semibold py-3 px-4">Meeting Subject</TableHead>
-                <TableHead className="hidden sm:table-cell bg-muted/50 font-semibold py-3 px-4">Meeting Date</TableHead>
-                <TableHead className="hidden md:table-cell bg-muted/50 font-semibold py-3 px-4">Task Name</TableHead>
-                <TableHead className="bg-muted/50 font-semibold py-3 px-4">Posted</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {meetings.map((meeting) => (
-                <TableRow key={meeting.id}>
-                  <TableCell className="font-medium">
-                    <div className="truncate max-w-[200px] sm:max-w-[300px]">
-                      {meeting.subject || 'Untitled Meeting'}
-                    </div>
-                    <div className="text-xs text-muted-foreground sm:hidden">
-                      {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell whitespace-nowrap">
-                    {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {meeting.taskName || (meeting.taskId ? `Task ${meeting.taskId}` : '-')}
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <span className="hidden sm:inline">{formatDateIST(meeting.postedDate, DEFAULT_DATE_FORMAT)}</span>
-                    <span className="sm:hidden">{formatDateIST(meeting.postedDate, TIME_ONLY_FORMAT)}</span>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[40%] bg-muted py-3 font-semibold text-foreground">Meeting Subject</TableHead>
+          <TableHead className="hidden sm:table-cell bg-muted py-3 font-semibold text-foreground">Meeting Date</TableHead>
+          <TableHead className="hidden md:table-cell bg-muted py-3 font-semibold text-foreground">Task Name</TableHead>
+          <TableHead className="bg-muted py-3 font-semibold text-foreground">Posted</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {meetings.map((meeting) => (
+          <TableRow key={meeting.id}>
+            <TableCell className="font-medium">
+              <div className="truncate max-w-[200px] sm:max-w-[300px]">
+                {meeting.subject || 'Untitled Meeting'}
+              </div>
+              <div className="text-xs text-muted-foreground sm:hidden">
+                {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
+              </div>
+            </TableCell>
+            <TableCell className="hidden sm:table-cell whitespace-nowrap">
+              {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
+            </TableCell>
+            <TableCell className="hidden md:table-cell">
+              {meeting.taskName || (meeting.taskId ? `Task ${meeting.taskId}` : '-')}
+            </TableCell>
+            <TableCell className="whitespace-nowrap">
+              <span className="hidden sm:inline">{formatDateIST(meeting.postedDate, DEFAULT_DATE_FORMAT)}</span>
+              <span className="sm:hidden">{formatDateIST(meeting.postedDate, TIME_ONLY_FORMAT)}</span>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 } 
