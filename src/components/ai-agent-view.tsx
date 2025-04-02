@@ -29,6 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { PM2Status } from './pm2-status';
 
 interface PostedMeeting {
   meetingId: string;
@@ -677,17 +678,6 @@ export function AIAgentView() {
     await processMeetings();
   };
 
-  // Initialize agent state from localStorage on component mount
-  useEffect(() => {
-    const storedAgentState = localStorage.getItem('aiAgentEnabled');
-    if (storedAgentState === 'true') {
-      // We need to use this approach instead of directly setting state
-      // to ensure the toggle function is called properly
-      toggleAgent(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const toggleAgent = (enabled: boolean) => {
     // If we're currently processing and trying to disable, we should cancel
     if (isProcessing && !enabled) {
@@ -697,39 +687,96 @@ export function AIAgentView() {
     
     setAgentEnabled(enabled);
     
-    // Store the state in localStorage
+    // Store the state in localStorage for UI purposes
     localStorage.setItem('aiAgentEnabled', enabled.toString());
     
-    if (enabled) {
-      addLog('AI Agent enabled - will check for meetings every 5 minutes', 'info');
-      success('AI Agent enabled');
-      
-      // Start the interval
-      processMeetings(); // Process immediately when enabled
-      
-      intervalRef.current = setInterval(() => {
-        addLog('Scheduled check for new meetings...', 'info');
-        processMeetings();
-      }, 5 * 60 * 1000); // 5 minutes in milliseconds
-    } else {
-      addLog('AI Agent disabled', 'info');
-      success('AI Agent disabled');
-      
-      // Clear the interval
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+    // Call the PM2 service API to enable/disable agent there
+    const PM2_SERVICE_URL = 'http://localhost:3100';
+    
+    fetch(`${PM2_SERVICE_URL}/api/agent-status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: session?.user?.email || 'default-user',
+        enabled
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        if (enabled) {
+          addLog('AI Agent enabled - will run continuously in the background', 'success');
+          success('AI Agent enabled and will run even when browser is closed');
+        } else {
+          addLog('AI Agent disabled', 'info');
+          success('AI Agent disabled');
+        }
+      } else {
+        error(`Failed to ${enabled ? 'enable' : 'disable'} AI Agent: ${data.error}`);
+        addLog(`Failed to ${enabled ? 'enable' : 'disable'} AI Agent: ${data.error}`, 'error');
+        // Revert UI state if the server call failed
+        setAgentEnabled(!enabled);
+        localStorage.setItem('aiAgentEnabled', (!enabled).toString());
       }
-    }
+    })
+    .catch(err => {
+      console.error('Error toggling AI Agent:', err);
+      error(`Failed to ${enabled ? 'enable' : 'disable'} AI Agent: Network error`);
+      addLog(`Failed to ${enabled ? 'enable' : 'disable'} AI Agent: Network error`, 'error');
+      // Revert UI state if the server call failed
+      setAgentEnabled(!enabled);
+      localStorage.setItem('aiAgentEnabled', (!enabled).toString());
+    });
   };
 
+  // Initialize agent state from PM2 service on component mount
   useEffect(() => {
+    // Check the PM2 service for current status
+    const userEmail = session?.user?.email || 'default-user';
+    const PM2_SERVICE_URL = 'http://localhost:3100';
+    
+    fetch(`${PM2_SERVICE_URL}/api/agent-status?userId=${encodeURIComponent(userEmail)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setAgentEnabled(data.enabled);
+          localStorage.setItem('aiAgentEnabled', data.enabled.toString());
+          
+          if (data.enabled) {
+            addLog('AI Agent is enabled and running in the background', 'info');
+          }
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching AI Agent status:', err);
+        // Fall back to localStorage if the server is not available
+        const storedAgentState = localStorage.getItem('aiAgentEnabled');
+        if (storedAgentState === 'true') {
+          setAgentEnabled(true);
+        }
+      });
+    
+    // Regular polling to update the UI with the latest status
+    const statusInterval = setInterval(() => {
+      fetch(`${PM2_SERVICE_URL}/api/status`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update any UI elements with the latest status if needed
+            // This could show things like uptime, number of users, etc.
+          }
+        })
+        .catch(() => {
+          // Ignore errors during status polling
+        });
+    }, 60000); // Poll every minute
+    
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      clearInterval(statusInterval);
     };
-  }, []);
+  }, [session]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -837,7 +884,11 @@ export function AIAgentView() {
                   <Power className={`h-4 w-4 ${agentEnabled ? 'text-green-500' : 'text-gray-400'}`} />
                 )}
                 <span className={`${isProcessing ? "text-red-500 font-medium" : ""} ${isCancelling ? "animate-pulse" : ""}`}>
-                  {isCancelling ? "Cancelling..." : isProcessing ? "Stop AI Agent" : "Enable AI Agent"}
+                  {isCancelling
+                    ? "Cancelling..."
+                    : isProcessing
+                      ? "Stop AI Agent"
+                      : "Enable AI Agent"}
                 </span>
               </div>
               <Switch 
@@ -1103,6 +1154,10 @@ export function AIAgentView() {
           )}
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PM2Status />
+      </div>
     </div>
   );
 } 

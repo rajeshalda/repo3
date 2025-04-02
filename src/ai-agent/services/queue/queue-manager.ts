@@ -1,23 +1,20 @@
+import { QueueItem } from '../../../interfaces/queue';
 import { Meeting, ProcessedMeeting } from '../../../interfaces/meetings';
-
-interface QueueItem {
-  meeting: Meeting;
-  userId: string;
-  resolve: (value: ProcessedMeeting | PromiseLike<ProcessedMeeting>) => void;
-  reject: (reason?: any) => void;
-  processFunction: (meeting: Meeting, userId: string) => Promise<ProcessedMeeting>;
-}
+import { RateLimiter } from '../../core/rate-limiter/token-bucket';
 
 export class QueueManager {
   private static instance: QueueManager;
   private queue: QueueItem[] = [];
   private isProcessing: boolean = false;
+  private rateLimiter: RateLimiter;
   
   // Rate limit settings
   private requestsPerMinute: number = 48; // Azure OpenAI S0 tier limit
   private processingInterval: number = Math.ceil(60000 / this.requestsPerMinute);
   
-  private constructor() {}
+  private constructor() {
+    this.rateLimiter = RateLimiter.getInstance();
+  }
 
   public static getInstance(): QueueManager {
     if (!QueueManager.instance) {
@@ -50,32 +47,36 @@ export class QueueManager {
   }
 
   private async processQueue(): Promise<void> {
-    if (this.queue.length === 0) {
-      this.isProcessing = false;
+    if (this.isProcessing || this.queue.length === 0) {
       return;
     }
 
     this.isProcessing = true;
-    const item = this.queue.shift();
-    
-    if (!item) {
-      this.isProcessing = false;
-      return;
-    }
 
     try {
-      console.log(`Processing meeting ${item.meeting.id} from queue. Remaining: ${this.queue.length}`);
-      const result = await item.processFunction(item.meeting, item.userId);
-      item.resolve(result);
-    } catch (error) {
-      console.error(`Error processing meeting ${item.meeting.id}:`, error);
-      item.reject(error);
-    }
+      while (this.queue.length > 0) {
+        // Wait for rate limiter to allow the request
+        await this.rateLimiter.acquireToken();
 
-    // Wait for the processing interval before processing the next item
-    setTimeout(() => {
-      this.processQueue();
-    }, this.processingInterval);
+        const item = this.queue.shift();
+        if (!item) continue;
+
+        try {
+          console.log(`Processing meeting: ${item.meeting.subject}`);
+          const result = await item.processFunction(item.meeting, item.userId);
+          console.log(`Successfully processed meeting: ${item.meeting.subject}`);
+          item.resolve(result);
+        } catch (error) {
+          console.error(`Error processing meeting: ${item.meeting.subject}`, error);
+          item.reject(error);
+        }
+
+        // Add a small delay between processing items to prevent rate limit issues
+        await new Promise(resolve => setTimeout(resolve, this.processingInterval));
+      }
+    } finally {
+      this.isProcessing = false;
+    }
   }
 
   public getQueueLength(): number {
@@ -93,7 +94,7 @@ export class QueueManager {
 
   public updateRateLimit(requestsPerMinute: number): void {
     this.requestsPerMinute = requestsPerMinute;
-    this.processingInterval = Math.ceil(60000 / this.requestsPerMinute);
-    console.log(`Rate limit updated to ${requestsPerMinute} requests per minute. Processing interval: ${this.processingInterval}ms`);
+    this.processingInterval = Math.ceil(60000 / requestsPerMinute);
+    this.rateLimiter.updateRateLimit(requestsPerMinute);
   }
 } 

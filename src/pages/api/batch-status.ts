@@ -33,60 +33,41 @@ export default async function handler(
       });
     }
 
-    // If no batch is currently processing
-    if (!currentBatchId) {
-      return res.status(200).json({ 
-        batchId: null,
-        message: 'No batch is currently processing',
-        completedMeetings: 0,
-        totalMeetings: 0
-      });
-    }
-
-    try {
-      // Get the status of the current batch
-      const status = meetingService.getBatchStatus(currentBatchId);
+    if (currentBatchId) {
+      const batchStatus = meetingService.getBatchStatus(currentBatchId);
       
-      if (!status) {
-        // Batch not found or completed
-        currentBatchId = null;
-        return res.status(200).json({ 
-          batchId: null,
-          message: 'Batch not found or completed',
-          completedMeetings: 0,
-          totalMeetings: 0
+      if (batchStatus) {
+        return res.status(200).json({
+          success: true,
+          batchId: currentBatchId,
+          totalMeetings: batchStatus.totalMeetings,
+          completedMeetings: batchStatus.completedMeetings,
+          processed: batchStatus.processed.length,
+          failed: batchStatus.failed.length,
+          status: batchStatus.completedMeetings >= batchStatus.totalMeetings ? 'completed' : 'processing'
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          batchId: currentBatchId,
+          status: 'unknown',
+          message: 'Batch is processing but status information is not available'
         });
       }
-
-      // Return the batch status
+    } else {
       return res.status(200).json({
-        batchId: currentBatchId,
-        message: 'Batch is processing',
-        completedMeetings: status.completedMeetings,
-        totalMeetings: status.totalMeetings,
-        processed: status.processed.length,
-        failed: status.failed.length
-      });
-    } catch (statusError) {
-      console.error('Error getting batch status:', statusError);
-      // If there's an error getting the status, clear the batch ID
-      currentBatchId = null;
-      return res.status(200).json({ 
+        success: true,
         batchId: null,
-        message: 'Error getting batch status',
-        error: statusError instanceof Error ? statusError.message : 'Unknown error',
-        completedMeetings: 0,
-        totalMeetings: 0
+        status: 'idle',
+        message: 'No batch is currently processing'
       });
     }
   } catch (error) {
-    console.error('Error in batch-status API:', error);
-    return res.status(500).json({ 
+    console.error('Error getting batch status:', error);
+    return res.status(500).json({
+      success: false,
       error: 'Failed to get batch status',
-      message: error instanceof Error ? error.message : 'Unknown error',
-      batchId: null,
-      completedMeetings: 0,
-      totalMeetings: 0
+      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 } 
