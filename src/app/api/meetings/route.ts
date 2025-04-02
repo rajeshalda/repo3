@@ -149,12 +149,10 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
 }
 
 async function getMeetings(accessToken: string, startDate: Date, endDate: Date) {
-  // Add one day to endDate to include the full end date in the Graph API call
-  // Note: This will potentially return meetings outside our exact date range
-  // so we need to filter the results afterward to match the exact requested range
+  // Add one day to endDate to include the full end date
   const adjustedEndDate = new Date(endDate);
   adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
-  
+
   const filter = encodeURIComponent(
     `start/dateTime ge '${startDate.toISOString()}' and start/dateTime lt '${adjustedEndDate.toISOString()}'`
   );
@@ -304,16 +302,16 @@ export async function GET(request: Request) {
     // Parse the dates and set proper time boundaries
     const startDate = new Date(from);
     const endDate = new Date(to);
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
+    
+    // Set time to start of day and end of day
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
 
     console.log('\n=== DATE RANGE DEBUG ===');
     console.log('Original from:', from);
     console.log('Original to:', to);
-    console.log('Parsed start date UTC:', startDate.toISOString());
-    console.log('Parsed end date UTC:', endDate.toISOString());
-    console.log('Start date IST:', formatToIST(startDate));
-    console.log('End date IST:', formatToIST(endDate));
+    console.log('Start date with time:', startDate.toISOString());
+    console.log('End date with time:', endDate.toISOString());
     console.log('======================\n');
 
     // Get access token
@@ -325,64 +323,10 @@ export async function GET(request: Request) {
     // Get meetings data
     const meetingsData = await getMeetings(accessToken, startDate, endDate);
 
-    // Filter meetings by date range first
+    // Filter meetings by date range
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
         const meetingDate = new Date(meeting.startTime);
-        
-        // First check using precise UTC time comparison
-        const isInRangeByTime = meetingDate >= startDate && meetingDate <= endDate;
-        
-        // Also compare only the date parts without time as a backup
-        const meetingDateOnly = new Date(
-            meetingDate.getFullYear(), 
-            meetingDate.getMonth(), 
-            meetingDate.getDate()
-        );
-        const startDateOnly = new Date(
-            startDate.getFullYear(), 
-            startDate.getMonth(), 
-            startDate.getDate()
-        );
-        const endDateOnly = new Date(
-            endDate.getFullYear(), 
-            endDate.getMonth(), 
-            endDate.getDate()
-        );
-        
-        // Strict date range comparison - must be within the user's selected range
-        const isInRangeByDate = 
-            meetingDateOnly >= startDateOnly && 
-            meetingDateOnly <= endDateOnly;
-            
-        // A meeting is in range if either condition is true
-        // In practice, we should prefer the date-only comparison as it's more reliable
-        // for filtering out unwanted dates
-        const isInRange = isInRangeByDate;
-        
-        console.log('\n=== MEETING FILTER DEBUG ===');
-        console.log('Meeting:', {
-            subject: meeting.subject,
-            originalStartTime: meeting.startTime,
-            meetingDateUTC: meetingDate.toISOString(),
-            meetingDateIST: formatToIST(meetingDate),
-            startDateIST: formatToIST(startDate),
-            endDateIST: formatToIST(endDate),
-            meetingDateOnly: meetingDateOnly.toISOString().split('T')[0],
-            startDateOnly: startDateOnly.toISOString().split('T')[0],
-            endDateOnly: endDateOnly.toISOString().split('T')[0],
-            isInRangeByTime,
-            isInRangeByDate,
-            isInRange
-        });
-        
-        // Additional debugging for excluded meetings
-        if (!isInRange) {
-            console.log(`EXCLUDED: Meeting "${meeting.subject}" on ${meetingDateOnly.toISOString().split('T')[0]} is outside requested range of ${startDateOnly.toISOString().split('T')[0]} to ${endDateOnly.toISOString().split('T')[0]}`);
-        }
-        
-        console.log('=========================\n');
-        
-        return isInRange;
+        return meetingDate >= startDate && meetingDate <= endDate;
     });
 
     console.log(`\nFiltered ${meetingsData.meetings.length} meetings to ${dateFilteredMeetings.length} within date range`);
