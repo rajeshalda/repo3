@@ -502,4 +502,79 @@ The following environment variables must be configured:
 3. Verify that meetings are being fetched correctly
 4. Test the AI agent by processing a few meetings manually
 
+For any issues or questions, please contact the development team.
+
+## Version 2.1.1 Bug Fixes
+
+### Security Improvements
+1. [70528] Security - Intervals API access token visible in Local Storage
+2. [70530] Security - Dashboard page visible before login redirect
+3. [70674] API Access Token does not persist across browsers or Incognito Mode
+
+### AI Agent Enhancements
+4. [70657] No option to stop meeting processing using AI Agent
+5. [70640] AI Agent not able to match correct interval task
+6. [70677] AI Agent not posting meetings in Intervals
+7. [70652] "Last 7 Days Data Fetching" information missing in AI Agent page
+8. [70636] Model matching meetings with unassigned Interval tasks
+9. [70555] Missing table headers for Confidence Score & Reason for Unmatched Meetings
+10. [70553] AI Agent icon should be relevant
+11. [70687] Incorrect task match categorization count for High, Medium, and Low
+12. [70690] Inconsistency in matching meetings with tasks
+13. [70686] Getting date range filter in AI Agent page when fetching default 7-day data
+14. [70678] Add option to clear or reset AI Agent posted history
+
+### UI/UX Improvements
+15. [70685] Add option to set meetings as Billable/Non-Billable before posting
+16. [70664] Improve visibility of "Match Tasks" button
+17. [70659] Table column names need clarity in Task Matches
+18. [70668] "Nathcorp" text not visible in Dark Mode on login page
+19. [70522] Improve table headers visibility in Posted Meetings
+20. [70523] Add sorting and filtering for Posted Meetings & Recently Posted Meetings
+21. [70852] Remove scroll functionality from Post meeting
+22. [70532] Tab title and page heading misalignment
+23. [70548] Dashboard UI improvements - Remove duplicated data & clarify Last Update section
+24. [70524] Hamburger menu not working on smaller screens
+25. [70525] Multiple post feature for manual posting is missing
+26. [70529] Duplicate text in login page could be removed for better UI
+27. [70533] Remove version number from login page - Display only copyright information
+28. [70536] Application name missing on dashboard page
+29. [70540] Remove "Powered by ChatGPT-4o" text from dashboard footer
+30. [70683] Improve UI differentiation between "Match Tasks" button and "Attended" status
+31. [70688] Incorrect favicon displayed - Nathcorp logo not visible
+32. [70689] App version and copyright message on dashboard page is missing
+33. [70920] Incorrect terminology - "API Key" should be "API Access Token" in UI
+
+### Data Display and Accuracy
+34. [70665] Incorrect meeting time display in Posted Meetings History
+35. [70666] AI Posted Meetings appearing in Manual Posted Meetings page
+36. [70653] "Check All" checkbox not functioning in AI Agent page
+37. [70660] Ensure consistency between Manual and AI Posted History tables
+38. [70654] Unwanted characters in meeting names in Recently Posted Meetings
+39. [70663] Change "Work Type" to "Project Name" in Recently Posted Meetings
+40. [70638] Not all assigned Interval tasks visible in "Change Task for Meeting" list
+41. [70546] Application fetching closed Interval tasks
+42. [70545] Only Nathcorp client tasks being fetched - other tasks not visible
+43. [70526] Unattended meetings appearing in matched task list
+44. [70527] Previous matched tasks not cleared when date range is updated
+45. [70547] Unmatched meetings displaying 90% confidence score on dashboard
+46. [70635] No user notification on session timeout, preventing meeting fetch
+47. [70639] Not all meetings are displayed in the selected date range
+48. [70662] Discrepancy in meeting attended time - 3-5 seconds difference
+49. [70667] No indication for manually posted meetings in Posted Meetings page
+50. [70675] Interval task name not visible in Recently Posted Meetings & Manual Posted Meeting History
+51. [70691] Search feature not working in "Change Task for Meeting" prompt window
+
+### Bug Fixes
+52. [70684] Intermittent incorrect "Intervals API Key not configured" notification
+53. [70680] Date selection offset requiring next day for real-time meetings
+54. [70676] Posted timestamp not visible for AI Agent logged meetings
+55. [70681] Manually posting unmatched meetings in AI Agent may not use actual attendance timing
+56. [70682] Meetings still appear in review section after being posted
+
+### Known Issues
+The following issue is still being investigated:
+57. [70679] AI Agent stops running when browser is closed
+    - Workaround: Keep the browser window open or implement a server-side scheduling solution
+
 For any issues or questions, please contact the development team. 

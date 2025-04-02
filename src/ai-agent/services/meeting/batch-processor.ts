@@ -1,25 +1,29 @@
 import { Meeting, ProcessedMeeting } from '../../../interfaces/meetings';
 import { QueueManager } from '../queue/queue-manager';
+import { RateLimiter } from '../../core/rate-limiter/token-bucket';
 
-interface BatchProcessingResult {
-  processed: ProcessedMeeting[];
-  failed: {
-    meeting: Meeting;
-    error: Error;
-  }[];
+interface BatchResult {
+  batchId: string;
   totalMeetings: number;
   completedMeetings: number;
+  processed: ProcessedMeeting[];
+  failed: Array<{ meeting: Meeting; error: Error }>;
+  status: 'processing' | 'completed' | 'failed';
 }
 
 export class BatchProcessor {
   private static instance: BatchProcessor;
   private queueManager: QueueManager;
-  private batchSize: number = 10;
-  private processingResults: Map<string, BatchProcessingResult> = new Map();
-  private processMeetingFunction: ((meeting: Meeting, userId: string) => Promise<ProcessedMeeting>) | null = null;
-  
+  private rateLimiter: RateLimiter;
+  private processingResults: Map<string, BatchResult>;
+  private processMeetingFunction?: (meeting: Meeting, userId: string) => Promise<ProcessedMeeting>;
+  private maxConcurrentBatches: number = 3;
+  private batchSize: number = 5; // Process 5 meetings at a time
+
   private constructor() {
     this.queueManager = QueueManager.getInstance();
+    this.rateLimiter = RateLimiter.getInstance();
+    this.processingResults = new Map();
   }
 
   public static getInstance(): BatchProcessor {
@@ -29,44 +33,47 @@ export class BatchProcessor {
     return BatchProcessor.instance;
   }
 
-  public setBatchSize(size: number): void {
-    if (size < 1) {
-      throw new Error('Batch size must be at least 1');
-    }
-    this.batchSize = size;
+  public setProcessFunction(func: (meeting: Meeting, userId: string) => Promise<ProcessedMeeting>): void {
+    this.processMeetingFunction = func;
   }
 
-  public setProcessFunction(fn: (meeting: Meeting, userId: string) => Promise<ProcessedMeeting>): void {
-    this.processMeetingFunction = fn;
-  }
-
-  public async processMeetingBatch(
-    meetings: Meeting[], 
-    userId: string, 
-    batchId: string = Date.now().toString()
-  ): Promise<string> {
+  public async processMeetingBatch(meetings: Meeting[], userId: string): Promise<string> {
     if (!this.processMeetingFunction) {
-      throw new Error('Process function not set. Call setProcessFunction before processing a batch.');
+      throw new Error('Process function not set');
     }
 
-    // Initialize batch processing result
+    const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Initialize batch result
     this.processingResults.set(batchId, {
+      batchId,
+      totalMeetings: meetings.length,
+      completedMeetings: 0,
       processed: [],
       failed: [],
-      totalMeetings: meetings.length,
-      completedMeetings: 0
+      status: 'processing'
     });
 
-    console.log(`Starting batch processing for ${meetings.length} meetings with batch ID: ${batchId}`);
-
-    // Process meetings in chunks
+    // Process meetings in smaller batches
     for (let i = 0; i < meetings.length; i += this.batchSize) {
-      const chunk = meetings.slice(i, i + this.batchSize);
-      console.log(`Processing chunk ${Math.floor(i / this.batchSize) + 1} of ${Math.ceil(meetings.length / this.batchSize)}, size: ${chunk.length}`);
+      const batch = meetings.slice(i, i + this.batchSize);
       
-      // Process each meeting in the chunk
-      const promises = chunk.map(meeting => this.processMeeting(meeting, userId, batchId));
-      await Promise.all(promises);
+      // Wait for rate limiter to allow processing this batch
+      await this.rateLimiter.acquireToken(this.batchSize);
+
+      // Process each meeting in the batch
+      await Promise.all(batch.map(meeting => 
+        this.processMeeting(meeting, userId, batchId)
+      ));
+
+      // Add a small delay between batches
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    // Update batch status
+    const result = this.processingResults.get(batchId);
+    if (result) {
+      result.status = result.failed.length === meetings.length ? 'failed' : 'completed';
     }
 
     return batchId;
@@ -101,11 +108,12 @@ export class BatchProcessor {
     }
   }
 
-  public getBatchStatus(batchId: string): BatchProcessingResult | undefined {
+  public getBatchStatus(batchId: string): BatchResult | undefined {
     return this.processingResults.get(batchId);
   }
 
-  public clearBatchResult(batchId: string): boolean {
-    return this.processingResults.delete(batchId);
+  public updateRateLimit(requestsPerMinute: number): void {
+    this.queueManager.updateRateLimit(requestsPerMinute);
+    this.rateLimiter.updateRateLimit(requestsPerMinute);
   }
 } 

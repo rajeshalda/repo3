@@ -1,0 +1,190 @@
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { useToast } from './ui/use-toast';
+import { Loader2, Server, Users, Clock, RefreshCw } from 'lucide-react';
+
+interface PM2Status {
+  status: string;
+  enabledUsers: number;
+  totalUsers: number;
+  uptime: number;
+}
+
+export function PM2Status() {
+  const [status, setStatus] = useState<PM2Status | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { toast } = useToast();
+  
+  const PM2_SERVICE_URL = 'http://localhost:3100';
+
+  const fetchStatus = async () => {
+    setIsRefreshing(true);
+    try {
+      const response = await fetch(`${PM2_SERVICE_URL}/api/status`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setStatus({
+            status: data.status,
+            enabledUsers: data.enabledUsers,
+            totalUsers: data.totalUsers,
+            uptime: data.uptime
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching PM2 status:', error);
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+    
+    // Poll status every 30 seconds
+    const intervalId = setInterval(fetchStatus, 30000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const formatUptime = (seconds: number) => {
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m ${Math.floor(seconds % 60)}s`;
+    }
+  };
+
+  const restartAgent = async () => {
+    try {
+      const response = await fetch('/api/pm2/restart', {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        toast({
+          title: 'AI Agent restarted',
+          description: 'The AI Agent service has been restarted.',
+          variant: 'default'
+        });
+        
+        // Fetch the latest status after a short delay
+        setTimeout(fetchStatus, 3000);
+      } else {
+        toast({
+          title: 'Failed to restart',
+          description: 'There was an error restarting the AI Agent service.',
+          variant: 'destructive'
+        });
+      }
+    } catch (error) {
+      console.error('Error restarting AI Agent:', error);
+      toast({
+        title: 'Failed to restart',
+        description: 'There was an error restarting the AI Agent service.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center">
+          <Server className="mr-2 h-5 w-5" />
+          AI Agent Status
+        </CardTitle>
+        <CardDescription>
+          Monitoring for the background AI Agent service
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <div className="flex items-center justify-center h-20">
+            <Loader2 className="animate-spin h-6 w-6 text-muted-foreground" />
+          </div>
+        ) : status ? (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col space-y-1">
+                <span className="text-sm text-muted-foreground">Status</span>
+                <div className="flex items-center">
+                  <Badge variant={status.status === 'running' ? 'default' : 'destructive'}>
+                    {status.status === 'running' ? 'Running' : 'Stopped'}
+                  </Badge>
+                </div>
+              </div>
+              
+              <div className="flex flex-col space-y-1">
+                <span className="text-sm text-muted-foreground">Uptime</span>
+                <div className="flex items-center">
+                  <Clock className="mr-1 h-4 w-4 text-muted-foreground" />
+                  <span>{formatUptime(status.uptime)}</span>
+                </div>
+              </div>
+              
+              <div className="flex flex-col space-y-1">
+                <span className="text-sm text-muted-foreground">Enabled Users</span>
+                <div className="flex items-center">
+                  <Users className="mr-1 h-4 w-4 text-muted-foreground" />
+                  <span>{status.enabledUsers} / {status.totalUsers}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-between pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={fetchStatus}
+                disabled={isRefreshing}
+              >
+                {isRefreshing ? (
+                  <>
+                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                    Refreshing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="mr-1 h-3 w-3" />
+                    Refresh
+                  </>
+                )}
+              </Button>
+              
+              <Button 
+                variant="secondary" 
+                size="sm"
+                onClick={restartAgent}
+              >
+                Restart Agent
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-4">
+            <p className="text-muted-foreground">Agent service is not running</p>
+            <Button 
+              className="mt-2" 
+              variant="outline"
+              onClick={fetchStatus}
+            >
+              Check Again
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+} 

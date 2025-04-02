@@ -3,15 +3,18 @@ import { Meeting, MeetingAnalysis, ProcessedMeeting, AttendanceRecord } from '..
 import { storageManager } from '../../data/storage/manager';
 import { QueueManager } from '../queue/queue-manager';
 import { BatchProcessor } from './batch-processor';
+import { RateLimiter } from '../../core/rate-limiter/token-bucket';
 
 export class MeetingService {
     private static instance: MeetingService;
     private queueManager: QueueManager;
     private batchProcessor: BatchProcessor;
+    private rateLimiter: RateLimiter;
 
     private constructor() {
         this.queueManager = QueueManager.getInstance();
         this.batchProcessor = BatchProcessor.getInstance();
+        this.rateLimiter = RateLimiter.getInstance();
         
         // Set the process function in the batch processor to avoid circular dependency
         this.batchProcessor.setProcessFunction((meeting, userId) => 
@@ -162,7 +165,6 @@ export class MeetingService {
             }
 
             // Use the queue manager to handle rate limiting
-            // Pass the analyzeMeetingInternal method as a callback to avoid circular dependency
             return await this.queueManager.queueMeetingAnalysis(
                 meeting, 
                 userId,
@@ -187,43 +189,62 @@ export class MeetingService {
                 return existingMeeting;
             }
 
+            // Wait for rate limiter to allow the request
+            await this.rateLimiter.acquireToken();
+
             // Get attendance records if it's an online meeting
             let attendance;
             if (meeting.onlineMeeting?.joinUrl) {
-                const accessToken = await this.getGraphToken();
-                const { meetingId, organizerId } = this.extractMeetingInfo(meeting.onlineMeeting.joinUrl);
-                
-                if (meetingId && organizerId) {
-                    const records = await this.getAttendanceRecords(userId, meetingId, organizerId, accessToken);
+                try {
+                    const accessToken = await this.getGraphToken();
+                    const { meetingId, organizerId } = this.extractMeetingInfo(meeting.onlineMeeting.joinUrl);
                     
-                    if (records.length > 0) {
-                        const attendanceRecords = records.map(record => ({
-                            name: record.identity?.displayName || 'Unknown',
-                            email: record.emailAddress || '',
-                            duration: record.totalAttendanceInSeconds,
-                            role: record.role,
-                            attendanceIntervals: record.attendanceIntervals
-                        }));
-
-                        const totalDuration = attendanceRecords.reduce((sum, record) => sum + record.duration, 0);
+                    if (meetingId && organizerId) {
+                        const records = await this.getAttendanceRecords(userId, meetingId, organizerId, accessToken);
                         
-                        attendance = {
-                            records: attendanceRecords,
-                            summary: {
-                                totalDuration,
-                                averageDuration: totalDuration / attendanceRecords.length,
-                                totalParticipants: attendanceRecords.length
-                            }
-                        };
+                        if (records.length > 0) {
+                            const attendanceRecords = records.map(record => ({
+                                name: record.identity?.displayName || 'Unknown',
+                                email: record.emailAddress || '',
+                                duration: record.totalAttendanceInSeconds,
+                                role: record.role,
+                                attendanceIntervals: record.attendanceIntervals
+                            }));
+
+                            const totalDuration = attendanceRecords.reduce((sum, record) => sum + record.duration, 0);
+                            
+                            attendance = {
+                                records: attendanceRecords,
+                                summary: {
+                                    totalDuration,
+                                    averageDuration: totalDuration / attendanceRecords.length,
+                                    totalParticipants: attendanceRecords.length
+                                }
+                            };
+                        }
                     }
+                } catch (error) {
+                    console.warn(`Failed to get attendance records for meeting ${meeting.id}:`, error);
+                    // Continue processing without attendance records
                 }
             }
 
             // Prepare meeting data for analysis
             const meetingData = this.prepareMeetingData(meeting);
             
-            // Get AI analysis
-            const analysisResult = await openAIClient.analyzeMeeting(meetingData);
+            // Get AI analysis with retry logic
+            let analysisResult;
+            try {
+                analysisResult = await openAIClient.analyzeMeeting(meetingData);
+            } catch (error) {
+                if (error instanceof Error && error.message.includes('429')) {
+                    // If rate limited, wait and retry
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    analysisResult = await openAIClient.analyzeMeeting(meetingData);
+                } else {
+                    throw error;
+                }
+            }
             
             // Parse AI response
             const analysis = this.parseAnalysis(analysisResult, meeting.id);
@@ -262,11 +283,12 @@ export class MeetingService {
     }
 
     /**
-     * Update the rate limit settings
+     * Update rate limits for all components
      */
     public updateRateLimit(requestsPerMinute: number): void {
         this.queueManager.updateRateLimit(requestsPerMinute);
-        openAIClient.updateRateLimit(requestsPerMinute);
+        this.batchProcessor.updateRateLimit(requestsPerMinute);
+        this.rateLimiter.updateRateLimit(requestsPerMinute);
     }
 
     public async getProcessedMeeting(meetingId: string): Promise<ProcessedMeeting | null> {
