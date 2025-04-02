@@ -927,7 +927,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Action</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
