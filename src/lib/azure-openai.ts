@@ -52,7 +52,7 @@ export class AzureOpenAIClient {
           messages: [
             { 
               role: 'system', 
-              content: 'You are a task matching expert. Return only the JSON response without any markdown formatting or code blocks.' 
+              content: 'You are a task matching expert. Analyze the meeting title and available tasks to find the best match. Return a JSON response with matchedTaskTitle (or null), confidence (0-1), and reason.' 
             },
             { role: 'user', content: prompt }
           ],
@@ -63,6 +63,11 @@ export class AzureOpenAIClient {
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('OpenAI API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: error
+        });
         
         // Handle rate limit error
         if (response.status === 429 && retryCount < this.maxRetries) {
@@ -79,7 +84,16 @@ export class AzureOpenAIClient {
       const content = data.choices[0].message.content;
       
       // Remove any markdown formatting if present
-      return content.replace(/^```json\s*|\s*```$/g, '').trim();
+      const cleanContent = content.replace(/^```json\s*|\s*```$/g, '').trim();
+      
+      // Validate JSON response
+      try {
+        JSON.parse(cleanContent);
+        return cleanContent;
+      } catch (e) {
+        console.error('Invalid JSON response from OpenAI:', cleanContent);
+        throw new Error('OpenAI returned invalid JSON response');
+      }
     } catch (error) {
       if (error instanceof Error && error.message.includes('429') && retryCount < this.maxRetries) {
         const waitTime = Math.pow(2, retryCount) * 1000; // Exponential backoff

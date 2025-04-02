@@ -14,6 +14,16 @@ interface Meeting {
   meetingInfo?: {
     meetingId: string;
   };
+  attendanceRecords?: {
+    name: string;
+    email: string;
+    duration: number;
+    intervals: {
+      joinDateTime: string;
+      leaveDateTime: string;
+      durationInSeconds: number;
+    }[];
+  }[];
 }
 
 interface MatchResult {
@@ -23,13 +33,34 @@ interface MatchResult {
   reason: string;
 }
 
-const BATCH_SIZE = 20;
+const BATCH_SIZE = 8;
+const DELAY_BETWEEN_REQUESTS = 1500; // 1.5 seconds
+
+interface CachedResponse {
+  response: string;
+  timestamp: number;
+}
+
+const openAICache = new Map<string, CachedResponse>();
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+function isSimilarTitle(title1: string, title2: string): boolean {
+  const words1 = title1.toLowerCase().split(/\s+/);
+  const words2 = title2.toLowerCase().split(/\s+/);
+  
+  // Calculate similarity ratio
+  const commonWords = words1.filter(word => words2.includes(word));
+  const similarityRatio = commonWords.length / Math.max(words1.length, words2.length);
+  
+  return similarityRatio > 0.7; // 70% similarity threshold
+}
 
 async function processMeetingBatch(
   meetings: Meeting[],
   tasks: Task[],
   openai: AzureOpenAIClient,
-  startIndex: number
+  startIndex: number,
+  userEmail: string
 ): Promise<{ results: MatchResult[], nextIndex: number }> {
   const results: MatchResult[] = [];
   let currentIndex = startIndex;
@@ -49,7 +80,6 @@ async function processMeetingBatch(
         for (const task of tasks) {
           const { matched, reason } = findKeywordMatches(meeting.subject, task);
           if (matched) {
-            // If we find a better match (more specific reason), update bestMatch
             if (!bestMatch || reason.length > bestMatch.reason.length) {
               bestMatch = {
                 task,
@@ -70,51 +100,112 @@ async function processMeetingBatch(
           continue;
         }
 
-        // If no keyword match, try OpenAI
-        console.log(`No keyword match found, trying OpenAI for: ${meeting.subject}`);
+        // Check if user attended the meeting
+        const userAttendance = meeting.attendanceRecords?.find(record => 
+          record.email.toLowerCase() === userEmail.toLowerCase()
+        );
+
+        if (!userAttendance || userAttendance.duration === 0) {
+          console.log(`Skipping OpenAI for meeting "${meeting.subject}" - No attendance recorded`);
+          results.push({
+            meeting,
+            matchedTask: null,
+            confidence: 0,
+            reason: 'No attendance recorded for this meeting'
+          });
+          continue;
+        }
+
+        // Check cache for similar meetings
+        let cachedResponse: CachedResponse | undefined;
+        for (const [cachedTitle, cached] of openAICache.entries()) {
+          if (isSimilarTitle(meeting.subject, cachedTitle) && 
+              Date.now() - cached.timestamp < CACHE_DURATION) {
+            cachedResponse = cached;
+            console.log(`Using cached response for similar meeting: ${cachedTitle}`);
+            break;
+          }
+        }
+
+        if (cachedResponse) {
+          try {
+            const matchData = JSON.parse(cachedResponse.response);
+            results.push({
+              meeting,
+              matchedTask: tasks.find(t => t.title.toLowerCase() === matchData.matchedTaskTitle?.toLowerCase()) || null,
+              confidence: matchData.confidence,
+              reason: matchData.reason
+            });
+            continue;
+          } catch (e) {
+            console.log('Invalid cached response, proceeding with OpenAI call');
+          }
+        }
+
+        // If no keyword match but user attended, try OpenAI
+        console.log(`No keyword match found, trying OpenAI for: ${meeting.subject} (Attendance: ${userAttendance.duration} seconds)`);
         const prompt = generateMatchingPrompt(meeting.subject, tasks);
 
-        const response = await openai.getCompletion(prompt);
-        const matchData = JSON.parse(response);
+        try {
+          const response = await openai.getCompletion(prompt);
+          console.log('OpenAI Response:', response);
+          
+          // Cache the response
+          openAICache.set(meeting.subject, {
+            response,
+            timestamp: Date.now()
+          });
+          
+          const matchData = JSON.parse(response);
+          console.log('Parsed match data:', matchData);
 
-        // Analyze the reason text for confidence adjustment
-        let adjustedConfidence = matchData.confidence;
-        const reasonLower = matchData.reason.toLowerCase();
-        
-        // Boost confidence based on strong indicators in the reason
-        if (reasonLower.includes('strongly aligns') || 
-            reasonLower.includes('direct match') || 
-            reasonLower.includes('most relevant match')) {
-            adjustedConfidence = Math.min(adjustedConfidence + 0.2, 1.0);
-        }
-        
-        // Boost confidence for infrastructure-related matches
-        if ((meeting.subject.toLowerCase().includes('infrastructure') || 
-             meeting.subject.toLowerCase().includes('system') ||
-             meeting.subject.toLowerCase().includes('server')) &&
-            reasonLower.includes('infrastructure')) {
-            adjustedConfidence = Math.min(adjustedConfidence + 0.1, 1.0);
-        }
+          // Analyze the reason text for confidence adjustment
+          let adjustedConfidence = matchData.confidence;
+          const reasonLower = matchData.reason.toLowerCase();
+          
+          // Boost confidence based on strong indicators in the reason
+          if (reasonLower.includes('strongly aligns') || 
+              reasonLower.includes('direct match') || 
+              reasonLower.includes('most relevant match')) {
+              adjustedConfidence = Math.min(adjustedConfidence + 0.2, 1.0);
+          }
+          
+          // Boost confidence for infrastructure-related matches
+          if ((meeting.subject.toLowerCase().includes('infrastructure') || 
+               meeting.subject.toLowerCase().includes('system') ||
+               meeting.subject.toLowerCase().includes('server')) &&
+              reasonLower.includes('infrastructure')) {
+              adjustedConfidence = Math.min(adjustedConfidence + 0.1, 1.0);
+          }
 
-        // Find the best matching task
-        let matchedTask: Task | null = null;
-        if (matchData.matchedTaskTitle) {
-            const foundTask = tasks.find(t => 
-                t.title.toLowerCase() === matchData.matchedTaskTitle.toLowerCase() ||
-                (t.title.toLowerCase().includes('infra') && 
-                 reasonLower.includes('infrastructure'))
-            );
-            if (foundTask) {
-                matchedTask = foundTask;
-            }
+          // Find the best matching task
+          let matchedTask: Task | null = null;
+          if (matchData.matchedTaskTitle) {
+              const foundTask = tasks.find(t => 
+                  t.title.toLowerCase() === matchData.matchedTaskTitle.toLowerCase() ||
+                  (t.title.toLowerCase().includes('infra') && 
+                   reasonLower.includes('infrastructure'))
+              );
+              if (foundTask) {
+                  matchedTask = foundTask;
+              }
+          }
+          
+          results.push({
+            meeting,
+            matchedTask: matchedTask,
+            confidence: matchedTask ? adjustedConfidence : 0,
+            reason: matchData.reason
+          });
+        } catch (openaiError) {
+          console.error(`OpenAI processing failed for meeting: ${meeting.subject}`, openaiError);
+          results.push({
+            meeting,
+            matchedTask: null,
+            confidence: 0,
+            reason: `OpenAI processing failed: ${openaiError instanceof Error ? openaiError.message : 'Unknown error'}`
+          });
         }
-        
-        results.push({
-          meeting,
-          matchedTask: matchedTask,
-          confidence: matchedTask ? adjustedConfidence : 0,
-          reason: matchData.reason
-        });
 
       } catch (error) {
         console.error(`Failed to process meeting: ${meeting.subject}`, error);
@@ -122,12 +213,12 @@ async function processMeetingBatch(
           meeting,
           matchedTask: null,
           confidence: 0,
-          reason: 'Failed to process meeting'
+          reason: `Failed to process meeting: ${error instanceof Error ? error.message : 'Unknown error'}`
         });
       }
 
-      // Small delay between meetings to avoid rate limits
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Increased delay between meetings
+      await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_REQUESTS));
     }
 
     return { 
@@ -231,7 +322,7 @@ export async function POST(request: Request) {
     const openai = new AzureOpenAIClient();
 
     // Process meetings in batches
-    const { results, nextIndex } = await processMeetingBatch(meetings, tasks, openai, startIndex);
+    const { results, nextIndex } = await processMeetingBatch(meetings, tasks, openai, startIndex, session.user.email);
 
     // Categorize results - only consider meetings with actual task matches
     const highConfidence = results.filter(r => r.matchedTask && r.confidence >= 0.8);
