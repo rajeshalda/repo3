@@ -255,7 +255,7 @@ export class IntervalsAPI {
 
         // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
         console.log('Using hardcoded worktype ID 802279 for India-Meeting');
-        const worktypeId = '802279';
+        const worktypeId = '803850';
 
         const requestBody = {
             personid: user.personid,

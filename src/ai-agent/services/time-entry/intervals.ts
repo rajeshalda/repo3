@@ -303,7 +303,7 @@ export class IntervalsTimeEntryService {
             
             // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
             console.log('Using hardcoded worktype ID 802279 for India-Meeting');
-            const worktypeId = '802279';
+            const worktypeId = '803850';
 
             // Find the current user's attendance record
             let userDuration = 0;
