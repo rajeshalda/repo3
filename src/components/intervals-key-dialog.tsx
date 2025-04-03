@@ -120,20 +120,20 @@ export function IntervalsKeyDialog({
         }
       }}>
         <DialogHeader>
-          <DialogTitle>Intervals API Key</DialogTitle>
+          <DialogTitle>Intervals API Access Token</DialogTitle>
           <DialogDescription className="space-y-2">
             {existingApiKey 
-              ? "Update your Intervals API key or click Close to keep the existing key."
+              ? "Update your Intervals API Access Token or click Close to keep the existing token."
               : (
                 <div className="space-y-2">
                   <div className="font-medium text-destructive">
-                    An Intervals API key is required to continue.
+                    An Intervals API Access Token is required to continue.
                   </div>
-                  <div>To get your Intervals API key:</div>
+                  <div>To get your Intervals API Access Token:</div>
                   <ol className="ml-4 list-decimal text-sm space-y-1">
                     <li>Go to Intervals and log into your account</li>
                     <li>Navigate to My Account -&gt; API Access under Options</li>
-                    <li>Generate or view your API token (11-character code like: a78828gq6t4)</li>
+                    <li>Generate or view your API Access Token (11-character code like: a78828gq6t4)</li>
                     <li>Copy and paste your token below</li>
                   </ol>
                 </div>
@@ -152,14 +152,14 @@ export function IntervalsKeyDialog({
             )}
             
             <div className="grid gap-2">
-              <Label htmlFor="apiKey">API Key</Label>
+              <Label htmlFor="apiKey">API Access Token</Label>
               <div className="relative">
                 <Input
                   id="apiKey"
                   type={showPassword ? "text" : "password"}
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Enter your Intervals API key"
+                  placeholder="Enter your Intervals API Access Token"
                   required
                   className="pr-10"
                 />
@@ -177,7 +177,7 @@ export function IntervalsKeyDialog({
                     <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   )}
                   <span className="sr-only">
-                    {showPassword ? "Hide API key" : "Show API key"}
+                    {showPassword ? "Hide API Access Token" : "Show API Access Token"}
                   </span>
                 </Button>
               </div>

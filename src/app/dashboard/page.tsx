@@ -338,7 +338,7 @@ export default function DashboardPage() {
       const response = await fetch('/api/intervals/tasks');
       if (!response.ok) {
         if (response.status === 401) {
-          toast("🔑 Invalid API key");
+          toast("🔑 Invalid API Access Token");
         } else {
           toast("❌ Failed to fetch tasks from Intervals");
         }
@@ -459,16 +459,16 @@ export default function DashboardPage() {
       if (session?.user?.email) {
         setApiKeyLoading(true);
         try {
-          // First check if the API key exists on the server without showing any UI
+          // First check if the API Access Token exists on the server without showing any UI
           const response = await fetch('/api/user/data');
           if (response.ok) {
             const data = await response.json();
             if (data.hasApiKey) {
-              // If the server confirms we have an API key, set it and don't show dialog
-              console.log('Server confirmed API key exists for user:', session.user.email);
+              // If the server confirms we have an API Access Token, set it and don't show dialog
+              console.log('Server confirmed API Access Token exists for user:', session.user.email);
               setShowApiKeyDialog(false);
               
-              // If we have the actual key value, set it
+              // If we have the actual token value, set it
               if (data.users && data.users.length > 0 && data.users[0].intervalsApiKey) {
                 setIntervalsApiKey(data.users[0].intervalsApiKey);
               } else {
@@ -479,8 +479,8 @@ export default function DashboardPage() {
                 setIntervalsApiKey(apiKey);
               }
             } else {
-              // Only if the server confirms we don't have a key, show the dialog
-              console.log('No API key found for user:', session.user.email);
+              // Only if the server confirms we don't have a token, show the dialog
+              console.log('No API Access Token found for user:', session.user.email);
               setShowApiKeyDialog(true);
             }
           } else {
@@ -491,28 +491,28 @@ export default function DashboardPage() {
             setIntervalsApiKey(apiKey);
             
             if (!apiKey) {
-              console.log('No API key found locally for user:', session.user.email);
+              console.log('No API Access Token found locally for user:', session.user.email);
               setShowApiKeyDialog(true);
             } else {
-              console.log('Found existing API key locally for user:', session.user.email);
+              console.log('Found existing API Access Token locally for user:', session.user.email);
               setShowApiKeyDialog(false);
             }
           }
         } catch (error) {
-          console.error('Error retrieving API key:', error);
-          // Only show dialog on error if we haven't found a key
+          console.error('Error retrieving API Access Token:', error);
+          // Only show dialog on error if we haven't found a token
           if (!intervalsApiKey) {
             setShowApiKeyDialog(true);
           }
         } finally {
-          // Mark that we've checked for the API key
+          // Mark that we've checked for the API Access Token
           setApiKeyChecked(true);
           setApiKeyLoading(false);
         }
       }
     };
 
-    // Only check for API key if authenticated and not already checked
+    // Only check for API Access Token if authenticated and not already checked
     if (status === 'authenticated' && !apiKeyChecked) {
       checkApiKey();
     }
@@ -525,7 +525,7 @@ export default function DashboardPage() {
     }
   }, [status]);
 
-  // Add effect to fetch tasks when API key is available
+  // Add effect to fetch tasks when API Access Token is available
   useEffect(() => {
     if (intervalsApiKey) {
       fetchTasks();
@@ -542,18 +542,18 @@ export default function DashboardPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to validate API key');
+        throw new Error(data.error || 'Failed to validate API Access Token');
       }
 
       if (session?.user?.email) {
         const storage = new UserStorage();
         await storage.setUserApiKey(session.user.email, session.user.email, apiKey);
         setIntervalsApiKey(apiKey);
-        toast("✅ Your Intervals API key has been saved successfully.");
+        toast("✅ Your Intervals API Access Token has been saved successfully.");
       }
       setShowApiKeyDialog(false);
     } catch (error) {
-      toast("❌ " + (error instanceof Error ? error.message : 'Failed to validate API key'));
+      toast("❌ " + (error instanceof Error ? error.message : 'Failed to validate API Access Token'));
     }
   };
 
