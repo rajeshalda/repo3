@@ -901,36 +901,9 @@ export function AIAgentView() {
                 ? "Cancelling the current process..."
                 : isProcessing 
                   ? "Click the toggle to stop the currently running process."
-                  : "When enabled, the AI Agent will automatically check for new meetings every 5 minutes."}
-            </div>
-            
-            <div className="border-t pt-4 mt-2">
-              <Button 
-                className="w-full sm:w-auto"
-                onClick={isProcessing ? cancelProcessing : handleProcessMeetings}
-                disabled={agentEnabled && !isProcessing || isCancelling}
-              >
-                {isCancelling ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Cancelling...
-                  </>
-                ) : isProcessing ? (
-                  <>
-                    <X className="mr-2 h-4 w-4" />
-                    Cancel Processing
-                  </>
-                ) : (
-                  'Process Meetings Now'
-                )}
-              </Button>
-              <div className="text-sm text-muted-foreground mt-2">
-                {isCancelling
-                  ? "Cancelling the operation. This may take a moment..."
-                  : isProcessing 
-                    ? "Cancel the current processing operation."
-                    : "Manually process your recent meetings and create time entries."}
-              </div>
+                  : agentEnabled
+                    ? "AI Agent is currently active. Click the toggle to stop the AI Agent."
+                    : "When enabled, the AI Agent will automatically check for new meetings every 5 minutes."}
             </div>
           </div>
         </CardContent>
