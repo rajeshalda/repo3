@@ -558,7 +558,20 @@ export default function DashboardPage() {
   };
 
   const matchMeetings = async () => {
-    if (!meetingsData?.meetings) return;
+    if (!meetingsData?.meetings || meetingsData.meetings.length === 0) {
+      toast.error("No meetings available to match", {
+        position: "top-center",
+        duration: 3000,
+        style: {
+          backgroundColor: "#ef4444",
+          color: "white",
+          fontSize: "16px",
+          borderRadius: "8px",
+          padding: "12px 24px"
+        }
+      });
+      return;
+    }
     
     setIsMatching(true);
     let currentIndex = 0;
@@ -1045,7 +1058,7 @@ export default function DashboardPage() {
                   </TabsContent>
 
                   <TabsContent value="task-matches" className="mt-0">
-                    {matchResults && (
+                    {matchResults ? (
                       <div className="rounded-lg border">
                         <MeetingMatches 
                           summary={matchResults.summary} 
@@ -1054,6 +1067,23 @@ export default function DashboardPage() {
                           postedMeetingIds={postedMeetingIds}
                           source="manual"
                         />
+                      </div>
+                    ) : (
+                      <div className="rounded-lg border bg-background p-8">
+                        <div className="flex flex-col items-center justify-center text-center space-y-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
+                            <path d="m16 6 4 14" />
+                            <path d="M12 6v14" />
+                            <path d="M8 8v12" />
+                            <path d="M4 4v16" />
+                          </svg>
+                          <div className="space-y-2">
+                            <h3 className="text-lg font-semibold">No Task Matches Yet</h3>
+                            <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                              Click the "Match Tasks" button to analyze your meetings and find matching tasks in Intervals.
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </TabsContent>
