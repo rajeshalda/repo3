@@ -191,20 +191,31 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const accessToken = await getGraphToken();
         
         // Get meetings for the current day (today) in IST timezone (UTC+05:30)
-        // Create date objects for start and end of the current day in IST
         const now = new Date();
         
-        // Start of day in IST (00:00:00)
-        const startDate = new Date(now);
-        startDate.setHours(0, 0, 0, 0);
-        // Adjust for IST offset (subtract 5 hours and 30 minutes to get UTC time)
-        startDate.setHours(startDate.getHours() - 5, startDate.getMinutes() - 30);
+        // Create a Date object for the start of today in IST (00:00:00)
+        // 00:00:00 IST = Previous day 18:30:00 UTC (UTC+5:30)
+        const startDate = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate() - 1, // Previous day
+            18, // 18:30 UTC 
+            30,
+            0,
+            0
+        ));
         
-        // End of day in IST (23:59:59)
-        const endDate = new Date(now);
-        endDate.setHours(23, 59, 59, 999);
-        // Adjust for IST offset (subtract 5 hours and 30 minutes to get UTC time)
-        endDate.setHours(endDate.getHours() - 5, endDate.getMinutes() - 30);
+        // Create a Date object for the end of today in IST (23:59:59.999)
+        // 23:59:59.999 IST = Today 18:29:59.999 UTC (UTC+5:30)
+        const endDate = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            18, // 18:29:59.999 UTC of current day
+            29,
+            59,
+            999
+        ));
 
         const startDateString = startDate.toISOString();
         const endDateString = endDate.toISOString();
