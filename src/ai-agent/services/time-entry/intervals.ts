@@ -197,8 +197,14 @@ export class IntervalsTimeEntryService {
     }
 
     private formatDate(dateString: string): string {
-        // Convert ISO date string to YYYY-MM-DD format
-        return dateString.split('T')[0];
+        // Convert the date to IST timezone (UTC+05:30) before formatting
+        const date = new Date(dateString);
+        
+        // Add 5 hours and 30 minutes to convert to IST
+        const istDate = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
+        
+        // Convert ISO date string to YYYY-MM-DD format in IST timezone
+        return istDate.toISOString().split('T')[0];
     }
 
     private async savePostedMeeting(meeting: ProcessedMeeting, timeEntry: TimeEntryResponse, rawResponse: any, userId: string, taskName: string): Promise<void> {
@@ -208,13 +214,26 @@ export class IntervalsTimeEntryService {
             const storage = new AIAgentPostedMeetingsStorage();
             await storage.loadData();
 
+            // Create a timestamp in IST timezone (UTC+05:30)
+            const now = new Date();
+            const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+            
+            // Format the date properly to remove UTC marker 'Z' and explicitly mark as IST
+            // Format: YYYY-MM-DDTHH:MM:SS IST
+            const istTimestamp = istDate.toISOString().replace('Z', '') + ' IST';
+            
+            console.log('Posted timestamp:', {
+                utc: now.toISOString(),
+                ist: istTimestamp
+            });
+
             // Only save the meeting in the time entry format
             const postedMeeting = {
                 meetingId: meeting.id,
                 userId: userId,
                 timeEntry: timeEntry,
                 rawResponse: rawResponse,
-                postedAt: new Date().toISOString(),
+                postedAt: istTimestamp, // Use explicitly formatted IST timestamp
                 taskName: taskName
             };
 
@@ -337,6 +356,13 @@ export class IntervalsTimeEntryService {
                 description: meeting.subject,
                 billable: isBillable ? 't' : 'f'
             };
+
+            // Add debug log to show date conversion
+            console.log('Date Conversion:', {
+                originalUtcDate: meeting.start.dateTime,
+                originalDatePortion: meeting.start.dateTime.split('T')[0],
+                convertedIstDate: this.formatDate(meeting.start.dateTime),
+            });
 
             console.log('Creating time entry with data:', JSON.stringify(timeEntry, null, 2));
 

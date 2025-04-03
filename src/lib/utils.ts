@@ -47,6 +47,23 @@ export function formatDateIST(date: Date | string | null | undefined, options: I
   if (!date) return 'Invalid Date';
   
   try {
+    // If the date string already has IST marker, handle it appropriately
+    if (typeof date === 'string' && date.includes(' IST')) {
+      // Remove the IST marker to get a standard date string
+      const cleanDateStr = date.replace(' IST', '');
+      // Parse the clean date string
+      const dateObj = new Date(cleanDateStr);
+      
+      if (isNaN(dateObj.getTime())) return 'Invalid Date';
+      
+      // Format using specified options, but no need to set timezone since it's already IST
+      return new Intl.DateTimeFormat('en-US', {
+        ...options,
+        timeZone: IST_TIMEZONE
+      }).format(dateObj);
+    }
+    
+    // Standard handling for other date formats
     const dateObj = typeof date === 'string' ? new Date(date) : date;
     if (isNaN(dateObj.getTime())) return 'Invalid Date';
 
