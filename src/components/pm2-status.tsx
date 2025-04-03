@@ -73,28 +73,16 @@ export function PM2Status() {
       });
       
       if (response.ok) {
-        toast({
-          title: 'AI Agent restarted',
-          description: 'The AI Agent service has been restarted.',
-          variant: 'default'
-        });
+        toast.success('The AI Agent service has been restarted.');
         
         // Fetch the latest status after a short delay
         setTimeout(fetchStatus, 3000);
       } else {
-        toast({
-          title: 'Failed to restart',
-          description: 'There was an error restarting the AI Agent service.',
-          variant: 'destructive'
-        });
+        toast.error('There was an error restarting the AI Agent service.');
       }
     } catch (error) {
       console.error('Error restarting AI Agent:', error);
-      toast({
-        title: 'Failed to restart',
-        description: 'There was an error restarting the AI Agent service.',
-        variant: 'destructive'
-      });
+      toast.error('There was an error restarting the AI Agent service.');
     }
   };
 
@@ -104,6 +92,7 @@ export function PM2Status() {
         <CardTitle className="flex items-center">
           <Server className="mr-2 h-5 w-5" />
           AI Agent Status
+          <Badge variant="outline" className="ml-2 bg-amber-100 text-amber-800">ALPHA</Badge>
         </CardTitle>
         <CardDescription>
           Monitoring for the background AI Agent service
