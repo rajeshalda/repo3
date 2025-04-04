@@ -18,12 +18,12 @@ export function PM2Status() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { toast } = useToast();
   
-  const PM2_SERVICE_URL = 'http://localhost:3100';
+  const PM2_SERVICE_URL = process.env.NEXT_PUBLIC_PM2_SERVICE_URL || 'http://localhost:3100';
 
   const fetchStatus = async () => {
     setIsRefreshing(true);
     try {
-      const response = await fetch(`${PM2_SERVICE_URL}/api/status`);
+      const response = await fetch('/api/pm2/status');
       if (response.ok) {
         const data = await response.json();
         if (data.success) {

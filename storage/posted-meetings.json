@@ -29,7 +29,17 @@
   },
   "neha@m365x65088219.onmicrosoft.com": {
     "email": "neha@m365x65088219.onmicrosoft.com",
-    "lastPostedDate": "2025-04-03T11:20:59.920 IST",
-    "meetings": []
+    "lastPostedDate": "2025-04-05T00:26:39.154 IST",
+    "meetings": [
+      {
+        "id": "neha@m365x65088219.onmicrosoft.com_umg_2025-04-03T08:00:00.0000000",
+        "subject": "umg",
+        "meetingDate": "2025-04-03T08:00:00.0000000",
+        "postedDate": "2025-04-05T00:26:39.154 IST",
+        "taskId": "16600385",
+        "taskName": "UMG Task",
+        "duration": 8
+      }
+    ]
   }
 }

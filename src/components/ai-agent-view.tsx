@@ -691,10 +691,8 @@ export function AIAgentView() {
     // Store the state in localStorage for UI purposes
     localStorage.setItem('aiAgentEnabled', enabled.toString());
     
-    // Call the PM2 service API to enable/disable agent there
-    const PM2_SERVICE_URL = 'http://localhost:3100';
-    
-    fetch(`${PM2_SERVICE_URL}/api/agent-status`, {
+    // Call the PM2 service API through our Next.js API proxy
+    fetch('/api/pm2/agent-status', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -736,9 +734,8 @@ export function AIAgentView() {
   useEffect(() => {
     // Check the PM2 service for current status
     const userEmail = session?.user?.email || 'default-user';
-    const PM2_SERVICE_URL = 'http://localhost:3100';
     
-    fetch(`${PM2_SERVICE_URL}/api/agent-status?userId=${encodeURIComponent(userEmail)}`)
+    fetch(`/api/pm2/agent-status?userId=${encodeURIComponent(userEmail)}`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -761,7 +758,7 @@ export function AIAgentView() {
     
     // Regular polling to update the UI with the latest status
     const statusInterval = setInterval(() => {
-      fetch(`${PM2_SERVICE_URL}/api/status`)
+      fetch('/api/pm2/status')
         .then(response => response.json())
         .then(data => {
           if (data.success) {
