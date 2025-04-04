@@ -80,7 +80,7 @@ export class PostedMeetingsStorage {
         if (!this.data[email]) {
             this.data[email] = {
                 email,
-                lastPostedDate: new Date().toISOString(),
+                lastPostedDate: this.getISTFormattedDate(),
                 meetings: []
             };
         }
@@ -99,17 +99,27 @@ export class PostedMeetingsStorage {
             id: meetingId,
             subject: meeting.subject,
             meetingDate: meeting.startTime,
-            postedDate: new Date().toISOString(),
+            postedDate: this.getISTFormattedDate(),
             taskId: meeting.taskId,
             taskName: meeting.taskName
         });
 
         // Update last posted date
-        this.data[email].lastPostedDate = new Date().toISOString();
+        this.data[email].lastPostedDate = this.getISTFormattedDate();
 
         await this.saveData();
         console.log('Successfully added meeting');
         console.log('===========================\n');
+    }
+
+    // Helper method to get formatted IST date
+    private getISTFormattedDate(): string {
+        // Create a timestamp in IST timezone (UTC+05:30)
+        const now = new Date();
+        const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+        
+        // Format: YYYY-MM-DDTHH:MM:SS IST
+        return istDate.toISOString().replace('Z', '') + ' IST';
     }
 
     async getPostedMeetings(email: string): Promise<PostedMeeting[]> {
@@ -169,7 +179,7 @@ export class PostedMeetingsStorage {
         await this.loadData();
         this.data[userEmail] = {
             email: userEmail,
-            lastPostedDate: new Date().toISOString(),
+            lastPostedDate: this.getISTFormattedDate(),
             meetings: []
         };
         await this.saveData();

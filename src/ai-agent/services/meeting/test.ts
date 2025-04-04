@@ -190,15 +190,38 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
     try {
         const accessToken = await getGraphToken();
         
-        // Get meetings from the last 7 days
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(endDate.getDate() - 7); // Look back 7 days instead of 14
+        // Get meetings for the current day (today) in IST timezone (UTC+05:30)
+        const now = new Date();
+        
+        // Create a Date object for the start of today in IST (00:00:00)
+        // 00:00:00 IST = Previous day 18:30:00 UTC (UTC+5:30)
+        const startDate = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate() - 1, // Previous day
+            18, // 18:30 UTC 
+            30,
+            0,
+            0
+        ));
+        
+        // Create a Date object for the end of today in IST (23:59:59.999)
+        // 23:59:59.999 IST = Today 18:29:59.999 UTC (UTC+5:30)
+        const endDate = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            18, // 18:29:59.999 UTC of current day
+            29,
+            59,
+            999
+        ));
 
         const startDateString = startDate.toISOString();
         const endDateString = endDate.toISOString();
         
-        console.log('Fetching meetings between:', startDateString, 'and', endDateString);
+        console.log('Fetching meetings for current day in IST (UTC+05:30)');
+        console.log('Date range (UTC):', startDateString, 'to', endDateString);
         
         const filter = encodeURIComponent(
             `start/dateTime ge '${startDateString}' and end/dateTime le '${endDateString}'`
@@ -210,7 +233,8 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const response = await fetch(url, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Prefer': 'outlook.timezone="Asia/Kolkata"' // Request times in IST timezone
             }
         });
 
@@ -224,7 +248,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         console.log('Received meetings data:', JSON.stringify(data, null, 2));
         
         const meetings = data.value;
-        console.log(`Found ${meetings.length} meetings from past 7 days:`, meetings.map((m: Meeting) => ({
+        console.log(`Found ${meetings.length} meetings for today:`, meetings.map((m: Meeting) => ({
             subject: m.subject,
             start: m.start.dateTime,
             end: m.end.dateTime

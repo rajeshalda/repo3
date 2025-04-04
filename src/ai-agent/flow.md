@@ -32,7 +32,8 @@ This document outlines the core workflows and architecture of the AI agent syste
    - Manages token usage and request quotas
 
 2. **Meeting Service**
-   - Fetches and processes meeting data from Microsoft Graph API
+   - Fetches and processes current day's meetings from Microsoft Graph API in IST timezone (UTC+05:30)
+   - Runs on a 5-minute cycle to continuously check for new meetings
    - Extracts attendance records and meeting duration
    - Uses AI to analyze meeting content and extract key information
    - Stores processed meeting data for future reference

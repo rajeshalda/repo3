@@ -20,16 +20,7 @@
   },
   "neha@m365x65088219.onmicrosoft.com": {
     "email": "neha@m365x65088219.onmicrosoft.com",
-    "lastPostedDate": "2025-03-28T09:21:03.218Z",
-    "meetings": [
-      {
-        "id": "neha@m365x65088219.onmicrosoft.com_wd issue_wd issue_2025-03-25T13:00:00.0000000",
-        "subject": "wd issue",
-        "meetingDate": "2025-03-25T13:00:00.0000000",
-        "postedDate": "2025-03-28T09:21:03.218Z",
-        "taskId": "16537632",
-        "taskName": "Infra  Task"
-      }
-    ]
+    "lastPostedDate": "2025-04-03T11:20:59.920 IST",
+    "meetings": []
   }
 }

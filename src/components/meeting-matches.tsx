@@ -516,7 +516,6 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const userId = session?.user?.email || '';
   const [selectedMeetings, setSelectedMeetings] = useState<Record<string, boolean>>({});
   const [isPostingMultiple, setIsPostingMultiple] = useState(false);
-  const [activeTab, setActiveTab] = useState('matched');
   const [selectedTasks, setSelectedTasks] = useState<Map<string, Task>>(new Map());
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
   
@@ -678,25 +677,14 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
   // Update getPostableMeetingsCount function to be more specific
   const getPostableMeetingsCount = () => {
-    if (activeTab === 'matched') {
-      return meetings.high.filter(m => {
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        const hasMatchedTask = m.matchedTask !== null;
-        return hasMatchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      }).length;
-    } else {
-      return meetings.unmatched.filter(m => {
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        const hasSelectedTask = selectedTasks.has(meetingKey);
-        return hasSelectedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      }).length;
-    }
+    return meetings.unmatched.filter(m => {
+      const hasAttendance = m.meeting.attendanceRecords.some(
+        record => record.name === session?.user?.name && record.duration > 0
+      );
+      const meetingKey = generateMeetingKey(m.meeting, userId);
+      const hasSelectedTask = selectedTasks.has(meetingKey);
+      return hasSelectedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
+    }).length;
   };
 
   // Update postAllMeetings function to handle both sections
@@ -707,21 +695,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
     try {
       // Get meetings based on active tab
-      const meetingsToPost = activeTab === 'matched' 
-        ? meetings.high.filter(m => {
-            const meetingKey = generateMeetingKey(m.meeting, userId);
-            const hasAttendance = m.meeting.attendanceRecords.some(
-              record => record.name === session?.user?.name && record.duration > 0
-            );
-            return m.matchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-          })
-        : meetings.unmatched.filter(m => {
-            const meetingKey = generateMeetingKey(m.meeting, userId);
-            const hasAttendance = m.meeting.attendanceRecords.some(
-              record => record.name === session?.user?.name && record.duration > 0
-            );
-            return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
-          });
+      const meetingsToPost = meetings.unmatched.filter(m => {
+        const meetingKey = generateMeetingKey(m.meeting, userId);
+        const hasAttendance = m.meeting.attendanceRecords.some(
+          record => record.name === session?.user?.name && record.duration > 0
+        );
+        return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
+      });
 
       const postedIds = new Set<string>();
 
@@ -740,7 +720,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
           const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
           const durationInSeconds = userAttendance.duration;
           const meetingKey = generateMeetingKey(result.meeting, userId);
-          const taskToUse = activeTab === 'matched' ? result.matchedTask! : selectedTasks.get(meetingKey)!;
+          const taskToUse = selectedTasks.get(meetingKey)!;
           
           const response = await fetch('/api/intervals/time-entries', {
             method: 'POST',
@@ -775,7 +755,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
       // Show notifications
       if (successCount > 0) {
-        toast.success(`Successfully posted ${successCount} ${activeTab} meetings`, {
+        toast.success(`Successfully posted ${successCount} unmatched meetings`, {
           position: "top-center",
           duration: 3000,
           style: {
@@ -790,7 +770,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
       if (failCount > 0) {
           setTimeout(() => {
-          toast.error(`Failed to post ${failCount} ${activeTab} meetings`, {
+          toast.error(`Failed to post ${failCount} unmatched meetings`, {
               position: "top-center",
               duration: 4000,
               style: {
@@ -814,17 +794,15 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     // Initialize selected meetings when meetings change
     const newSelectedMeetings = new Set<string>();
     
-    if (activeTab === 'matched') {
-      meetings.high.forEach(m => {
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        if (m.matchedTask) {
-          newSelectedMeetings.add(meetingKey);
-        }
-      });
-    }
+    meetings.unmatched.forEach(m => {
+      const meetingKey = generateMeetingKey(m.meeting, userId);
+      if (m.matchedTask) {
+        newSelectedMeetings.add(meetingKey);
+      }
+    });
     
     setSelectedMeetingKeys(newSelectedMeetings);
-  }, [meetings, activeTab, userId]);
+  }, [meetings, userId]);
 
   // Helper functions for unmatched meetings
   const isSelected = (meetingId: string) => !!selectedMeetings[meetingId];
@@ -862,16 +840,10 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     <div className="bg-background">
       {/* Content */}
       <div className="p-0">
-        <Tabs defaultValue="matched" className="w-full" onValueChange={(value) => setActiveTab(value)}>
-      <div className="border-b">
+        <Tabs defaultValue="unmatched" className="w-full">
+          <div className="border-b">
             <div className="px-4 flex justify-between items-center">
               <TabsList className="h-10 bg-transparent gap-4">
-                <TabsTrigger 
-                  value="matched"
-                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
-                >
-                  Matched ({meetings.high.length})
-                </TabsTrigger>
                 <TabsTrigger 
                   value="unmatched"
                   className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
@@ -880,183 +852,104 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                 </TabsTrigger>
               </TabsList>
               {/* Post All button for each section */}
-          {getPostableMeetingsCount() > 0 && (
-            <Button
-              onClick={postAllMeetings}
-              disabled={isPostingMultiple}
-              size="sm"
+              {getPostableMeetingsCount() > 0 && (
+                <Button
+                  onClick={postAllMeetings}
+                  disabled={isPostingMultiple}
+                  size="sm"
                   className="mr-4"
-            >
-              {isPostingMultiple ? (
-                <>
-                  <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
-                  Posting...
-                </>
-              ) : (
-                    <>Post All {activeTab === "matched" ? "Matched" : "Unmatched"} ({getPostableMeetingsCount()})</>
+                >
+                  {isPostingMultiple ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                      Posting...
+                    </>
+                  ) : (
+                    <>Post All Unmatched ({getPostableMeetingsCount()})</>
+                  )}
+                </Button>
               )}
-            </Button>
-          )}
-        </div>
-      </div>
+            </div>
+          </div>
 
           <div className="h-auto overflow-y-auto">
-            <TabsContent value="matched" className="p-0 h-full">
-              <div className="rounded-md">
-                {meetings.high.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                        <TableHead className="w-12 sticky top-0 bg-background z-10">
-                      <Checkbox
-                            checked={meetings.high.every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
-                        onCheckedChange={(checked) => {
-                              const newKeys = new Set(selectedMeetingKeys);
-                              meetings.high.forEach(m => {
-                                const key = generateMeetingKey(m.meeting, userId);
-                            if (checked) {
-                                  newKeys.add(key);
-                            } else {
-                                  newKeys.delete(key);
-                            }
-                          });
-                              setSelectedMeetingKeys(newKeys);
-                        }}
-                      />
-                    </TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {meetings.high.map((result, index) => (
-                    <MatchRow
-                      key={`high-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
-                      result={result}
-                      onMeetingPosted={handleMeetingPosted}
-                      postedMeetingIds={Array.from(postedMeetingIds)}
-                      selectedTasks={selectedTasks}
-                      source={source}
-                      onTaskSelect={(task) => {
-                        const meetingKey = generateMeetingKey(result.meeting, userId);
-                        const updatedTasks = new Map(selectedTasks);
-                        if (task) {
-                          updatedTasks.set(meetingKey, task);
-                          setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
-                        } else {
-                          updatedTasks.delete(meetingKey);
-                          setSelectedMeetingKeys(prev => {
-                            const next = new Set(prev);
-                            next.delete(meetingKey);
-                            return next;
-                          });
-                        }
-                        setSelectedTasks(updatedTasks);
-                      }}
-                      isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
-                      onSelectChange={(selected) => {
-                        const meetingKey = generateMeetingKey(result.meeting, userId);
-                        setSelectedMeetingKeys(prev => {
-                          const next = new Set(prev);
-                          if (selected) {
-                            next.add(meetingKey);
-                          } else {
-                            next.delete(meetingKey);
-                          }
-                          return next;
-                        });
-                      }}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-                ) : (
-                  <div className="flex items-center justify-center h-32 text-muted-foreground">
-                    No matched meetings found
-          </div>
-        )}
-            </div>
-            </TabsContent>
-
             <TabsContent value="unmatched" className="p-0 h-full">
               <div className="rounded-md">
                 {meetings.unmatched.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
                         <TableHead className="w-12 sticky top-0 bg-background z-10">
-                      <Checkbox
+                          <Checkbox
                             checked={meetings.unmatched.every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
-                        onCheckedChange={(checked) => {
+                            onCheckedChange={(checked) => {
                               const newKeys = new Set(selectedMeetingKeys);
                               meetings.unmatched.forEach(m => {
                                 const key = generateMeetingKey(m.meeting, userId);
-                            if (checked) {
+                                if (checked) {
                                   newKeys.add(key);
-                            } else {
+                                } else {
                                   newKeys.delete(key);
-                            }
-                          });
+                                }
+                              });
                               setSelectedMeetingKeys(newKeys);
-                        }}
-                      />
-                    </TableHead>
+                            }}
+                          />
+                        </TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {meetings.unmatched.map((result, index) => (
-                    <MatchRow
-                      key={`unmatched-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
-                      result={result}
-                      onMeetingPosted={handleMeetingPosted}
-                      postedMeetingIds={Array.from(postedMeetingIds)}
-                      selectedTasks={selectedTasks}
-                      source={source}
-                      onTaskSelect={(task) => {
-                        const meetingKey = generateMeetingKey(result.meeting, userId);
-                        const updatedTasks = new Map(selectedTasks);
-                        if (task) {
-                          updatedTasks.set(meetingKey, task);
-                          setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
-                        } else {
-                          updatedTasks.delete(meetingKey);
-                          setSelectedMeetingKeys(prev => {
-                            const next = new Set(prev);
-                            next.delete(meetingKey);
-                            return next;
-                          });
-                        }
-                        setSelectedTasks(updatedTasks);
-                      }}
-                      isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
-                      onSelectChange={(selected) => {
-                        const meetingKey = generateMeetingKey(result.meeting, userId);
-                        setSelectedMeetingKeys(prev => {
-                          const next = new Set(prev);
-                          if (selected) {
-                            next.add(meetingKey);
-                          } else {
-                            next.delete(meetingKey);
-                          }
-                          return next;
-                        });
-                      }}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-        ) : (
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {meetings.unmatched.map((result, index) => (
+                        <MatchRow
+                          key={`unmatched-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                          result={result}
+                          onMeetingPosted={handleMeetingPosted}
+                          postedMeetingIds={Array.from(postedMeetingIds)}
+                          selectedTasks={selectedTasks}
+                          source={source}
+                          onTaskSelect={(task) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            const updatedTasks = new Map(selectedTasks);
+                            if (task) {
+                              updatedTasks.set(meetingKey, task);
+                              setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
+                            } else {
+                              updatedTasks.delete(meetingKey);
+                              setSelectedMeetingKeys(prev => {
+                                const next = new Set(prev);
+                                next.delete(meetingKey);
+                                return next;
+                              });
+                            }
+                            setSelectedTasks(updatedTasks);
+                          }}
+                          isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
+                          onSelectChange={(selected) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            setSelectedMeetingKeys(prev => {
+                              const next = new Set(prev);
+                              if (selected) {
+                                next.add(meetingKey);
+                              } else {
+                                next.delete(meetingKey);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
                   <div className="flex items-center justify-center h-32 text-muted-foreground">
-            No unmatched meetings found
-          </div>
-        )}
-          </div>
+                    No unmatched meetings found
+                  </div>
+                )}
+              </div>
             </TabsContent>
           </div>
         </Tabs>

@@ -77,14 +77,25 @@ async function main() {
             );
             const targetUser = userResponse.data;
 
-            // Step 2: Get meetings from the last 7 days
-            const startDate = new Date();
-            startDate.setDate(startDate.getDate() - 7);
-            const endDate = new Date();
+            // Step 2: Get meetings for the current day in IST timezone (UTC+05:30)
+            // Create date objects for start and end of the current day in IST
+            const now = new Date();
+            
+            // Start of day in IST (00:00:00)
+            const startDate = new Date(now);
+            startDate.setHours(0, 0, 0, 0);
+            // Adjust for IST offset (subtract 5 hours and 30 minutes to get UTC time)
+            startDate.setHours(startDate.getHours() - 5, startDate.getMinutes() - 30);
+            
+            // End of day in IST (23:59:59)
+            const endDate = new Date(now);
+            endDate.setHours(23, 59, 59, 999);
+            // Adjust for IST offset (subtract 5 hours and 30 minutes to get UTC time)
+            endDate.setHours(endDate.getHours() - 5, endDate.getMinutes() - 30);
 
             const startDateString = startDate.toISOString();
             const endDateString = endDate.toISOString();
-            console.log(`📅 Retrieving meetings from ${formatDate(startDateString)} to ${formatDate(endDateString)}\n`);
+            console.log(`📅 Retrieving meetings for today (IST): ${formatDate(startDateString)} to ${formatDate(endDateString)}\n`);
 
             const filter = encodeURIComponent(
                 `start/dateTime ge '${startDateString}' and end/dateTime le '${endDateString}'`

@@ -30,6 +30,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { PM2Status } from './pm2-status';
+import { formatDateIST, DEFAULT_DATE_FORMAT } from "@/lib/utils";
 
 interface PostedMeeting {
   meetingId: string;
@@ -794,14 +795,7 @@ export function AIAgentView() {
 
   // Add a date formatter function near the other utility functions
   const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    return formatDateIST(dateString, DEFAULT_DATE_FORMAT);
   };
 
   // Add clearPostedMeetings handler
@@ -815,14 +809,25 @@ export function AIAgentView() {
         throw new Error('Failed to clear meetings');
       }
       
-      // Clear the local state
-      setPostedMeetings([]);
-      success('Successfully cleared posted meetings');
-      addLog('Cleared all posted meetings', 'success');
+      const data = await response.json();
+      
+      // Only clear the current user's meetings from the local state
+      if (session?.user?.email) {
+        const userEmail = session.user.email;
+        setPostedMeetings(prevMeetings => 
+          prevMeetings.filter(meeting => meeting.userId !== userEmail)
+        );
+      } else {
+        // Refresh meetings from the server if we can't filter locally
+        await fetchPostedMeetings();
+      }
+      
+      success('Successfully cleared your posted meetings');
+      addLog('Cleared your posted meetings', 'success');
     } catch (err) {
       console.error('Error clearing meetings:', err);
-      error('Failed to clear meetings');
-      addLog('Failed to clear posted meetings', 'error');
+      error('Failed to clear your meetings');
+      addLog('Failed to clear your posted meetings', 'error');
     }
   };
 
@@ -1136,7 +1141,7 @@ export function AIAgentView() {
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.worktype)}</TableCell>
                       <TableCell>{meeting.timeEntry.billable === 't' ? 'Yes' : 'No'}</TableCell>
-                      <TableCell>{formatDateTime(meeting.timeEntry.datemodified)}</TableCell>
+                      <TableCell>{formatDateTime(meeting.postedAt)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
