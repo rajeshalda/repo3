@@ -131,18 +131,24 @@ export async function POST(request: Request) {
                 const tasks = await intervalsApi.getTasks();
                 const taskDetails = tasks.find((t: { id: string; title?: string }) => t.id === taskId);
                 const taskName = taskDetails?.title || `Task ${taskId}`;
+
+                // Convert attendance records durations from seconds to minutes
+                const processedAttendanceRecords = (attendanceRecords || []).map((record: { email: string; name: string; duration: number }) => ({
+                    ...record,
+                    duration: Math.round(record.duration / 60) // Convert seconds to minutes
+                }));
                 
                 await postedMeetingsStorage.addPostedMeeting(
                     session.user.email,
                     {
-                        id: meetingId || '',
                         subject: subject || 'No subject',
                         startTime: startTime || new Date().toISOString(),
                         taskId: taskId,
                         taskName: taskName
-                    }
+                    },
+                    processedAttendanceRecords  // Pass the processed records with minutes
                 );
-                console.log('Meeting stored in Manual App storage');
+                console.log('Meeting stored in Manual App storage with duration in minutes');
             } else {
                 // For AI agent posts, store only in AIAgentPostedMeetingsStorage
                 const aiAgentStorage = new AIAgentPostedMeetingsStorage();

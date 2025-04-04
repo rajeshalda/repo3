@@ -1,28 +1,41 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-interface PostedMeeting {
-    id: string;  // This will be our unique key: userId_meetingName_meetingId_time
+interface Meeting {
     subject: string;
-    meetingDate: string;
-    postedDate: string;
-    taskId?: string;  // Add taskId field
-    taskName?: string;  // Add taskName field
+    startTime: string;
+    taskId?: string;
+    taskName?: string;
+}
+
+interface AttendanceRecord {
+    email: string;
+    name: string;
+    duration: number;
 }
 
 interface UserMeetings {
-    email: string;
-    lastPostedDate: string;
     meetings: PostedMeeting[];
+    lastPostedDate: string;
 }
 
-interface StorageData {
+interface PostedMeetingsData {
     [email: string]: UserMeetings;
+}
+
+interface PostedMeeting {
+    id: string;
+    subject: string;
+    meetingDate: string;
+    postedDate: string;
+    taskId?: string;
+    taskName?: string;
+    duration: number;
 }
 
 export class PostedMeetingsStorage {
     private storagePath: string;
-    private data: StorageData = {};
+    private data: PostedMeetingsData = {};
 
     constructor() {
         this.storagePath = path.join(process.cwd(), 'storage', 'posted-meetings.json');
@@ -42,57 +55,26 @@ export class PostedMeetingsStorage {
         await fs.writeFile(this.storagePath, JSON.stringify(this.data, null, 2));
     }
 
-    async addPostedMeeting(email: string, meeting: { 
-        id: string; 
-        subject: string; 
-        startTime: string; 
-        threadId?: string;
-        taskId?: string;
-        taskName?: string;
-    }) {
+    async addPostedMeeting(email: string, meeting: Meeting, attendanceRecords: AttendanceRecord[]) {
         await this.loadData();
-        console.log('\n=== ADDING POSTED MEETING ===');
-        
-        // Normalize the meeting subject
-        const normalizedSubject = meeting.subject 
-            ? meeting.subject
-                .trim()
-                .replace(/\s+/g, ' ')    // normalize spaces
-                .replace(/[^\w\s-]/g, '') // remove special chars except hyphen
-                .trim()
-            : 'unnamed-meeting';
-        
-        // Generate consistent ID using the same format as stored data (repeating subject)
-        const meetingId = `${email.toLowerCase()}_${normalizedSubject}_${normalizedSubject}_${meeting.startTime || new Date().toISOString()}`;
-
-        console.log('Adding meeting:', {
+        console.log('Adding posted meeting:', {
             email,
-            originalId: meeting.id,
-            normalizedId: meetingId,
-            subject: meeting.subject,
-            normalizedSubject,
-            startTime: meeting.startTime,
-            taskId: meeting.taskId,
-            taskName: meeting.taskName
+            meeting,
+            attendanceRecords
         });
 
-        // Initialize user data if it doesn't exist
+        const meetingId = `${email.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
+
         if (!this.data[email]) {
             this.data[email] = {
-                email,
-                lastPostedDate: this.getISTFormattedDate(),
-                meetings: []
+                meetings: [],
+                lastPostedDate: this.getISTFormattedDate()  // Initialize with current date
             };
         }
 
-        // Check if meeting is already posted using normalized ID
-        const existingMeeting = this.data[email].meetings.some(m => m.id === meetingId);
-
-        if (existingMeeting) {
-            console.log('Meeting already exists in storage');
-            console.log('===========================\n');
-            return;
-        }
+        // Find user's attendance record to get duration
+        const userAttendance = attendanceRecords.find(record => record.email === email);
+        const duration = userAttendance ? userAttendance.duration : 0;
 
         // Add new meeting
         this.data[email].meetings.push({
@@ -101,7 +83,8 @@ export class PostedMeetingsStorage {
             meetingDate: meeting.startTime,
             postedDate: this.getISTFormattedDate(),
             taskId: meeting.taskId,
-            taskName: meeting.taskName
+            taskName: meeting.taskName,
+            duration: duration  // Add duration field
         });
 
         // Update last posted date
@@ -178,9 +161,8 @@ export class PostedMeetingsStorage {
     async clearUserMeetings(userEmail: string): Promise<void> {
         await this.loadData();
         this.data[userEmail] = {
-            email: userEmail,
-            lastPostedDate: this.getISTFormattedDate(),
-            meetings: []
+            meetings: [],
+            lastPostedDate: this.getISTFormattedDate()
         };
         await this.saveData();
     }

@@ -45,6 +45,7 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
+import { formatDateIST } from "@/lib/utils";
 
 interface RawAttendanceRecord {
   identity: {
@@ -781,9 +782,6 @@ export default function DashboardPage() {
                       <span>Total meetings in period:</span>
                       <span className="font-medium">{meetingsData?.totalMeetingsInPeriod || 0}</span>
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1 truncate">
-                      {getDateRangeText()}
-                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -827,7 +825,7 @@ export default function DashboardPage() {
                     {meetingsLoading ? (
                       <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                     ) : getLastPostedDate() ? (
-                      new Date(getLastPostedDate()!).toLocaleDateString()
+                      formatDateIST(getLastPostedDate()!, { dateStyle: 'long' })
                     ) : (
                       'No posts yet'
                     )}
@@ -902,8 +900,8 @@ export default function DashboardPage() {
                             <TableHead>Meeting Name</TableHead>
                             <TableHead>Date and Time</TableHead>
                             <TableHead>Schedule Duration</TableHead>
-                            <TableHead>Actual Duration</TableHead>
-                            <TableHead>Attendance</TableHead>
+                            <TableHead>Meeting Attended Duration</TableHead>
+                            <TableHead className="text-right pr-8">Attendance</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -1008,7 +1006,7 @@ export default function DashboardPage() {
                                       <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">Meeting did not start</span>
                                     )}
                                   </TableCell>
-                                  <TableCell className="px-4 py-3 text-center">
+                                  <TableCell className="px-4 py-3 text-right pr-8">
                                     {meeting.attendanceRecords.some(record => record.name === session?.user?.name) ? (
                                       <Badge variant="success" className="bg-green-100 text-green-800 border border-green-200 hover:bg-green-200">
                                         <svg 
@@ -1227,7 +1225,7 @@ export default function DashboardPage() {
         {/* Main Content Area */}
         <main className="flex-1 overflow-hidden px-2 sm:px-0">
           <div className="h-full overflow-y-auto">
-            <div className="space-y-4">
+            <div className="space-y-4 pb-16">
               {renderCurrentView()}
             </div>
           </div>

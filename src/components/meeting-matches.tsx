@@ -303,29 +303,40 @@ function MatchRow({
       }
 
       const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
-      const durationInSeconds = userAttendance.duration;
-      const meetingKey = generateMeetingKey(result.meeting, session?.user?.email || '');
+      
+      // Calculate total duration in seconds from attendance intervals
+      const totalDurationInSeconds = userAttendance.intervals.reduce(
+        (total, interval) => total + interval.durationInSeconds,
+        0
+      );
 
       const response = await fetch('/api/intervals/time-entries', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           taskId: selectedTask.id,
           date: meetingDate,
-          time: durationInSeconds,
+          time: totalDurationInSeconds,
           description: result.meeting.subject,
           meetingId: result.meeting.meetingInfo?.meetingId || result.meeting.subject,
           subject: result.meeting.subject,
           startTime: result.meeting.startTime,
           confidence: result.confidence,
-          // Set isManualPost based on the source prop
-          isManualPost: source !== 'ai-agent'
+          isManualPost: source !== 'ai-agent',
+          attendanceRecords: [{
+            email: session?.user?.email || '',
+            name: session?.user?.name || '',
+            duration: totalDurationInSeconds,
+            intervals: userAttendance.intervals
+          }]
         }),
       });
 
       const postResult = await response.json();
       if (postResult.success) {
-        const decimalHours = Number((durationInSeconds / 3600).toFixed(2));
+        const decimalHours = Number((totalDurationInSeconds / 3600).toFixed(2));
         toast.success(`Successfully posted ${decimalHours} hours to Intervals`, {
           position: "top-center",
           duration: 3000,
@@ -734,7 +745,11 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
         try {
           const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
-          const durationInSeconds = userAttendance.duration;
+          // Calculate total duration in seconds from attendance intervals
+          const totalDurationInSeconds = userAttendance.intervals.reduce(
+            (total, interval) => total + interval.durationInSeconds,
+            0
+          );
           const meetingKey = generateMeetingKey(result.meeting, userId);
           const taskToUse = activeTab === 'matched' ? result.matchedTask! : selectedTasks.get(meetingKey)!;
 
@@ -746,8 +761,18 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             body: JSON.stringify({
               taskId: taskToUse.id,
               date: meetingDate,
-              duration: durationInSeconds,
-              note: result.meeting.subject,
+              time: totalDurationInSeconds,
+              description: result.meeting.subject,
+              meetingId: result.meeting.meetingInfo?.meetingId || result.meeting.subject,
+              subject: result.meeting.subject,
+              startTime: result.meeting.startTime,
+              isManualPost: source !== 'ai-agent',
+              attendanceRecords: [{
+                email: session?.user?.email || '',
+                name: session?.user?.name || '',
+                duration: totalDurationInSeconds,
+                intervals: userAttendance.intervals
+              }]
             }),
           });
 

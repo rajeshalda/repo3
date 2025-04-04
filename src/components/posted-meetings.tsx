@@ -17,6 +17,7 @@ interface PostedMeeting {
   postedDate: string;
   taskId?: string;
   taskName?: string;
+  duration?: number;  // Duration in minutes
 }
 
 interface PostedMeetingsProps {
@@ -58,6 +59,12 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
               <div className="text-base font-semibold break-words">{meeting.subject}</div>
             </div>
             
+            {/* Duration */}
+            <div>
+              <div className="text-sm font-medium text-muted-foreground mb-1">Duration</div>
+              <div className="text-base">{meeting.duration ? `${meeting.duration} minutes` : 'N/A'}</div>
+            </div>
+
             {/* Date and Time Info */}
             <div className="flex items-start justify-between pt-2 border-t">
               <div className="space-y-1">
@@ -91,10 +98,11 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-[35%] font-semibold">Meeting Subject</TableHead>
-            <TableHead className="w-[25%] whitespace-nowrap font-semibold">Meeting Date</TableHead>
+            <TableHead className="w-[30%] font-semibold">Meeting Subject</TableHead>
+            <TableHead className="w-[20%] whitespace-nowrap font-semibold">Meeting Date</TableHead>
+            <TableHead className="w-[15%] font-semibold">Duration</TableHead>
             <TableHead className="w-[20%] font-semibold">Task Name</TableHead>
-            <TableHead className="w-[20%] whitespace-nowrap font-semibold">Posted Date & Time</TableHead>
+            <TableHead className="w-[15%] whitespace-nowrap font-semibold">Posted Date & Time</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -107,6 +115,9 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
               </TableCell>
               <TableCell className="whitespace-nowrap py-4">
                 {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
+              </TableCell>
+              <TableCell className="py-4">
+                {meeting.duration ? `${meeting.duration} minutes` : 'N/A'}
               </TableCell>
               <TableCell className="py-4">
                 {meeting.taskName ? (
