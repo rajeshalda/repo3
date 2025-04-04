@@ -518,6 +518,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const [isPostingMultiple, setIsPostingMultiple] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState<Map<string, Task>>(new Map());
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab] = useState('matched');
   
   // Add a matchesRef to detect actual changes in matches data
   const matchesRef = useRef(matches);
@@ -677,14 +678,25 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
   // Update getPostableMeetingsCount function to be more specific
   const getPostableMeetingsCount = () => {
-    return meetings.unmatched.filter(m => {
-      const hasAttendance = m.meeting.attendanceRecords.some(
-        record => record.name === session?.user?.name && record.duration > 0
-      );
-      const meetingKey = generateMeetingKey(m.meeting, userId);
-      const hasSelectedTask = selectedTasks.has(meetingKey);
-      return hasSelectedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-    }).length;
+    if (activeTab === 'matched') {
+      return meetings.high.filter(m => {
+        const hasAttendance = m.meeting.attendanceRecords.some(
+          record => record.name === session?.user?.name && record.duration > 0
+        );
+        const meetingKey = generateMeetingKey(m.meeting, userId);
+        const hasMatchedTask = m.matchedTask !== null;
+        return hasMatchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
+      }).length;
+    } else {
+      return meetings.unmatched.filter(m => {
+        const hasAttendance = m.meeting.attendanceRecords.some(
+          record => record.name === session?.user?.name && record.duration > 0
+        );
+        const meetingKey = generateMeetingKey(m.meeting, userId);
+        const hasSelectedTask = selectedTasks.has(meetingKey);
+        return hasSelectedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
+      }).length;
+    }
   };
 
   // Update postAllMeetings function to handle both sections
@@ -695,55 +707,53 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
     try {
       // Get meetings based on active tab
-      const meetingsToPost = meetings.unmatched.filter(m => {
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      });
+      const meetingsToPost = activeTab === 'matched' 
+        ? meetings.high.filter(m => {
+            const meetingKey = generateMeetingKey(m.meeting, userId);
+            const hasAttendance = m.meeting.attendanceRecords.some(
+              record => record.name === session?.user?.name && record.duration > 0
+            );
+            return m.matchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
+          })
+        : meetings.unmatched.filter(m => {
+            const meetingKey = generateMeetingKey(m.meeting, userId);
+            const hasAttendance = m.meeting.attendanceRecords.some(
+              record => record.name === session?.user?.name && record.duration > 0
+            );
+            return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
+          });
 
       const postedIds = new Set<string>();
 
       for (const result of meetingsToPost) {
+        const userAttendance = result.meeting.attendanceRecords.find(
+          record => record.name === session?.user?.name
+        );
+
+        if (!userAttendance) continue;
+
         try {
-          const userAttendance = result.meeting.attendanceRecords.find(
-            record => record.name === session?.user?.name
-          );
-
-          if (!userAttendance || !userAttendance.duration || userAttendance.duration <= 0) {
-            console.log(`Skipping meeting "${result.meeting.subject}" due to invalid attendance`);
-            failCount++;
-            continue;
-          }
-
           const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
           const durationInSeconds = userAttendance.duration;
           const meetingKey = generateMeetingKey(result.meeting, userId);
-          const taskToUse = selectedTasks.get(meetingKey)!;
-          
+          const taskToUse = activeTab === 'matched' ? result.matchedTask! : selectedTasks.get(meetingKey)!;
+
           const response = await fetch('/api/intervals/time-entries', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
               taskId: taskToUse.id,
               date: meetingDate,
-              time: durationInSeconds,
-              description: result.meeting.subject,
-              meetingId: result.meeting.meetingInfo?.meetingId || result.meeting.subject,
-              subject: result.meeting.subject,
-              startTime: result.meeting.startTime,
-              confidence: result.confidence,
-              // Set isManualPost based on the source prop
-              isManualPost: source !== 'ai-agent'
+              duration: durationInSeconds,
+              note: result.meeting.subject,
             }),
           });
 
-          const postResult = await response.json();
-          if (postResult.success) {
+          if (response.ok) {
             successCount++;
-            postedIds.add(meetingKey);
-            onMeetingPosted?.(meetingKey);
+            postedIds.add(result.meeting.meetingInfo?.meetingId || result.meeting.subject || '');
           } else {
             failCount++;
           }
@@ -755,35 +765,37 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
       // Show notifications
       if (successCount > 0) {
-        toast.success(`Successfully posted ${successCount} unmatched meetings`, {
+        toast.success(`Successfully posted ${successCount} ${activeTab} meetings`, {
           position: "top-center",
           duration: 3000,
           style: {
-            backgroundColor: "#22c55e",
-            color: "white",
-            fontSize: "16px",
-            borderRadius: "8px",
-            padding: "12px 24px"
+            backgroundColor: "rgb(0 192 97 / 0.9)",
+            color: "#fff",
           }
         });
       }
 
       if (failCount > 0) {
-          setTimeout(() => {
-          toast.error(`Failed to post ${failCount} unmatched meetings`, {
-              position: "top-center",
-              duration: 4000,
-              style: {
-                backgroundColor: "#ef4444",
-                color: "white",
-                fontSize: "16px",
-                borderRadius: "8px",
-                padding: "12px 24px"
-              }
-            });
+        setTimeout(() => {
+          toast.error(`Failed to post ${failCount} ${activeTab} meetings`, {
+            position: "top-center",
+            duration: 4000,
+            style: {
+              backgroundColor: "rgb(255 0 0 / 0.9)",
+              color: "#fff",
+            }
+          });
         }, successCount > 0 ? 3500 : 0);
       }
 
+      // Update posted meetings
+      if (postedIds.size > 0) {
+        postedIds.forEach(id => {
+          onMeetingPosted(id);
+        });
+      }
+    } catch (error) {
+      console.error('Error in postAllMeetings:', error);
     } finally {
       setIsPostingMultiple(false);
     }
@@ -840,10 +852,16 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     <div className="bg-background">
       {/* Content */}
       <div className="p-0">
-        <Tabs defaultValue="unmatched" className="w-full">
+        <Tabs defaultValue="matched" className="w-full" onValueChange={(value) => setActiveTab(value)}>
           <div className="border-b">
             <div className="px-4 flex justify-between items-center">
               <TabsList className="h-10 bg-transparent gap-4">
+                <TabsTrigger 
+                  value="matched"
+                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
+                >
+                  Matched ({meetings.high.length})
+                </TabsTrigger>
                 <TabsTrigger 
                   value="unmatched"
                   className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
@@ -865,7 +883,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                       Posting...
                     </>
                   ) : (
-                    <>Post All Unmatched ({getPostableMeetingsCount()})</>
+                    <>Post All {activeTab === "matched" ? "Matched" : "Unmatched"} ({getPostableMeetingsCount()})</>
                   )}
                 </Button>
               )}
@@ -873,6 +891,85 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
           </div>
 
           <div className="h-auto overflow-y-auto">
+            <TabsContent value="matched" className="p-0 h-full">
+              <div className="rounded-md">
+                {meetings.high.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-12 sticky top-0 bg-background z-10">
+                          <Checkbox
+                            checked={meetings.high.every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
+                            onCheckedChange={(checked) => {
+                              const newKeys = new Set(selectedMeetingKeys);
+                              meetings.high.forEach(m => {
+                                const key = generateMeetingKey(m.meeting, userId);
+                                if (checked) {
+                                  newKeys.add(key);
+                                } else {
+                                  newKeys.delete(key);
+                                }
+                              });
+                              setSelectedMeetingKeys(newKeys);
+                            }}
+                          />
+                        </TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {meetings.high.map((result, index) => (
+                        <MatchRow
+                          key={`high-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                          result={result}
+                          onMeetingPosted={handleMeetingPosted}
+                          postedMeetingIds={Array.from(postedMeetingIds)}
+                          selectedTasks={selectedTasks}
+                          source={source}
+                          onTaskSelect={(task) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            const updatedTasks = new Map(selectedTasks);
+                            if (task) {
+                              updatedTasks.set(meetingKey, task);
+                              setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
+                            } else {
+                              updatedTasks.delete(meetingKey);
+                              setSelectedMeetingKeys(prev => {
+                                const next = new Set(prev);
+                                next.delete(meetingKey);
+                                return next;
+                              });
+                            }
+                            setSelectedTasks(updatedTasks);
+                          }}
+                          isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
+                          onSelectChange={(selected) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            setSelectedMeetingKeys(prev => {
+                              const next = new Set(prev);
+                              if (selected) {
+                                next.add(meetingKey);
+                              } else {
+                                next.delete(meetingKey);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="flex items-center justify-center h-32 text-muted-foreground">
+                    No matched meetings found
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
             <TabsContent value="unmatched" className="p-0 h-full">
               <div className="rounded-md">
                 {meetings.unmatched.length > 0 ? (

@@ -1,8 +1,17 @@
 {
   "vishalkumar@m365x65088219.onmicrosoft.com": {
     "email": "vishalkumar@m365x65088219.onmicrosoft.com",
-    "lastPostedDate": "2025-03-28T09:54:44.051Z",
-    "meetings": []
+    "lastPostedDate": "2025-04-04T12:04:38.307 IST",
+    "meetings": [
+      {
+        "id": "vishalkumar@m365x65088219.onmicrosoft.com_meeting and meeting_meeting and meeting_2025-04-02T07:30:00.0000000",
+        "subject": "meeting and meeting",
+        "meetingDate": "2025-04-02T07:30:00.0000000",
+        "postedDate": "2025-04-04T12:04:38.307 IST",
+        "taskId": "16600387",
+        "taskName": "Sandisk Task"
+      }
+    ]
   },
   "ramesh@m365x65088219.onmicrosoft.com": {
     "email": "ramesh@m365x65088219.onmicrosoft.com",
