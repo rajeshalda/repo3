@@ -17,11 +17,15 @@ export function Logo({ className, size = 'md', variant = 'dashboard' }: LogoProp
   const dimensions = sizes[size];
   
   const logoSrc = variant === 'login' 
-    ? "/nathcorp-logo-large.svg"    // For login page (240x240)
-    : "/nathcorp-logo-small.svg";   // For dashboard header (140x140)
+    ? "/nathcorp-logo-large.png"    // Using PNG for login page
+    : "/nathcorp-logo-small.svg";   // Keep SVG for dashboard header
   
   return (
-    <div className={cn("relative flex items-center justify-center", className)}>
+    <div className={cn(
+      "relative flex items-center justify-center",
+      variant === 'login' && "p-6 rounded-2xl bg-white/10 dark:bg-white/20 border border-white/20 dark:border-white/30",
+      className
+    )}>
       <Image
         src={logoSrc}
         alt="NATHCORP"

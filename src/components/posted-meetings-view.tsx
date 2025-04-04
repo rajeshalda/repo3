@@ -134,15 +134,15 @@ export function PostedMeetingsView() {
     <div className="space-y-6">
       <Card>
         <CardHeader className="border-b">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <div className="flex items-center gap-4">
-              <h2 className="text-2xl font-semibold">Manually Posted Meetings</h2>
+              <h2 className="text-xl sm:text-2xl font-semibold">Manually Posted Meetings</h2>
               <div className="text-sm text-muted-foreground">
                 Total Posted: {postedMeetings.length}
               </div>
             </div>
             {postedMeetings.length > 0 && (
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2 items-center">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -213,7 +213,7 @@ export function PostedMeetingsView() {
                   size="sm" 
                   onClick={handleResetPosted}
                   disabled={isResetting}
-                  className="h-8"
+                  className="h-8 whitespace-nowrap"
                 >
                   {isResetting ? (
                     <RefreshCw className="h-4 w-4 mr-2 animate-spin" />

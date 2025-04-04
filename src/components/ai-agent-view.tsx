@@ -836,6 +836,28 @@ export function AIAgentView() {
     setProjectFilter("all");
   };
 
+  const [status, setStatus] = useState<string>('');
+  
+  const handleRefresh = async () => {
+    try {
+      const response = await fetch('/api/ai-agent/status');
+      const data = await response.json();
+      setStatus(data.status);
+    } catch (error) {
+      console.error('Error refreshing status:', error);
+    }
+  };
+
+  const handleRestart = async () => {
+    try {
+      await fetch('/api/ai-agent/restart', { method: 'POST' });
+      // Refresh status after restart
+      handleRefresh();
+    } catch (error) {
+      console.error('Error restarting agent:', error);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Card */}
@@ -1130,6 +1152,53 @@ export function AIAgentView() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PM2Status />
+      </div>
+
+      <div className="flex justify-between items-center gap-4 mt-4 mb-16 px-4">
+        <Button
+          onClick={handleRefresh}
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+          </svg>
+          Refresh
+        </Button>
+        <Button
+          onClick={handleRestart}
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+          Restart Agent
+        </Button>
       </div>
     </div>
   );

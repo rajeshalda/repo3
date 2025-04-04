@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IntervalsKeyDialog } from "@/components/intervals-key-dialog";
 import { UserStorage } from "@/lib/user-storage";
-import { Settings2, Loader2, Moon, Sun, Menu, LogOut } from "lucide-react";
+import { Settings2, Loader2, Moon, Sun, Menu, LogOut, X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { MeetingMatches } from '@/components/meeting-matches';
@@ -760,13 +760,13 @@ export default function DashboardPage() {
         return (
           <>
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-              <Card className="w-full">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6 px-2 sm:px-0">
+              <Card className="w-full min-w-[250px]">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6">
                   <CardTitle className="text-sm font-medium">Meetings Overview</CardTitle>
                 </CardHeader>
-                <CardContent className="px-4 sm:px-6">
-                  <div className="text-xl sm:text-2xl font-bold">
+                <CardContent className="px-3 sm:px-6">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold">
                     {meetingsLoading ? (
                       <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                     ) : (
@@ -781,7 +781,7 @@ export default function DashboardPage() {
                       <span>Total meetings in period:</span>
                       <span className="font-medium">{meetingsData?.totalMeetingsInPeriod || 0}</span>
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-1 truncate">
                       {getDateRangeText()}
                     </p>
                   </div>
@@ -850,7 +850,7 @@ export default function DashboardPage() {
             ) : (
               <div className="space-y-6">
                 <Tabs defaultValue="fetched-meetings" className="w-full">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
                     <TabsList>
                       <TabsTrigger value="fetched-meetings" className="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -878,7 +878,7 @@ export default function DashboardPage() {
                         disabled={isMatching} 
                         variant="default" 
                         size="sm"
-                        className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-2.5 rounded-lg flex items-center justify-center gap-2"
+                        className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-2.5 rounded-lg flex items-center justify-center gap-2 mr-2"
                       >
                         {isMatching ? (
                           <>
@@ -1112,18 +1112,40 @@ export default function DashboardPage() {
 
       {/* Mobile Sidebar */}
       {showMobileSidebar && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-gray-800/40" onClick={() => setShowMobileSidebar(false)} />
-          <div className="fixed inset-y-0 left-0 w-64 bg-background border-r">
-            <Sidebar 
-              currentView={currentView}
-              onViewChange={(view) => {
-                setCurrentView(view);
-                setShowMobileSidebar(false);
-              }}
-            />
+        <>
+          <div 
+            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
+            aria-hidden="true"
+            onClick={() => setShowMobileSidebar(false)}
+          />
+          <div 
+            className="fixed inset-y-0 left-0 z-50 w-full max-w-xs bg-background shadow-lg lg:hidden"
+          >
+            <div className="flex h-full flex-col">
+              <div className="flex items-center justify-between px-4 py-4 border-b">
+                <Logo size="sm" />
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setShowMobileSidebar(false)}
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+              <Sidebar 
+                currentView={currentView}
+                onViewChange={(view) => {
+                  setCurrentView(view);
+                  setShowMobileSidebar(false);
+                }}
+                className="border-none"
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* Main Content */}
@@ -1134,30 +1156,32 @@ export default function DashboardPage() {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="lg:hidden"
+              className="lg:hidden shrink-0"
               onClick={() => setShowMobileSidebar(true)}
             >
               <Menu className="h-5 w-5" />
             </Button>
             
-            <div className="flex flex-1 items-center justify-between">
-              <div className="flex items-center gap-4">
-                <Logo size="sm" />
-                <div className="hidden sm:flex items-center gap-2">
-                  <h1 className="text-lg font-semibold">Meeting Time Tracker</h1>
-                  <span className="inline-flex items-center rounded-md bg-blue-400/10 px-2 py-0.5 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-400/30 align-middle dark:bg-blue-500/20 dark:text-blue-300 dark:ring-blue-500/30">
+            <div className="flex flex-1 items-center justify-between gap-x-4">
+              <div className="flex items-center gap-4 min-w-0">
+                <Logo size="sm" className="shrink-0" />
+                <div className="hidden sm:flex items-center gap-2 min-w-0">
+                  <h1 className="text-lg font-semibold truncate">Meeting Time Tracker</h1>
+                  <span className="inline-flex items-center rounded-md bg-blue-400/10 px-2 py-0.5 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-400/30 align-middle dark:bg-blue-500/20 dark:text-blue-300 dark:ring-blue-500/30 shrink-0">
                     Beta
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 shrink-0">
                 {/* Only show DateRangePicker in header if in dashboard view */}
                 {currentView === 'dashboard' && meetingsData && dateRange?.from && dateRange?.to && (
-                  <DateRangePicker
-                    dateRange={dateRange}
-                    onDateRangeChange={handleDateRangeChange}
-                  />
+                  <div className="hidden sm:block">
+                    <DateRangePicker
+                      dateRange={dateRange}
+                      onDateRangeChange={handleDateRangeChange}
+                    />
+                  </div>
                 )}
                 
                 <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -1201,9 +1225,11 @@ export default function DashboardPage() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto relative min-h-[calc(100vh-4rem)]">
-          <div className="container mx-auto p-4 sm:p-6 space-y-6 pb-16">
-            {renderCurrentView()}
+        <main className="flex-1 overflow-hidden px-2 sm:px-0">
+          <div className="h-full overflow-y-auto">
+            <div className="space-y-4">
+              {renderCurrentView()}
+            </div>
           </div>
           <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
             <span className="opacity-70">v2.1.1  Powered by GPT-4o  © 2025 NathCorp Inc.</span>

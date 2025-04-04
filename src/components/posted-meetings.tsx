@@ -46,40 +46,91 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
     );
   }
 
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[40%] bg-muted py-3 font-semibold text-foreground">Meeting Subject</TableHead>
-          <TableHead className="hidden sm:table-cell bg-muted py-3 font-semibold text-foreground">Meeting Date</TableHead>
-          <TableHead className="hidden md:table-cell bg-muted py-3 font-semibold text-foreground">Task Name</TableHead>
-          <TableHead className="bg-muted py-3 font-semibold text-foreground">Posted</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {meetings.map((meeting) => (
-          <TableRow key={meeting.id}>
-            <TableCell className="font-medium">
-              <div className="truncate max-w-[200px] sm:max-w-[300px]">
-                {meeting.subject || 'Untitled Meeting'}
+  // Mobile view (card layout)
+  const MobileView = () => (
+    <div className="space-y-3 sm:hidden px-2">
+      {meetings.map((meeting) => (
+        <div key={meeting.id} className="bg-card rounded-lg border shadow-sm p-4">
+          <div className="space-y-3">
+            {/* Meeting Subject */}
+            <div>
+              <div className="text-sm font-medium text-muted-foreground mb-1">Meeting Subject</div>
+              <div className="text-base font-semibold break-words">{meeting.subject}</div>
+            </div>
+            
+            {/* Date and Time Info */}
+            <div className="flex items-start justify-between pt-2 border-t">
+              <div className="space-y-1">
+                <div className="text-xs font-medium text-muted-foreground">Date & Time</div>
+                <div className="text-sm">{formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}</div>
               </div>
-              <div className="text-xs text-muted-foreground sm:hidden">
-                {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
+              <div className="space-y-1 text-right">
+                <div className="text-xs font-medium text-muted-foreground">Posted Date & Time</div>
+                <div className="text-sm">{formatDateIST(meeting.postedDate, DEFAULT_DATE_FORMAT)}</div>
               </div>
-            </TableCell>
-            <TableCell className="hidden sm:table-cell whitespace-nowrap">
-              {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
-            </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {meeting.taskName || (meeting.taskId ? `Task ${meeting.taskId}` : '-')}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              <span className="hidden sm:inline">{formatDateIST(meeting.postedDate, DEFAULT_DATE_FORMAT)}</span>
-              <span className="sm:hidden">{formatDateIST(meeting.postedDate, TIME_ONLY_FORMAT)}</span>
-            </TableCell>
+            </div>
+
+            {/* Task Info */}
+            {meeting.taskName && (
+              <div className="pt-2 border-t">
+                <div className="text-xs font-medium text-muted-foreground mb-1">Associated Task</div>
+                <div className="text-sm font-medium inline-flex items-center px-2.5 py-1 rounded-md bg-secondary">
+                  {meeting.taskName}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // Desktop view (table layout)
+  const DesktopView = () => (
+    <div className="hidden sm:block w-full overflow-auto rounded-lg border bg-card shadow-sm">
+      <Table>
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="w-[35%] font-semibold">Meeting Subject</TableHead>
+            <TableHead className="w-[25%] whitespace-nowrap font-semibold">Meeting Date</TableHead>
+            <TableHead className="w-[20%] font-semibold">Task Name</TableHead>
+            <TableHead className="w-[20%] whitespace-nowrap font-semibold">Posted Date & Time</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {meetings.map((meeting) => (
+            <TableRow key={meeting.id} className="hover:bg-muted/50">
+              <TableCell className="font-medium py-4">
+                <div className="break-words pr-4">
+                  {meeting.subject}
+                </div>
+              </TableCell>
+              <TableCell className="whitespace-nowrap py-4">
+                {formatDateIST(meeting.meetingDate, DEFAULT_DATE_FORMAT)}
+              </TableCell>
+              <TableCell className="py-4">
+                {meeting.taskName ? (
+                  <div className="inline-flex items-center px-2.5 py-1 rounded-md bg-secondary text-sm font-medium">
+                    {meeting.taskName}
+                  </div>
+                ) : (
+                  <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell className="whitespace-nowrap py-4">
+                {formatDateIST(meeting.postedDate, DEFAULT_DATE_FORMAT)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  return (
+    <div className="w-full">
+      <MobileView />
+      <DesktopView />
+    </div>
   );
 } 

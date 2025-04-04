@@ -46,7 +46,7 @@
         "reason": "The meeting subject 'Infra date offset' contains the keyword 'Infra', which aligns with the task title 'Infra Task'. Additionally, the task is assigned to the user and matches the general development context. However, the lack of detailed analysis or explicit technical keywords reduces the confidence score."
       }
     ],
-    "status": "pending",
+    "status": "approved",
     "confidence": 0.6,
     "reason": "Low confidence match"
   },

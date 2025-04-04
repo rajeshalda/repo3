@@ -38,7 +38,7 @@ body {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -90,14 +90,24 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  * {
+    @apply box-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply antialiased min-h-screen bg-background text-foreground;
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
   
   /* Dark mode table styles */
@@ -142,5 +152,50 @@ body {
     .bg-blue-400\/10 {
       @apply bg-blue-500/20;
     }
+  }
+}
+
+@layer utilities {
+  .xs\:max-w-xs {
+    max-width: 20rem;
+  }
+
+  .xs\:p-2 {
+    padding: 0.5rem;
+  }
+
+  .xs\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  /* Prevent text from becoming too small on mobile */
+  @media (max-width: 640px) {
+    .prevent-text-shrink {
+      font-size: min(16px, 4.5vw);
+    }
+  }
+
+  /* Better table handling on small screens */
+  .table-responsive {
+    @apply w-full overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Custom scrollbar for better mobile experience */
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600;
+    border-radius: 4px;
   }
 }

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Button } from './button';
+import { Button } from '@/components/ui/button';
 import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, ChevronRight, FileCheck, Book } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { LucideIcon } from 'lucide-react';
 
 // Custom AIChipIcon component
 const AIChipIcon = ({ className }: { className?: string }) => (
@@ -25,16 +26,22 @@ const AIChipIcon = ({ className }: { className?: string }) => (
   </div>
 );
 
-interface SidebarProps {
-  className?: string;
-  currentView: string;
-  onViewChange: (view: string) => void;
+interface NavigationItem {
+  name: string;
+  icon: LucideIcon | typeof AIChipIcon;
+  view: string;
 }
 
-export function Sidebar({ className, currentView, onViewChange }: SidebarProps) {
+interface SidebarProps {
+  currentView: string;
+  onViewChange: (view: string) => void;
+  className?: string;
+}
+
+export function Sidebar({ currentView, onViewChange, className }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const navigationItems = [
+  const navigationItems: NavigationItem[] = [
     {
       name: 'Manual',
       icon: Book,
@@ -53,45 +60,50 @@ export function Sidebar({ className, currentView, onViewChange }: SidebarProps) 
   ];
 
   return (
-    <div className={cn(
-      "flex flex-col h-screen bg-background border-r transition-all duration-300",
-      isExpanded ? "w-64" : "w-16",
-      className
-    )}>
-      {/* Hamburger toggle */}
+    <div
+      className={cn(
+        "relative flex h-full flex-col border-r bg-background transition-all duration-300",
+        isExpanded ? "w-64" : "w-[4.5rem]",
+        className
+      )}
+    >
+      {/* Sidebar Toggle Button */}
       <div className="flex justify-end p-4">
-        <Button variant="ghost" size="icon" onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="h-8 w-8"
+        >
+          {isExpanded ? (
+            <ChevronLeft className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
         </Button>
       </div>
 
-      {/* Navigation Items */}
-      <nav className="flex-1">
-        <ul className="space-y-2 px-2">
-          {navigationItems.map((item) => (
-            <li key={item.view}>
-              <Button 
-                variant={currentView === item.view ? "secondary" : "ghost"}
-                className={cn(
-                  "w-full justify-start",
-                  !isExpanded && "justify-center px-2"
-                )}
-                onClick={() => onViewChange(item.view)}
-              >
-                <item.icon className="h-4 w-4 mr-2" />
-                {isExpanded && <span>{item.name}</span>}
-              </Button>
-            </li>
-          ))}
-        </ul>
+      <nav className="flex-1 space-y-1 p-4">
+        {navigationItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = currentView === item.view;
+
+          return (
+            <Button
+              key={item.name}
+              variant={isActive ? "secondary" : "ghost"}
+              className={cn(
+                "w-full justify-start gap-4 py-2",
+                !isExpanded && "justify-center px-2"
+              )}
+              onClick={() => onViewChange(item.view)}
+            >
+              <Icon className="h-5 w-5 shrink-0" />
+              {isExpanded && <span>{item.name}</span>}
+            </Button>
+          );
+        })}
       </nav>
-
-      {/* Mobile Menu Overlay */}
-      <div className="lg:hidden">
-        <Button variant="ghost" size="icon" className="fixed top-4 right-4 z-50" onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </Button>
-      </div>
     </div>
   );
 } 
