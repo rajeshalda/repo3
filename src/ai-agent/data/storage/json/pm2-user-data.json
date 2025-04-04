@@ -2,7 +2,7 @@
   "users": [
     {
       "userId": "neha@m365x65088219.onmicrosoft.com",
-      "enabled": true
+      "enabled": false
     },
     {
       "userId": "ramesh@m365x65088219.onmicrosoft.com",
@@ -14,10 +14,6 @@
     },
     {
       "userId": "vishalkumar@m365x65088219.onmicrosoft.com",
-      "enabled": false
-    },
-    {
-      "userId": "vijay@m365x65088219.onmicrosoft.com",
       "enabled": false
     }
   ]
