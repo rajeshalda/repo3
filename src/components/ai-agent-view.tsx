@@ -886,10 +886,26 @@ export function AIAgentView() {
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
-            Automatically process your meetings and create time entries using AI.
-            <span className="block mt-1 text-xs">Fetches meetings from the past 7 days.</span>
-          </p>
+          <div className="space-y-4">
+            <div>
+              <p className="text-muted-foreground">
+                Automatically process your meetings and create time entries using AI.
+              </p>
+            </div>
+            <div className="flex items-start space-x-2 bg-yellow-50 p-3 rounded-md">
+              <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="font-medium text-sm text-yellow-800 mb-1">For Better AI Task Matching:</h4>
+                <ul className="text-xs text-yellow-700 space-y-1">
+                  <li>• Use clear meeting names (e.g., "Sprint Planning - Project X" instead of "Discussion")</li>
+                  <li>• Match meeting names with task names</li>
+                  <li>• Use format: [Project] - [Meeting Type]</li>
+                  <li>• Verify AI matches before posting</li>
+                  <li>• Use full names, avoid abbreviations</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
