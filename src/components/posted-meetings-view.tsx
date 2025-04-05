@@ -25,6 +25,7 @@ interface PostedMeeting {
   postedDate: string;
   taskId?: string;
   taskName?: string;
+  duration?: number;
 }
 
 export function PostedMeetingsView() {
@@ -38,6 +39,25 @@ export function PostedMeetingsView() {
   const [taskFilter, setTaskFilter] = useState<string>("all");
   const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
 
+  // Add sorting state
+  type SortField = keyof PostedMeeting | 'duration';
+  const [sortConfig, setSortConfig] = useState<{
+    field: SortField;
+    direction: 'asc' | 'desc';
+  }>({
+    field: 'meetingDate',
+    direction: 'desc'
+  });
+
+  // Add sorting options
+  const sortOptions: { label: string; value: SortField }[] = [
+    { label: 'Meeting Date', value: 'meetingDate' },
+    { label: 'Meeting Name', value: 'subject' },
+    { label: 'Task Name', value: 'taskName' },
+    { label: 'Duration', value: 'duration' },
+    { label: 'Posted Date', value: 'postedDate' }
+  ];
+
   // Extract unique dates and tasks for filter dropdowns
   const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => 
     new Date(meeting.meetingDate).toLocaleDateString('en-US', {
@@ -47,6 +67,30 @@ export function PostedMeetingsView() {
     })
   )));
   const uniqueTasks = Array.from(new Set(postedMeetings.map(meeting => meeting.taskName || 'Unassigned')));
+
+  // Add sort function
+  const sortMeetings = (meetings: PostedMeeting[]) => {
+    return [...meetings].sort((a, b) => {
+      let aValue: string | number;
+      let bValue: string | number;
+
+      if (sortConfig.field === 'duration') {
+        aValue = a.duration || 0;
+        bValue = b.duration || 0;
+      } else {
+        aValue = (a[sortConfig.field as keyof PostedMeeting] as string) || '';
+        bValue = (b[sortConfig.field as keyof PostedMeeting] as string) || '';
+      }
+
+      // Convert to lowercase if string
+      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
 
   // Update filtered meetings whenever filters or meetings change
   useEffect(() => {
@@ -79,8 +123,11 @@ export function PostedMeetingsView() {
       );
     }
     
+    // Apply sorting
+    filtered = sortMeetings(filtered);
+    
     setFilteredMeetings(filtered);
-  }, [postedMeetings, filterText, dateFilter, taskFilter]);
+  }, [postedMeetings, filterText, dateFilter, taskFilter, sortConfig]);
 
   const fetchPostedMeetings = async () => {
     try {
@@ -123,11 +170,15 @@ export function PostedMeetingsView() {
     }
   };
 
-  // Add clearFilters function
+  // Update clearFilters to include sorting reset
   const clearFilters = () => {
     setFilterText("");
     setDateFilter("all");
     setTaskFilter("all");
+    setSortConfig({
+      field: 'meetingDate',
+      direction: 'desc'
+    });
   };
 
   return (
@@ -196,6 +247,54 @@ export function PostedMeetingsView() {
                       <Button onClick={clearFilters} variant="outline" size="sm" className="w-full">
                         Clear Filters
                       </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8"
+                    >
+                      {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                      Sort
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-60">
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Sort Meetings</h4>
+                      <div className="space-y-2">
+                        <Select
+                          value={sortConfig.field}
+                          onValueChange={(value: SortField) => setSortConfig(prev => ({ 
+                            ...prev, 
+                            field: value
+                          }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select field to sort" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sortOptions.map(option => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSortConfig(prev => ({
+                            ...prev,
+                            direction: prev.direction === 'asc' ? 'desc' : 'asc'
+                          }))}
+                          className="w-full"
+                        >
+                          {sortConfig.direction === 'asc' ? 'Sort Ascending ↑' : 'Sort Descending ↓'}
+                        </Button>
+                      </div>
                     </div>
                   </PopoverContent>
                 </Popover>

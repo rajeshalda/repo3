@@ -133,6 +133,63 @@ export function AIAgentView() {
   const [projectFilter, setProjectFilter] = useState<string>("all");
   const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
   
+  // Update sorting state to be more user-friendly with proper typing
+  type SortField = keyof PostedMeeting['timeEntry'] | 'meetingId' | 'postedAt' | 'taskName';
+  
+  const [sortConfig, setSortConfig] = useState<{
+    field: SortField;
+    direction: 'asc' | 'desc';
+  }>({
+    field: 'date',
+    direction: 'desc'
+  });
+
+  // Add sorting options with proper typing
+  const sortOptions: { label: string; value: SortField }[] = [
+    { label: 'Meeting Date', value: 'date' },
+    { label: 'Meeting Name', value: 'description' },
+    { label: 'Task Name', value: 'taskName' },
+    { label: 'Duration', value: 'time' },
+    { label: 'Client', value: 'client' },
+    { label: 'Project', value: 'project' },
+    { label: 'Module', value: 'module' },
+    { label: 'Work Type', value: 'worktype' },
+    { label: 'Posted Date', value: 'postedAt' }
+  ];
+
+  // Update sort handler with proper typing
+  const handleSort = (field: SortField) => {
+    setSortConfig(prev => ({
+      field,
+      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
+
+  // Update sortMeetings function with proper typing and null handling
+  const sortMeetings = (meetings: PostedMeeting[]) => {
+    return [...meetings].sort((a, b) => {
+      let aValue: string = '';
+      let bValue: string = '';
+
+      if (sortConfig.field === 'meetingId' || sortConfig.field === 'postedAt' || sortConfig.field === 'taskName') {
+        aValue = String(a[sortConfig.field] || '');
+        bValue = String(b[sortConfig.field] || '');
+      } else {
+        const field = sortConfig.field as keyof PostedMeeting['timeEntry'];
+        aValue = String(a.timeEntry[field] || '');
+        bValue = String(b.timeEntry[field] || '');
+      }
+
+      // Convert to lowercase for string comparison
+      aValue = aValue.toLowerCase();
+      bValue = bValue.toLowerCase();
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
   // Extract unique modules and work types for filter dropdowns
   const uniqueModules = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.module)));
   const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.worktype)));
@@ -148,7 +205,7 @@ export function AIAgentView() {
     return textarea.value;
   };
 
-  // Update filtered meetings whenever filters or meetings change
+  // Update useEffect dependencies
   useEffect(() => {
     let filtered = [...postedMeetings];
     
@@ -188,8 +245,11 @@ export function AIAgentView() {
       );
     }
     
+    // Apply sorting
+    filtered = sortMeetings(filtered);
+    
     setFilteredMeetings(filtered);
-  }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter]);
+  }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter, sortConfig]);
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -828,7 +888,7 @@ export function AIAgentView() {
     }
   };
 
-  // Add clearFilters function
+  // Update clearFilters to include sorting reset
   const clearFilters = () => {
     setFilterText("");
     setModuleFilter("all");
@@ -836,6 +896,10 @@ export function AIAgentView() {
     setDateFilter("all");
     setClientFilter("all");
     setProjectFilter("all");
+    setSortConfig({
+      field: 'date',
+      direction: 'desc'
+    });
   };
 
   const [status, setStatus] = useState<string>('');
@@ -1079,6 +1143,56 @@ export function AIAgentView() {
                     </div>
                   </PopoverContent>
                 </Popover>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8"
+                    >
+                      {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                      Sort
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-60">
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Sort Meetings</h4>
+                      <div className="space-y-2">
+                        <Select
+                          value={sortConfig.field}
+                          onValueChange={(value: SortField) => setSortConfig(prev => ({ 
+                            ...prev, 
+                            field: value
+                          }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select field to sort" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sortOptions.map(option => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSortConfig(prev => ({
+                            ...prev,
+                            direction: prev.direction === 'asc' ? 'desc' : 'asc'
+                          }))}
+                          className="w-full"
+                        >
+                          {sortConfig.direction === 'asc' ? 'Sort Ascending ↑' : 'Sort Descending ↓'}
+                        </Button>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
                 <div className="relative h-8">
                   <Search className="h-4 w-4 absolute left-2 top-2 text-muted-foreground" />
                   <Input
