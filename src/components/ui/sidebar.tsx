@@ -83,7 +83,7 @@ export function Sidebar({ currentView, onViewChange, className }: SidebarProps) 
         </Button>
       </div>
 
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-2 p-4">
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.view;
@@ -93,7 +93,7 @@ export function Sidebar({ currentView, onViewChange, className }: SidebarProps) 
               key={item.name}
               variant={isActive ? "secondary" : "ghost"}
               className={cn(
-                "w-full justify-start gap-4 py-2",
+                "w-full justify-start gap-4 py-3",
                 !isExpanded && "justify-center px-2"
               )}
               onClick={() => onViewChange(item.view)}

@@ -74,7 +74,21 @@
     "participants": [],
     "keyPoints": [],
     "suggestedTasks": [],
-    "status": "pending",
+    "status": "approved",
+    "confidence": 0,
+    "reason": "No matching tasks found"
+  },
+  {
+    "id": "AAMkAGM5YjUwMjJmLTY2ZTItNDdiNy1hYmIyLTI4MGQxM2QzNDk0NQBGAAAAAABCigKutEUbRbS2yE95NOFHBwBl3XOS-iXATYjFE5IsfXKjAAAAAAENAABl3XOS-iXATYjFE5IsfXKjAABGnkyRAAA=",
+    "userId": "neha@m365x65088219.onmicrosoft.com",
+    "subject": "cool",
+    "startTime": "2025-04-05T14:00:00.0000000",
+    "endTime": "2025-04-05T14:30:00.0000000",
+    "duration": 833,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [],
+    "status": "approved",
     "confidence": 0,
     "reason": "No matching tasks found"
   }

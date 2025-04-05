@@ -761,7 +761,7 @@ export default function DashboardPage() {
         return (
           <>
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6 px-2 sm:px-0">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8 px-4 sm:px-6">
               <Card className="w-full min-w-[250px]">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6">
                   <CardTitle className="text-sm font-medium">Meetings Overview</CardTitle>
@@ -846,7 +846,7 @@ export default function DashboardPage() {
                 />
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
                 <Tabs defaultValue="fetched-meetings" className="w-full">
                   <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
                     <TabsList>
