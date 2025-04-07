@@ -4,6 +4,28 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 import { UserStorage } from '@/lib/user-storage';
 import { IntervalsAPI } from '@/lib/intervals-api';
 
+// Add a simple in-memory rate limiting mechanism
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute in milliseconds
+const MAX_REQUESTS_PER_WINDOW = 10; // Maximum 10 requests per minute per user
+
+// Store request timestamps by user email
+const requestLog = new Map<string, number[]>();
+
+// Check if a user has exceeded their rate limit
+function isRateLimited(email: string): boolean {
+  const now = Date.now();
+  const userRequests = requestLog.get(email) || [];
+  
+  // Filter out requests older than the window
+  const recentRequests = userRequests.filter(timestamp => (now - timestamp) < RATE_LIMIT_WINDOW);
+  
+  // Update the request log
+  requestLog.set(email, [...recentRequests, now]);
+  
+  // Check if the number of recent requests exceeds the limit
+  return recentRequests.length >= MAX_REQUESTS_PER_WINDOW;
+}
+
 interface IntervalsApiError extends Error {
   response?: {
     status?: number;
@@ -39,6 +61,15 @@ export async function GET() {
     }
 
     console.log('Session user email:', session.user.email);
+
+    // Check rate limiting
+    if (isRateLimited(session.user.email)) {
+      console.warn(`Rate limit exceeded for user: ${session.user.email}`);
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
 
     // Initialize storage and load data
     const storage = new UserStorage();

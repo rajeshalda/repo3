@@ -59,5 +59,37 @@
         "duration": 14
       }
     ]
+  },
+  "pushkar@m365x65088219.onmicrosoft.com": {
+    "meetings": [
+      {
+        "id": "pushkar@m365x65088219.onmicrosoft.com_Air India Client Issue Call_2025-04-03T16:00:00.0000000",
+        "subject": "Air India Client Issue Call",
+        "meetingDate": "2025-04-03T16:00:00.0000000",
+        "postedDate": "2025-04-07T12:35:53.672 IST",
+        "taskId": "16600382",
+        "taskName": "Daily Status Report",
+        "duration": 0
+      },
+      {
+        "id": "pushkar@m365x65088219.onmicrosoft.com_Daily standup call_2025-04-03T18:00:00.0000000",
+        "subject": "Daily standup call",
+        "meetingDate": "2025-04-03T18:00:00.0000000",
+        "postedDate": "2025-04-07T12:36:17.447 IST",
+        "taskId": "16600382",
+        "taskName": "Daily Status Report",
+        "duration": 0
+      },
+      {
+        "id": "pushkar@m365x65088219.onmicrosoft.com_BWM mainframe development catch up call_2025-04-03T16:30:00.0000000",
+        "subject": "BWM mainframe development catch up call",
+        "meetingDate": "2025-04-03T16:30:00.0000000",
+        "postedDate": "2025-04-07T12:38:45.558 IST",
+        "taskId": "16602380",
+        "taskName": "Dev Task- Payroll website development",
+        "duration": 1
+      }
+    ],
+    "lastPostedDate": "2025-04-07T12:38:45.558 IST"
   }
 }
