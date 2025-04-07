@@ -178,7 +178,8 @@ export class IntervalsAPI {
     // Get task details by ID
     async getTaskDetails(taskId: string) {
         try {
-            const response = await this.request(`task/${taskId}`);
+            // Use the detailed endpoint to get full task details including client and project
+            const response = await this.request(`task/${taskId}?detailed=true`);
             if (!response || !response.task) {
                 console.warn(`No task found with ID ${taskId}`);
                 return null;

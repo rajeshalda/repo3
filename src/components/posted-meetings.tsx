@@ -18,6 +18,8 @@ interface PostedMeeting {
   taskId?: string;
   taskName?: string;
   duration?: number;  // Duration in minutes
+  client?: string;
+  project?: string;
 }
 
 interface PostedMeetingsProps {
@@ -86,6 +88,26 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
                 </div>
               </div>
             )}
+            
+            {/* Client and Project Info */}
+            {(meeting.client || meeting.project) && (
+              <div className="pt-2 border-t">
+                <div className="flex items-start justify-between">
+                  {meeting.client && (
+                    <div className="space-y-1">
+                      <div className="text-xs font-medium text-muted-foreground">Client</div>
+                      <div className="text-sm font-medium">{meeting.client}</div>
+                    </div>
+                  )}
+                  {meeting.project && (
+                    <div className="space-y-1 text-right">
+                      <div className="text-xs font-medium text-muted-foreground">Project</div>
+                      <div className="text-sm font-medium">{meeting.project}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ))}
@@ -98,11 +120,13 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-[30%] font-semibold">Meeting Subject</TableHead>
-            <TableHead className="w-[20%] whitespace-nowrap font-semibold">Meeting Date</TableHead>
-            <TableHead className="w-[15%] font-semibold">Duration</TableHead>
-            <TableHead className="w-[20%] font-semibold">Task Name</TableHead>
-            <TableHead className="w-[15%] whitespace-nowrap font-semibold">Posted Date & Time</TableHead>
+            <TableHead className="w-[25%] font-semibold">Meeting Subject</TableHead>
+            <TableHead className="w-[15%] whitespace-nowrap font-semibold">Meeting Date</TableHead>
+            <TableHead className="w-[10%] font-semibold">Duration</TableHead>
+            <TableHead className="w-[15%] font-semibold">Task Name</TableHead>
+            <TableHead className="w-[15%] font-semibold">Client</TableHead>
+            <TableHead className="w-[10%] font-semibold">Project</TableHead>
+            <TableHead className="w-[10%] whitespace-nowrap font-semibold">Posted Date</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -123,6 +147,24 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
                 {meeting.taskName ? (
                   <div className="inline-flex items-center px-2.5 py-1 rounded-md bg-secondary text-sm font-medium">
                     {meeting.taskName}
+                  </div>
+                ) : (
+                  <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell className="py-4">
+                {meeting.client ? (
+                  <div className="text-sm font-medium">
+                    {meeting.client}
+                  </div>
+                ) : (
+                  <span className="text-muted-foreground">-</span>
+                )}
+              </TableCell>
+              <TableCell className="py-4">
+                {meeting.project ? (
+                  <div className="text-sm font-medium">
+                    {meeting.project}
                   </div>
                 ) : (
                   <span className="text-muted-foreground">-</span>

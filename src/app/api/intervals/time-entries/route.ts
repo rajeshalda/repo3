@@ -129,8 +129,17 @@ export async function POST(request: Request) {
                 
                 // Get task details to store the task name
                 const tasks = await intervalsApi.getTasks();
-                const taskDetails = tasks.find((t: { id: string; title?: string }) => t.id === taskId);
+                const taskDetails = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
                 const taskName = taskDetails?.title || `Task ${taskId}`;
+                const client = taskDetails?.client || null;
+                const project = taskDetails?.project || null;
+
+                console.log('Task details for manual posting:', {
+                    taskId,
+                    taskName,
+                    client,
+                    project
+                });
 
                 // Convert attendance records durations from seconds to minutes
                 const processedAttendanceRecords = (attendanceRecords || []).map((record: { email: string; name: string; duration: number }) => ({
@@ -144,7 +153,9 @@ export async function POST(request: Request) {
                         subject: subject || 'No subject',
                         startTime: startTime || new Date().toISOString(),
                         taskId: taskId,
-                        taskName: taskName
+                        taskName: taskName,
+                        client: client,
+                        project: project
                     },
                     processedAttendanceRecords  // Pass the processed records with minutes
                 );
@@ -152,6 +163,33 @@ export async function POST(request: Request) {
             } else {
                 // For AI agent posts, store only in AIAgentPostedMeetingsStorage
                 const aiAgentStorage = new AIAgentPostedMeetingsStorage();
+                
+                // Get additional client and project information for the task
+                // This is critical for displaying this information in the UI
+                if (result.time) {
+                    try {
+                        // Get full task list and find detailed task information
+                        const tasks = await intervalsApi.getTasks();
+                        const taskInfo = tasks.find((t: any) => t.id === taskId);
+                        
+                        if (taskInfo) {
+                            // Get full task details from the taskInfo
+                            result.time.client = taskInfo.client || null;
+                            result.time.project = taskInfo.project || null;
+                            
+                            console.log('Task details for AI agent posting:', {
+                                taskId,
+                                taskName: taskInfo.title,
+                                client: taskInfo.client,
+                                project: taskInfo.project
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error enriching time entry with client/project info:', error);
+                        // Continue even if this fails
+                    }
+                }
+                
                 await aiAgentStorage.addPostedMeeting(
                     session.user.email,
                     {
@@ -159,7 +197,7 @@ export async function POST(request: Request) {
                         userId: session.user.email,
                         timeEntry: result.time,
                         rawResponse: result,
-                        postedAt: date // Use the actual meeting date
+                        postedAt: convertToIST(date) // Convert date to IST format
                     }
                 );
                 console.log('Meeting stored in AI Agent storage');
@@ -200,4 +238,16 @@ export async function POST(request: Request) {
             error: error instanceof Error ? error.message : 'Failed to process time entry request' 
         }, { status: 500 });
     }
+}
+
+// Helper method to convert a date string to IST format
+function convertToIST(dateStr: string): string {
+    // Instead of using the meeting date's time, use the current time
+    const now = new Date();
+    
+    // Add 5.5 hours to convert from UTC to IST
+    const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+    
+    // Return ISO string with IST marker
+    return istDate.toISOString().replace('Z', '') + ' IST';
 } 

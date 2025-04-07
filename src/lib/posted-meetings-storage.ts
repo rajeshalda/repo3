@@ -6,6 +6,8 @@ interface Meeting {
     startTime: string;
     taskId?: string;
     taskName?: string;
+    client?: string;
+    project?: string;
 }
 
 interface AttendanceRecord {
@@ -31,6 +33,8 @@ interface PostedMeeting {
     taskId?: string;
     taskName?: string;
     duration: number;
+    client?: string;
+    project?: string;
 }
 
 export class PostedMeetingsStorage {
@@ -84,7 +88,9 @@ export class PostedMeetingsStorage {
             postedDate: this.getISTFormattedDate(),
             taskId: meeting.taskId,
             taskName: meeting.taskName,
-            duration: duration  // Add duration field
+            duration: duration,  // Add duration field
+            client: meeting.client,
+            project: meeting.project
         });
 
         // Update last posted date

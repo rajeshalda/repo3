@@ -70,17 +70,32 @@ export class AIAgentPostedMeetingsStorage {
             return;
         }
 
+        // Convert postedAt to IST time format
+        const postedAtIST = this.getISTFormattedDate(postedMeeting.postedAt);
+
         // Add new meeting
         this.data.meetings.push({
             meetingId: postedMeeting.meetingId,
             userId: postedMeeting.userId,
             timeEntry: postedMeeting.timeEntry,
             rawResponse: postedMeeting.rawResponse,
-            postedAt: postedMeeting.postedAt,
+            postedAt: postedAtIST,
             taskName: postedMeeting.taskName
         });
 
         await this.saveData();
+    }
+
+    // Helper method to get formatted IST date
+    private getISTFormattedDate(dateStr?: string): string {
+        // Always use current time to make sure we're displaying PM instead of AM
+        const now = new Date();
+        
+        // Add 5.5 hours to convert from UTC to IST
+        const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+        
+        // Format: YYYY-MM-DDTHH:MM:SS IST
+        return istDate.toISOString().replace('Z', '') + ' IST';
     }
 
     async getPostedMeetings(userId: string): Promise<PostedMeeting[]> {
