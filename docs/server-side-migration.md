@@ -92,6 +92,9 @@ module.exports = {
 
 4. **Deployment Commands**
 ```bash
+# Install PM2 globally
+npm install -g pm2
+
 # Start everything with a single command (automatically starts PM2)
 npm run dev
 

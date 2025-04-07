@@ -5,6 +5,12 @@ class IntervalsAPI {
     constructor(apiKey) {
         this.baseUrl = 'https://api.myintervals.com/';
         this.apiKey = apiKey;
+        this.cache = {
+            tasks: {
+                data: null,
+                timestamp: 0
+            }
+        };
     }
     async request(endpoint, options = {}) {
         const url = `${this.baseUrl}${endpoint}`;
@@ -117,12 +123,40 @@ class IntervalsAPI {
     }
     // Get all tasks
     async getTasks() {
-        const response = await this.request('task');
-        if (!response || !response.task || !Array.isArray(response.task)) {
-            console.warn('No tasks found or invalid response format');
+        // Check if we have a cached response and it's less than 10 minutes old
+        const cacheExpiryTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+        const now = Date.now();
+        
+        if (this.cache.tasks.data && (now - this.cache.tasks.timestamp) < cacheExpiryTime) {
+            console.log('Using cached tasks data from', new Date(this.cache.tasks.timestamp).toISOString());
+            return this.cache.tasks.data;
+        }
+        
+        try {
+            console.log('Fetching fresh tasks data from Intervals API');
+            const response = await this.request('task');
+            
+            if (!response || !response.task || !Array.isArray(response.task)) {
+                console.warn('No tasks found or invalid response format');
+                return [];
+            }
+            
+            // Cache the response
+            this.cache.tasks.data = response.task;
+            this.cache.tasks.timestamp = now;
+            
+            return response.task;
+        } catch (error) {
+            console.error('Error fetching tasks:', error instanceof Error ? error.message : 'Unknown error');
+            
+            // If we have stale cache, still use it rather than returning nothing
+            if (this.cache.tasks.data) {
+                console.log('Using stale cached tasks data due to API error');
+                return this.cache.tasks.data;
+            }
+            
             return [];
         }
-        return response.task;
     }
     // Get project information
     async getProject(projectId) {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, type ReactElement, useRef, useCallback } from 'react';
+import React, { useState, useEffect, type ReactElement, useRef, useCallback, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from "@/components/ui/button";
 import {
@@ -127,6 +127,16 @@ interface MatchGroups {
   unmatched: MatchResult[];
 }
 
+// Add type definition for window to include our cache
+declare global {
+  interface Window {
+    __TASKS_CACHE?: {
+      tasks: Task[];
+      timestamp: number;
+    };
+  }
+}
+
 function generateMeetingKey(meeting: Meeting, userId: string): string {
   const meetingId = (meeting.meetingInfo?.meetingId || '').trim();
   const meetingName = meeting.subject.trim();
@@ -236,6 +246,8 @@ function MatchRow({
   const [availableTasks, setAvailableTasks] = useState<Task[]>([]);
   const [isTaskSelectOpen, setIsTaskSelectOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [tasksError, setTasksError] = useState<string | null>(null);
+  const [lastFetchTime, setLastFetchTime] = useState<number>(0);
   
   const meetingKey = generateMeetingKey(result.meeting, session?.user?.email || '');
   const selectedTask = selectedTasks.get(meetingKey) || result.matchedTask || null;
@@ -248,21 +260,92 @@ function MatchRow({
         task.project.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
+  // Global tasks cache to share between all MatchRow components
+  const tasksCache = useMemo(() => {
+    // Using window's key storage as a simple global store
+    if (typeof window !== 'undefined') {
+      if (!window.__TASKS_CACHE) {
+        window.__TASKS_CACHE = {
+          tasks: [],
+          timestamp: 0
+        };
+      }
+      return window.__TASKS_CACHE;
+    }
+    return { tasks: [], timestamp: 0 };
+  }, []);
+
   // Fetch available tasks
   const fetchTasks = async () => {
-    if (availableTasks.length > 0) return availableTasks; // Return cached tasks if available
+    // Return cached tasks from global cache if available and less than 10 minutes old
+    const now = Date.now();
+    const cacheExpiryTime = 10 * 60 * 1000; // 10 minutes in milliseconds
     
+    if (tasksCache.tasks.length > 0 && (now - tasksCache.timestamp) < cacheExpiryTime) {
+      console.log('Using globally cached tasks data');
+      setAvailableTasks(tasksCache.tasks);
+      return tasksCache.tasks;
+    }
+    
+    // Check if we've fetched tasks in the last 10 seconds (avoid spamming API)
+    if (now - lastFetchTime < 10000) {
+      console.log('Rate limiting: Avoiding too frequent API calls');
+      
+      // If we have any tasks already, just use them
+      if (availableTasks.length > 0) {
+        return availableTasks;
+      }
+      
+      // Otherwise use the global cache if available, even if expired
+      if (tasksCache.tasks.length > 0) {
+        setAvailableTasks(tasksCache.tasks);
+        return tasksCache.tasks;
+      }
+      
+      // If we don't have any tasks and no cache, notify user to wait
+      toast("Too many requests. Please wait a few seconds before trying again.");
+      
+      return [];
+    }
+    
+    setLastFetchTime(now);
     setIsLoadingTasks(true);
+    setTasksError(null);
+    
     try {
       const response = await fetch('/api/intervals/tasks');
-      if (!response.ok) throw new Error('Failed to fetch tasks');
+      
+      if (response.status === 429) {
+        // Handle rate limit
+        const retryAfter = response.headers.get('retry-after') || '60';
+        const errorMessage = `Rate limit exceeded. Please try again after ${retryAfter} seconds.`;
+        toast(errorMessage);
+        setTasksError(errorMessage);
+        return availableTasks.length > 0 ? availableTasks : tasksCache.tasks;
+      }
+      
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        const errorMessage = errorBody.error || `Failed to fetch tasks: ${response.status}`;
+        toast(errorMessage);
+        setTasksError(errorMessage);
+        return availableTasks.length > 0 ? availableTasks : tasksCache.tasks;
+      }
+      
       const tasks = await response.json();
+      
+      // Update both local state and global cache
       setAvailableTasks(tasks);
+      tasksCache.tasks = tasks;
+      tasksCache.timestamp = now;
+      
       return tasks;
     } catch (error) {
       console.error('Error fetching tasks:', error);
-      toast("Failed to load tasks. Please try again.");
-      return [];
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load tasks';
+      toast(errorMessage);
+      setTasksError(errorMessage);
+      return availableTasks.length > 0 ? availableTasks : tasksCache.tasks;
     } finally {
       setIsLoadingTasks(false);
     }
@@ -270,11 +353,23 @@ function MatchRow({
 
   // Preload tasks on component mount
   useEffect(() => {
-    fetchTasks();
-  }, []); // Empty dependency array to load once
+    // If we already have tasks in the global cache, use them immediately
+    if (tasksCache.tasks.length > 0) {
+      setAvailableTasks(tasksCache.tasks);
+    }
+    
+    // Then try to fetch fresh tasks if needed
+    if (tasksCache.tasks.length === 0 || Date.now() - tasksCache.timestamp > 10 * 60 * 1000) {
+      fetchTasks();
+    }
+  }, []);
 
   const handleTaskSelect = () => {
     setIsTaskSelectOpen(true);
+    // Refresh tasks when opening the selector
+    if (availableTasks.length === 0) {
+      fetchTasks();
+    }
   };
 
   // Add this function to handle task changes
