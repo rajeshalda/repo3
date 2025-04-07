@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 interface LogoProps {
   className?: string;
@@ -14,18 +16,20 @@ const sizes = {
 };
 
 export function Logo({ className, size = 'md', variant = 'dashboard' }: LogoProps) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const dimensions = sizes[size];
   
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const logoSrc = variant === 'login' 
-    ? "/nathcorp-logo-large.png"    // Using PNG for login page
+    ? (mounted && theme === 'dark' ? "/nathcorp-logo-darkmode.png" : "/nathcorp-logo-large.png")
     : "/nathcorp-logo-small.svg";   // Keep SVG for dashboard header
   
   return (
-    <div className={cn(
-      "relative flex items-center justify-center",
-      variant === 'login' && "p-6 rounded-2xl bg-white/10 dark:bg-white/20 border border-white/20 dark:border-white/30",
-      className
-    )}>
+    <div className={cn("relative flex items-center justify-center", className)}>
       <Image
         src={logoSrc}
         alt="NATHCORP"
