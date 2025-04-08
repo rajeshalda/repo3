@@ -134,12 +134,34 @@ export function PostedMeetingsView() {
       const response = await fetch('/api/meetings/posted');
       if (response.ok) {
         const data = await response.json();
-        setPostedMeetings(data.meetings || []);
-        setFilteredMeetings(data.meetings || []); // Initialize filtered meetings
+        
+        // Deduplicate meetings based on ID
+        const uniqueMeetings = deduplicateMeetings(data.meetings || []);
+        
+        setPostedMeetings(uniqueMeetings);
+        setFilteredMeetings(uniqueMeetings); // Initialize filtered meetings
       }
     } catch (error) {
       console.error('Error fetching posted meetings:', error);
     }
+  };
+
+  // Helper function to deduplicate meetings by ID
+  const deduplicateMeetings = (meetings: PostedMeeting[]): PostedMeeting[] => {
+    const meetingMap = new Map<string, PostedMeeting>();
+    
+    // Use map to keep the latest posted meeting (by postedDate) for each ID
+    meetings.forEach(meeting => {
+      const existingMeeting = meetingMap.get(meeting.id);
+      
+      // If this is the first meeting with this ID or it's newer than the existing one, store it
+      if (!existingMeeting || new Date(meeting.postedDate) > new Date(existingMeeting.postedDate)) {
+        meetingMap.set(meeting.id, meeting);
+      }
+    });
+    
+    // Convert map values back to array
+    return Array.from(meetingMap.values());
   };
 
   useEffect(() => {

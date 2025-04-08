@@ -19,11 +19,9 @@ const nextConfig: NextConfig = {
   // Required for Azure Web App
   httpAgentOptions: {
     keepAlive: true,
-  },
-  // Ensure proper port binding
-  serverOptions: {
-    port: parseInt(process.env.PORT || '8080', 10)
   }
+  // 'serverOptions' removed as it's not a valid Next.js config option
+  // Port configuration should be handled through env variables or scripts
 };
 
 export default nextConfig;
