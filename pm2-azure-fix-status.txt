@@ -1,0 +1,57 @@
+PM2 Agent Azure Deployment Fix - Status Report
+==========================================
+
+Issue Summary:
+-------------
+The PM2 agent service was failing to start in the Azure App Service environment, resulting in connection refused errors when accessing the status endpoint. This was preventing the AI agent functionality from working in production.
+
+Error Messages:
+-------------
+- "Error fetching PM2 status: TypeError: fetch failed"
+- "[cause]: [AggregateError: ] { code: 'ECONNREFUSED' }"
+- Status endpoint returning: {"success": false, "message": "Failed to fetch PM2 status"}
+
+Root Cause:
+----------
+1. Azure App Service was using the default `npm start` command which didn't properly initialize PM2
+2. PM2 configuration wasn't optimized for Azure's environment constraints
+3. File permissions and directory structure weren't properly set up for Azure's sandbox environment
+
+Solution Implemented:
+------------------
+1. Modified Production Start Script:
+   - Updated package.json to include proper initialization sequence
+   - Added PM2 installation, build step, and agent startup to the production flow
+   - Original: "start": "next start -p 8080"
+   - Updated: "start": "cross-env NODE_ENV=production npm run pm2:install && npm run build && npm run pm2:start && next start -p 8080"
+
+2. Enhanced PM2 Configuration:
+   - Updated pm2.config.js with Azure-specific optimizations
+   - Configured PM2_HOME to use app directory: path.join(process.cwd(), '.pm2')
+   - Added automatic logs directory creation
+   - Implemented Azure environment detection
+   - Added proper production environment variable handling
+
+Results:
+-------
+1. PM2 agent now starts successfully in Azure environment
+2. Status endpoint (https://intervaldeploytest.azurewebsites.net/api/pm2/status) working correctly
+3. AI agent functionality operational in production
+4. Logs properly maintained and accessible
+
+Technical Details:
+----------------
+- Environment: Azure App Service
+- Node.js Version: v22.14.0
+- Next.js Version: 15.1.5
+- PM2 Integration: Running as managed process alongside Next.js server
+
+Additional Benefits:
+-----------------
+1. Improved error handling and logging
+2. Better production/development environment separation
+3. Automated setup process
+4. Azure-specific optimizations for reliability
+
+Current Status: ✅ RESOLVED
+Production Environment: ✅ OPERATIONAL 

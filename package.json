@@ -6,7 +6,7 @@
     "predev": "node scripts/pm2-check.js",
     "dev": "cross-env START_PM2=true next dev -p 8080",
     "build": "next build",
-    "start": "next start -p 8080",
+    "start": "cross-env NODE_ENV=production npm run pm2:install && npm run build && npm run pm2:start && next start -p 8080",
     "lint": "next lint",
     "pm2:install": "npm install pm2 -g",
     "pm2:start": "pm2 start pm2.config.js",
