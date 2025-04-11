@@ -110,6 +110,14 @@ export async function POST(request: Request) {
                 }, { status: 400 });
             }
             
+            // Get task details first
+            const tasks = await intervalsApi.getTasks();
+            const task = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
+            
+            // Determine billable status
+            const isNathcorpClient = task?.client?.toLowerCase() === 'nathcorp';
+            const billableStr = isNathcorpClient ? 'f' : (billable ? 't' : 'f');
+            
             // Create time entry with hours
             const result = await intervalsApi.createTimeEntry({
                 taskId,
@@ -117,7 +125,7 @@ export async function POST(request: Request) {
                 time: timeInHours > 0 ? timeInHours : 0.01, // Minimum time entry of 0.01 hours for manual posts
                 description: description || 'No description provided',
                 workType: workType || 'Meeting',
-                billable: billable ?? true
+                billable: billableStr
             });
 
             // Store in the appropriate storage system based on the source
@@ -146,7 +154,6 @@ export async function POST(request: Request) {
                 
                 // For manual posts, we'll use the same storage as AI agent
                 // Get task details to store the task name
-                const tasks = await intervalsApi.getTasks();
                 const taskDetails = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
                 const taskName = taskDetails?.title || `Task ${taskId}`;
                 const client = taskDetails?.client || null;
@@ -188,22 +195,16 @@ export async function POST(request: Request) {
                 // This is critical for displaying this information in the UI
                 if (result.time) {
                     try {
-                        // Get full task list and find detailed task information
-                        const tasks = await intervalsApi.getTasks();
-                        const taskInfo = tasks.find((t: any) => t.id === taskId);
+                        // Get full task details from the taskInfo
+                        result.time.client = task?.client || null;
+                        result.time.project = task?.project || null;
                         
-                        if (taskInfo) {
-                            // Get full task details from the taskInfo
-                            result.time.client = taskInfo.client || null;
-                            result.time.project = taskInfo.project || null;
-                            
-                            console.log('Task details for AI agent posting:', {
-                                taskId,
-                                taskName: taskInfo.title,
-                                client: taskInfo.client,
-                                project: taskInfo.project
-                            });
-                        }
+                        console.log('Task details for AI agent posting:', {
+                            taskId,
+                            taskName: task?.title,
+                            client: task?.client,
+                            project: task?.project
+                        });
                     } catch (error) {
                         console.error('Error enriching time entry with client/project info:', error);
                         // Continue even if this fails

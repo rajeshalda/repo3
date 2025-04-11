@@ -39,7 +39,7 @@ interface TimeEntryPayload {
     time: number;  // time in hours
     description: string;
     workType: string;
-    billable?: boolean;
+    billable?: 't' | 'f';  // Update to match API requirement
 }
 
 interface TimeEntryRequest {
@@ -50,7 +50,7 @@ interface TimeEntryRequest {
     moduleid: string;
     taskid: string;
     description: string;
-    billable: boolean;
+    billable: 't' | 'f';  // Already updated to reflect API requirement
     worktypeid: string;
 }
 
@@ -258,6 +258,10 @@ export class IntervalsAPI {
         console.log('Using hardcoded worktype ID 803850 for India-Meeting');
         const worktypeId = '803850';
 
+        // Determine billable status based on client
+        const isNathcorpClient = task.client?.toLowerCase() === 'nathcorp';
+        const billableStr: 't' | 'f' = isNathcorpClient ? 'f' : (payload.billable ?? 't');
+
         const requestBody = {
             personid: user.personid,
             taskid: payload.taskId,
@@ -267,7 +271,7 @@ export class IntervalsAPI {
             time: payload.time,
             description: payload.description,
             worktypeid: worktypeId,
-            billable: payload.billable ?? true
+            billable: billableStr
         };
 
         console.log('Posting time entry with request body:', requestBody);

@@ -19,6 +19,10 @@
     {
       "userId": "pushkar@m365x65088219.onmicrosoft.com",
       "enabled": false
+    },
+    {
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "enabled": true
     }
   ]
 }
