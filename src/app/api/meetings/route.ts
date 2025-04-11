@@ -4,6 +4,9 @@ import { authOptions } from '@/lib/auth';
 import { getAppGraphToken } from '@/lib/graph-app-auth';
 import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
 import { IST_TIMEZONE } from '@/lib/utils';
+import { AIAgentPostedMeetingsStorage } from '@/ai-agent/services/storage/posted-meetings';
+import path from 'path';
+import fs from 'fs/promises';
 
 // Add session type
 interface ExtendedSession {
@@ -334,36 +337,54 @@ export async function GET(request: Request) {
         console.log(`\n⚠️ WARNING: ${meetingsData.meetings.length - dateFilteredMeetings.length} meetings were filtered out for being outside the requested date range`);
     }
 
-    // Get posted meetings storage
-    const postedMeetingsStorage = new PostedMeetingsStorage();
+    // Get posted meetings storage - use AI agent storage instead of old manual storage
+    // This will ensure we check against the same storage that AI agent uses
+    const aiAgentStorage = new AIAgentPostedMeetingsStorage();
+    await aiAgentStorage.loadData();
     
-    // Get all posted meetings for logging and debugging
-    const postedMeetings = await postedMeetingsStorage.getPostedMeetings(session.user.email);
+    // Access the data directly from file
+    const filePath = path.join(process.cwd(), 'src/ai-agent/data/storage/json/ai-agent-meetings.json');
+    const fileContent = await fs.readFile(filePath, 'utf-8');
+    const aiAgentData = JSON.parse(fileContent);
+    const aiPostedMeetings = aiAgentData.meetings || [];
+    
+    // Filter meetings for current user
+    const userEmail = session.user?.email || '';
+    const userPostedMeetings = aiPostedMeetings.filter((m: { userId: string }) => m.userId === userEmail);
+    
     console.log('\n==== MEETINGS FILTERING DEBUG ====');
-    console.log(`User Email: ${session.user.email}`);
+    console.log(`User Email: ${userEmail}`);
     console.log(`Total meetings fetched: ${dateFilteredMeetings.length}`);
-    console.log(`Total posted meetings: ${postedMeetings.length}`);
+    console.log(`Total posted meetings for user: ${userPostedMeetings.length}`);
     
     console.log('\nProcessing current meetings:');
     const filteredMeetings = [];
     for (const meeting of dateFilteredMeetings) {
-        // Normalize the meeting subject
-        const normalizedSubject = meeting.subject
-            .trim()
-            .replace(/\s+/g, ' ')    // normalize spaces
-            .replace(/[^\w\s-]/g, '') // remove special chars except hyphen
-            .trim();
+        // Check if meeting is already posted using meetingId format
+        const meetingId = meeting.meetingInfo?.meetingId || `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
         
-        // Generate consistent ID using the same format as stored data
-        const meetingId = `${session.user.email.toLowerCase()}_${normalizedSubject}_${normalizedSubject}_${meeting.startTime}`;
+        // Check if meeting is already posted in AI agent storage
+        const isPosted = userPostedMeetings.some((m: { meetingId: string }) => 
+            // Check both formats to be safe
+            m.meetingId === meetingId || 
+            m.meetingId === `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`
+        );
         
-        // Check if meeting is already posted
-        const isPosted = postedMeetings.some(posted => posted.id === meetingId);
         console.log('Meeting:', meeting.subject, 'ID:', meetingId, 'Is Posted:', isPosted);
         
         if (!isPosted) {
             console.log('Adding to filtered meetings list');
-            filteredMeetings.push(meeting);
+            // Add isPosted flag to meeting object
+            filteredMeetings.push({
+                ...meeting,
+                isPosted: false
+            });
+        } else {
+            // Mark as posted if it is already in storage
+            filteredMeetings.push({
+                ...meeting,
+                isPosted: true
+            });
         }
     }
 

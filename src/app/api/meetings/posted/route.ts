@@ -1,7 +1,44 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
-import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+// Use a dedicated storage file that doesn't affect AI agent
+const STORAGE_PATH = path.join(process.cwd(), 'storage', 'manual-posted-meetings.json');
+
+// Define types
+interface PostedMeeting {
+    id: string;
+    subject: string;
+    meetingDate: string;
+    postedDate: string;
+}
+
+interface PostedMeetingsData {
+    [userEmail: string]: PostedMeeting[];
+}
+
+// Load data helper
+async function loadData(): Promise<PostedMeetingsData> {
+    try {
+        const fileContent = await fs.readFile(STORAGE_PATH, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+            // File doesn't exist, return empty data
+            return {};
+        }
+        throw error;
+    }
+}
+
+// Save data helper
+async function saveData(data: PostedMeetingsData): Promise<void> {
+    const dir = path.dirname(STORAGE_PATH);
+    await fs.mkdir(dir, { recursive: true });
+    await fs.writeFile(STORAGE_PATH, JSON.stringify(data, null, 2));
+}
 
 export async function GET() {
     try {
@@ -10,11 +47,9 @@ export async function GET() {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const storage = new PostedMeetingsStorage();
-        const meetings = await storage.getPostedMeetings(session.user.email);
-
+        // Return empty array since we're deprecating this feature
         return NextResponse.json({
-            meetings
+            meetings: []
         });
     } catch (error) {
         console.error('Error fetching posted meetings:', error);
@@ -32,8 +67,10 @@ export async function DELETE() {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const storage = new PostedMeetingsStorage();
-        await storage.clearUserMeetings(session.user.email);
+        // Don't modify AI agent storage
+        const data = await loadData();
+        data[session.user.email] = [];
+        await saveData(data);
 
         return NextResponse.json({ success: true });
     } catch (error) {

@@ -1,175 +1,156 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-
-interface Meeting {
-    subject: string;
-    startTime: string;
-    taskId?: string;
-    taskName?: string;
-    client?: string;
-    project?: string;
-}
-
-interface AttendanceRecord {
-    email: string;
-    name: string;
-    duration: number;
-}
-
-interface UserMeetings {
-    meetings: PostedMeeting[];
-    lastPostedDate: string;
-}
-
-interface PostedMeetingsData {
-    [email: string]: UserMeetings;
-}
+import { TimeEntryResponse } from '@/interfaces/time-entries';
+import { IntervalsAPI } from './intervals-api';
 
 interface PostedMeeting {
-    id: string;
-    subject: string;
-    meetingDate: string;
-    postedDate: string;
-    taskId?: string;
+    meetingId: string;
+    userId: string;
+    timeEntry: TimeEntryResponse;
+    rawResponse: any;
+    postedAt: string;
     taskName?: string;
-    duration: number;
-    client?: string;
-    project?: string;
+}
+
+interface PostedMeetingsFile {
+    meetings: PostedMeeting[];
 }
 
 export class PostedMeetingsStorage {
+    private data: PostedMeetingsFile = { meetings: [] };
     private storagePath: string;
-    private data: PostedMeetingsData = {};
 
     constructor() {
-        this.storagePath = path.join(process.cwd(), 'storage', 'posted-meetings.json');
+        this.storagePath = path.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json', 'ai-agent-meetings.json');
     }
 
-    async loadData() {
+    private async loadData() {
         try {
-            const data = await fs.readFile(this.storagePath, 'utf-8');
-            this.data = JSON.parse(data);
-        } catch {
-            // If file doesn't exist or can't be read, use empty data
-            this.data = {};
+            const fileContent = await fs.readFile(this.storagePath, 'utf-8');
+            this.data = JSON.parse(fileContent);
+        } catch (error) {
+            if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+                // File doesn't exist, initialize with empty data
+                this.data = { meetings: [] };
+                await this.saveData();
+            } else {
+                throw error;
+            }
         }
     }
 
-    async saveData() {
+    private async saveData() {
+        const dir = path.dirname(this.storagePath);
+        await fs.mkdir(dir, { recursive: true });
         await fs.writeFile(this.storagePath, JSON.stringify(this.data, null, 2));
     }
 
-    async addPostedMeeting(email: string, meeting: Meeting, attendanceRecords: AttendanceRecord[]) {
+    private getISTFormattedDate(date?: string | Date): string {
+        const now = date ? new Date(date) : new Date();
+        const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+        return istDate.toISOString().replace('Z', '') + ' IST';
+    }
+
+    async addPostedMeeting(email: string, meeting: { 
+        subject: string, 
+        startTime: string, 
+        taskId?: string, 
+        taskName?: string, 
+        client?: string, 
+        project?: string 
+    }, attendanceRecords: { email: string, name: string, duration: number }[], apiKey: string) {
         await this.loadData();
-        console.log('Adding posted meeting:', {
-            email,
-            meeting,
-            attendanceRecords
-        });
 
         const meetingId = `${email.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
-
-        if (!this.data[email]) {
-            this.data[email] = {
-                meetings: [],
-                lastPostedDate: this.getISTFormattedDate()  // Initialize with current date
-            };
-        }
 
         // Find user's attendance record to get duration
         const userAttendance = attendanceRecords.find(record => record.email === email);
         const duration = userAttendance ? userAttendance.duration : 0;
 
-        // Add new meeting
-        this.data[email].meetings.push({
-            id: meetingId,
-            subject: meeting.subject,
-            meetingDate: meeting.startTime,
-            postedDate: this.getISTFormattedDate(),
-            taskId: meeting.taskId,
-            taskName: meeting.taskName,
-            duration: duration,  // Add duration field
+        // Get task details from Intervals API
+        const intervalsApi = new IntervalsAPI(apiKey);
+        const tasks = await intervalsApi.getTasks();
+        const taskDetails = tasks.find((t: { 
+            id: string; 
+            projectid: string; 
+            moduleid: string; 
+            title?: string; 
+            client?: string; 
+            project?: string;
+            module?: string;
+        }) => t.id === (meeting.taskId || "")) || {
+            projectid: "",
+            moduleid: "",
+            title: meeting.taskName,
             client: meeting.client,
-            project: meeting.project
-        });
+            project: meeting.project,
+            module: "Design"
+        };
 
-        // Update last posted date
-        this.data[email].lastPostedDate = this.getISTFormattedDate();
+        // Create time entry response format
+        const timeEntry: any = {  // Use any temporarily to avoid type errors
+            id: meetingId,
+            projectid: taskDetails.projectid || "",
+            moduleid: taskDetails.moduleid || "",
+            taskid: meeting.taskId || "",
+            worktypeid: "803850",  // Default worktype ID for India-Meeting
+            personid: email,
+            date: new Date(meeting.startTime).toISOString().split('T')[0],
+            datemodified: this.getISTFormattedDate(),
+            time: Number((duration / 60).toFixed(2)), // Convert seconds to hours and ensure it's a number
+            description: meeting.subject,
+            billable: taskDetails.client?.toLowerCase() !== 'nathcorp' ? "t" : "f", // Set billable based on client
+            created: this.getISTFormattedDate(),
+            updated: this.getISTFormattedDate(),
+            client: taskDetails.client || null,
+            project: taskDetails.project || null,
+            // Add these fields for UI display
+            module: taskDetails.module || "Design", // Add module display name
+            worktype: "India-Meeting"  // Add worktype display name
+        };
+
+        // Create raw response format
+        const rawResponse = {
+            personid: email,
+            status: "Created",
+            code: 201,
+            time: { ...timeEntry }
+        };
+
+        // Add new meeting in AI agent format
+        const postedMeeting: PostedMeeting = {
+            meetingId,
+            userId: email,
+            timeEntry,
+            rawResponse,
+            postedAt: this.getISTFormattedDate(),
+            taskName: taskDetails.title || meeting.taskName
+        };
+
+        // Check if meeting already exists
+        const existingIndex = this.data.meetings.findIndex(m => m.meetingId === meetingId);
+        if (existingIndex >= 0) {
+            this.data.meetings[existingIndex] = postedMeeting;
+        } else {
+            this.data.meetings.push(postedMeeting);
+        }
 
         await this.saveData();
-        console.log('Successfully added meeting');
-        console.log('===========================\n');
-    }
-
-    // Helper method to get formatted IST date
-    private getISTFormattedDate(): string {
-        // Create a timestamp in IST timezone (UTC+05:30)
-        const now = new Date();
-        const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
-        
-        // Format: YYYY-MM-DDTHH:MM:SS IST
-        return istDate.toISOString().replace('Z', '') + ' IST';
     }
 
     async getPostedMeetings(email: string): Promise<PostedMeeting[]> {
         await this.loadData();
-        console.log('Getting posted meetings:', {
-            email,
-            hasData: !!this.data[email],
-            totalMeetings: this.data[email]?.meetings?.length || 0
-        });
-        
-        if (!this.data[email]?.meetings) {
-            return [];
-        }
-
-        // Sort meetings by posted date, most recent first
-        return [...this.data[email].meetings].sort(
-            (a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()
-        );
-    }
-
-    async getLastPostedDate(email: string): Promise<string | null> {
-        await this.loadData();
-        return this.data[email]?.lastPostedDate || null;
+        return this.data.meetings.filter(m => m.userId === email);
     }
 
     async isPosted(email: string, meetingId: string): Promise<boolean> {
         await this.loadData();
-        
-        console.log('\n=== POSTED MEETING CHECK ===');
-        console.log('Looking for meeting:', meetingId);
-        
-        if (!this.data[email]?.meetings) {
-            console.log('No stored meetings found for user');
-            console.log('=========================\n');
-            return false;
-        }
-
-        // Direct ID comparison since IDs are now normalized consistently
-        const isPosted = this.data[email].meetings.some(m => m.id === meetingId);
-
-        console.log('Comparing IDs:', {
-            lookingFor: meetingId,
-            found: isPosted
-        });
-        console.log('=========================\n');
-        
-        return isPosted;
-    }
-
-    async filterPostedMeetings(email: string, meetingIds: string[]): Promise<string[]> {
-        await this.loadData();
-        const postedIds = new Set(this.data[email]?.meetings.map(m => m.id) || []);
-        return meetingIds.filter(id => !postedIds.has(id));
+        return this.data.meetings.some(m => m.userId === email && m.meetingId === meetingId);
     }
 
     async clearUserMeetings(userEmail: string): Promise<void> {
         await this.loadData();
-        this.data[userEmail] = {
-            meetings: [],
-            lastPostedDate: this.getISTFormattedDate()
-        };
+        this.data.meetings = this.data.meetings.filter(m => m.userId !== userEmail);
         await this.saveData();
     }
 } 

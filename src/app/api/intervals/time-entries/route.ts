@@ -123,10 +123,28 @@ export async function POST(request: Request) {
             // Store in the appropriate storage system based on the source
             // Use isManualPost to determine storage destination
             if (isManualPost) {
-                // For manual posts, store only in the PostedMeetingsStorage
-                const postedMeetingsStorage = new PostedMeetingsStorage();
-                await postedMeetingsStorage.loadData();
+                // Before adding a new meeting, check if it's already in the AI Agent storage
+                // to avoid duplicate entries
+                const aiAgentStorage = new AIAgentPostedMeetingsStorage();
+                await aiAgentStorage.loadData();
                 
+                // Create meeting ID in both possible formats to check
+                const standardMeetingId = meetingId;
+                const manualMeetingId = `${session.user.email.toLowerCase()}_${subject}_${startTime}`;
+                
+                // Check if either ID exists in storage
+                const meetingExists = await aiAgentStorage.isPosted(session.user.email, standardMeetingId) || 
+                                     await aiAgentStorage.isPosted(session.user.email, manualMeetingId);
+                
+                if (meetingExists) {
+                    console.log('Meeting already exists in AI Agent storage, skipping duplicate entry');
+                    return NextResponse.json({ 
+                        success: true, 
+                        message: 'Meeting already posted. Skipping duplicate entry.'
+                    });
+                }
+                
+                // For manual posts, we'll use the same storage as AI agent
                 // Get task details to store the task name
                 const tasks = await intervalsApi.getTasks();
                 const taskDetails = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
@@ -141,12 +159,13 @@ export async function POST(request: Request) {
                     project
                 });
 
-                // Convert attendance records durations from seconds to minutes
+                // Convert attendance records durations from seconds to minutes for storage
                 const processedAttendanceRecords = (attendanceRecords || []).map((record: { email: string; name: string; duration: number }) => ({
                     ...record,
-                    duration: Math.round(record.duration / 60) // Convert seconds to minutes
+                    duration: record.duration // Keep as seconds for consistent storage
                 }));
                 
+                const postedMeetingsStorage = new PostedMeetingsStorage();
                 await postedMeetingsStorage.addPostedMeeting(
                     session.user.email,
                     {
@@ -157,9 +176,10 @@ export async function POST(request: Request) {
                         client: client,
                         project: project
                     },
-                    processedAttendanceRecords  // Pass the processed records with minutes
+                    processedAttendanceRecords,
+                    apiKey
                 );
-                console.log('Meeting stored in Manual App storage with duration in minutes');
+                console.log('Meeting stored in AI Agent storage format');
             } else {
                 // For AI agent posts, store only in AIAgentPostedMeetingsStorage
                 const aiAgentStorage = new AIAgentPostedMeetingsStorage();
