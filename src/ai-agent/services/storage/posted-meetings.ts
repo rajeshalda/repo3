@@ -64,6 +64,15 @@ export class AIAgentPostedMeetingsStorage {
     async addPostedMeeting(userId: string, postedMeeting: PostedMeeting) {
         await this.loadData();
         
+        // Ensure we're using the GraphID if it's available
+        // Check if meetingId is in the Graph ID format (AAMkA...)
+        const isGraphIdFormat = typeof postedMeeting.meetingId === 'string' && 
+                                postedMeeting.meetingId.startsWith('AAMkA') && 
+                                postedMeeting.meetingId.includes('=');
+
+        console.log('AIAgentPostedMeetingsStorage: Adding meeting with ID:', postedMeeting.meetingId);
+        console.log('Is ID in Graph format?', isGraphIdFormat);
+                                
         // Check if meeting already exists
         const existingMeeting = this.data.meetings.find(m => m.meetingId === postedMeeting.meetingId);
         if (existingMeeting) {

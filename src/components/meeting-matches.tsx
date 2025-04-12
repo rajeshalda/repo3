@@ -405,6 +405,52 @@ function MatchRow({
         0
       );
 
+      console.log('Meeting data before posting:', {
+        meetingId: result.meeting.meetingInfo?.meetingId,
+        subject: result.meeting.subject,
+        meetingInfo: result.meeting.meetingInfo,
+        rawMeeting: result.meeting // Log the entire meeting object to inspect its structure
+      });
+
+      // Safely check if we have a Graph ID available (AAMkA...)
+      // Handle all possible undefined values properly
+      const meetingInfo = result.meeting.meetingInfo;
+      const graphId = meetingInfo?.graphId;
+      
+      const hasGraphId = !!meetingInfo && 
+                        !!graphId && 
+                        typeof graphId === 'string' &&
+                        graphId.startsWith('AAMkA') &&
+                        graphId.includes('=');
+      
+      // Use the proper ID hierarchy: ALWAYS prioritize Graph ID when available
+      let meetingGraphId: string;
+      
+      if (hasGraphId && meetingInfo && meetingInfo.graphId) {
+        // If we have a valid Graph ID, use it
+        meetingGraphId = meetingInfo.graphId;
+      } else if (meetingInfo?.meetingId) {
+        // Otherwise use the meetingId if available
+        meetingGraphId = meetingInfo.meetingId;
+      } else if ((result.meeting as any).id) {
+        // Then try the id property
+        meetingGraphId = (result.meeting as any).id;
+      } else if (result.meeting.rawData?.id) {
+        // Then try the raw data id if available
+        meetingGraphId = result.meeting.rawData.id;
+      } else {
+        // Lastly, create a fallback ID
+        meetingGraphId = `${session?.user?.email}_${result.meeting.subject}_${result.meeting.startTime}`;
+      }
+      
+      console.log('Using meetingId for posting:', meetingGraphId, 'Source:', {
+        hasGraphId,
+        hasMeetingInfo: !!meetingInfo,
+        meetingInfoId: meetingInfo?.meetingId,
+        graphId: meetingInfo?.graphId,
+        rawId: result.meeting.rawData?.id
+      });
+
       const response = await fetch('/api/intervals/time-entries', {
         method: 'POST',
         headers: {
@@ -415,7 +461,13 @@ function MatchRow({
           date: meetingDate,
           time: totalDurationInSeconds,
           description: result.meeting.subject,
-          meetingId: result.meeting.meetingInfo?.meetingId || result.meeting.subject,
+          meetingId: meetingGraphId,  // Primary ID for backward compatibility
+          meetingInfo: meetingInfo ? {
+            meetingId: meetingInfo.meetingId,
+            graphId: meetingInfo.graphId, // Include the Graph ID explicitly
+            threadId: meetingInfo.threadId,
+            organizerId: meetingInfo.organizerId
+          } : undefined,
           subject: result.meeting.subject,
           startTime: result.meeting.startTime,
           confidence: result.confidence,
@@ -428,6 +480,8 @@ function MatchRow({
           }]
         }),
       });
+
+      console.log('Posting meeting with ID:', meetingGraphId);
 
       const postResult = await response.json();
       if (postResult.success) {
@@ -848,6 +902,27 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
           const meetingKey = generateMeetingKey(result.meeting, userId);
           const taskToUse = activeTab === 'matched' ? result.matchedTask! : selectedTasks.get(meetingKey)!;
 
+          console.log('Meeting data before posting in batch:', {
+            meetingId: result.meeting.meetingInfo?.meetingId,
+            subject: result.meeting.subject,
+            meetingInfo: result.meeting.meetingInfo,
+            rawMeeting: result.meeting // Log the entire meeting object
+          });
+
+          // Use the proper ID hierarchy: Graph ID in meetingInfo or fall back to other properties
+          const meetingGraphId = result.meeting.meetingInfo?.meetingId || 
+                                result.meeting.meetingInfo?.graphId || // Try using the graphId from meetingInfo first
+                                (result.meeting as any).id || // Then try the id property
+                                (result.meeting.rawData?.id) || // Then try the raw data id if available
+                                `${session?.user?.email}_${result.meeting.subject}_${result.meeting.startTime}`; // Last resort fallback
+          
+          console.log('Using meetingId for batch posting:', meetingGraphId, 'Source:', {
+            hasMeetingInfo: !!result.meeting.meetingInfo,
+            meetingInfoId: result.meeting.meetingInfo?.meetingId,
+            graphId: result.meeting.meetingInfo?.graphId,
+            rawId: result.meeting.rawData?.id
+          });
+
           const response = await fetch('/api/intervals/time-entries', {
             method: 'POST',
             headers: {
@@ -858,7 +933,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
               date: meetingDate,
               time: totalDurationInSeconds,
               description: result.meeting.subject,
-              meetingId: result.meeting.meetingInfo?.meetingId || result.meeting.subject,
+              meetingId: meetingGraphId, // Use the properly extracted ID
+              meetingInfo: result.meeting.meetingInfo ? {
+                meetingId: result.meeting.meetingInfo.meetingId,
+                graphId: result.meeting.meetingInfo.graphId,
+                threadId: result.meeting.meetingInfo.threadId,
+                organizerId: result.meeting.meetingInfo.organizerId
+              } : undefined,
               subject: result.meeting.subject,
               startTime: result.meeting.startTime,
               isManualPost: source !== 'ai-agent',

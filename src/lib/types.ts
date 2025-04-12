@@ -7,8 +7,12 @@ export interface Meeting {
   organizer?: string;
   meetingInfo?: {
     meetingId: string;
+    graphId?: string;
+    threadId?: string;
+    organizerId?: string;
   };
   attendanceRecords: AttendanceRecord[];
+  rawData?: any;
 }
 
 export interface AttendanceRecord {

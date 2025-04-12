@@ -57,11 +57,20 @@ export class PostedMeetingsStorage {
         taskId?: string, 
         taskName?: string, 
         client?: string, 
-        project?: string 
+        project?: string,
+        meetingId?: string  // Add meetingId parameter to accept Microsoft Graph ID
     }, attendanceRecords: { email: string, name: string, duration: number }[], apiKey: string) {
         await this.loadData();
 
-        const meetingId = `${email.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
+        // Prioritize the provided meetingId (Microsoft Graph ID) if available,
+        // otherwise fall back to the old custom format
+        const meetingId = meeting.meetingId || `${email.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
+        
+        console.log('PostedMeetingsStorage: Using meetingId:', {
+            providedId: meeting.meetingId,
+            generatedId: `${email.toLowerCase()}_${meeting.subject}_${meeting.startTime}`,
+            finalId: meetingId
+        });
 
         // Find user's attendance record to get duration
         const userAttendance = attendanceRecords.find(record => record.email === email);
@@ -89,7 +98,7 @@ export class PostedMeetingsStorage {
 
         // Create time entry response format
         const timeEntry: any = {  // Use any temporarily to avoid type errors
-            id: meetingId,
+            id: meeting.meetingId || meetingId, // Use the Graph ID directly if available
             projectid: taskDetails.projectid || "",
             moduleid: taskDetails.moduleid || "",
             taskid: meeting.taskId || "",
@@ -119,7 +128,7 @@ export class PostedMeetingsStorage {
 
         // Add new meeting in AI agent format
         const postedMeeting: PostedMeeting = {
-            meetingId,
+            meetingId: meeting.meetingId || meetingId, // Use the provided Microsoft Graph ID if available
             userId: email,
             timeEntry,
             rawResponse,
@@ -127,8 +136,8 @@ export class PostedMeetingsStorage {
             taskName: taskDetails.title || meeting.taskName
         };
 
-        // Check if meeting already exists
-        const existingIndex = this.data.meetings.findIndex(m => m.meetingId === meetingId);
+        // Check if meeting already exists - use the same ID as we used for the postedMeeting
+        const existingIndex = this.data.meetings.findIndex(m => m.meetingId === (meeting.meetingId || meetingId));
         if (existingIndex >= 0) {
             this.data.meetings[existingIndex] = postedMeeting;
         } else {

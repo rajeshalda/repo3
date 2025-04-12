@@ -48,6 +48,42 @@ export async function POST(request: Request) {
             attendanceRecords: attendanceRecords ? 'provided' : 'not provided'
         });
 
+        // Log the actual meetingId received
+        console.log('Actual meetingId received:', meetingId);
+        
+        // Check if it has the Microsoft Graph ID format (long string with equals signs at the end)
+        const isGraphIdFormat = typeof meetingId === 'string' && 
+                               meetingId.startsWith('AAMkA') && 
+                               meetingId.includes('=');
+        
+        console.log('Is meetingId in Microsoft Graph format:', isGraphIdFormat);
+
+        // We ONLY want to use Graph ID format from now on
+        // If the payload already contains a Graph ID, use it
+        // Otherwise check if we can extract it from the meetingInfo
+        let graphId = isGraphIdFormat ? meetingId : null;
+        
+        // If we don't have a Graph ID yet, check if it's in the payload.meetingInfo
+        if (!graphId && payload.meetingInfo?.graphId) {
+            if (typeof payload.meetingInfo.graphId === 'string' && 
+                payload.meetingInfo.graphId.startsWith('AAMkA') && 
+                payload.meetingInfo.graphId.includes('=')) {
+                graphId = payload.meetingInfo.graphId;
+                console.log('Found Graph ID in meetingInfo:', graphId);
+            }
+        }
+        
+        // For manual posts, we should ONLY use Graph ID format
+        if (isManualPost && !graphId) {
+            console.error('CRITICAL ERROR: Manual post without Graph ID is not allowed.');
+            return NextResponse.json({ 
+                error: 'A valid Microsoft Graph ID is required for manual meeting posts.' 
+            }, { status: 400 });
+        }
+        
+        // Use the Graph ID as the primary ID for storage
+        const primaryMeetingId = graphId || meetingId;
+
         // Required fields validation
         if (!taskId) {
             return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
@@ -137,8 +173,13 @@ export async function POST(request: Request) {
                 await aiAgentStorage.loadData();
                 
                 // Create meeting ID in both possible formats to check
-                const standardMeetingId = meetingId;
+                const standardMeetingId = primaryMeetingId;
                 const manualMeetingId = `${session.user.email.toLowerCase()}_${subject}_${startTime}`;
+                
+                console.log('Checking for duplicates with meetingIds:', {
+                    standardMeetingId,
+                    manualMeetingId
+                });
                 
                 // Check if either ID exists in storage
                 const meetingExists = await aiAgentStorage.isPosted(session.user.email, standardMeetingId) || 
@@ -152,7 +193,7 @@ export async function POST(request: Request) {
                     });
                 }
                 
-                // For manual posts, we'll use the same storage as AI agent
+                // For manual posts, we'll use the same storage format as AI agent
                 // Get task details to store the task name
                 const taskDetails = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
                 const taskName = taskDetails?.title || `Task ${taskId}`;
@@ -166,12 +207,40 @@ export async function POST(request: Request) {
                     project
                 });
 
-                // Convert attendance records durations from seconds to minutes for storage
-                const processedAttendanceRecords = (attendanceRecords || []).map((record: { email: string; name: string; duration: number }) => ({
-                    ...record,
-                    duration: record.duration // Keep as seconds for consistent storage
-                }));
+                console.log('Storing manual meeting with meetingId:', primaryMeetingId);
                 
+                // Use the AIAgentPostedMeetingsStorage for both manual and AI agent posts
+                // This ensures consistency in the storage format
+                
+                // Add additional client and project information for the task
+                // This matches how AI agent stores data
+                if (result.time) {
+                    try {
+                        // Get full task details from the taskInfo
+                        result.time.client = client;
+                        result.time.project = project;
+                        result.time.module = taskDetails?.module || null;
+                        result.time.worktype = workType || 'Meeting';
+                    } catch (error) {
+                        console.error('Error enriching time entry with client/project info:', error);
+                        // Continue even if this fails
+                    }
+                }
+                
+                // Store the meeting in AI Agent storage format
+                await aiAgentStorage.addPostedMeeting(
+                    session.user.email,
+                    {
+                        meetingId: primaryMeetingId || '', // Use the primary ID (Graph ID if available)
+                        userId: session.user.email,
+                        timeEntry: result.time,
+                        rawResponse: result,
+                        postedAt: convertToIST(date) // Convert date to IST format
+                    }
+                );
+                
+                // NOTE: We still store in the legacy PostedMeetingsStorage for backward compatibility
+                // But the primary storage is now AIAgentPostedMeetingsStorage
                 const postedMeetingsStorage = new PostedMeetingsStorage();
                 await postedMeetingsStorage.addPostedMeeting(
                     session.user.email,
@@ -181,12 +250,17 @@ export async function POST(request: Request) {
                         taskId: taskId,
                         taskName: taskName,
                         client: client,
-                        project: project
+                        project: project,
+                        meetingId: primaryMeetingId // Pass the Graph ID if available
                     },
-                    processedAttendanceRecords,
+                    (attendanceRecords || []).map((record: { email: string; name: string; duration: number }) => ({
+                        ...record,
+                        duration: record.duration // Keep as seconds for consistent storage
+                    })),
                     apiKey
                 );
-                console.log('Meeting stored in AI Agent storage format');
+                
+                console.log('Meeting stored in BOTH storage formats (AI Agent format and legacy format)');
             } else {
                 // For AI agent posts, store only in AIAgentPostedMeetingsStorage
                 const aiAgentStorage = new AIAgentPostedMeetingsStorage();
@@ -211,10 +285,12 @@ export async function POST(request: Request) {
                     }
                 }
                 
+                console.log('AI Agent: Storing meeting with meetingId:', primaryMeetingId);
+                
                 await aiAgentStorage.addPostedMeeting(
                     session.user.email,
                     {
-                        meetingId: meetingId || '',
+                        meetingId: primaryMeetingId || '',  // Use the Graph ID when available
                         userId: session.user.email,
                         timeEntry: result.time,
                         rawResponse: result,
@@ -229,13 +305,13 @@ export async function POST(request: Request) {
                 const storageManager = StorageManager.getInstance();
                 // Create a decision to mark the meeting as 'approved'
                 await storageManager.updateReviewStatus({
-                    meetingId: meetingId || '',
+                    meetingId: primaryMeetingId || '',
                     status: 'approved',
                     decidedAt: new Date().toISOString(),
                     decidedBy: session.user.email,
                     feedback: 'Meeting successfully posted to Intervals'
                 });
-                console.log(`Marked meeting ${meetingId} as approved in reviews.json`);
+                console.log(`Marked meeting ${primaryMeetingId} as approved in reviews.json`);
             } catch (error) {
                 console.error('Error updating meeting status in reviews.json:', error);
                 // Don't fail the request if this fails

@@ -17,6 +17,7 @@ interface ExtendedSession {
 }
 
 interface GraphMeeting {
+  id: string;
   subject: string;
   start: {
     dateTime: string;
@@ -28,6 +29,12 @@ interface GraphMeeting {
     joinUrl: string;
   };
   bodyPreview: string;
+  organizer: {
+    emailAddress: {
+      name: string;
+      address: string;
+    }
+  };
 }
 
 interface AttendanceInterval {
@@ -77,56 +84,71 @@ async function getAttendanceReport(organizerId: string, meetingId: string) {
     // Get app-level token instead of using user's token
     const appToken = await getAppGraphToken();
     
-    // Get attendance reports
-    const reportsResponse = await fetch(
-      `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${meetingId}/attendanceReports`,
-      {
-        headers: {
-          Authorization: `Bearer ${appToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    // Get attendance reports - use the same URL format as AI agent
+    const reportsUrl = `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${meetingId}/attendanceReports`;
+    console.log('Fetching attendance reports from:', reportsUrl);
+    
+    const reportsResponse = await fetch(reportsUrl, {
+      headers: {
+        Authorization: `Bearer ${appToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!reportsResponse.ok) {
-      console.log('Reports Response Error:', {
+      const errorText = await reportsResponse.text();
+      console.error('Error fetching attendance reports:', {
         status: reportsResponse.status,
         statusText: reportsResponse.statusText,
-        text: await reportsResponse.text()
+        body: errorText
       });
+      
+      // Early return on error
       return null;
     }
     
     const reportsData = await reportsResponse.json();
     console.log('Reports Data:', JSON.stringify(reportsData, null, 2));
     
-    if (!reportsData.value?.[0]?.id) return null;
+    if (!reportsData.value || reportsData.value.length === 0) {
+      console.log('No attendance reports found for the meeting');
+      return null;
+    }
 
-    // Get attendance records
-    const recordsResponse = await fetch(
-      `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${meetingId}/attendanceReports/${reportsData.value[0].id}/attendanceRecords`,
-      {
-        headers: {
-          Authorization: `Bearer ${appToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const reportId = reportsData.value[0].id;
+    
+    // Get attendance records - use the same URL format as AI agent
+    const recordsUrl = `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${meetingId}/attendanceReports/${reportId}/attendanceRecords`;
+    console.log('Fetching attendance records from:', recordsUrl);
+    
+    const recordsResponse = await fetch(recordsUrl, {
+      headers: {
+        Authorization: `Bearer ${appToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!recordsResponse.ok) {
-      console.log('Records Response Error:', {
+      const errorText = await recordsResponse.text();
+      console.error('Error fetching attendance records:', {
         status: recordsResponse.status,
         statusText: recordsResponse.statusText,
-        text: await recordsResponse.text()
+        body: errorText
       });
       return null;
     }
     
     const recordsData = await recordsResponse.json();
     console.log('Records Data:', JSON.stringify(recordsData, null, 2));
-    return recordsData.value || [];
+    
+    if (!recordsData.value || recordsData.value.length === 0) {
+      console.log('No attendance records found for the report');
+      return null;
+    }
+    
+    return recordsData.value;
   } catch (error) {
-    console.error('Error fetching attendance:', error);
+    console.error('Error in getAttendanceReport:', error);
     return null;
   }
 }
@@ -134,20 +156,71 @@ async function getAttendanceReport(organizerId: string, meetingId: string) {
 function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
   console.log('Extracting from:', { joinUrl, bodyPreview });
   
-  // Extract meeting ID from body preview
-  const meetingIdMatch = bodyPreview.match(/Meeting ID: (\d{3} \d{3} \d{3} \d{3})/);
-  const meetingId = meetingIdMatch ? meetingIdMatch[1].replace(/\s/g, '') : null;
+  // Initialize with null values
+  let meetingId = null;
+  let threadId = null;
+  let organizerId = null;
   
-  // Extract thread ID from join URL
-  const threadMatch = decodeURIComponent(joinUrl).match(/19:meeting_([^@]+)@thread\.v2/);
-  const threadId = threadMatch ? threadMatch[1] : null;
+  try {
+    // Decode the URL first (safely)
+    const decodedUrl = decodeURIComponent(joinUrl);
+    console.log('Decoded URL:', decodedUrl);
+    
+    // Extract thread ID from join URL using improved regex
+    const threadMatch = decodedUrl.match(/19:meeting_([^@]+)@thread\.v2/);
+    if (threadMatch) {
+      threadId = threadMatch[1];
+      console.log('Extracted Thread ID:', threadId);
+    }
+    
+    // Extract organizer ID from join URL
+    const organizerMatch = decodedUrl.match(/"Oid":"([^"]+)"/);
+    if (organizerMatch) {
+      organizerId = organizerMatch[1];
+      console.log('Extracted Organizer ID:', organizerId);
+    }
+    
+    // Try multiple patterns to extract meeting ID from body preview
+    // First try the standard "Meeting ID: 123 456 789 101" format
+    let meetingIdMatch = bodyPreview.match(/Meeting ID: (\d{3} \d{3} \d{3} \d{3})/);
+    if (meetingIdMatch) {
+      meetingId = meetingIdMatch[1].replace(/\s/g, '');
+    } else {
+      // Try alternate format "Meeting ID: 123456789"
+      meetingIdMatch = bodyPreview.match(/Meeting ID: (\d+)/);
+      if (meetingIdMatch) {
+        meetingId = meetingIdMatch[1];
+      }
+    }
+    
+    // Fallback: If no meetingId found and we have threadId, use the thread as meeting ID
+    // This aligns better with how the AI agent works
+    if (!meetingId && threadId) {
+      meetingId = `19:meeting_${threadId}@thread.v2`;
+      console.log('Using thread as meeting ID fallback');
+    }
+    
+  } catch (error) {
+    console.error('Error extracting meeting info:', error);
+  }
   
-  // Extract organizer ID from join URL
-  const organizerMatch = decodeURIComponent(joinUrl).match(/"Oid":"([^"]+)"/);
-  const organizerId = organizerMatch ? organizerMatch[1] : null;
-
-  const result = { meetingId, threadId, organizerId };
-  console.log('Extracted:', result);
+  const result: {
+    meetingId: string | null;
+    threadId: string | null;
+    organizerId: string | null;
+    graphId?: string;
+    rawJoinUrl: string;
+    rawBodyPreview: string;
+  } = { 
+    meetingId, 
+    threadId, 
+    organizerId,
+    // Add raw data for debugging
+    rawJoinUrl: joinUrl,
+    rawBodyPreview: bodyPreview
+  };
+  
+  console.log('Extracted Meeting Info:', JSON.stringify(result, null, 2));
   return result;
 }
 
@@ -188,6 +261,15 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
   // Fetch attendance for each meeting
   const meetingsWithAttendance = await Promise.all(
     allMeetings.map(async (meeting: GraphMeeting) => {
+      // Log the raw meeting data for debugging
+      console.log('Processing meeting:', {
+        subject: meeting.subject,
+        start: meeting.start.dateTime,
+        id: meeting.id,
+        bodyPreview: meeting.bodyPreview?.substring(0, 50) + '...',
+        hasOnlineMeeting: !!meeting.onlineMeeting
+      });
+
       const meetingData: MeetingData = {
         subject: meeting.subject,
         startTime: meeting.start.dateTime,
@@ -204,15 +286,22 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
           meeting.onlineMeeting.joinUrl,
           meeting.bodyPreview
         );
+        
+        // Add the Graph API ID to the meetingInfo
+        meetingInfo.graphId = meeting.id;
+        console.log('Added Graph API ID to meetingInfo:', meeting.id);
+        
         meetingData.meetingInfo = meetingInfo;
 
         if (meetingInfo.threadId && meetingInfo.organizerId) {
+          // Build the formatted string exactly like the AI agent does
           const formattedString = `1*${meetingInfo.organizerId}*0**19:meeting_${meetingInfo.threadId}@thread.v2`;
           const base64MeetingId = Buffer.from(formattedString).toString('base64');
           
           console.log('Attempting to fetch attendance with:', {
             organizerId: meetingInfo.organizerId,
             threadId: meetingInfo.threadId,
+            graphId: meetingInfo.graphId,
             formattedString,
             base64MeetingId
           });
@@ -224,13 +313,15 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
           
           if (attendanceRecords) {
             meetingData.attendanceRecords = attendanceRecords.map((record: RawAttendanceRecord) => ({
-              name: record.identity.displayName,
-              email: record.emailAddress,
+              name: record.identity?.displayName || 'Unknown',
+              email: record.emailAddress || '',
               duration: record.totalAttendanceInSeconds,
-              intervals: record.attendanceIntervals,
+              intervals: record.attendanceIntervals || [],
               rawRecord: record
             }));
           }
+        } else {
+          console.log('Skipping attendance fetch - missing threadId or organizerId:', meetingInfo);
         }
       }
 
