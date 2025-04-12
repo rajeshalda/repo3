@@ -106,7 +106,7 @@ export class PostedMeetingsStorage {
             personid: email,
             date: new Date(meeting.startTime).toISOString().split('T')[0],
             datemodified: this.getISTFormattedDate(),
-            time: Number((duration / 60).toFixed(2)), // Convert seconds to hours and ensure it's a number
+            time: (duration / 3600).toFixed(2), // Convert seconds to hours but keep as string
             description: meeting.subject,
             billable: taskDetails.client?.toLowerCase() !== 'nathcorp' ? "t" : "f", // Set billable based on client
             created: this.getISTFormattedDate(),

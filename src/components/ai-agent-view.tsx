@@ -1262,7 +1262,7 @@ export function AIAgentView() {
                           </span>
                         )}
                       </TableCell>
-                      <TableCell>{meeting.timeEntry.time}h</TableCell>
+                      <TableCell>{meeting.timeEntry.time}</TableCell>
                       <TableCell>{meeting.timeEntry.client || "N/A"}</TableCell>
                       <TableCell>{meeting.timeEntry.project || meeting.timeEntry.projectid || "N/A"}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>

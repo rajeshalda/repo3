@@ -139,6 +139,12 @@ export async function POST(request: Request) {
             // Convert seconds to decimal hours for Intervals API
             const timeInHours = timeToUse ? Number((timeToUse / 3600).toFixed(2)) : 0;
             
+            console.log('Time conversion:', {
+                timeToUseSeconds: timeToUse,
+                calculatedHours: timeInHours,
+                rawCalculation: timeToUse / 3600
+            });
+            
             // For manual posts, allow user to specify time directly
             if (timeInHours <= 0 && !isManualPost) {
                 return NextResponse.json({ 
@@ -150,9 +156,27 @@ export async function POST(request: Request) {
             const tasks = await intervalsApi.getTasks();
             const task = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
             
-            // Determine billable status
-            const isNathcorpClient = task?.client?.toLowerCase() === 'nathcorp';
-            const billableStr = isNathcorpClient ? 'f' : (billable ? 't' : 'f');
+            // Simplified billable status determination:
+            // 1. If client is "Internal" OR "Nathcorp" OR project contains "Internal" -> non-billable ('f')
+            // 2. All other meetings -> billable ('t')
+            const client = task?.client?.toLowerCase() || '';
+            const project = task?.project?.toLowerCase() || '';
+            
+            const isInternal = 
+                client === 'internal' || 
+                client === 'nathcorp' || 
+                project.includes('internal');
+            
+            // Set billable status based on internal check
+            const billableStr = isInternal ? 'f' : 't';
+            
+            console.log('Billable status determination:', {
+                client: task?.client,
+                project: task?.project,
+                isInternal,
+                billableStatus: billableStr,
+                rule: 'Internal/Nathcorp = Non-billable, Everything else = Billable'
+            });
             
             // Create time entry with hours
             const result = await intervalsApi.createTimeEntry({
@@ -221,6 +245,11 @@ export async function POST(request: Request) {
                         result.time.project = project;
                         result.time.module = taskDetails?.module || null;
                         result.time.worktype = workType || 'Meeting';
+                        
+                        // Convert time to string format to match AI agent format
+                        if (typeof result.time.time === 'number') {
+                            result.time.time = result.time.time.toFixed(2);
+                        }
                     } catch (error) {
                         console.error('Error enriching time entry with client/project info:', error);
                         // Continue even if this fails
@@ -272,6 +301,11 @@ export async function POST(request: Request) {
                         // Get full task details from the taskInfo
                         result.time.client = task?.client || null;
                         result.time.project = task?.project || null;
+                        
+                        // Convert time to string format to ensure consistency
+                        if (typeof result.time.time === 'number') {
+                            result.time.time = result.time.time.toFixed(2);
+                        }
                         
                         console.log('Task details for AI agent posting:', {
                             taskId,

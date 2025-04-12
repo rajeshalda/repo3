@@ -258,9 +258,29 @@ export class IntervalsAPI {
         console.log('Using hardcoded worktype ID 803850 for India-Meeting');
         const worktypeId = '803850';
 
-        // Determine billable status based on client
-        const isNathcorpClient = task.client?.toLowerCase() === 'nathcorp';
-        const billableStr: 't' | 'f' = isNathcorpClient ? 'f' : (payload.billable ?? 't');
+        // Determine billable status based on client/project
+        // Simplified billable status determination:
+        // 1. If client is "Internal" OR "Nathcorp" OR project contains "Internal" -> non-billable ('f')
+        // 2. All other meetings -> billable ('t')
+        const client = task.client?.toLowerCase() || '';
+        const project = task.project?.toLowerCase() || '';
+        
+        const isInternal = 
+            client === 'internal' || 
+            client === 'nathcorp' || 
+            project.includes('internal');
+        
+        // Set billable status based on internal check
+        const billableStr: 't' | 'f' = isInternal ? 'f' : 't';
+        
+        // Log the billable status determination for debugging
+        console.log('Intervals API - Billable determination:', {
+            client: task.client,
+            project: task.project,
+            isInternal,
+            billableStatus: billableStr,
+            rule: 'Internal/Nathcorp = Non-billable, Everything else = Billable'
+        });
 
         const requestBody = {
             personid: user.personid,
