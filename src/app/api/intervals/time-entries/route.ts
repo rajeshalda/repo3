@@ -249,7 +249,7 @@ export async function POST(request: Request) {
                         result.time.client = client;
                         result.time.project = project;
                         result.time.module = taskDetails?.module || null;
-                        result.time.worktype = workType || 'Meeting';
+                        result.time.worktype = workType || 'India-Meeting';
                         
                         // Convert time to string format to match AI agent format
                         if (typeof result.time.time === 'number') {
@@ -273,28 +273,9 @@ export async function POST(request: Request) {
                     }
                 );
                 
-                // NOTE: We still store in the legacy PostedMeetingsStorage for backward compatibility
-                // But the primary storage is now AIAgentPostedMeetingsStorage
-                const postedMeetingsStorage = new PostedMeetingsStorage();
-                await postedMeetingsStorage.addPostedMeeting(
-                    session.user.email,
-                    {
-                        subject: subject || 'No subject',
-                        startTime: startTime || new Date().toISOString(),
-                        taskId: taskId,
-                        taskName: taskName,
-                        client: client,
-                        project: project,
-                        meetingId: primaryMeetingId // Pass the Graph ID if available
-                    },
-                    (attendanceRecords || []).map((record: { email: string; name: string; duration: number }) => ({
-                        ...record,
-                        duration: record.duration // Keep as seconds for consistent storage
-                    })),
-                    apiKey
-                );
-                
-                console.log('Meeting stored in BOTH storage formats (AI Agent format and legacy format)');
+                // We'll no longer store in the legacy storage to avoid duplication
+                // The AIAgentPostedMeetingsStorage is the primary storage now
+                console.log('Meeting stored in AI Agent storage format only to prevent duplication');
             } else {
                 // For AI agent posts, store only in AIAgentPostedMeetingsStorage
                 const aiAgentStorage = new AIAgentPostedMeetingsStorage();

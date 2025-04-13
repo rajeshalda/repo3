@@ -10,6 +10,7 @@ interface PostedMeeting {
     rawResponse: any;
     postedAt: string;
     taskName?: string;
+    uniqueStorageId?: string;
 }
 
 interface PostedMeetingsFile {
@@ -126,9 +127,14 @@ export class PostedMeetingsStorage {
             time: { ...timeEntry }
         };
 
+        // Generate unique timestamp for this meeting instance to differentiate recurring entries
+        const now = new Date().toISOString();
+        const timeInHours = parseFloat((duration / 3600).toFixed(2));
+        
         // Add new meeting in AI agent format
         const postedMeeting: PostedMeeting = {
-            meetingId: meeting.meetingId || meetingId, // Use the provided Microsoft Graph ID if available
+            meetingId: meetingId, // Store original meetingId for reference
+            uniqueStorageId: `${meetingId}_${timeInHours}_${now}`, // Create a unique ID for this instance
             userId: email,
             timeEntry,
             rawResponse,
@@ -136,13 +142,8 @@ export class PostedMeetingsStorage {
             taskName: taskDetails.title || meeting.taskName
         };
 
-        // Check if meeting already exists - use the same ID as we used for the postedMeeting
-        const existingIndex = this.data.meetings.findIndex(m => m.meetingId === (meeting.meetingId || meetingId));
-        if (existingIndex >= 0) {
-            this.data.meetings[existingIndex] = postedMeeting;
-        } else {
-            this.data.meetings.push(postedMeeting);
-        }
+        // Always add as a new entry instead of replacing existing ones with the same meetingId
+        this.data.meetings.push(postedMeeting);
 
         await this.saveData();
     }
@@ -152,8 +153,51 @@ export class PostedMeetingsStorage {
         return this.data.meetings.filter(m => m.userId === email);
     }
 
-    async isPosted(email: string, meetingId: string): Promise<boolean> {
+    async isPosted(email: string, meetingId: string, duration?: number, startTime?: string): Promise<boolean> {
         await this.loadData();
+        
+        // If we have duration and startTime, use them to check for specific recurring meeting instances
+        if (duration !== undefined && startTime) {
+            const date = new Date(startTime).toISOString().split('T')[0]; // Get YYYY-MM-DD
+            const timeInHours = (duration / 3600).toFixed(2); // Convert seconds to hours
+            
+            // Check if there's a matching meeting with the same ID, user, date and similar duration
+            return this.data.meetings.some(m => {
+                if (m.userId !== email || m.meetingId !== meetingId) {
+                    return false;
+                }
+                
+                // Get the date from the entry's timeEntry
+                const entryDate = m.timeEntry?.date;
+                
+                // If dates don't match (not the same day), it's a different instance
+                if (entryDate !== date) {
+                    return false;
+                }
+                
+                // Check if durations are similar (within 1 minute tolerance)
+                const entryTimeHours = parseFloat(m.timeEntry?.time?.toString() || '0');
+                const entryDuration = Math.round(entryTimeHours * 3600); // Convert hours to seconds
+                const targetDuration = duration;
+                const durationDiff = Math.abs(entryDuration - targetDuration);
+                
+                // Consider it a match if duration is within 1 minute
+                return durationDiff < 60;
+            });
+        }
+        
+        // If no duration/date info provided, fall back to the original behavior
+        // but still avoid counting recurring meetings as posted
+        if (startTime) {
+            const date = new Date(startTime).toISOString().split('T')[0]; // Get YYYY-MM-DD
+            return this.data.meetings.some(m => 
+                m.userId === email && 
+                m.meetingId === meetingId && 
+                m.timeEntry?.date === date
+            );
+        }
+        
+        // Most basic check - just ID and user (not recommended for recurring meetings)
         return this.data.meetings.some(m => m.userId === email && m.meetingId === meetingId);
     }
 

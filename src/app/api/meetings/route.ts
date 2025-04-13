@@ -468,8 +468,8 @@ export async function GET(request: Request) {
         const storage = new AIAgentPostedMeetingsStorage();
         await storage.loadData();
         
-        // Use the enhanced isPosted method that considers duration
-        const isPosted = await storage.isPosted(userEmail, meetingId, userDuration);
+        // Use the enhanced isPosted method that considers both duration and startTime
+        const isPosted = await storage.isPosted(userEmail, meetingId, userDuration, meeting.startTime);
         
         console.log('Meeting:', meeting.subject, 'ID:', meetingId, 'Duration:', userDuration, 'Is Posted:', isPosted);
         
