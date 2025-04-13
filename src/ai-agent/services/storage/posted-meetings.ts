@@ -88,11 +88,26 @@ export class AIAgentPostedMeetingsStorage {
         console.log(`[${now}] Meeting duration: ${durationInSeconds}s (${timeInHours} hours)`);
         
         // Check if this EXACT entry already exists (shouldn't happen with the unique ID)
-        const exactDuplicate = this.data.meetings.some(m => 
-            m.meetingId === uniqueStorageId && 
-            m.userId === userId && 
-            m.timeEntry?.time === postedMeeting.timeEntry?.time
-        );
+        const exactDuplicate = this.data.meetings.some(m => {
+            // Check for same meeting ID, user ID, and time (all must match to be a duplicate)
+            const sameBasicInfo = (
+                m.meetingId === postedMeeting.meetingId && 
+                m.userId === userId &&
+                m.timeEntry?.time === postedMeeting.timeEntry?.time
+            );
+            
+            // If the basic info doesn't match, it's not a duplicate
+            if (!sameBasicInfo) return false;
+            
+            // Check if the dates match (if date is available)
+            if (m.timeEntry?.date && postedMeeting.timeEntry?.date) {
+                return m.timeEntry.date === postedMeeting.timeEntry.date;
+            }
+            
+            // If we can't compare dates, consider it a duplicate if all other info matches
+            // This is safer than allowing potential duplicates
+            return true;
+        });
         
         if (exactDuplicate) {
             console.log(`[${now}] Exact duplicate found, skipping storage`);
@@ -150,10 +165,10 @@ export class AIAgentPostedMeetingsStorage {
         await this.saveData();
     }
 
-    async isPosted(userId: string, meetingId: string, duration?: number): Promise<boolean> {
+    async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string): Promise<boolean> {
         await this.loadData();
         
-        // If duration is provided, use it as part of the duplicate check
+        // If we have duration and startTime, use them to check for specific recurring meeting instances
         if (duration !== undefined) {
             // Find meetings with the same ID and user
             const matchingMeetings = this.data.meetings.filter(m => 
@@ -166,13 +181,23 @@ export class AIAgentPostedMeetingsStorage {
             }
             
             // For recurring meetings, check if there's a meeting with similar duration
-            // Consider it a duplicate only if there's a meeting with similar duration (within 1 minute)
+            // Consider it a duplicate only if there's a meeting with similar duration and on the same day (if startTime provided)
             for (const meeting of matchingMeetings) {
                 // Convert timeEntry.time (hours) to seconds for comparison
-                // Note: timeEntry.time could be a string like "0.05" or a number
                 const timeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
                 const storedDuration = Math.round(timeInHours * 3600); // Convert hours to seconds
                 const durationDiff = Math.abs(storedDuration - duration);
+                
+                // If startTime is provided, also check the date
+                if (startTime) {
+                    const requestDate = new Date(startTime).toISOString().split('T')[0]; // Get YYYY-MM-DD
+                    const storedDate = meeting.timeEntry?.date;
+                    
+                    // If dates don't match, this instance is not a duplicate
+                    if (storedDate !== requestDate) {
+                        continue;
+                    }
+                }
                 
                 // If durations are similar (within 1 minute), consider it a duplicate
                 if (durationDiff < 60) { // 1 minute = 60 seconds
@@ -181,12 +206,12 @@ export class AIAgentPostedMeetingsStorage {
                 }
             }
             
-            console.log(`Meeting ${meetingId} has same ID but different duration, not considered a duplicate`);
-            // If we have meetings with the same ID but different durations, it's not a duplicate
+            console.log(`Meeting ${meetingId} has same ID but different duration/date, not considered a duplicate`);
+            // If we have meetings with the same ID but different durations or dates, it's not a duplicate
             return false;
         }
         
-        // Original behavior if duration is not provided
+        // Original behavior if duration is not provided - check for same ID and user
         return this.data.meetings.some(m => m.meetingId === meetingId && m.userId === userId);
     }
 } 
