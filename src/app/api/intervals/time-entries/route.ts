@@ -205,9 +205,14 @@ export async function POST(request: Request) {
                     manualMeetingId
                 });
                 
-                // Check if either ID exists in storage
-                const meetingExists = await aiAgentStorage.isPosted(session.user.email, standardMeetingId) || 
-                                     await aiAgentStorage.isPosted(session.user.email, manualMeetingId);
+                // Convert time in hours to seconds for duration-based duplicate check
+                const durationSeconds = Math.round(timeInHours * 3600);
+                console.log(`Manual post meeting duration: ${durationSeconds}s (${timeInHours} hours)`);
+                
+                // Check if either ID exists in storage, including duration check
+                const meetingExists = 
+                    await aiAgentStorage.isPosted(session.user.email, standardMeetingId, durationSeconds) || 
+                    await aiAgentStorage.isPosted(session.user.email, manualMeetingId, durationSeconds);
                 
                 if (meetingExists) {
                     console.log('Meeting already exists in AI Agent storage, skipping duplicate entry');

@@ -157,6 +157,22 @@ export function AIAgentView() {
     { label: 'Posted Date', value: 'postedAt' }
   ];
 
+  // Add helper function to normalize worktype values
+  const normalizeWorktype = (meeting: PostedMeeting): string => {
+    // Check for worktype in the timeEntry
+    if (meeting.timeEntry.worktype) {
+      return meeting.timeEntry.worktype;
+    }
+    
+    // If there's no worktype but there's a worktypeid of "803850", return "India-Meeting"
+    if (meeting.timeEntry.worktypeid === "803850") {
+      return "India-Meeting";
+    }
+    
+    // Default fallback
+    return "Meeting";
+  };
+
   // Update sort handler with proper typing
   const handleSort = (field: SortField) => {
     setSortConfig(prev => ({
@@ -192,7 +208,7 @@ export function AIAgentView() {
 
   // Extract unique modules and work types for filter dropdowns
   const uniqueModules = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.module)));
-  const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.worktype)));
+  const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => normalizeWorktype(meeting))));
   const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.date)));
   const uniqueClients = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.client).filter(Boolean))) as string[];
   const uniqueProjects = Array.from(new Set(postedMeetings.map(meeting => 
@@ -225,7 +241,7 @@ export function AIAgentView() {
     
     // Filter by work type
     if (workTypeFilter !== "all") {
-      filtered = filtered.filter(meeting => meeting.timeEntry.worktype === workTypeFilter);
+      filtered = filtered.filter(meeting => normalizeWorktype(meeting) === workTypeFilter);
     }
     
     // Filter by date
@@ -1266,7 +1282,7 @@ export function AIAgentView() {
                       <TableCell>{meeting.timeEntry.client || "N/A"}</TableCell>
                       <TableCell>{meeting.timeEntry.project || meeting.timeEntry.projectid || "N/A"}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
-                      <TableCell>{decodeHtmlEntities(meeting.timeEntry.worktype)}</TableCell>
+                      <TableCell>{decodeHtmlEntities(normalizeWorktype(meeting))}</TableCell>
                       <TableCell>{meeting.timeEntry.billable === 't' ? 'Yes' : 'No'}</TableCell>
                       <TableCell>{formatDateTime(meeting.postedAt)}</TableCell>
                     </TableRow>

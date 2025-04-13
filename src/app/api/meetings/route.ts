@@ -454,14 +454,24 @@ export async function GET(request: Request) {
         // Check if meeting is already posted using meetingId format
         const meetingId = meeting.meetingInfo?.meetingId || `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
         
-        // Check if meeting is already posted in AI agent storage
-        const isPosted = userPostedMeetings.some((m: { meetingId: string }) => 
-            // Check both formats to be safe
-            m.meetingId === meetingId || 
-            m.meetingId === `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`
-        );
+        // Get user duration to check for recurring meetings with different durations
+        let userDuration = 0;
+        if (meeting.attendanceRecords?.length && userEmail) {
+            const userRecord = meeting.attendanceRecords.find(record => 
+                record.email.toLowerCase() === userEmail.toLowerCase()
+            );
+            userDuration = userRecord?.duration || 0;
+        }
         
-        console.log('Meeting:', meeting.subject, 'ID:', meetingId, 'Is Posted:', isPosted);
+        // Check if meeting is already posted in AI agent storage
+        // First get all meetings with the same ID - we'll use AIAgentPostedMeetingsStorage directly
+        const storage = new AIAgentPostedMeetingsStorage();
+        await storage.loadData();
+        
+        // Use the enhanced isPosted method that considers duration
+        const isPosted = await storage.isPosted(userEmail, meetingId, userDuration);
+        
+        console.log('Meeting:', meeting.subject, 'ID:', meetingId, 'Duration:', userDuration, 'Is Posted:', isPosted);
         
         if (!isPosted) {
             console.log('Adding to filtered meetings list');

@@ -4,6 +4,7 @@ import { TimeEntryResponse } from '@/interfaces/time-entries';
 
 interface PostedMeeting {
     meetingId: string;
+    uniqueStorageId?: string;
     userId: string;
     timeEntry: TimeEntryResponse;
     rawResponse: any;
@@ -64,57 +65,60 @@ export class AIAgentPostedMeetingsStorage {
     async addPostedMeeting(userId: string, postedMeeting: PostedMeeting) {
         await this.loadData();
         
+        // Calculate timestamp for log messages
+        const now = new Date().toISOString();
+        
         // Ensure we're using the GraphID if it's available
-        // Check if meetingId is in the Graph ID format (AAMkA...)
         const isGraphIdFormat = typeof postedMeeting.meetingId === 'string' && 
                                 postedMeeting.meetingId.startsWith('AAMkA') && 
                                 postedMeeting.meetingId.includes('=');
 
-        console.log('AIAgentPostedMeetingsStorage: Adding meeting with ID:', postedMeeting.meetingId);
-        console.log('Is ID in Graph format?', isGraphIdFormat);
-        console.log('Meeting time value:', postedMeeting.timeEntry?.time, 'hours');
+        console.log(`[${now}] AIAgentPostedMeetingsStorage: Adding meeting with ID:`, postedMeeting.meetingId);
+        console.log(`[${now}] Is ID in Graph format?`, isGraphIdFormat);
+        console.log(`[${now}] Meeting time value:`, postedMeeting.timeEntry?.time, 'hours');
+        console.log(`[${now}] Meeting worktypeid:`, postedMeeting.timeEntry?.worktypeid);
         
-        // Calculate meeting duration in seconds (for debugging purposes)
+        // Create a unique storage ID that includes time and timestamp to ensure uniqueness
+        // This ensures each instance of a recurring meeting gets its own unique entry
         const timeInHours = parseFloat(postedMeeting.timeEntry?.time?.toString() || '0');
         const durationInSeconds = Math.round(timeInHours * 3600);
-        console.log(`Meeting duration in seconds: ${durationInSeconds}s (${timeInHours} hours)`);
+        const uniqueStorageId = `${postedMeeting.meetingId}_${timeInHours}_${now}`;
         
-        // Find meetings with the same ID and user
-        const matchingMeetings = this.data.meetings.filter(m => 
-            m.meetingId === postedMeeting.meetingId && m.userId === userId
+        console.log(`[${now}] Generated unique storage ID: ${uniqueStorageId}`);
+        console.log(`[${now}] Meeting duration: ${durationInSeconds}s (${timeInHours} hours)`);
+        
+        // Check if this EXACT entry already exists (shouldn't happen with the unique ID)
+        const exactDuplicate = this.data.meetings.some(m => 
+            m.meetingId === uniqueStorageId && 
+            m.userId === userId && 
+            m.timeEntry?.time === postedMeeting.timeEntry?.time
         );
         
-        // Check if this exact meeting instance already exists
-        let isDuplicate = false;
-        for (const meeting of matchingMeetings) {
-            // Compare time values to see if it's the same meeting instance
-            const storedTimeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
-            const storedDurationInSeconds = Math.round(storedTimeInHours * 3600);
-            const durationDiff = Math.abs(storedDurationInSeconds - durationInSeconds);
-            
-            // If durations are similar (within 1 minute), it's the same meeting instance
-            if (durationDiff < 60) {
-                console.log(`Meeting instance already exists with similar duration (diff: ${durationDiff}s), skipping storage`);
-                isDuplicate = true;
-                break;
-            }
-        }
-        
-        // If it's a duplicate, don't add it again
-        if (isDuplicate) {
+        if (exactDuplicate) {
+            console.log(`[${now}] Exact duplicate found, skipping storage`);
             return;
         }
         
-        console.log(`Adding new meeting instance with duration: ${durationInSeconds}s`);
+        // Create a proper copy of the timeEntry object
+        const timeEntryCopy = { ...postedMeeting.timeEntry };
+        
+        // Ensure default worktypeid value if missing
+        if (!timeEntryCopy.worktypeid) {
+            timeEntryCopy.worktypeid = "803850"; // Default worktype ID for India-Meeting
+        }
         
         // Convert postedAt to IST time format
         const postedAtIST = this.getISTFormattedDate(postedMeeting.postedAt);
-
-        // Add new meeting
+        
+        // We're always adding as a new entry with the unique ID
+        console.log(`[${now}] Adding new meeting instance with unique ID: ${uniqueStorageId}`);
+        
+        // Store both the original meetingId and our unique storage ID
         this.data.meetings.push({
-            meetingId: postedMeeting.meetingId,
+            meetingId: postedMeeting.meetingId, // Original meetingId for reference/lookups
+            uniqueStorageId, // Our unique storage ID
             userId: postedMeeting.userId,
-            timeEntry: postedMeeting.timeEntry,
+            timeEntry: timeEntryCopy,
             rawResponse: postedMeeting.rawResponse,
             postedAt: postedAtIST,
             taskName: postedMeeting.taskName
