@@ -1165,9 +1165,6 @@ export default function DashboardPage() {
                 <Logo size="sm" className="shrink-0" />
                 <div className="hidden sm:flex items-center gap-2 min-w-0">
                   <h1 className="text-lg font-semibold truncate">Meeting Time Tracker</h1>
-                  <span className="inline-flex items-center rounded-md bg-blue-400/10 px-2 py-0.5 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-400/30 align-middle dark:bg-blue-500/20 dark:text-blue-300 dark:ring-blue-500/30 shrink-0">
-                    Beta
-                  </span>
                 </div>
               </div>
 

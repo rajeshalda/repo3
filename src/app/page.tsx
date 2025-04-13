@@ -16,9 +16,6 @@ export default function LoginPage() {
         <div className="space-y-2 mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground flex items-center justify-center gap-2">
             Meeting Time Tracker
-            <span className="inline-flex items-center rounded-[2px] bg-blue-400/10 px-2 py-0 text-[7px] uppercase tracking-wide font-semibold text-blue-400 ring-1 ring-inset ring-blue-400/30 align-middle h-[12px] dark:bg-blue-500/20 dark:text-blue-300 dark:ring-blue-500/30">
-              Beta
-            </span>
           </h1>
         </div>
         <button

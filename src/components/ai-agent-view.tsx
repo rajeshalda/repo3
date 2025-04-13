@@ -120,7 +120,7 @@ export function AIAgentView() {
     unmatched: 0
   });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { error, success } = useToast();
+  const { error, success, toast } = useToast();
   const [isCancelling, setIsCancelling] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -282,7 +282,24 @@ export function AIAgentView() {
     if (storedUnmatched) {
       setUnmatchedMeetings(JSON.parse(storedUnmatched));
     }
-  }, []);
+
+    // Set up automatic refresh polling when AI agent is processing
+    let refreshInterval: NodeJS.Timeout | null = null;
+    
+    if (isProcessing) {
+      // Poll for updates every 5 seconds when agent is processing
+      refreshInterval = setInterval(() => {
+        console.log('Auto-refreshing posted meetings while AI agent is processing...');
+        fetchPostedMeetings();
+      }, 5000);
+    }
+    
+    return () => {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    };
+  }, [isProcessing]); // Re-run effect when processing state changes
 
   // Save unmatched meetings to localStorage whenever they change
   useEffect(() => {
@@ -615,6 +632,15 @@ export function AIAgentView() {
         data.data.meetings.forEach((meeting: any) => {
           addLog(`Processing: ${meeting.subject}`, 'info');
         });
+      }
+
+      // Check if any postings were successful
+      if (data.data.posted && data.data.posted.length > 0) {
+        // Show toast notification that meetings were posted and view needs refresh
+        success("Meetings posted successfully. Click 'Refresh' to view the latest data.");
+        
+        // Auto-refresh the posted meetings list
+        await fetchPostedMeetings();
       }
 
       // Update match results and summary
@@ -1097,6 +1123,29 @@ export function AIAgentView() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle>Recently Posted Meetings</CardTitle>
           <div className="flex space-x-2">
+            {/* Add Refresh button */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8"
+              onClick={() => fetchPostedMeetings()}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <span className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-1">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                    <path d="M21 3v5h-5"></path>
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                    <path d="M8 16H3v5"></path>
+                  </svg>
+                  Refresh
+                </span>
+              )}
+            </Button>
+            
             {postedMeetings.length > 0 && (
               <>
                 <Popover>

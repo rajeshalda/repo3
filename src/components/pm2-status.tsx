@@ -16,6 +16,7 @@ export function PM2Status() {
   const [status, setStatus] = useState<PM2Status | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentUptime, setCurrentUptime] = useState<number>(0);
   const { toast } = useToast();
   
   const PM2_SERVICE_URL = process.env.NEXT_PUBLIC_PM2_SERVICE_URL || 'http://localhost:3100';
@@ -33,6 +34,8 @@ export function PM2Status() {
             totalUsers: data.totalUsers,
             uptime: data.uptime
           });
+          // Set the currentUptime to match the fetched uptime
+          setCurrentUptime(data.uptime);
         }
       }
     } catch (error) {
@@ -46,11 +49,24 @@ export function PM2Status() {
   useEffect(() => {
     fetchStatus();
     
-    // Poll status every 30 seconds
-    const intervalId = setInterval(fetchStatus, 30000);
+    // Poll full status every 30 seconds
+    const statusIntervalId = setInterval(fetchStatus, 30000);
     
-    return () => clearInterval(intervalId);
+    return () => clearInterval(statusIntervalId);
   }, []);
+
+  // Add separate effect for incrementing uptime every second
+  useEffect(() => {
+    // Only start the uptime timer if we have a valid status
+    if (status?.status !== 'running') return;
+    
+    // Update uptime every second
+    const uptimeIntervalId = setInterval(() => {
+      setCurrentUptime(prev => prev + 1);
+    }, 1000);
+    
+    return () => clearInterval(uptimeIntervalId);
+  }, [status?.status]);
 
   const formatUptime = (seconds: number) => {
     const days = Math.floor(seconds / 86400);
@@ -119,7 +135,11 @@ export function PM2Status() {
                 <span className="text-sm text-muted-foreground">Uptime</span>
                 <div className="flex items-center">
                   <Clock className="mr-1 h-4 w-4 text-muted-foreground" />
-                  <span>{formatUptime(status.uptime)}</span>
+                  <span>{formatUptime(currentUptime)}</span>
+                  <span className="ml-2 relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
                 </div>
               </div>
               
@@ -156,8 +176,12 @@ export function PM2Status() {
                 variant="secondary" 
                 size="sm"
                 onClick={restartAgent}
+                disabled={true}
+                className="cursor-not-allowed opacity-60 relative"
+                title="This function is currently disabled by administrator"
               >
-                Restart Agent
+                <span className="relative z-10">Restart Agent</span>
+                <span className="absolute inset-0 bg-gray-200 opacity-20 rounded pointer-events-none"></span>
               </Button>
             </div>
           </div>
