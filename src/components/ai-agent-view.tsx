@@ -1252,7 +1252,7 @@ export function AIAgentView() {
                 </TableHeader>
                 <TableBody>
                   {filteredMeetings.map((meeting) => (
-                    <TableRow key={meeting.meetingId}>
+                    <TableRow key={`${meeting.meetingId}-${meeting.timeEntry.time}-${meeting.postedAt}`}>
                       <TableCell>{meeting.timeEntry.date}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.description)}</TableCell>
                       <TableCell>

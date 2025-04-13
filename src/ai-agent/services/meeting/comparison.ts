@@ -76,14 +76,45 @@ export class MeetingComparisonService {
                 return false;
             }
 
-            const duration1 = meeting1?.attendance?.records?.[0]?.duration || 0;
-            const duration2 = meeting2?.attendance?.records?.[0]?.duration || 0;
+            // If meeting IDs match (possibly a recurring meeting), but dates differ,
+            // we should not consider them duplicate meetings
+            if (meeting1.id === meeting2.id && meeting1Date !== meeting2Date) {
+                return false;
+            }
 
-            // Compare only meetingId, date, and duration
-            // We'll check for time entry existence separately
+            // Get user duration if available
+            let duration1 = 0;
+            if (meeting1?.attendance?.records && meeting1.userId) {
+                const userRecord = meeting1.attendance.records.find(record => 
+                    record.email.toLowerCase() === meeting1.userId.toLowerCase()
+                );
+                if (userRecord) {
+                    duration1 = userRecord.duration;
+                }
+            }
+
+            let duration2 = 0;
+            if (meeting2?.attendance?.records && meeting2.userId) {
+                const userRecord = meeting2.attendance.records.find(record => 
+                    record.email.toLowerCase() === meeting2.userId.toLowerCase()
+                );
+                if (userRecord) {
+                    duration2 = userRecord.duration;
+                }
+            }
+
+            // For meetings with same ID and date, consider them the same only 
+            // if they have similar durations (within 1 minute)
+            const durationDiff = Math.abs(duration1 - duration2);
+            const isSimilarDuration = durationDiff < 60; // 1 minute threshold
+
+            if (meeting1.id === meeting2.id && meeting1Date === meeting2Date && !isSimilarDuration) {
+                console.log(`Meetings have same ID and date but different durations (diff: ${durationDiff}s), considered different meetings`);
+            }
+
             return meeting1.id === meeting2.id && 
                    meeting1Date === meeting2Date && 
-                   Math.abs(duration1 - duration2) < 60; // 1 minute threshold
+                   isSimilarDuration;
         } catch (error) {
             console.error('Error in simpleCompare:', error);
             return false;
@@ -109,7 +140,19 @@ export class MeetingComparisonService {
                 for (const postedMeeting of postedMeetings) {
                     // Check if meeting is similar and has a time entry
                     if (this.simpleCompare(newMeeting, postedMeeting)) {
-                        const hasTimeEntry = await storage.isPosted(postedMeeting.userId, postedMeeting.id);
+                        // Get user duration if available
+                        let userDuration = 0;
+                        if (newMeeting?.attendance?.records && newMeeting.userId) {
+                            const userRecord = newMeeting.attendance.records.find(record => 
+                                record.email.toLowerCase() === newMeeting.userId.toLowerCase()
+                            );
+                            if (userRecord) {
+                                userDuration = userRecord.duration;
+                            }
+                        }
+                        
+                        // Pass duration to isPosted to handle recurring meetings correctly
+                        const hasTimeEntry = await storage.isPosted(postedMeeting.userId, postedMeeting.id, userDuration);
                         if (hasTimeEntry) {
                             simpleResult.duplicates.push(newMeeting);
                             isDuplicate = true;
@@ -199,7 +242,20 @@ export class MeetingComparisonService {
                 
                 // Check each meeting in the batch
                 for (const meeting of batch) {
-                    const isPosted = await storage.isPosted(meeting.userId, meeting.id);
+                    // Get user's duration for this meeting
+                    let userDuration = 0;
+                    if (meeting.attendance?.records && meeting.userId) {
+                        const userRecord = meeting.attendance.records.find(record => 
+                            record.email.toLowerCase() === meeting.userId.toLowerCase()
+                        );
+                        
+                        if (userRecord) {
+                            userDuration = userRecord.duration;
+                        }
+                    }
+                    
+                    // Pass duration to isPosted to handle recurring meetings correctly
+                    const isPosted = await storage.isPosted(meeting.userId, meeting.id, userDuration);
                     if (!isPosted) {
                         uniqueMeetings.push(meeting);
                     }
