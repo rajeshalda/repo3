@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { Info } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 export function PostedMeetingsView() {
   return (
@@ -12,14 +11,19 @@ export function PostedMeetingsView() {
           </div>
         </CardHeader>
         <CardContent className="p-6">
-          <Alert>
-            <Info className="h-4 w-4" />
-            <AlertTitle>Feature Deprecated</AlertTitle>
-            <AlertDescription>
-              The manual posting feature has been integrated with the AI Agent functionality.
-              Please use the "Recently Posted Meetings" section in the AI Agent tab to view all posted meetings.
-            </AlertDescription>
-          </Alert>
+          <div className="rounded-md relative overflow-hidden">
+            <div className="flex items-start space-x-3 p-4 bg-yellow-100 border-2 border-yellow-500 rounded-md relative overflow-hidden">
+              <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#000,#000_10px,#eab308_10px,#eab308_20px)] opacity-10"></div>
+              <AlertCircle className="h-5 w-5 text-black flex-shrink-0 z-10 mt-0.5" />
+              <div className="z-10">
+                <h3 className="text-base font-bold text-black mb-1">Feature Deprecated</h3>
+                <p className="text-sm text-black">
+                  The manual posting feature has been integrated with the AI Agent functionality.
+                  Please use the "Recently Posted Meetings" section in the AI Agent tab to view all posted meetings.
+                </p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

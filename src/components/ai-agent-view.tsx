@@ -1044,6 +1044,11 @@ export function AIAgentView() {
               <p className="text-muted-foreground">
                 Automatically process your meetings and create time entries using AI.
               </p>
+              <div className="flex items-center space-x-2 mt-2 p-2 bg-red-50 border-2 border-red-500 rounded-md relative overflow-hidden">
+                <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#fee2e2,#fee2e2_10px,#fecaca_10px,#fecaca_20px)] opacity-20"></div>
+                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 z-10" />
+                <p className="text-sm font-bold text-red-700 z-10">WARNING: Agent can make mistakes. Read the information below.</p>
+              </div>
             </div>
             <div className="flex items-start space-x-2 bg-yellow-50 p-3 rounded-md">
               <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />

@@ -16,7 +16,7 @@ export default function LoginPage() {
       </Button>
       
       <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
-        <span className="opacity-70">v2.1.0  Powered by ChatGPT-4o  © 2025 NathCorp Inc.</span>
+        <span className="opacity-70">v2.1.2  Powered by ChatGPT-4o  © 2025 NathCorp Inc.</span>
       </footer>
     </div>
   );
