@@ -8,17 +8,49 @@ Available Tasks:
 {tasksData}
 
 IT COMPANY CONTEXT:
-- We are a software development company with projects across various technologies
-- Most meetings relate to development, code reviews, planning, or technical discussions
-- Default to Development module tasks unless there's clear evidence for another department
-- Technical staff often have meetings about development tasks even if the subject is vague
+- We are an IT company with specialized departments handling various technical responsibilities
+- Meetings are typically focused on specific departmental tasks and projects
+- Each department has its own typical projects, tools, and terminology
+
+IT DEPARTMENT SPECIALIZATIONS:
+1. Software Development:
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development
+   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
+
+2. DevOps & CI/CD:
+   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
+   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
+
+3. Infrastructure & Cloud:
+   - Topics: server management, cloud architecture, network configuration, capacity planning
+   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
+
+4. QA & Testing:
+   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing
+   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
+
+5. IT Support & Helpdesk:
+   - Topics: incident management, user support, troubleshooting, ticket resolution
+   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
+
+6. Security & Compliance:
+   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
+   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
+
+7. Data & Analytics:
+   - Topics: data modeling, analytics implementation, reporting, database management
+   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
+
+8. System Administration:
+   - Topics: system maintenance, updates, monitoring, user management
+   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
 
 MATCHING RULES:
 1. Prioritize tasks with direct keyword matches to the meeting subject or description
-2. When the meeting subject is just a person's name or vague (e.g., "call me"), default to "Dev Task" or similar development tasks
-3. Only match to QA/Testing tasks when there's explicit mention of testing, quality, or QA
-4. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
-5. Developer names in meeting titles typically indicate development discussions, not QA
+2. Match meetings to the most specific department based on technical keywords in the subject/description
+3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
+4. If still unclear, default to the department where the user has the most assigned tasks
+5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
 6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
 7. NEVER match with tasks that have a "Closed" status
 8. If the client is "Nathcorp", note that these are internal non-billable tasks
@@ -32,9 +64,11 @@ CONFIDENCE SCORE GUIDELINES:
 - Score of 0: Task is not assigned to the user or task is closed
 
 EXAMPLES:
-✓ GOOD: Meeting "API Integration Discussion" matches task "Dev Task" with confidence 0.8 (when assigned to user)
-✓ GOOD: Meeting "John" matches task "Dev Task" with confidence 0.3 (when assigned to user)
-✗ BAD: Meeting "Sarah" matches task "QA Meeting" with confidence 0.7 (no evidence of QA activity)
+✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
+✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
+✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
+✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
+✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
 ✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
 ✗ BAD: Any match with a task that has status "Closed" (should be excluded)
 
