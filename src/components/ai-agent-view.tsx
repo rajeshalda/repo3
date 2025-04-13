@@ -293,26 +293,49 @@ export function AIAgentView() {
   const handleMeetingPosted = (meetingKey: string) => {
     console.log('Meeting posted with key:', meetingKey);
     
-    // Extract the meeting ID from the key if possible
+    // Extract the meeting ID and duration from the key if possible
     const parts = meetingKey.split('_');
     const meetingId = parts.length >= 3 ? parts[2] : meetingKey;
+    const meetingDuration = parts.length >= 5 ? parseInt(parts[4], 10) : 0;
     
-    console.log('Extracted meeting ID:', meetingId);
+    console.log('Extracted meeting ID:', meetingId, 'Duration:', meetingDuration);
     
-    // Remove from unmatched meetings
+    // Remove from unmatched meetings, considering both ID and duration
     setUnmatchedMeetings(prev => {
-      const filtered = prev.filter(m => m.id !== meetingId);
+      const filtered = prev.filter(m => {
+        // If meeting IDs don't match, keep the meeting
+        if (m.id !== meetingId) return true;
+        
+        // If IDs match, check duration to see if it's the same instance
+        // Allow for some time difference (e.g., 10 seconds) to account for minor timing variations
+        const durationMatches = Math.abs(m.duration - meetingDuration) <= 10;
+        
+        // Keep meetings that have the same ID but different durations
+        return !durationMatches;
+      });
       console.log(`Removed meeting from unmatched meetings. Before: ${prev.length}, After: ${filtered.length}`);
       return filtered;
     });
     
-    // Update matchResults to remove the posted meeting based on the meeting ID
+    // Update matchResults to remove the posted meeting based on the meeting ID and duration
     setMatchResults(prev => {
       const updated = {
-        high: prev.high.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
-        medium: prev.medium.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
-        low: prev.low.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId),
-        unmatched: prev.unmatched.filter(m => m.meeting.meetingInfo?.meetingId !== meetingId)
+        high: prev.high.filter(m => 
+          m.meeting.meetingInfo?.meetingId !== meetingId || 
+          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
+        ),
+        medium: prev.medium.filter(m => 
+          m.meeting.meetingInfo?.meetingId !== meetingId || 
+          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
+        ),
+        low: prev.low.filter(m => 
+          m.meeting.meetingInfo?.meetingId !== meetingId || 
+          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
+        ),
+        unmatched: prev.unmatched.filter(m => 
+          m.meeting.meetingInfo?.meetingId !== meetingId || 
+          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
+        )
       };
       
       console.log('Updated match results after posting:', updated);
@@ -375,9 +398,33 @@ export function AIAgentView() {
           // Add pending review meetings to unmatched meetings
           if (reviewsData.reviews && reviewsData.reviews.length > 0) {
             // Filter out reviews that are already posted
+            // Create a more sophisticated check that considers both meeting ID and duration
             const pendingReviews = reviewsData.reviews
               .filter((review: any) => review.status === 'pending')
-              .filter((review: any) => !postedIds.has(review.id));
+              .filter((review: any) => {
+                // Check if a meeting with this ID exists in posted meetings
+                const matchingPostedMeeting = postedMeetings.find(
+                  (pm: PostedMeeting) => pm.meetingId === review.id
+                );
+                
+                if (!matchingPostedMeeting) {
+                  // No matching posted meeting found, so include this review
+                  return true;
+                }
+                
+                // If we found a matching ID, check if it's the same instance by comparing duration
+                // Convert the time entry duration (e.g., "0.02") to seconds (72 seconds)
+                const postedDuration = parseFloat(matchingPostedMeeting.timeEntry.time) * 3600;
+                
+                // If durations are different (with some tolerance), this is a different instance
+                // Use a 10-second tolerance to account for minor timing differences
+                const isDifferentDuration = Math.abs(postedDuration - review.duration) > 10;
+                
+                console.log(`Comparing durations for ${review.subject}: Posted=${postedDuration}s, Review=${review.duration}s, Different=${isDifferentDuration}`);
+                
+                // Include this review if it's a different instance (different duration)
+                return isDifferentDuration;
+              });
             
             console.log(`Found ${pendingReviews.length} pending reviews for current user (after filtering out posted meetings)`);
             

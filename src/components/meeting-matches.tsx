@@ -141,7 +141,18 @@ function generateMeetingKey(meeting: Meeting, userId: string): string {
   const meetingId = (meeting.meetingInfo?.meetingId || '').trim();
   const meetingName = meeting.subject.trim();
   const meetingTime = meeting.startTime.trim();
-  const key = `${userId.trim()}_${meetingName}_${meetingId}_${meetingTime}`;
+  
+  // Calculate total duration for this meeting
+  let totalDuration = 0;
+  const userAttendance = meeting.attendanceRecords.find(
+    record => record.email === userId
+  );
+  if (userAttendance) {
+    totalDuration = userAttendance.duration;
+  }
+  
+  // Include duration in the key to differentiate recurring meetings with different durations
+  const key = `${userId.trim()}_${meetingName}_${meetingId}_${meetingTime}_${totalDuration}`;
   console.log('Generated key:', key);
   return key;
 }
@@ -734,8 +745,17 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       const meetingKey = generateMeetingKey(m.meeting, userId);
       const meetingId = m.meeting.meetingInfo?.meetingId;
       
-      // Check if meeting is already posted - check both the key and the ID
-      const isPosted = postedIds.has(meetingKey) || (meetingId && postedIds.has(meetingId));
+      // Improved logic to check if meeting is already posted
+      // First check the full key which includes duration
+      let isPosted = postedIds.has(meetingKey);
+      
+      // If not found by key, check if it's a recurring meeting with same ID but different instance
+      if (!isPosted && meetingId && postedIds.has(meetingId)) {
+        // For meetings with the same ID, we need to check if this is truly the same instance
+        // or a different instance of a recurring meeting by comparing duration and time
+        console.log('Found meeting with same ID but potentially different instance:', m.meeting.subject);
+        isPosted = false; // Assume it's a different instance of a recurring meeting
+      }
       
       // Add attendance check
       const hasAttendance = m.meeting.attendanceRecords.some(
