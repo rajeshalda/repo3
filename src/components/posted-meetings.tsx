@@ -120,13 +120,13 @@ export function PostedMeetings({ meetings }: PostedMeetingsProps) {
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-[25%] font-semibold">Meeting Subject</TableHead>
-            <TableHead className="w-[15%] whitespace-nowrap font-semibold">Meeting Date</TableHead>
-            <TableHead className="w-[10%] font-semibold">Duration</TableHead>
-            <TableHead className="w-[15%] font-semibold">Task Name</TableHead>
-            <TableHead className="w-[15%] font-semibold">Client</TableHead>
-            <TableHead className="w-[10%] font-semibold">Project</TableHead>
-            <TableHead className="w-[10%] whitespace-nowrap font-semibold">Posted Date</TableHead>
+            <TableHead className="w-[25%] text-base font-bold">Meeting Subject</TableHead>
+            <TableHead className="w-[15%] whitespace-nowrap text-base font-bold">Meeting Date</TableHead>
+            <TableHead className="w-[10%] text-base font-bold">Duration</TableHead>
+            <TableHead className="w-[15%] text-base font-bold">Task Name</TableHead>
+            <TableHead className="w-[15%] text-base font-bold">Client</TableHead>
+            <TableHead className="w-[10%] text-base font-bold">Project</TableHead>
+            <TableHead className="w-[10%] whitespace-nowrap text-base font-bold">Posted Date</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
