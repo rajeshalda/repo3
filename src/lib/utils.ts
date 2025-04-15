@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { DateRange } from "react-day-picker"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -100,3 +101,42 @@ export const DATE_ONLY_FORMAT: Intl.DateTimeFormatOptions = {
   day: 'numeric',
   timeZone: IST_TIMEZONE
 };
+
+// Convert date range to UTC times based on IST day boundaries
+export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
+  if (!dateRange?.from || !dateRange?.to) return null;
+
+  // For start date: We want 00:00:00 IST of the start date
+  // For April 13, we want meetings from April 13 00:00:00 IST onwards
+  const utcStart = new Date(dateRange.from);
+  // Set to beginning of the selected day in IST (18:30 UTC of same day)
+  utcStart.setUTCHours(18, 30, 0, 0);  // 18:30:00.000 UTC = 00:00:00 IST next day
+
+  // For end date: We want 23:59:59.999 IST of the end date
+  // This means 18:29:59.999 UTC of the NEXT day
+  const utcEnd = new Date(dateRange.to);
+  utcEnd.setDate(utcEnd.getDate() + 1); // Go to next day
+  utcEnd.setUTCHours(18, 29, 59, 999); // 18:29:59.999 UTC = 23:59:59.999 IST of selected end date
+
+  // Log the conversions for verification
+  console.log('Date range conversion:', {
+    selectedRange: {
+      start: dateRange.from.toLocaleDateString('en-US', { timeZone: IST_TIMEZONE }),
+      end: dateRange.to.toLocaleDateString('en-US', { timeZone: IST_TIMEZONE })
+    },
+    utcTimes: {
+      start: utcStart.toISOString(),
+      end: utcEnd.toISOString()
+    },
+    istTimes: {
+      // Convert UTC times back to IST for verification
+      start: new Date(utcStart.getTime() + IST_OFFSET).toISOString(),
+      end: new Date(utcEnd.getTime() + IST_OFFSET).toISOString()
+    }
+  });
+
+  return {
+    start: utcStart.toISOString(),
+    end: utcEnd.toISOString()
+  };
+}

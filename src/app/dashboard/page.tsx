@@ -45,7 +45,7 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
-import { formatDateIST } from "@/lib/utils";
+import { formatDateIST, convertDateRangeToUTC } from "@/lib/utils";
 
 interface RawAttendanceRecord {
   identity: {
@@ -256,13 +256,17 @@ export default function DashboardPage() {
   const fetchMeetings = useCallback(async () => {
     try {
       setMeetingsLoading(true);
+      
+      // Convert date range to UTC times based on IST day boundaries
+      const utcDateRange = convertDateRangeToUTC(dateRange);
+      if (!utcDateRange) {
+        console.error('Invalid date range');
+        return;
+      }
+
       const params = new URLSearchParams();
-      if (dateRange?.from) {
-        params.append('from', dateRange.from.toISOString());
-      }
-      if (dateRange?.to) {
-        params.append('to', dateRange.to.toISOString());
-      }
+      params.append('from', utcDateRange.start);
+      params.append('to', utcDateRange.end);
       
       const response = await fetch(`/api/meetings?${params.toString()}`);
       await handleApiResponse(response);
@@ -279,34 +283,27 @@ export default function DashboardPage() {
       const dateFilteredMeetings = startDate && endDate 
         ? rawData.meetings.filter((meeting: Meeting) => {
             const meetingDate = new Date(meeting.startTime);
-            // Compare dates without time
-            const meetingDateOnly = new Date(
-              meetingDate.getFullYear(),
-              meetingDate.getMonth(),
-              meetingDate.getDate()
-            );
-            const startDateOnly = new Date(
-              startDate.getFullYear(),
-              startDate.getMonth(),
-              startDate.getDate()
-            );
-            const endDateOnly = new Date(
-              endDate.getFullYear(),
-              endDate.getMonth(),
-              endDate.getDate()
-            );
             
-            // Special case for March 10 meetings when start date is March 11
-            // This handles the specific bug we're seeing
-            if (meetingDateOnly.getDate() === 10 && 
-                meetingDateOnly.getMonth() === 2 && // March (0-indexed)
-                startDateOnly.getDate() === 11 && 
-                startDateOnly.getMonth() === 2) {
-              console.log(`Filtering out March 10 meeting: ${meeting.subject}`);
-              return false;
-            }
+            // Convert meeting time to IST for comparison
+            const meetingIST = new Date(meetingDate.getTime() + (5.5 * 60 * 60 * 1000));
             
-            return meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
+            // Get start of day for selected start date in IST
+            const startIST = new Date(startDate);
+            startIST.setHours(0, 0, 0, 0);
+            
+            // Get end of day for selected end date in IST
+            const endIST = new Date(endDate);
+            endIST.setHours(23, 59, 59, 999);
+            
+            console.log('Meeting time check:', {
+              meeting: meeting.subject,
+              meetingIST: meetingIST.toISOString(),
+              startIST: startIST.toISOString(),
+              endIST: endIST.toISOString(),
+              isWithinRange: meetingIST >= startIST && meetingIST <= endIST
+            });
+            
+            return meetingIST >= startIST && meetingIST <= endIST;
           })
         : rawData.meetings;
       
@@ -384,16 +381,19 @@ export default function DashboardPage() {
     // Clear match results when date range changes
     setMatchResults(null);
     if (newRange?.from && newRange?.to) {
+      const utcDateRange = convertDateRangeToUTC(newRange);
       console.log('Date range changed:', {
         from: newRange.from.toISOString(),
         to: newRange.to.toISOString(),
         fromLocal: newRange.from.toLocaleDateString(),
-        toLocal: newRange.to.toLocaleDateString()
+        toLocal: newRange.to.toLocaleDateString(),
+        utcStart: utcDateRange?.start,
+        utcEnd: utcDateRange?.end
       });
       
       localStorage.setItem('meetingsDateRange', JSON.stringify({
-        from: newRange.from.toISOString(),
-        to: newRange.to.toISOString()
+        from: utcDateRange?.start,
+        to: utcDateRange?.end
       }));
       // Also clear from localStorage
       localStorage.removeItem('taskMatches');
