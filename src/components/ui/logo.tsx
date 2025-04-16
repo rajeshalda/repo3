@@ -12,7 +12,7 @@ interface LogoProps {
 const sizes = {
   sm: { width: 60, height: 30 },     // For very small displays
   md: { width: 80, height: 40 },     // For dashboard header
-  lg: { width: 240, height: 240 },   // For login page
+  lg: { width: 540, height: 540 },   // For login page
 };
 
 export function Logo({ className, size = 'md', variant = 'dashboard' }: LogoProps) {

@@ -6,7 +6,74 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatDate(dateString: string) {
+// Get user's timezone
+export function getUserTimezone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+// Format date with user's timezone
+export function formatDateInUserTimezone(dateString: string) {
+  const date = new Date(dateString);
+  const userTimezone = getUserTimezone();
+  return date.toLocaleString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: userTimezone
+  });
+}
+
+// Convert local date to UTC for Graph API
+export function convertLocalDateToUTC(date: Date, timeString: string): Date {
+  const userTimezone = getUserTimezone();
+  // Create a date string in user's timezone
+  const localDateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${timeString}`;
+  
+  // Parse the date string while considering the user's timezone
+  return new Date(new Date(localDateString).toLocaleString('en-US', { timeZone: userTimezone }));
+}
+
+// Convert date range to UTC times for Graph API
+export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
+  if (!dateRange?.from || !dateRange?.to) return null;
+
+  const userTimezone = getUserTimezone();
+
+  // For start date: Convert local midnight to UTC
+  const localStartDate = convertLocalDateToUTC(dateRange.from, '00:00:00');
+  
+  // For end date: Convert local 23:59:59.999 to UTC
+  const localEndDate = convertLocalDateToUTC(dateRange.to, '23:59:59.999');
+
+  // Log the conversions for verification
+  console.log('Date range conversion:', {
+    userTimezone,
+    selectedRange: {
+      start: dateRange.from.toLocaleDateString('en-US', { timeZone: userTimezone }),
+      end: dateRange.to.toLocaleDateString('en-US', { timeZone: userTimezone })
+    },
+    localTimes: {
+      start: localStartDate.toLocaleString('en-US', { timeZone: userTimezone }),
+      end: localEndDate.toLocaleString('en-US', { timeZone: userTimezone })
+    },
+    utcTimes: {
+      start: localStartDate.toISOString(),
+      end: localEndDate.toISOString()
+    }
+  });
+
+  return {
+    start: localStartDate.toISOString(),
+    end: localEndDate.toISOString(),
+    timezone: userTimezone // This can be used for the Prefer: outlook.timezone header
+  };
+}
+
+// Format date with specific timezone
+export function formatDateWithTimezone(dateString: string, timezone: string = getUserTimezone()) {
   const date = new Date(dateString);
   return date.toLocaleString('en-US', {
     weekday: 'short',
@@ -15,28 +82,8 @@ export function formatDate(dateString: string) {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
-    timeZoneName: 'short'
+    timeZone: timezone
   });
-}
-
-export function formatDateWithTimezone(dateString: string) {
-  const date = new Date(dateString);
-  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return `${date.toLocaleString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  })} GMT${formatTimezoneOffset(date)}`;
-}
-
-function formatTimezoneOffset(date: Date): string {
-  const offset = -date.getTimezoneOffset();
-  const hours = Math.floor(Math.abs(offset) / 60);
-  const minutes = Math.abs(offset) % 60;
-  return `${offset >= 0 ? '+' : '-'}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
 
 // Constants for IST timezone
@@ -101,42 +148,3 @@ export const DATE_ONLY_FORMAT: Intl.DateTimeFormatOptions = {
   day: 'numeric',
   timeZone: IST_TIMEZONE
 };
-
-// Convert date range to UTC times based on IST day boundaries
-export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
-  if (!dateRange?.from || !dateRange?.to) return null;
-
-  // For start date: We want 00:00:00 IST of the start date
-  // For April 13, we want meetings from April 13 00:00:00 IST onwards
-  const utcStart = new Date(dateRange.from);
-  // Set to beginning of the selected day in IST (18:30 UTC of same day)
-  utcStart.setUTCHours(18, 30, 0, 0);  // 18:30:00.000 UTC = 00:00:00 IST next day
-
-  // For end date: We want 23:59:59.999 IST of the end date
-  // This means 18:29:59.999 UTC of the NEXT day
-  const utcEnd = new Date(dateRange.to);
-  utcEnd.setDate(utcEnd.getDate() + 1); // Go to next day
-  utcEnd.setUTCHours(18, 29, 59, 999); // 18:29:59.999 UTC = 23:59:59.999 IST of selected end date
-
-  // Log the conversions for verification
-  console.log('Date range conversion:', {
-    selectedRange: {
-      start: dateRange.from.toLocaleDateString('en-US', { timeZone: IST_TIMEZONE }),
-      end: dateRange.to.toLocaleDateString('en-US', { timeZone: IST_TIMEZONE })
-    },
-    utcTimes: {
-      start: utcStart.toISOString(),
-      end: utcEnd.toISOString()
-    },
-    istTimes: {
-      // Convert UTC times back to IST for verification
-      start: new Date(utcStart.getTime() + IST_OFFSET).toISOString(),
-      end: new Date(utcEnd.getTime() + IST_OFFSET).toISOString()
-    }
-  });
-
-  return {
-    start: utcStart.toISOString(),
-    end: utcEnd.toISOString()
-  };
-}
