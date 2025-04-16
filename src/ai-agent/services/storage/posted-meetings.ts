@@ -174,15 +174,30 @@ export class AIAgentPostedMeetingsStorage {
             const matchingMeetings = this.data.meetings.filter(m => 
                 m.meetingId === meetingId && m.userId === userId
             );
+
+            // For name-based matching, also check if the description matches the meetingId
+            // This helps catch manually posted meetings with the same name as AI agent posts
+            const descriptionMatches = this.data.meetings.filter(m => 
+                m.userId === userId && 
+                m.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase()
+            );
             
-            // If no matching meetings found, it's not a duplicate
-            if (matchingMeetings.length === 0) {
+            // Combine both sets of matches without duplicates
+            const combinedMatches = [...matchingMeetings];
+            for (const match of descriptionMatches) {
+                if (!matchingMeetings.some(m => m.meetingId === match.meetingId)) {
+                    combinedMatches.push(match);
+                }
+            }
+            
+            // If no matching meetings found at all, it's not a duplicate
+            if (combinedMatches.length === 0) {
                 return false;
             }
             
             // For recurring meetings, check if there's a meeting with similar duration
             // Consider it a duplicate only if there's a meeting with similar duration and on the same day (if startTime provided)
-            for (const meeting of matchingMeetings) {
+            for (const meeting of combinedMatches) {
                 // Convert timeEntry.time (hours) to seconds for comparison
                 const timeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
                 const storedDuration = Math.round(timeInHours * 3600); // Convert hours to seconds
@@ -212,6 +227,9 @@ export class AIAgentPostedMeetingsStorage {
         }
         
         // Original behavior if duration is not provided - check for same ID and user
-        return this.data.meetings.some(m => m.meetingId === meetingId && m.userId === userId);
+        return this.data.meetings.some(m => 
+            (m.meetingId === meetingId || m.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase()) && 
+            m.userId === userId
+        );
     }
 } 

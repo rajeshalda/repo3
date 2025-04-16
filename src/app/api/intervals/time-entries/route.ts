@@ -178,18 +178,7 @@ export async function POST(request: Request) {
                 rule: 'Internal/Nathcorp = Non-billable, Everything else = Billable'
             });
             
-            // Create time entry with hours
-            const result = await intervalsApi.createTimeEntry({
-                taskId,
-                date,
-                time: timeInHours > 0 ? timeInHours : 0.01, // Minimum time entry of 0.01 hours for manual posts
-                description: description || 'No description provided',
-                workType: workType || 'Meeting',
-                billable: billableStr
-            });
-
-            // Store in the appropriate storage system based on the source
-            // Use isManualPost to determine storage destination
+            // For manual posts, check for duplicates BEFORE creating the time entry
             if (isManualPost) {
                 // Before adding a new meeting, check if it's already in the AI Agent storage
                 // to avoid duplicate entries
@@ -214,14 +203,62 @@ export async function POST(request: Request) {
                     await aiAgentStorage.isPosted(session.user.email, standardMeetingId, durationSeconds) || 
                     await aiAgentStorage.isPosted(session.user.email, manualMeetingId, durationSeconds);
                 
-                if (meetingExists) {
+                // Additional check: For manual posts, also check directly by meeting subject/description
+                // This handles cases where the meeting name is the same but IDs differ
+                let descriptionExists = false;
+                if (description) {
+                    // Get all posted meetings and check for matching descriptions on the same date
+                    const postedMeetings = await aiAgentStorage.getPostedMeetings(session.user.email);
+                    descriptionExists = postedMeetings.some(meeting => {
+                        // Same description
+                        const sameDescription = 
+                            meeting.timeEntry?.description?.toLowerCase() === description.toLowerCase();
+                        
+                        // Same date (if we have date information)
+                        let sameDate = true;
+                        if (date && meeting.timeEntry?.date) {
+                            sameDate = meeting.timeEntry.date === date;
+                        }
+                        
+                        // Same duration (approximately)
+                        let similarDuration = true;
+                        if (durationSeconds > 0 && meeting.timeEntry?.time) {
+                            const meetingTimeInHours = parseFloat(meeting.timeEntry.time.toString());
+                            const meetingDurationSeconds = Math.round(meetingTimeInHours * 3600);
+                            const durationDiff = Math.abs(meetingDurationSeconds - durationSeconds);
+                            similarDuration = durationDiff < 60; // Within 1 minute
+                        }
+                        
+                        return sameDescription && sameDate && similarDuration;
+                    });
+                    
+                    if (descriptionExists) {
+                        console.log(`Meeting with description "${description}" already exists on date ${date} with similar duration`);
+                    }
+                }
+                
+                if (meetingExists || descriptionExists) {
                     console.log('Meeting already exists in AI Agent storage, skipping duplicate entry');
                     return NextResponse.json({ 
                         success: true, 
                         message: 'Meeting already posted. Skipping duplicate entry.'
                     });
                 }
-                
+            }
+            
+            // Create time entry with hours
+            const result = await intervalsApi.createTimeEntry({
+                taskId,
+                date,
+                time: timeInHours > 0 ? timeInHours : 0.01, // Minimum time entry of 0.01 hours for manual posts
+                description: description || 'No description provided',
+                workType: workType || 'Meeting',
+                billable: billableStr
+            });
+
+            // Store in the appropriate storage system based on the source
+            // Use isManualPost to determine storage destination
+            if (isManualPost) {
                 // For manual posts, we'll use the same storage format as AI agent
                 // Get task details to store the task name
                 const taskDetails = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
@@ -262,7 +299,8 @@ export async function POST(request: Request) {
                 }
                 
                 // Store the meeting in AI Agent storage format
-                await aiAgentStorage.addPostedMeeting(
+                const storageForManual = new AIAgentPostedMeetingsStorage();
+                await storageForManual.addPostedMeeting(
                     session.user.email,
                     {
                         meetingId: primaryMeetingId || '', // Use the primary ID (Graph ID if available)
@@ -278,7 +316,7 @@ export async function POST(request: Request) {
                 console.log('Meeting stored in AI Agent storage format only to prevent duplication');
             } else {
                 // For AI agent posts, store only in AIAgentPostedMeetingsStorage
-                const aiAgentStorage = new AIAgentPostedMeetingsStorage();
+                const storageForAgent = new AIAgentPostedMeetingsStorage();
                 
                 // Get additional client and project information for the task
                 // This is critical for displaying this information in the UI
@@ -307,7 +345,7 @@ export async function POST(request: Request) {
                 
                 console.log('AI Agent: Storing meeting with meetingId:', primaryMeetingId);
                 
-                await aiAgentStorage.addPostedMeeting(
+                await storageForAgent.addPostedMeeting(
                     session.user.email,
                     {
                         meetingId: primaryMeetingId || '',  // Use the Graph ID when available

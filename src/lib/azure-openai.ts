@@ -2,7 +2,7 @@ export class AzureOpenAIClient {
   private endpoint: string;
   private apiKey: string;
   private deploymentName: string;
-  private apiVersion: string = '2023-12-01-preview'; // Updated API version
+  private apiVersion: string = '2025-01-01-preview'; // Updated API version
   private lastRequestTime: number = 0;
   private minRequestInterval: number = 1000; // Minimum 1 second between requests
   private maxRetries: number = 3;
