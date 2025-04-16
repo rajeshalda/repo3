@@ -147,5 +147,28 @@
     "status": "pending",
     "confidence": 0,
     "reason": "Error during task matching"
+  },
+  {
+    "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=",
+    "userId": "debrab@m365x92504196.onmicrosoft.com",
+    "subject": "infra",
+    "startTime": "2025-04-16T17:00:00.0000000",
+    "endTime": "2025-04-16T17:30:00.0000000",
+    "duration": 190,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [
+      {
+        "id": "16600382",
+        "title": "Daily Status Report",
+        "project": "Internal",
+        "module": "Development",
+        "confidence": 0.5,
+        "reason": "The meeting subject 'infra' is a common abbreviation for 'infrastructure', which aligns with the Infrastructure & Cloud department. The 'Daily Status Report' task is an internal task (client: Nathcorp) and is assigned to the user. While there are no explicit technical keywords or context, this is the only internal task available and assigned, and it is plausible for an infrastructure-related internal status meeting. Evidence is moderate but not strong, so confidence is set to 0.5."
+      }
+    ],
+    "status": "approved",
+    "confidence": 0.5,
+    "reason": "Low confidence match"
   }
 ]
