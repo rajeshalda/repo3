@@ -5,6 +5,7 @@ import { IntervalsAPI } from '@/lib/intervals-api';
 import { UserStorage } from '@/lib/user-storage';
 import { AzureOpenAIClient } from '@/lib/azure-openai';
 import { findKeywordMatches, generateMatchingPrompt } from '@/lib/matching-utils';
+import { fetchAllTasksDirectly } from '@/lib/intervals-direct-fetcher';
 import type { Task } from '@/lib/types';
 
 interface Meeting {
@@ -247,6 +248,69 @@ function deduplicateMeetings(meetings: Meeting[]): Meeting[] {
   });
 }
 
+// Skip cache and fetch fresh tasks directly
+async function fetchFreshTasksWithoutCache(apiKey: string): Promise<any[]> {
+  try {
+    console.log('Forcing fresh task fetch from Intervals API without cache...');
+    // First try the direct fetcher
+    let tasks = await fetchAllTasksDirectly(apiKey);
+    
+    if (tasks && tasks.length > 0) {
+      console.log(`Direct fetcher returned ${tasks.length} tasks`);
+      return tasks;
+    }
+    
+    // If direct fetcher fails, use the API proxy but with a cache busting parameter
+    const timestamp = new Date().getTime();
+    const url = '/api/intervals-proxy';
+    const headers = {
+      'Content-Type': 'application/json',
+      'x-user-id': apiKey,
+      'x-no-cache': 'true' // Signal not to use cache
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        endpoint: `task?limit=500&_nocache=${timestamp}`, // Add cache busting parameter
+        method: 'GET',
+        data: null,
+        forceBypassCache: true // Add extra flag for cache bypassing
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Parse response format
+    let parsedTasks = [];
+    if (data && Array.isArray(data.task)) {
+      parsedTasks = data.task;
+    } else if (Array.isArray(data)) {
+      parsedTasks = data;
+    } else if (data && data.tasks && Array.isArray(data.tasks)) {
+      parsedTasks = data.tasks;
+    } else if (data && data.data && Array.isArray(data.data.task)) {
+      parsedTasks = data.data.task;
+    } else if (data && data.data && Array.isArray(data.data)) {
+      parsedTasks = data.data;
+    } else {
+      console.warn('Unexpected API response format when forcing fresh task fetch');
+    }
+    
+    console.log(`Forced fresh fetch returned ${parsedTasks.length} tasks`);
+    return parsedTasks;
+  } catch (error) {
+    console.error('Error in fetchFreshTasksWithoutCache:', error);
+    // Return empty array on error
+    return [];
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -284,9 +348,24 @@ export async function POST(request: Request) {
     const currentUser = await intervalsApi.getCurrentUser();
     console.log('Current user information:', currentUser);
     
-    // Fetch all tasks first
-    console.log('Fetching tasks using Intervals API...');
-    const allTasks = await intervalsApi.getTasks();
+    // Fetch all tasks directly without using cache
+    console.log('Fetching fresh tasks without using cache...');
+    let allTasks = await fetchFreshTasksWithoutCache(apiKeyValue);
+    
+    if (!allTasks || allTasks.length === 0) {
+      console.log('Fresh task fetch failed, trying direct fetcher...');
+      allTasks = await fetchAllTasksDirectly(apiKeyValue);
+      
+      if (!allTasks || allTasks.length === 0) {
+        console.log('Direct fetcher failed, falling back to regular API...');
+        // Last resort: Fall back to the regular API method but with cache bypass
+        allTasks = await intervalsApi.getTasks({ bypassCache: true });
+        if (!allTasks || allTasks.length === 0) {
+          console.log('All methods failed to fetch tasks');
+          return NextResponse.json({ error: 'No tasks found' }, { status: 404 });
+        }
+      }
+    }
     console.log('Total available tasks:', allTasks.length);
     
     // Filter tasks to only show those assigned to the current user and not closed

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 import { UserStorage } from '@/lib/user-storage';
 import { IntervalsAPI } from '@/lib/intervals-api';
+import { fetchAllTasksDirectly } from '@/lib/intervals-direct-fetcher';
 
 // Add a simple in-memory rate limiting mechanism
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute in milliseconds
@@ -95,14 +96,21 @@ export async function GET() {
     console.log('Initializing Intervals API with key...');
     const intervalsApi = new IntervalsAPI(finalApiKey);
     
-    // Get all tasks first
-    console.log('Fetching tasks from Intervals...');
-    const tasks = await intervalsApi.getTasks();
+    // First try to get tasks using the direct fetcher
+    console.log('Fetching tasks directly from Intervals API...');
+    let tasks = await fetchAllTasksDirectly(finalApiKey);
     
     if (!tasks || tasks.length === 0) {
-      console.log('No tasks found in Intervals');
-      return NextResponse.json([]);
+      console.log('No tasks found using direct fetcher, falling back to regular API...');
+      // Fall back to the regular API method
+      tasks = await intervalsApi.getTasks();
+      if (!tasks || tasks.length === 0) {
+        console.log('No tasks found in Intervals');
+        return NextResponse.json([]);
+      }
     }
+    
+    console.log(`Retrieved ${tasks.length} total tasks from Intervals API`);
 
     // Get the current user for filtering
     console.log('Getting current user to filter tasks...');
@@ -154,14 +162,16 @@ export async function GET() {
       }
       
       // Check if assigneeid is a string containing the user's personid
-      const assignees = task.assigneeid.split(',');
+      // Split by commas AND spaces to handle different formats
+      const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
       console.log(`Task ${task.id} assignees:`, assignees, 'Current user personid:', currentUser.personid);
       
       // Try both string and number comparisons because the IDs might be in different formats
       const isAssignedToUser = assignees.some((id: string) => {
-        return id.trim() === currentUser.personid || 
-               id.trim() === String(currentUser.personid) || 
-               Number(id.trim()) === Number(currentUser.personid);
+        const normalizedId = id.trim();
+        const normalizedPersonId = String(currentUser.personid).trim();
+        return normalizedId === normalizedPersonId || 
+               Number(normalizedId) === Number(normalizedPersonId);
       });
       
       if (isAssignedToUser) {
@@ -172,6 +182,19 @@ export async function GET() {
     });
 
     console.log(`Filtered from ${tasks.length} to ${filteredTasks.length} tasks assigned to the current user and not closed`);
+
+    // Count how many tasks are closed vs. open
+    const openTasks = tasks.filter((task: any) => task.status !== "Closed");
+    const closedTasks = tasks.filter((task: any) => task.status === "Closed");
+    console.log(`Total tasks breakdown: ${openTasks.length} open, ${closedTasks.length} closed`);
+    
+    // Count tasks assigned to user (both open and closed)
+    const assignedToUser = tasks.filter((task: any) => {
+      if (!task.assigneeid) return false;
+      const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+      return assignees.some((id: string) => id.trim() === String(currentUser.personid).trim());
+    });
+    console.log(`Tasks assigned to current user: ${assignedToUser.length} total, ${filteredTasks.length} open`);
 
     // Transform the response to match our Task interface
     const formattedTasks = filteredTasks.map((task: { 

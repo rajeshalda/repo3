@@ -2,6 +2,7 @@ import { openAIClient } from '../../core/azure-openai/client';
 import { generateTaskMatchingPrompt } from '../../core/azure-openai/prompts/task-matching';
 import { ProcessedMeeting } from '../../../interfaces/meetings';
 import { IntervalsAPI, Task } from './intervals';
+import { fetchTasksDirectly } from './direct-fetcher';
 import { reviewService } from '../review/review-service';
 import { ReviewMeeting } from '../review/types';
 import fs from 'fs/promises';
@@ -77,8 +78,29 @@ export class TaskService {
     }
 
     private async fetchTasksFromIntervals(apiKey: string): Promise<Task[]> {
-        const api = new IntervalsAPI(apiKey);
-        return api.getTasks();
+        try {
+            console.log('Fetching tasks using standard API implementation...');
+            const api = new IntervalsAPI(apiKey);
+            const tasks = await api.getTasks();
+            
+            // If we got a reasonable number of tasks, return them
+            if (tasks.length > 0) {
+                console.log(`Standard API returned ${tasks.length} tasks`);
+                return tasks;
+            }
+            
+            // If we didn't get any tasks, try the direct fetcher as backup
+            console.log('No tasks found with standard API, trying direct fetcher...');
+            const directTasks = await fetchTasksDirectly(apiKey);
+            console.log(`Direct fetcher returned ${directTasks.length} tasks`);
+            
+            return directTasks;
+        } catch (error) {
+            console.error('Error using standard API, falling back to direct fetcher:', error);
+            const directTasks = await fetchTasksDirectly(apiKey);
+            console.log(`Direct fetcher returned ${directTasks.length} tasks`);
+            return directTasks;
+        }
     }
 
     private async queueForReview(meeting: ProcessedMeeting, confidence: number, reason: string, userId: string): Promise<void> {
@@ -301,15 +323,25 @@ export class TaskService {
         try {
             console.log(`Fetching task name for taskId: ${taskId}`);
             const intervalsApi = new IntervalsAPI(apiKey);
+            
+            // First try getting tasks from the regular API
             const tasks = await intervalsApi.getTasks();
             
-            const task = tasks.find(t => t.id === taskId);
+            let task = tasks.find(t => t.id === taskId);
+            
+            // If task not found with regular API, try direct fetcher
+            if (!task) {
+                console.log(`Task with ID ${taskId} not found in regular API, trying direct fetcher...`);
+                const directTasks = await fetchTasksDirectly(apiKey);
+                task = directTasks.find(t => t.id === taskId);
+            }
+            
             if (task) {
                 console.log(`Found task name: ${task.title} for taskId: ${taskId}`);
                 return task.title;
             }
             
-            console.log(`No task found for taskId: ${taskId}`);
+            console.log(`No task found for taskId: ${taskId} in either API or direct fetch`);
             return null;
         } catch (error) {
             console.error(`Error fetching task name for taskId ${taskId}:`, error);
