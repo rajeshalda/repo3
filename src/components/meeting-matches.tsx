@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { formatDate, formatDateWithTimezone, formatDateIST, DEFAULT_DATE_FORMAT, TIME_ONLY_FORMAT } from "@/lib/utils";
+import { formatDateWithTimezone, formatDateIST, DEFAULT_DATE_FORMAT, TIME_ONLY_FORMAT } from "@/lib/utils";
 import type { Meeting, Task, MatchResult } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { 
@@ -204,25 +204,36 @@ function formatMatchReason(reason: string): string {
   let formatted = reason.replace(/\.{3,}$/, '');
   
   // Extract the key information based on common patterns
-  if (formatted.includes('Found keyword matches:')) {
-    // Check if it's an exact match
-    const isExactMatch = formatted.includes('exact match') || 
-                        formatted.toLowerCase().includes('identical') ||
-                        formatted.includes('same to same');
-    
-    formatted = formatted.replace('Found keyword matches:', isExactMatch ? 'Exact match:' : 'Match:');
-  } else if (formatted.includes('Matched common pattern')) {
-    formatted = formatted.replace('Matched common pattern', 'Pattern:');
-  } else if (formatted.includes('suggests a focus on')) {
-    formatted = formatted.replace(/suggests a focus on (.*?)(,|\.).*$/, 'matches $1');
+  if (formatted.toLowerCase().includes('exact match')) {
+    return 'Exact match';
   }
-  
-  // Ensure it ends with a period
-  if (!formatted.endsWith('.')) {
-    formatted += '.';
+
+  // For keyword matches
+  if (formatted.includes('keyword')) {
+    const keywordMatch = formatted.match(/contains the keyword '([^']+)'/);
+    if (keywordMatch) {
+      return `Keyword match: "${keywordMatch[1]}"`;
+    }
   }
-  
-  return formatted;
+
+  // For contextual matches
+  if (formatted.includes('contextually relevant')) {
+    return 'Context match: DevOps related';
+  }
+
+  // For domain matches
+  if (formatted.includes('infrastructure') && formatted.includes('DevOps')) {
+    return 'Domain match: Infrastructure/DevOps';
+  }
+
+  // For partial matches
+  if (formatted.includes('partial match') || formatted.includes('similar to')) {
+    return 'Partial match';
+  }
+
+  // Default case - take the first sentence or limit to 50 characters
+  formatted = formatted.split('.')[0];
+  return formatted.length > 50 ? formatted.substring(0, 47) + '...' : formatted;
 }
 
 function getConfidenceDisplay(confidence: number, reason: string): { value: number, display: string } {
@@ -741,9 +752,22 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     // Convert postedMeetingIds to a Set if it isn't already one
     const postedIds = postedMeetingIds instanceof Set ? postedMeetingIds : new Set(postedMeetingIds);
     
+    console.log('Filtering meetings:', {
+      totalMeetings: matchResults.length,
+      postedIds: Array.from(postedIds)
+    });
+    
     return matchResults.filter((m: MatchResult) => {
       const meetingKey = generateMeetingKey(m.meeting, userId);
       const meetingId = m.meeting.meetingInfo?.meetingId;
+      
+      console.log('Processing meeting:', {
+        subject: m.meeting.subject,
+        meetingKey,
+        meetingId,
+        confidence: m.confidence,
+        matchedTask: m.matchedTask?.title
+      });
       
       // Improved logic to check if meeting is already posted
       // First check the full key which includes duration
@@ -751,9 +775,11 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       
       // If not found by key, check if it's a recurring meeting with same ID but different instance
       if (!isPosted && meetingId && postedIds.has(meetingId)) {
-        // For meetings with the same ID, we need to check if this is truly the same instance
-        // or a different instance of a recurring meeting by comparing duration and time
-        console.log('Found meeting with same ID but potentially different instance:', m.meeting.subject);
+        console.log('Found meeting with same ID but potentially different instance:', {
+          subject: m.meeting.subject,
+          meetingId,
+          meetingKey
+        });
         isPosted = false; // Assume it's a different instance of a recurring meeting
       }
       
@@ -773,13 +799,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       // Only include meetings that are not posted and have duration
       const isIncluded = !isPosted && hasDuration && hasAttendance;
       
-      if (isPosted) {
-        console.log('Filtering out posted meeting:', m.meeting.subject, 'Key:', meetingKey, 'ID:', meetingId);
-      }
-      
-      if (!hasDuration) {
-        console.log('Filtering out meeting with zero duration:', m.meeting.subject);
-      }
+      console.log('Meeting filter results:', {
+        subject: m.meeting.subject,
+        isPosted,
+        hasDuration,
+        hasAttendance,
+        isIncluded
+      });
       
       return isIncluded;
     });
@@ -859,7 +885,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   // Update getPostableMeetingsCount function to be more specific
   const getPostableMeetingsCount = () => {
     if (activeTab === 'matched') {
-      return meetings.high.filter(m => {
+      return [...meetings.high, ...meetings.medium, ...meetings.low].filter(m => {
         const hasAttendance = m.meeting.attendanceRecords.some(
           record => record.name === session?.user?.name && record.duration > 0
         );
@@ -1069,6 +1095,20 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       : Array.from(postedMeetingIds).includes(meetingId);
   };
 
+  // Add debug logging for initial props
+  useEffect(() => {
+    console.log('MeetingMatches component loaded with:', {
+      summary,
+      matchesReceived: {
+        high: matches.high.length,
+        medium: matches.medium.length,
+        low: matches.low.length,
+        unmatched: matches.unmatched.length
+      },
+      postedMeetingIds: Array.from(postedMeetingIds instanceof Set ? postedMeetingIds : new Set(postedMeetingIds))
+    });
+  }, []);
+
   return (
     <div className="bg-background">
       {/* Content */}
@@ -1082,7 +1122,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                     value="matched"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
                   >
-                    Matched ({meetings.high.length})
+                    Matched ({meetings.high.length + meetings.medium.length + meetings.low.length})
                   </TabsTrigger>
                 )}
                 <TabsTrigger 
@@ -1117,16 +1157,18 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             {source !== 'ai-agent' && (
               <TabsContent value="matched" className="p-0 h-full">
                 <div className="rounded-md">
-                  {meetings.high.length > 0 ? (
+                  {(meetings.high.length > 0 || meetings.medium.length > 0 || meetings.low.length > 0) ? (
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead className="w-12 sticky top-0 bg-background z-10">
                             <Checkbox
-                              checked={meetings.high.every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
+                              checked={[...meetings.high, ...meetings.medium, ...meetings.low].every(m => 
+                                selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId))
+                              )}
                               onCheckedChange={(checked) => {
                                 const newKeys = new Set(selectedMeetingKeys);
-                                meetings.high.forEach(m => {
+                                [...meetings.high, ...meetings.medium, ...meetings.low].forEach(m => {
                                   const key = generateMeetingKey(m.meeting, userId);
                                   if (checked) {
                                     newKeys.add(key);
@@ -1142,12 +1184,94 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                           <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>
+                          <TableHead className="sticky top-0 bg-background z-10">Action</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
+                        {/* Show high confidence matches first */}
                         {meetings.high.map((result, index) => (
                           <MatchRow
                             key={`high-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                            result={result}
+                            onMeetingPosted={handleMeetingPosted}
+                            postedMeetingIds={Array.from(postedMeetingIds)}
+                            selectedTasks={selectedTasks}
+                            source={source}
+                            onTaskSelect={(task) => {
+                              const meetingKey = generateMeetingKey(result.meeting, userId);
+                              const updatedTasks = new Map(selectedTasks);
+                              if (task) {
+                                updatedTasks.set(meetingKey, task);
+                                setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
+                              } else {
+                                updatedTasks.delete(meetingKey);
+                                setSelectedMeetingKeys(prev => {
+                                  const next = new Set(prev);
+                                  next.delete(meetingKey);
+                                  return next;
+                                });
+                              }
+                              setSelectedTasks(updatedTasks);
+                            }}
+                            isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
+                            onSelectChange={(selected) => {
+                              const meetingKey = generateMeetingKey(result.meeting, userId);
+                              setSelectedMeetingKeys(prev => {
+                                const next = new Set(prev);
+                                if (selected) {
+                                  next.add(meetingKey);
+                                } else {
+                                  next.delete(meetingKey);
+                                }
+                                return next;
+                              });
+                            }}
+                          />
+                        ))}
+                        {/* Show medium confidence matches */}
+                        {meetings.medium.map((result, index) => (
+                          <MatchRow
+                            key={`medium-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                            result={result}
+                            onMeetingPosted={handleMeetingPosted}
+                            postedMeetingIds={Array.from(postedMeetingIds)}
+                            selectedTasks={selectedTasks}
+                            source={source}
+                            onTaskSelect={(task) => {
+                              const meetingKey = generateMeetingKey(result.meeting, userId);
+                              const updatedTasks = new Map(selectedTasks);
+                              if (task) {
+                                updatedTasks.set(meetingKey, task);
+                                setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
+                              } else {
+                                updatedTasks.delete(meetingKey);
+                                setSelectedMeetingKeys(prev => {
+                                  const next = new Set(prev);
+                                  next.delete(meetingKey);
+                                  return next;
+                                });
+                              }
+                              setSelectedTasks(updatedTasks);
+                            }}
+                            isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
+                            onSelectChange={(selected) => {
+                              const meetingKey = generateMeetingKey(result.meeting, userId);
+                              setSelectedMeetingKeys(prev => {
+                                const next = new Set(prev);
+                                if (selected) {
+                                  next.add(meetingKey);
+                                } else {
+                                  next.delete(meetingKey);
+                                }
+                                return next;
+                              });
+                            }}
+                          />
+                        ))}
+                        {/* Show low confidence matches */}
+                        {meetings.low.map((result, index) => (
+                          <MatchRow
+                            key={`low-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
