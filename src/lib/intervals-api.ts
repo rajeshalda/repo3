@@ -1,3 +1,5 @@
+import { fetchAllTasksDirectly } from './intervals-direct-fetcher';
+
 // Type definitions
 interface UserAttributes {
     id: string;
@@ -61,7 +63,41 @@ export class IntervalsAPI {
         this.userId = userId;
     }
 
-    private async request(endpoint: string, options: RequestInit = {}) {
+    private async request(endpoint: string, options: RequestInit = {}, queryParams?: Record<string, string | number>) {
+        // Extract endpoint path without query parameters
+        const endpointPath = endpoint.split('?')[0];
+        
+        // Create query string from existing query params and passed queryParams
+        let queryString = '';
+        
+        // If endpoint has query params, parse them
+        if (endpoint.includes('?')) {
+            queryString = endpoint.split('?')[1];
+        }
+        
+        // If additional queryParams are provided, add them
+        if (queryParams && Object.keys(queryParams).length > 0) {
+            const params = new URLSearchParams();
+            
+            // Add any existing query params
+            if (queryString) {
+                queryString.split('&').forEach(param => {
+                    const [key, value] = param.split('=');
+                    params.append(key, value);
+                });
+            }
+            
+            // Add new query params
+            Object.entries(queryParams).forEach(([key, value]) => {
+                params.append(key, String(value));
+            });
+            
+            queryString = params.toString();
+        }
+        
+        // Construct final endpoint with query params
+        const finalEndpoint = queryString ? `${endpointPath}?${queryString}` : endpointPath;
+        
         const url = '/api/intervals-proxy';
         const headers = {
             'Content-Type': 'application/json',
@@ -72,7 +108,7 @@ export class IntervalsAPI {
             method: 'POST',
             headers,
             body: JSON.stringify({
-                endpoint,
+                endpoint: finalEndpoint,
                 method: options.method || 'GET',
                 data: options.body ? JSON.parse(options.body as string) : null
             })
@@ -166,13 +202,51 @@ export class IntervalsAPI {
     }
 
     // Get all tasks
-    async getTasks() {
-        const response = await this.request('task');
-        if (!response || !response.task || !Array.isArray(response.task)) {
-            console.warn('No tasks found or invalid response format');
+    async getTasks(options?: { bypassCache?: boolean }) {
+        try {
+            console.log('Fetching tasks with limit parameter...');
+            // Use direct endpoint with limit parameter already included
+            const response = await this.request('task?limit=500');
+            console.log('Raw task response:', response ? JSON.stringify(response).substring(0, 300) + '...' : 'null');
+            
+            // Extract tasks array from the response with better error handling
+            let tasks = [];
+            if (response && Array.isArray(response.task)) {
+                tasks = response.task;
+                console.log('Found tasks in response.task array:', tasks.length);
+            } else if (Array.isArray(response)) {
+                tasks = response;
+                console.log('Response is directly an array:', tasks.length);
+            } else if (response && response.tasks && Array.isArray(response.tasks)) {
+                tasks = response.tasks;
+                console.log('Found tasks in response.tasks array:', tasks.length);
+            } else {
+                // Try one more format - sometimes the API nests it under a data property
+                if (response && response.data && Array.isArray(response.data.task)) {
+                    tasks = response.data.task;
+                    console.log('Found tasks in response.data.task array:', tasks.length);
+                } else if (response && response.data && Array.isArray(response.data)) {
+                    tasks = response.data;
+                    console.log('Found tasks in response.data array:', tasks.length);
+                } else {
+                    console.warn('No tasks found or invalid response format:', 
+                      response ? Object.keys(response).join(', ') : 'null response');
+                    return [];
+                }
+            }
+            
+            console.log(`Retrieved ${tasks.length} tasks from Intervals API`);
+            
+            // Log the first task as an example
+            if (tasks.length > 0) {
+                console.log('Example task:', JSON.stringify(tasks[0]));
+            }
+            
+            return tasks;
+        } catch (error) {
+            console.error('Error fetching tasks:', error instanceof Error ? error.message : 'Unknown error');
             return [];
         }
-        return response.task;
     }
 
     // Get task details by ID
@@ -243,15 +317,25 @@ export class IntervalsAPI {
         const user = await this.getCurrentUser();
         console.log('Current user:', user);
 
-        // Get task details
+        // Get task details - first try with regular API
         console.log('Fetching task details for ID:', payload.taskId);
-        const tasks = await this.getTasks();
-        const task = tasks.find((t: Task) => t.id === payload.taskId);
+        let tasks = await this.getTasks();
+        let task = tasks.find((t: Task) => t.id === payload.taskId);
         
+        // If task not found, try using the direct fetcher
         if (!task) {
-            console.error('Available tasks:', tasks.map((t: Task) => ({ id: t.id, title: t.title })));
-            throw new Error(`Task not found with ID: ${payload.taskId}`);
+            console.log('Task not found in regular API results, trying direct fetcher...');
+            const directTasks = await fetchAllTasksDirectly(this.userId);
+            console.log(`Direct fetcher found ${directTasks.length} tasks`);
+            task = directTasks.find(t => t.id === payload.taskId);
+            
+            if (!task) {
+                console.error('Available tasks from both methods:',
+                  [...tasks, ...directTasks].map((t: any) => ({ id: t.id, title: t.title })).slice(0, 20));
+                throw new Error(`Task not found with ID: ${payload.taskId} in either API or direct fetch`);
+            }
         }
+        
         console.log('Task details:', task);
 
         // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting

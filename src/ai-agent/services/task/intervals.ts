@@ -96,8 +96,8 @@ export class IntervalsAPI {
             const currentUser = await this.getCurrentUser();
             console.log('Current user personid:', currentUser.personid);
 
-            // Then fetch all tasks
-            const response = await fetch(`${this.baseUrl}/task/`, {
+            // Then fetch all tasks with a limit of 500
+            const response = await fetch(`${this.baseUrl}/task/?limit=500`, {
                 method: 'GET',
                 headers: this.headers
             });
@@ -107,10 +107,14 @@ export class IntervalsAPI {
             }
 
             const data = await response.json();
+            console.log(`Raw tasks API response: Found ${data?.task?.length || 0} total tasks`);
+            
             if (!data?.task || !Array.isArray(data.task)) {
                 console.warn('No tasks found or invalid response format');
                 return [];
             }
+
+            console.log(`Total tasks from API: ${data.task.length}`);
 
             // Filter tasks by three criteria:
             // 1. The current user's ID is in the assigneeid list
@@ -118,8 +122,17 @@ export class IntervalsAPI {
             const userTasks = data.task.filter((task: IntervalsTaskResponse) => {
                 // Check if task is assigned to user
                 if (!task.assigneeid) return false;
-                const assignees = task.assigneeid.split(',');
-                const isAssignedToUser = assignees.includes(currentUser.personid);
+                
+                // Split by commas AND spaces to handle different formats
+                const assignees = task.assigneeid.split(/[,\s]+/).filter(id => id.trim() !== '');
+                
+                // Try both string and number comparisons because the IDs might be in different formats
+                const isAssignedToUser = assignees.some(id => {
+                    const normalizedId = id.trim();
+                    const normalizedPersonId = currentUser.personid.trim();
+                    return normalizedId === normalizedPersonId || 
+                           Number(normalizedId) === Number(normalizedPersonId);
+                });
                 
                 // Check if task is not closed
                 const isNotClosed = task.status !== "Closed";

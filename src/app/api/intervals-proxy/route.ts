@@ -20,10 +20,12 @@ async function getUserApiKey(userId: string): Promise<string | null> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { endpoint, method = 'GET', data } = body;
+    const { endpoint, method = 'GET', data, forceBypassCache } = body;
     
     // Get user ID from session or request
     const userId = request.headers.get('x-user-id');
+    const noCache = request.headers.get('x-no-cache') === 'true' || forceBypassCache === true;
+    
     if (!userId) {
       return NextResponse.json({ error: 'User ID not provided' }, { status: 401 });
     }
@@ -41,7 +43,33 @@ export async function POST(request: NextRequest) {
       'Accept': 'application/json'
     };
 
-    const url = `${INTERVALS_BASE_URL}${endpoint}`;
+    // If cache bypassing is requested, add cache control headers
+    if (noCache) {
+      headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+      headers['Pragma'] = 'no-cache';
+      headers['Expires'] = '0';
+    }
+
+    // Construct the URL - ensure the endpoint is properly used with its query parameters
+    let formattedEndpoint = endpoint;
+    // Remove leading slash if present
+    if (formattedEndpoint.startsWith('/')) {
+      formattedEndpoint = formattedEndpoint.substring(1);
+    }
+    
+    // Make sure INTERVALS_BASE_URL doesn't end with slash
+    const baseUrl = INTERVALS_BASE_URL.endsWith('/')
+      ? INTERVALS_BASE_URL.slice(0, -1)
+      : INTERVALS_BASE_URL;
+    
+    // Ensure the limit parameter is included for task endpoints
+    if (formattedEndpoint.startsWith('task') && !formattedEndpoint.includes('limit=')) {
+      formattedEndpoint += formattedEndpoint.includes('?') ? '&limit=500' : '?limit=500';
+    }
+      
+    const url = `${baseUrl}/${formattedEndpoint}`;
+    console.log('Making request to intervals API:', url);
+    
     const options: RequestInit = {
       method,
       headers,
@@ -49,7 +77,42 @@ export async function POST(request: NextRequest) {
     };
 
     const response = await fetch(url, options);
-    const responseData = await response.json();
+    
+    // Try to parse the response as JSON, but handle text responses as well
+    let responseData;
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        responseData = await response.json();
+      } catch (err) {
+        console.error('Error parsing JSON response:', err);
+        // Fallback to text if JSON parsing fails
+        responseData = { error: 'Failed to parse JSON response', text: await response.text() };
+      }
+    } else {
+      // Handle non-JSON responses
+      const text = await response.text();
+      console.log('Non-JSON response:', text.substring(0, 300) + '...');
+      try {
+        // Try to parse it as JSON anyway
+        responseData = JSON.parse(text);
+      } catch (err) {
+        // If not JSON, return as text
+        responseData = { text };
+      }
+    }
+
+    // Log response details
+    console.log(`Intervals API response: Status ${response.status}, content-type: ${contentType}`);
+    if (responseData && typeof responseData === 'object') {
+      // If task response, log the number of tasks
+      if (responseData.task && Array.isArray(responseData.task)) {
+        console.log(`Task response contains ${responseData.task.length} tasks`);
+      }
+      
+      // Log first part of the response data
+      console.log('Response data:', JSON.stringify(responseData).substring(0, 300) + '...');
+    }
 
     if (!response.ok) {
       return NextResponse.json(responseData, { status: response.status });

@@ -122,18 +122,21 @@ class IntervalsAPI {
         }
     }
     // Get all tasks
-    async getTasks() {
+    async getTasks(options = {}) {
+        // Check if cache should be bypassed
+        const bypassCache = options.bypassCache === true;
+        
         // Check if we have a cached response and it's less than 10 minutes old
         const cacheExpiryTime = 10 * 60 * 1000; // 10 minutes in milliseconds
         const now = Date.now();
         
-        if (this.cache.tasks.data && (now - this.cache.tasks.timestamp) < cacheExpiryTime) {
+        if (!bypassCache && this.cache.tasks.data && (now - this.cache.tasks.timestamp) < cacheExpiryTime) {
             console.log('Using cached tasks data from', new Date(this.cache.tasks.timestamp).toISOString());
             return this.cache.tasks.data;
         }
         
         try {
-            console.log('Fetching fresh tasks data from Intervals API');
+            console.log(bypassCache ? 'Bypassing cache and fetching fresh tasks data' : 'Fetching fresh tasks data from Intervals API');
             const response = await this.request('task');
             
             if (!response || !response.task || !Array.isArray(response.task)) {
@@ -141,7 +144,7 @@ class IntervalsAPI {
                 return [];
             }
             
-            // Cache the response
+            // Cache the response (even when bypassing, we update the cache)
             this.cache.tasks.data = response.task;
             this.cache.tasks.timestamp = now;
             
@@ -149,8 +152,8 @@ class IntervalsAPI {
         } catch (error) {
             console.error('Error fetching tasks:', error instanceof Error ? error.message : 'Unknown error');
             
-            // If we have stale cache, still use it rather than returning nothing
-            if (this.cache.tasks.data) {
+            // If we have stale cache and not bypassing cache, still use it rather than returning nothing
+            if (!bypassCache && this.cache.tasks.data) {
                 console.log('Using stale cached tasks data due to API error');
                 return this.cache.tasks.data;
             }
@@ -170,6 +173,26 @@ class IntervalsAPI {
         }
         catch (error) {
             console.error('Error fetching project:', error instanceof Error ? error.message : 'Unknown error');
+            return null;
+        }
+    }
+    // Get a specific task by ID - direct method
+    async getTaskById(taskId) {
+        try {
+            console.log(`Fetching specific task by ID: ${taskId}`);
+            const response = await this.getData(`/task/${taskId}`);
+            
+            if (!response || (!response.task && !response.id)) {
+                console.warn(`No task found with ID ${taskId} using direct API call`);
+                return null;
+            }
+            
+            // Handle both response formats (task object or array with single item)
+            const task = response.task || response;
+            console.log(`Successfully fetched task by ID: ${taskId}`);
+            return task;
+        } catch (error) {
+            console.error(`Error fetching task by ID ${taskId}:`, error instanceof Error ? error.message : 'Unknown error');
             return null;
         }
     }
@@ -206,14 +229,23 @@ class IntervalsAPI {
         // Get current user first to get their personid
         const user = await this.getCurrentUser();
         console.log('Current user:', user);
-        // Get task details
-        console.log('Fetching task details for ID:', payload.taskId);
-        const tasks = await this.getTasks();
-        const task = tasks.find((t) => t.id === payload.taskId);
+        
+        // First try to get the task directly by ID (most reliable method)
+        console.log('Fetching task directly by ID:', payload.taskId);
+        let task = await this.getTaskById(payload.taskId);
+        
+        // If direct fetch fails, try getting it from the list of all tasks
         if (!task) {
-            console.error('Available tasks:', tasks.map((t) => ({ id: t.id, title: t.title })));
-            throw new Error(`Task not found with ID: ${payload.taskId}`);
+            console.log('Direct task fetch failed, trying from task list...');
+            const tasks = await this.getTasks({ bypassCache: true });
+            task = tasks.find((t) => t.id === payload.taskId);
+            
+            if (!task) {
+                console.error('Available tasks from list:', tasks.map((t) => ({ id: t.id, title: t.title })));
+                throw new Error(`Task not found with ID: ${payload.taskId}`);
+            }
         }
+        
         console.log('Task details:', task);
         /*
         // First try project-specific work types
