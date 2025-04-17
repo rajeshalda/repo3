@@ -567,11 +567,11 @@ function MatchRow({
             <div className="truncate font-medium text-foreground">{selectedTask.title}</div>
             <div className="text-xs text-muted-foreground dark:text-gray-400 truncate">{selectedTask.project}</div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={handleTaskSelect}
               disabled={isLoadingTasks}
-              className="w-full text-xs text-muted-foreground hover:text-foreground mt-1"
+              className="mt-2 text-sm border border-gray-300 hover:bg-accent hover:text-accent-foreground font-medium px-3 bg-gray-50 dark:bg-gray-800"
             >
               Change Task
             </Button>
@@ -1345,7 +1345,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Action</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
