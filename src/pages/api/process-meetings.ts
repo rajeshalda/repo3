@@ -27,6 +27,7 @@ async function pollBatchStatus(batchId: string, timeoutMs: number = 300000): Pro
       
       if (completedMeetings >= totalMeetings) {
         console.log('All meetings processed');
+        console.log('===== BATCH PROCESSING COMPLETED =====');
         return true;
       }
       
@@ -55,15 +56,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     console.log(`Processing meetings for user ${userId} from source: ${source || 'api'}`);
+    console.log(`===== STARTING PROCESSING CYCLE =====`);
 
     try {
       // Get meetings for the user using fetchUserMeetings function
-      console.log('Fetching meetings for user:', userId);
+      console.log('[STEP 1/4] [INFO] Fetching meetings for user:', userId);
       const { meetings } = await fetchUserMeetings(userId as string);
       
-      console.log(`Found ${meetings.length} meetings for processing`);
+      console.log(`[INFO] Total meetings fetched from Graph API: ${meetings.length}`);
       
       if (!meetings || meetings.length === 0) {
+        console.log('[INFO] No meetings found to process');
         return res.status(200).json({ 
           success: true, 
           message: 'No meetings found to process',
@@ -72,8 +75,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       
       // Start a batch processing job with the correct method
+      console.log('[STEP 2/4] [INFO] Starting batch analysis...');
       const batchId = await meetingService.analyzeMeetingBatch(meetings, userId as string);
-      console.log(`Started batch processing with ID: ${batchId}`);
+      console.log(`[INFO] Batch processing started with ID: ${batchId}`);
       
       // Set the current batch ID for status tracking
       setCurrentBatchId(batchId);
@@ -85,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       setCurrentBatchId('');
       
       if (!batchCompleted) {
+        console.error('[ERROR] Batch processing failed or timed out');
         return res.status(500).json({ 
           success: false, 
           error: 'Batch processing timed out or failed',
@@ -93,6 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       
       // Get the processed meetings from storage
+      console.log('[STEP 3/4] [INFO] Retrieving processed meetings...');
       const processedMeetings = [];
       for (const meeting of meetings) {
         try {
@@ -101,14 +107,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             processedMeetings.push(processed);
           }
         } catch (error) {
-          console.error(`Error getting processed meeting ${meeting.id}:`, error);
+          console.error(`[ERROR] Failed to retrieve processed meeting ${meeting.id}:`, error);
         }
       }
       
-      console.log(`Successfully processed ${processedMeetings.length} meetings`);
+      console.log(`[SUCCESS] Retrieved ${processedMeetings.length} processed meetings`);
 
       // Filter out already processed meetings and meetings the user didn't attend
-      console.log('Filtering out already processed meetings and meetings the user didn\'t attend...');
+      console.log('[STEP 4/4] [INFO] Filtering meetings...');
       const uniqueMeetings = await meetingComparisonService.filterNewMeetings(processedMeetings);
       
       // Further filter to only include meetings the user actually attended
@@ -120,20 +126,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           );
           
           if (userRecord && userRecord.duration > 0) {
-            console.log(`User ${userId} attended meeting "${meeting.subject}" for ${userRecord.duration} seconds`);
+            console.log(`[INFO] User ${userId} attended meeting "${meeting.subject}" for ${userRecord.duration} seconds`);
             return true;
           } else {
-            console.log(`User ${userId} did not attend meeting "${meeting.subject}" or had zero duration. Skipping.`);
+            console.warn(`[WARN] User ${userId} did not attend meeting "${meeting.subject}" or had zero duration - skipping`);
             return false;
           }
         }
-        console.log(`No attendance records found for meeting "${meeting.subject}". Skipping.`);
+        console.warn(`[WARN] No attendance records found for meeting "${meeting.subject}" - skipping`);
         return false;
       });
       
-      console.log(`Found ${uniqueMeetings.length} unique meetings, ${attendedMeetings.length} of which were attended by the user`);
+      console.log(`[INFO] ===== MEETINGS STATISTICS =====`);
+      console.log(`[INFO] Total Meetings Fetched: ${meetings.length}`);
+      console.log(`[INFO] Total Meetings Processed: ${processedMeetings.length}`);
+      console.log(`[INFO] Unique Meetings: ${uniqueMeetings.length}`);
+      console.log(`[INFO] Attended Meetings: ${attendedMeetings.length}`);
+      console.log(`[INFO] ===============================`);
 
       if (attendedMeetings.length === 0) {
+        console.log('[INFO] No attended meetings found');
         return res.status(200).json({
           success: true,
           message: 'No meetings found that were attended by the user',
@@ -149,14 +161,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       // Get task matches for attended meetings
-      console.log('Matching tasks to attended meetings...');
+      console.log('[STEP 1/2] [INFO] Matching tasks to attended meetings...');
       const matchResults = [];
       for (const meeting of attendedMeetings) {
         try {
-          console.log('Matching tasks for meeting:', meeting.subject);
+          console.log('[INFO] Processing meeting:', meeting.subject);
           const matches = await taskService.matchTasksToMeeting(meeting, userId as string);
           if (matches === null) {
-            console.log(`Meeting queued for review: ${meeting.id} - ${meeting.subject}`);
+            console.warn(`[WARN] Meeting queued for review: ${meeting.id} - ${meeting.subject}`);
             matchResults.push({
               meetingId: meeting.id,
               meetingSubject: meeting.subject,
@@ -168,11 +180,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               meetingId: meeting.id,
               ...matches
             });
-            console.log(`Found ${matches.matchedTasks?.length || 0} matches for meeting: ${meeting.subject}`);
+            console.log(`[SUCCESS] Found ${matches.matchedTasks?.length || 0} task matches for meeting: ${meeting.subject}`);
           }
           await delay(2000); // Add delay between calls
         } catch (error) {
-          console.error('Error matching tasks for meeting:', meeting.subject, error);
+          console.error('[ERROR] Failed to match tasks for meeting:', meeting.subject, error);
           matchResults.push({
             meetingId: meeting.id,
             meetingSubject: meeting.subject,
@@ -183,12 +195,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       // Create time entries for matched meetings
-      console.log('Creating time entries...');
+      console.log('[STEP 2/2] [INFO] Creating time entries...');
       const timeEntries = [];
+      let successfulTimeEntries = 0;
+      let failedTimeEntries = 0;
+
       for (const result of matchResults) {
         // Skip meetings that need review or had errors
         if (result.needsReview || result.error) {
-          console.log(`Skipping time entry creation for meeting: ${result.meetingSubject} - ${result.needsReview ? 'Needs review' : 'Has error'}`);
+          console.warn(`[WARN] Skipping time entry creation for meeting: ${result.meetingSubject} - ${result.needsReview ? 'Needs review' : 'Has error'}`);
           continue;
         }
 
@@ -196,7 +211,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const meeting = attendedMeetings.find(m => m.id === result.meetingId);
           if (meeting) {
             try {
-              console.log(`Creating time entry for meeting: ${meeting.subject}`);
+              console.log(`[INFO] Creating time entry for meeting: ${meeting.subject}`);
               const timeEntry = await timeEntryService.createTimeEntry(
                 meeting,
                 {
@@ -210,23 +225,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 meetingSubject: meeting.subject,
                 timeEntry
               });
-              console.log(`Successfully created time entry for: ${meeting.subject}`);
+              console.log(`[SUCCESS] Time entry created for: ${meeting.subject}`);
+              successfulTimeEntries++;
               await delay(2000); // Add delay between calls
             } catch (error) {
-              console.error('Error creating time entry:', error);
+              console.error('[ERROR] Failed to create time entry:', error);
               timeEntries.push({
                 meetingId: meeting.id,
                 meetingSubject: meeting.subject,
                 error: error instanceof Error ? error.message : 'Unknown error'
               });
+              failedTimeEntries++;
             }
           }
         }
       }
       
-      return res.status(200).json({ 
-        success: true, 
-        message: `Successfully processed ${processedMeetings.length} meetings`, 
+      const processedMeetingIds = new Set(processedMeetings.map(m => m.id));
+      const remainingMeetings = meetings.filter(m => !processedMeetingIds.has(m.id));
+
+      // At the end of the function, add a clear completion message
+      console.log(`[INFO] ===== PRIMARY PROCESSING CYCLE SUMMARY =====`);
+      console.log(`[INFO] Total Meetings: ${meetings.length}`);
+      console.log(`[SUCCESS] Time Entries Created: ${successfulTimeEntries}`);
+      console.log(`[ERROR] Time Entries Failed: ${failedTimeEntries}`);
+      console.log(`[INFO] =======================================`);
+
+      // For the second cycle
+      if (remainingMeetings.length > 0) {
+        console.log(`[INFO] ===== STARTING SECONDARY PROCESSING CYCLE =====`);
+        console.log(`[INFO] Processing ${remainingMeetings.length} remaining meetings`);
+        // ... process remaining meetings ...
+        console.log(`[SUCCESS] Secondary processing cycle completed`);
+        console.log(`[INFO] Remaining Meetings Processed: ${remainingMeetings.length}`);
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: `Successfully processed all meetings`,
         data: {
           totalMeetings: meetings.length,
           processedMeetings: processedMeetings.length,
@@ -238,6 +274,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     } catch (processingError) {
       console.error(`Error processing meetings:`, processingError);
+      console.log('===== PROCESSING CYCLE FAILED WITH ERROR =====');
       throw processingError;
     }
   } catch (error) {

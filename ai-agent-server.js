@@ -31,6 +31,11 @@ if (!fs.existsSync(POSTED_MEETINGS_PATH)) {
 // Load user data
 let userData = JSON.parse(fs.readFileSync(USER_DATA_PATH, 'utf8'));
 
+// Flag to track if processing is currently active
+let isProcessing = false;
+let processingStartTime = null;
+let lastProcessingDuration = null;
+
 // Helper to save user data
 const saveUserData = () => {
   fs.writeFileSync(USER_DATA_PATH, JSON.stringify(userData, null, 2));
@@ -105,20 +110,36 @@ const processMeetingsForUser = async (userId) => {
 
 // Process meetings for all enabled users
 const processAllUsers = async () => {
-  console.log('Processing meetings for all enabled users...');
-  
-  for (const user of userData.users) {
-    if (user.enabled) {
-      try {
-        await processMeetingsForUser(user.userId);
-      } catch (error) {
-        console.error(`Failed to process meetings for user ${user.userId}:`, error);
-        // Continue with next user even if one fails
-      }
-    }
+  // If already processing, skip this cycle - no matter how long it takes
+  if (isProcessing) {
+    const elapsedTime = Date.now() - processingStartTime;
+    console.log(`Previous processing cycle still running (elapsed: ${Math.round(elapsedTime/1000)}s), skipping this cycle`);
+    return;
   }
   
-  console.log('Finished processing for all users');
+  try {
+    // Set flag to indicate processing has started
+    isProcessing = true;
+    processingStartTime = Date.now();
+    console.log(`Processing meetings for all enabled users... (started at ${new Date(processingStartTime).toISOString()})`);
+    
+    for (const user of userData.users) {
+      if (user.enabled) {
+        try {
+          await processMeetingsForUser(user.userId);
+        } catch (error) {
+          console.error(`Failed to process meetings for user ${user.userId}:`, error);
+          // Continue with next user even if one fails
+        }
+      }
+    }
+    
+    lastProcessingDuration = Date.now() - processingStartTime;
+    console.log(`Finished processing for all users (duration: ${Math.round(lastProcessingDuration/1000)}s)`);
+  } finally {
+    // Always reset the processing flag when done, even if there were errors
+    isProcessing = false;
+  }
 };
 
 // Main function to start the processing cycle
@@ -128,8 +149,16 @@ const startProcessingCycle = () => {
   // Process immediately on startup
   processAllUsers();
   
-  // Set up interval to process meetings every 5 minutes
-  setInterval(processAllUsers, 5 * 60 * 1000);
+  // Set up interval to check every 5 minutes, but only start new cycle if previous one finished
+  setInterval(() => {
+    // Only start a new cycle if not currently processing
+    if (!isProcessing) {
+      processAllUsers();
+    } else {
+      const elapsedTime = Date.now() - processingStartTime;
+      console.log(`Previous cycle still running (elapsed: ${Math.round(elapsedTime/1000)}s), waiting for completion before starting new cycle`);
+    }
+  }, 5 * 60 * 1000);
 };
 
 // API server to handle enabling/disabling the AI agent
@@ -227,6 +256,9 @@ const server = http.createServer((req, res) => {
       status: 'running',
       enabledUsers,
       totalUsers: userData.users.length,
+      isProcessingActive: isProcessing,
+      lastProcessingDuration: lastProcessingDuration ? `${Math.round(lastProcessingDuration/1000)}s` : null,
+      currentProcessingElapsed: isProcessing ? `${Math.round((Date.now() - processingStartTime)/1000)}s` : null,
       uptime: process.uptime()
     }));
   }

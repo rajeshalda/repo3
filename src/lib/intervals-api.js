@@ -322,9 +322,29 @@ class IntervalsAPI {
                 });
                 throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
             }
-            const result = await response.json();
-            console.log('Successfully created time entry:', result);
-            return result;
+            
+            // Parse the API response
+            const apiResult = await response.json();
+            console.log('Raw Intervals API response:', apiResult);
+            
+            // Get project and module details to enrich the time entry data
+            const projectInfo = task.project ? { 
+                name: task.project, 
+                id: task.projectid 
+            } : await this.getProject(task.projectid);
+            
+            // Directly modify the time object in the API response to include the missing fields
+            if (apiResult && apiResult.time) {
+                // Add client, project, and module info directly to the time object
+                apiResult.time.client = task.client || null;
+                apiResult.time.project = projectInfo?.name || task.project || null;
+                apiResult.time.module = task.module || null;
+                // Add task title for reference
+                apiResult.time.taskTitle = task.title || null;
+            }
+            
+            console.log('Successfully created time entry with enhanced data:', apiResult);
+            return apiResult;
         }
         catch (error) {
             console.error('Failed to create time entry:', error);
