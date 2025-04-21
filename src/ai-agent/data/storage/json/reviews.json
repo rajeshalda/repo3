@@ -1,1 +1,116 @@
-[]
+[
+  {
+    "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabrAAA=",
+    "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+    "subject": "Cross-Team Integration Meeting (Dev & QA)",
+    "startTime": "2025-04-18T23:30:00.0000000",
+    "endTime": "2025-04-19T00:00:00.0000000",
+    "duration": 80,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [
+      {
+        "id": "16619697",
+        "title": "QA Task",
+        "project": "Internal",
+        "module": "Quality Assurance",
+        "confidence": 0.5,
+        "reason": "The meeting subject explicitly mentions 'Dev & QA', indicating a focus on both development and quality assurance. The task 'QA Task' is assigned to the user and directly matches the QA aspect of the meeting subject. While there are no additional key points or context, the keyword 'QA' provides concrete evidence for this match."
+      },
+      {
+        "id": "16621997",
+        "title": "Dev Task",
+        "project": "Internal",
+        "module": "Development",
+        "confidence": 0.5,
+        "reason": "The meeting subject includes 'Dev', which is a direct reference to development activities. The task 'Dev Task' is assigned to the user and matches the development focus of the meeting. The evidence is based on the explicit mention of 'Dev' in the meeting subject."
+      }
+    ],
+    "status": "pending",
+    "confidence": 0.5,
+    "reason": "Low confidence match"
+  },
+  {
+    "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabqAAA=",
+    "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+    "subject": "Daily Status Reporting Optimization",
+    "startTime": "2025-04-18T23:00:00.0000000",
+    "endTime": "2025-04-18T23:30:00.0000000",
+    "duration": 181,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [
+      {
+        "id": "16600382",
+        "title": "Daily Status Report",
+        "project": "Internal",
+        "module": "Development",
+        "confidence": 0.6,
+        "reason": "The meeting subject 'Daily Status Reporting Optimization' directly references 'Daily Status Report', which is the title of the task. Both are related to status reporting, and the task is assigned to the user. This provides concrete evidence for a medium-confidence match."
+      }
+    ],
+    "status": "pending",
+    "confidence": 0.6,
+    "reason": "Low confidence match"
+  },
+  {
+    "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabnAAA=",
+    "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+    "subject": "Skill Enhancement Workshop: Cloud Technologies",
+    "startTime": "2025-04-18T21:30:00.0000000",
+    "endTime": "2025-04-18T22:00:00.0000000",
+    "duration": 211,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [
+      {
+        "id": "16619698",
+        "title": "Skill Enhance Task",
+        "project": "Internal",
+        "module": "Discovery",
+        "confidence": 0.6,
+        "reason": "The meeting subject contains 'Skill Enhancement', which directly matches the task title 'Skill Enhance Task'. Both are internal tasks assigned to the user. Although there is no explicit mention of 'Cloud Technologies' in the task, the strong keyword match on 'Skill Enhancement' provides concrete evidence for this match."
+      }
+    ],
+    "status": "pending",
+    "confidence": 0.6,
+    "reason": "Low confidence match"
+  },
+  {
+    "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLablAAA=",
+    "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+    "subject": "Developer Team Retrospective",
+    "startTime": "2025-04-18T20:30:00.0000000",
+    "endTime": "2025-04-18T21:00:00.0000000",
+    "duration": 161,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [],
+    "status": "pending",
+    "confidence": 0,
+    "reason": "No matching tasks found"
+  },
+  {
+    "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabhAAA=",
+    "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+    "subject": "UMG Project Planning Session",
+    "startTime": "2025-04-18T19:00:00.0000000",
+    "endTime": "2025-04-18T19:30:00.0000000",
+    "duration": 87,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [
+      {
+        "id": "16622023",
+        "title": "UMG Stand Up Call With Internal Team",
+        "project": "Internal",
+        "module": "Cloud &amp; Infra",
+        "confidence": 0.5,
+        "reason": "The meeting subject contains 'UMG Project', which matches the 'UMG Stand Up Call With Internal Team' task. Both refer to the UMG project and are internal (client: Nathcorp). The match is based on project name alignment, but lacks specific technical keywords, so confidence is medium."
+      }
+    ],
+    "status": "pending",
+    "confidence": 0.5,
+    "reason": "Low confidence match"
+  }
+]

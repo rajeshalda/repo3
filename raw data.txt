@@ -1,27 +1,2063 @@
+=== DATE RANGE DEBUG ===
+Original from: 2025-04-15T18:30:00.000Z
+Original to: 2025-04-16T18:29:59.000Z
+Start date with time: 2025-04-15T18:30:00.000Z
+End date with time: 2025-04-16T18:29:59.999Z
+======================
+
+ GET /api/auth/session 200 in 3186ms
+ GET /api/auth/session 200 in 16ms
+Total meetings fetched: 7
+Processing meeting: {
+  subject: 'COLD',
+  start: '2025-04-16T09:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qMAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 223 483 790 696 2\r\n' +
+    'Passcode: Vq2oH2hB\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "223483790696",
+  "threadId": "MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 223 483 790 696 2\r\nPasscode: Vq2oH2hB\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qMAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qMAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'payroll',
+  start: '2025-04-17T12:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qLAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 262 754 573 298 6\r\n' +
+    'Passcode: Tr7Ku2Km\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "262754573298",
+  "threadId": "NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 262 754 573 298 6\r\nPasscode: Tr7Ku2Km\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qLAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qLAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'sandisk',
+  start: '2025-04-17T11:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qKAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 293 658 736 727 8\r\n' +
+    'Passcode: uu9tc6oi\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "293658736727",
+  "threadId": "MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 293 658 736 727 8\r\nPasscode: uu9tc6oi\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qKAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qKAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'infra',
+  start: '2025-04-17T10:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qJAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 223 388 381 306 2\r\n' +
+    'Passcode: S2tH73jo\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "223388381306",
+  "threadId": "MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 223 388 381 306 2\r\nPasscode: S2tH73jo\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qJAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qJAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'UMG',
+  start: '2025-04-17T09:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qIAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 222 963 545 998 3\r\n' +
+    'Passcode: gr27A3qX\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-1840,,2'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "222963545998",
+  "threadId": "YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 222 963 545 998 3\r\nPasscode: gr27A3qX\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,,2"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qIAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qIAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'sandisk',
+  start: '2025-04-16T18:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 217 016 813 478 7\r\n' +
+    'Passcode: t2cz7w7R\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "217016813478",
+  "threadId": "NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 016 813 478 7\r\nPasscode: t2cz7w7R\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'infra',
+  start: '2025-04-16T17:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 262 130 764 868 5\r\n' +
+    'Passcode: qA6Jy7BX\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "262130764868",
+  "threadId": "NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 262 130 764 868 5\r\nPasscode: qA6Jy7BX\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy' 
+}
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy/attendanceReports
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "b8befd2b-d869-4707-869f-cc8f68132be8",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-16T12:12:36.062Z",
+      "meetingEndDateTime": "2025-04-16T12:17:51.969Z"
+    }
+  ]
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy/attendanceReports/b8befd2b-d869-4707-869f-cc8f68132be8/attendanceRecords
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "785c8471-1efc-4d82-89bb-8deceb301c79",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-15T11:36:24.121Z",
+      "meetingEndDateTime": "2025-04-15T11:39:37.857Z"
+    }
+  ]
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy/attendanceReports/785c8471-1efc-4d82-89bb-8deceb301c79/attendanceRecords
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy')/attendanceReports('b8befd2b-d869-4707-869f-cc8f68132be8')/attendanceRecords",
+  "value": [
+    {
+      "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+      "emailAddress": "DebraB@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 312,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+        "displayName": "Debra Berger",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-04-16T12:12:39.4103665Z",
+          "leaveDateTime": "2025-04-16T12:17:51.9696727Z",
+          "durationInSeconds": 312
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy')/attendanceReports('785c8471-1efc-4d82-89bb-8deceb301c79')/attendanceRecords",
+  "value": [
+    {
+      "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+      "emailAddress": "DebraB@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 190,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+        "displayName": "Debra Berger",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-04-15T11:36:27.040624Z",
+          "leaveDateTime": "2025-04-15T11:39:37.8576297Z",
+          "durationInSeconds": 190
+        }
+      ]
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+
+Filtered 7 meetings to 3 within date range
+
+⚠️ WARNING: 4 meetings were filtered out for being outside the requested date range
+
+==== MEETINGS FILTERING DEBUG ====
+User Email: debrab@m365x92504196.onmicrosoft.com
+Total meetings fetched: 3
+Total posted meetings for user: 0
+
+Processing current meetings:
+Meeting: COLD ID: 223483790696 Duration: 0 Is Posted: false
+Adding to filtered meetings list
+Meeting: sandisk ID: 217016813478 Duration: 312 Is Posted: false
+Adding to filtered meetings list
+Meeting: infra ID: 262130764868 Duration: 190 Is Posted: false
+Adding to filtered meetings list
+
+=== FINAL RESPONSE DEBUG ===
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-15T18:30:00.000Z
+Parsed as Date: 2025-04-15T18:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-15T18:30:00.000Z
+After adding 5:30 hours: 2025-04-16T00:00:00.000Z
+Formatted IST result: 16/04/2025, 05:30 am IST
+===========================
+
+Final IST result: 16/04/2025, 05:30 am IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T18:29:59.999Z
+Parsed as Date: 2025-04-16T18:29:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T18:29:59.999Z
+After adding 5:30 hours: 2025-04-16T23:59:59.999Z
+Formatted IST result: 17/04/2025, 05:29 am IST
+===========================
+
+Final IST result: 17/04/2025, 05:29 am IST
+================================
+
+Time range: {
+  fromIST: '16/04/2025, 05:30 am IST',
+  toIST: '17/04/2025, 05:29 am IST',
+  fromUTC: '2025-04-15T18:30:00.000Z',
+  toUTC: '2025-04-16T18:29:59.999Z'
+}
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T09:00:00.0000000
+Parsed as Date: 2025-04-16T03:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T03:30:00.000Z
+After adding 5:30 hours: 2025-04-16T09:00:00.000Z
+Formatted IST result: 16/04/2025, 02:30 pm IST
+===========================
+
+Final IST result: 16/04/2025, 02:30 pm IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T09:30:00.0000000
+Parsed as Date: 2025-04-16T04:00:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T04:00:00.000Z
+After adding 5:30 hours: 2025-04-16T09:30:00.000Z
+Formatted IST result: 16/04/2025, 03:00 pm IST
+===========================
+
+Final IST result: 16/04/2025, 03:00 pm IST
+================================
+
+First meeting times (if any): {
+  subject: 'COLD',
+  displayStartTime: '16/04/2025, 02:30 pm IST',
+  displayEndTime: '16/04/2025, 03:00 pm IST'
+}
+===========================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-15T18:30:00.000Z
+Parsed as Date: 2025-04-15T18:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-15T18:30:00.000Z
+After adding 5:30 hours: 2025-04-16T00:00:00.000Z
+Formatted IST result: 16/04/2025, 05:30 am IST
+===========================
+
+Final IST result: 16/04/2025, 05:30 am IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T18:29:59.999Z
+Parsed as Date: 2025-04-16T18:29:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T18:29:59.999Z
+After adding 5:30 hours: 2025-04-16T23:59:59.999Z
+Formatted IST result: 17/04/2025, 05:29 am IST
+===========================
+
+Final IST result: 17/04/2025, 05:29 am IST
+================================
+
+ GET /api/meetings?from=2025-04-15T18%3A30%3A00.000Z&to=2025-04-16T18%3A29%3A59.000Z 200 in 8652ms
+ GET /api/auth/session 200 in 23ms
+ ○ Compiling /api/meetings/match ...
+ ✓ Compiled /api/meetings/match in 808ms (2195 modules)
+Processing meetings batch starting at index 0
+Number of unique meetings to process: 3
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '5jurj7c9cf1',
+    lastSync: '2025-04-04T04:09:58.249Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '19juh5d4jh6',
+    lastSync: '2025-04-04T18:55:22.829Z'
+  },
+  {
+    userId: 'casio@m365x65088219.onmicrosoft.com',
+    email: 'casio@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-04-01T06:55:36.964Z'
+  },
+  {
+    userId: 'pushkar@m365x65088219.onmicrosoft.com',
+    email: 'pushkar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '0nmbnk23m1p',
+    lastSync: '2025-04-07T06:40:09.328Z'
+  },
+  {
+    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
+    email: 'pradeepg@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-11T05:13:56.285Z'
+  },
+  {
+    userId: 'debrab@m365x92504196.onmicrosoft.com',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-16T04:42:29.593Z'
+  },
+  {
+    userId: 'meganb@m365x92504196.onmicrosoft.com',
+    email: 'meganb@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '7otyrqdwaiw',
+    lastSync: '2025-04-16T12:34:14.488Z'
+  }
+]
+Found user: Yes
+Getting current user information...
+Current user information: {
+  personid: 423316,
+  status: 'OK',
+  code: 200,
+  listcount: 8,
+  person: [
+    {
+      id: '423155',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'Admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '423345',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'alexw',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423317',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'IrvinS',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423158',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423346',
+      localid: '8',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423316',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'pradeepg',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423157',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'Pushkar',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423156',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'Vishal',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Fetching fresh tasks without using cache...
+Forcing fresh task fetch from Intervals API without cache...
+Direct fetcher: Fetching tasks with axios...
+Direct fetcher: API response status: 200
+Direct fetcher: API response structure: personid, status, code, listcount, task
+Direct fetcher: Found tasks in task array: 31
+Direct fetcher: Retrieved 31 tasks from Intervals API
+Direct fetcher returned 31 tasks
+Total available tasks: 31
+Filtering tasks for user with personid: 423316
+Filtered from 31 to 17 tasks assigned to the current user and not closed
+Processing batch from 0 to 3 of 3 meetings
+Skipping OpenAI for meeting "COLD" - No attendance recorded
+ POST /api/meetings/match 200 in 3518ms
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'Debra Berger',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    image: 'data:image/jpeg;base64, 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'
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6ImNMdmZyd1pUME1mYXV0eS12RUVCX3diMTNDcTh3RWtnZTlGMjVaV1VXMXciLCJhbGciOiJSUzI1NiIsIng1dCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSIsImtpZCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9kNmI0OGFmYi1hZTkzLTQxODAtYmQwZi1hYTQ3YzVjNWI1N2IvIiwiaWF0IjoxNzQ0ODc0MDc1LCJuYmYiOjE3NDQ4NzQwNzUsImV4cCI6MTc0NDg3ODY3MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBNER1S1E2OEJCN0FxY25WblFoRWZBYi9aMnM1emtQK0R0c1lvaGc1aUJFbWVRNXVkOG5EdW43Y0VLcmVzaHBCSE5jMzVSOG5vN1FrQWlXNkVPeHpnZUNZaEJIamRFdkh0ZzVnY04xVlBQRTB5RzN6OTdDY0QzakNjYkpoaEVxTHMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGFyQXBwIiwiYXBwaWQiOiIxOGY1OWJlZS01NWExLTRiNjEtOTRhNC1iYzIyZWFlZTgzZTciLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkJlcmdlciIsImdpdmVuX25hbWUiOiJEZWJyYSIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjEuNy4yNS4yNTEiLCJuYW1lIjoiRGVicmEgQmVyZ2VyIiwib2lkIjoiNDEzYzFjMzQtM2QzYy00MTk2LTkwZGYtZGRjMDA4OGJlZjBjIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDA0NzkwMjFEMDgiLCJyaCI6IjEuQVdNQi00cTAxcE91Z0VHOUQ2cEh4Y1cxZXdNQUFBQUFBQUFBd0FBQUFBQUFBQURJQVF0akFRLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIEdyb3VwLlJlYWQuQWxsIE9ubGluZU1lZXRpbmdzLlJlYWQgUmVwb3J0cy5SZWFkLkFsbCBVc2VyLlJlYWQgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWQiOiIwMDNmYThmOS04ZWJiLTc5MTctMjkzZC01MjUxMTY1YzI3ZTciLCJzdWIiOiIzNWoyZXFZbXFwbGZqTUlLNVVHU2dWRVRBVWY5THctVG16YjRaemtVUnNNIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZDZiNDhhZmItYWU5My00MTgwLWJkMGYtYWE0N2M1YzViNTdiIiwidW5pcXVlX25hbWUiOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1cG4iOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1dGkiOiJVR1BFUjZreHowdVFjZy1GVEp4Q0FRIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlhlU0pNTDBrRkVUa094NE9QMXMwbmFybFdnZUVwZkZ4WThmelhzS0tGLUkiLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6IjdoYlFnM0xXNDF0Wi1nSzhSOWdZazhvdG1fTTdQOFpjTEVBZTRIaVp6aXcifSwieG1zX3RjZHQiOjE3NDM2MDE1NDB9.Zu-OXc7ff640huGM5BtAKdhXgA5pFAMyQjkQSChbskpR8dvY7fRCEhPMA77DuKwExEFte8Qs6renx3b8c532rDrwTC0BraUdKjx6w62UAjHS9RHmyNbABafj_WNMDqQ97la8Vi9QvDKsmwwdw-HwQcf130mBsy8QFFkU98_G8iZiUa8OPGjTLUavKmEb2HinN2ppFi4a3LHEN3tE2Me-H5MiG5EPl6iaKrHcOWYHynlsvPSB4fHnzFTvl_JE5ZwWgDL2Xct5P1Q8lFMcjqlJGa7qR8nK12jgppJ2uNqHdAlVbciZaeuT5m_O9NcxDMqej_r-_KbzrAEGXvuT0YzRzA'
+}
+Session user email: debrab@m365x92504196.onmicrosoft.com
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '5jurj7c9cf1',
+    lastSync: '2025-04-04T04:09:58.249Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '19juh5d4jh6',
+    lastSync: '2025-04-04T18:55:22.829Z'
+  },
+  {
+    userId: 'casio@m365x65088219.onmicrosoft.com',
+    email: 'casio@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-04-01T06:55:36.964Z'
+  },
+  {
+    userId: 'pushkar@m365x65088219.onmicrosoft.com',
+    email: 'pushkar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '0nmbnk23m1p',
+    lastSync: '2025-04-07T06:40:09.328Z'
+  },
+  {
+    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
+    email: 'pradeepg@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-11T05:13:56.285Z'
+  },
+  {
+    userId: 'debrab@m365x92504196.onmicrosoft.com',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-16T04:42:29.593Z'
+  },
+  {
+    userId: 'meganb@m365x92504196.onmicrosoft.com',
+    email: 'meganb@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '7otyrqdwaiw',
+    lastSync: '2025-04-16T12:34:14.488Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Fetching tasks directly from Intervals API...
+Direct fetcher: Fetching tasks with axios...
+Direct fetcher: API response status: 200
+Direct fetcher: API response structure: personid, status, code, listcount, task
+Direct fetcher: Found tasks in task array: 31
+Direct fetcher: Retrieved 31 tasks from Intervals API
+Retrieved 31 total tasks from Intervals API
+Getting current user to filter tasks...
+Current user information: {
+  personid: 423316,
+  status: 'OK',
+  code: 200,
+  listcount: 8,
+  person: [
+    {
+      id: '423155',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'Admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '423345',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'alexw',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423317',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'IrvinS',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423158',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423346',
+      localid: '8',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423316',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'pradeepg',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423157',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'Pushkar',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423156',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'Vishal',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Filtering tasks for user with personid: 423316
+Task 16600382: "Daily Status Report" - Assignees: 423317,423346,423316, Status: Open
+Task 16600383: "WD Stand Up Call with client" - Assignees: 423345,423346,423316, Status: Open
+Task 16600385: "UMG Stand Up Call With Client" - Assignees: 423345,423317,423316, Status: Open
+Task 16602377: "BMW Mainframe App Stand Up Call With Client" - Assignees: 423316, Status: Open
+Task 16602378: "JCET Migration Stand Up Call With Client" - Assignees: 423155, Status: Open
+Task 16602380: "Payroll website development stand up call with client" - Assignees: none, Status: Open
+Task 16614026: "Test My Task" - Assignees: 423158, Status: Open
+Task 16618320: "Pradeep Task" - Assignees: 423316, Status: Open
+Task 16620137: "DevOps Meeting" - Assignees: 423317, Status: Open
+Task 16620187: "coca cola" - Assignees: 423316, Status: Open
+Task 16620317: "Pesi" - Assignees: 423316, Status: Open
+Task 16620421: "mytask-1" - Assignees: 423317, Status: Open
+Task 16620422: "mytask-2" - Assignees: 423317, Status: Open
+Task 16620467: "Devops" - Assignees: 423316, Status: Open
+Task 16620471: "Devoloper" - Assignees: 423316, Status: Open
+Task 16621988: "HR Task" - Assignees: 423317,423316, Status: Open
+Task 16622021: "WD Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622023: "UMG Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622069: "QA testing" - Assignees: 423346, Status: Open
+Task 16622870: "Payroll website development stand up call with Internal team" - Assignees: 423317, Status: Open
+Task 16624478: "WD Dev project" - Assignees: 423346, Status: Open
+Task 16624479: "HR activities" - Assignees: 423346, Status: Open
+Task 16624486: "Training" - Assignees: 423346, Status: Open
+Task 16624494: "WD project internal QA" - Assignees: 423346, Status: Open
+Task 16624498: "infra WD project" - Assignees: 423346, Status: Open
+Task 16619697: "QA Task" - Assignees: 423316, Status: Open
+Task 16619698: "Skill Enhance Task" - Assignees: 423316, Status: Open
+Task 16620188: "IT Support" - Assignees: 423317,423346, Status: Open
+Task 16621997: "Dev Task" - Assignees: 423317,423316, Status: Open
+Task 16600387: "Sandisk Stand Up Call With Client" - Assignees: 423155,423346,423316, Status: Open
+Task 16604686: "Infra Task" - Assignees: 423317,423316, Status: Open
+Task 16600382 assignees: [ '423317', '423346', '423316' ] Current user personid: 423316
+Task 16600382 is assigned to current user
+Task 16600383 assignees: [ '423345', '423346', '423316' ] Current user personid: 423316
+Task 16600383 is assigned to current user
+Task 16600385 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16600385 is assigned to current user
+Task 16602377 assignees: [ '423316' ] Current user personid: 423316
+Task 16602377 is assigned to current user
+Task 16602378 assignees: [ '423155' ] Current user personid: 423316
+Skipping unassigned task: 16602380 - Payroll website development stand up call with client
+Task 16614026 assignees: [ '423158' ] Current user personid: 423316
+Task 16618320 assignees: [ '423316' ] Current user personid: 423316
+Task 16618320 is assigned to current user
+Task 16620137 assignees: [ '423317' ] Current user personid: 423316
+Task 16620187 assignees: [ '423316' ] Current user personid: 423316
+Task 16620187 is assigned to current user
+Task 16620317 assignees: [ '423316' ] Current user personid: 423316
+Task 16620317 is assigned to current user
+Task 16620421 assignees: [ '423317' ] Current user personid: 423316
+Task 16620422 assignees: [ '423317' ] Current user personid: 423316
+Task 16620467 assignees: [ '423316' ] Current user personid: 423316
+Task 16620467 is assigned to current user
+Task 16620471 assignees: [ '423316' ] Current user personid: 423316
+Task 16620471 is assigned to current user
+Task 16621988 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621988 is assigned to current user
+Task 16622021 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622021 is assigned to current user
+Task 16622023 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622023 is assigned to current user
+Task 16622069 assignees: [ '423346' ] Current user personid: 423316
+Task 16622870 assignees: [ '423317' ] Current user personid: 423316
+Task 16624478 assignees: [ '423346' ] Current user personid: 423316
+Task 16624479 assignees: [ '423346' ] Current user personid: 423316
+Task 16624486 assignees: [ '423346' ] Current user personid: 423316
+Task 16624494 assignees: [ '423346' ] Current user personid: 423316
+Task 16624498 assignees: [ '423346' ] Current user personid: 423316
+Task 16619697 assignees: [ '423316' ] Current user personid: 423316
+Task 16619697 is assigned to current user
+Task 16619698 assignees: [ '423316' ] Current user personid: 423316
+Task 16619698 is assigned to current user
+Task 16620188 assignees: [ '423317', '423346' ] Current user personid: 423316
+Task 16621997 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621997 is assigned to current user
+Task 16600387 assignees: [ '423155', '423346', '423316' ] Current user personid: 423316
+Task 16600387 is assigned to current user
+Task 16604686 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16604686 is assigned to current user
+Filtered from 31 to 17 tasks assigned to the current user and not closed
+Total tasks breakdown: 31 open, 0 closed
+Tasks assigned to current user: 17 total, 17 open
+Successfully fetched 17 tasks for the current user
+ GET /api/intervals/tasks 200 in 3487ms
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'Debra Berger',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    image: 'data:image/jpeg;base64, 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'
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6ImNMdmZyd1pUME1mYXV0eS12RUVCX3diMTNDcTh3RWtnZTlGMjVaV1VXMXciLCJhbGciOiJSUzI1NiIsIng1dCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSIsImtpZCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9kNmI0OGFmYi1hZTkzLTQxODAtYmQwZi1hYTQ3YzVjNWI1N2IvIiwiaWF0IjoxNzQ0ODc0MDc1LCJuYmYiOjE3NDQ4NzQwNzUsImV4cCI6MTc0NDg3ODY3MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBNER1S1E2OEJCN0FxY25WblFoRWZBYi9aMnM1emtQK0R0c1lvaGc1aUJFbWVRNXVkOG5EdW43Y0VLcmVzaHBCSE5jMzVSOG5vN1FrQWlXNkVPeHpnZUNZaEJIamRFdkh0ZzVnY04xVlBQRTB5RzN6OTdDY0QzakNjYkpoaEVxTHMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGFyQXBwIiwiYXBwaWQiOiIxOGY1OWJlZS01NWExLTRiNjEtOTRhNC1iYzIyZWFlZTgzZTciLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkJlcmdlciIsImdpdmVuX25hbWUiOiJEZWJyYSIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjEuNy4yNS4yNTEiLCJuYW1lIjoiRGVicmEgQmVyZ2VyIiwib2lkIjoiNDEzYzFjMzQtM2QzYy00MTk2LTkwZGYtZGRjMDA4OGJlZjBjIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDA0NzkwMjFEMDgiLCJyaCI6IjEuQVdNQi00cTAxcE91Z0VHOUQ2cEh4Y1cxZXdNQUFBQUFBQUFBd0FBQUFBQUFBQURJQVF0akFRLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIEdyb3VwLlJlYWQuQWxsIE9ubGluZU1lZXRpbmdzLlJlYWQgUmVwb3J0cy5SZWFkLkFsbCBVc2VyLlJlYWQgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWQiOiIwMDNmYThmOS04ZWJiLTc5MTctMjkzZC01MjUxMTY1YzI3ZTciLCJzdWIiOiIzNWoyZXFZbXFwbGZqTUlLNVVHU2dWRVRBVWY5THctVG16YjRaemtVUnNNIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZDZiNDhhZmItYWU5My00MTgwLWJkMGYtYWE0N2M1YzViNTdiIiwidW5pcXVlX25hbWUiOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1cG4iOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1dGkiOiJVR1BFUjZreHowdVFjZy1GVEp4Q0FRIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlhlU0pNTDBrRkVUa094NE9QMXMwbmFybFdnZUVwZkZ4WThmelhzS0tGLUkiLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6IjdoYlFnM0xXNDF0Wi1nSzhSOWdZazhvdG1fTTdQOFpjTEVBZTRIaVp6aXcifSwieG1zX3RjZHQiOjE3NDM2MDE1NDB9.Zu-OXc7ff640huGM5BtAKdhXgA5pFAMyQjkQSChbskpR8dvY7fRCEhPMA77DuKwExEFte8Qs6renx3b8c532rDrwTC0BraUdKjx6w62UAjHS9RHmyNbABafj_WNMDqQ97la8Vi9QvDKsmwwdw-HwQcf130mBsy8QFFkU98_G8iZiUa8OPGjTLUavKmEb2HinN2ppFi4a3LHEN3tE2Me-H5MiG5EPl6iaKrHcOWYHynlsvPSB4fHnzFTvl_JE5ZwWgDL2Xct5P1Q8lFMcjqlJGa7qR8nK12jgppJ2uNqHdAlVbciZaeuT5m_O9NcxDMqej_r-_KbzrAEGXvuT0YzRzA'
+}
+Session user email: debrab@m365x92504196.onmicrosoft.com
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '5jurj7c9cf1',
+    lastSync: '2025-04-04T04:09:58.249Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '19juh5d4jh6',
+    lastSync: '2025-04-04T18:55:22.829Z'
+  },
+  {
+    userId: 'casio@m365x65088219.onmicrosoft.com',
+    email: 'casio@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-04-01T06:55:36.964Z'
+  },
+  {
+    userId: 'pushkar@m365x65088219.onmicrosoft.com',
+    email: 'pushkar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '0nmbnk23m1p',
+    lastSync: '2025-04-07T06:40:09.328Z'
+  },
+  {
+    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
+    email: 'pradeepg@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-11T05:13:56.285Z'
+  },
+  {
+    userId: 'debrab@m365x92504196.onmicrosoft.com',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-16T04:42:29.593Z'
+  },
+  {
+    userId: 'meganb@m365x92504196.onmicrosoft.com',
+    email: 'meganb@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '7otyrqdwaiw',
+    lastSync: '2025-04-16T12:34:14.488Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Fetching tasks directly from Intervals API...
+Direct fetcher: Fetching tasks with axios...
+Direct fetcher: API response status: 200
+Direct fetcher: API response structure: personid, status, code, listcount, task
+Direct fetcher: Found tasks in task array: 31
+Direct fetcher: Retrieved 31 tasks from Intervals API
+Retrieved 31 total tasks from Intervals API
+Getting current user to filter tasks...
+Current user information: {
+  personid: 423316,
+  status: 'OK',
+  code: 200,
+  listcount: 8,
+  person: [
+    {
+      id: '423155',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'Admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '423345',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'alexw',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423317',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'IrvinS',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423158',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423346',
+      localid: '8',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423316',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'pradeepg',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423157',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'Pushkar',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423156',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'Vishal',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Filtering tasks for user with personid: 423316
+Task 16600382: "Daily Status Report" - Assignees: 423317,423346,423316, Status: Open
+Task 16600383: "WD Stand Up Call with client" - Assignees: 423345,423346,423316, Status: Open
+Task 16600385: "UMG Stand Up Call With Client" - Assignees: 423345,423317,423316, Status: Open
+Task 16602377: "BMW Mainframe App Stand Up Call With Client" - Assignees: 423316, Status: Open
+Task 16602378: "JCET Migration Stand Up Call With Client" - Assignees: 423155, Status: Open
+Task 16602380: "Payroll website development stand up call with client" - Assignees: none, Status: Open
+Task 16614026: "Test My Task" - Assignees: 423158, Status: Open
+Task 16618320: "Pradeep Task" - Assignees: 423316, Status: Open
+Task 16620137: "DevOps Meeting" - Assignees: 423317, Status: Open
+Task 16620187: "coca cola" - Assignees: 423316, Status: Open
+Task 16620317: "Pesi" - Assignees: 423316, Status: Open
+Task 16620421: "mytask-1" - Assignees: 423317, Status: Open
+Task 16620422: "mytask-2" - Assignees: 423317, Status: Open
+Task 16620467: "Devops" - Assignees: 423316, Status: Open
+Task 16620471: "Devoloper" - Assignees: 423316, Status: Open
+Task 16621988: "HR Task" - Assignees: 423317,423316, Status: Open
+Task 16622021: "WD Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622023: "UMG Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622069: "QA testing" - Assignees: 423346, Status: Open
+Task 16622870: "Payroll website development stand up call with Internal team" - Assignees: 423317, Status: Open
+Task 16624478: "WD Dev project" - Assignees: 423346, Status: Open
+Task 16624479: "HR activities" - Assignees: 423346, Status: Open
+Task 16624486: "Training" - Assignees: 423346, Status: Open
+Task 16624494: "WD project internal QA" - Assignees: 423346, Status: Open
+Task 16624498: "infra WD project" - Assignees: 423346, Status: Open
+Task 16619697: "QA Task" - Assignees: 423316, Status: Open
+Task 16619698: "Skill Enhance Task" - Assignees: 423316, Status: Open
+Task 16620188: "IT Support" - Assignees: 423317,423346, Status: Open
+Task 16621997: "Dev Task" - Assignees: 423317,423316, Status: Open
+Task 16600387: "Sandisk Stand Up Call With Client" - Assignees: 423155,423346,423316, Status: Open
+Task 16604686: "Infra Task" - Assignees: 423317,423316, Status: Open
+Task 16600382 assignees: [ '423317', '423346', '423316' ] Current user personid: 423316
+Task 16600382 is assigned to current user
+Task 16600383 assignees: [ '423345', '423346', '423316' ] Current user personid: 423316
+Task 16600383 is assigned to current user
+Task 16600385 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16600385 is assigned to current user
+Task 16602377 assignees: [ '423316' ] Current user personid: 423316
+Task 16602377 is assigned to current user
+Task 16602378 assignees: [ '423155' ] Current user personid: 423316
+Skipping unassigned task: 16602380 - Payroll website development stand up call with client
+Task 16614026 assignees: [ '423158' ] Current user personid: 423316
+Task 16618320 assignees: [ '423316' ] Current user personid: 423316
+Task 16618320 is assigned to current user
+Task 16620137 assignees: [ '423317' ] Current user personid: 423316
+Task 16620187 assignees: [ '423316' ] Current user personid: 423316
+Task 16620187 is assigned to current user
+Task 16620317 assignees: [ '423316' ] Current user personid: 423316
+Task 16620317 is assigned to current user
+Task 16620421 assignees: [ '423317' ] Current user personid: 423316
+Task 16620422 assignees: [ '423317' ] Current user personid: 423316
+Task 16620467 assignees: [ '423316' ] Current user personid: 423316
+Task 16620467 is assigned to current user
+Task 16620471 assignees: [ '423316' ] Current user personid: 423316
+Task 16620471 is assigned to current user
+Task 16621988 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621988 is assigned to current user
+Task 16622021 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622021 is assigned to current user
+Task 16622023 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622023 is assigned to current user
+Task 16622069 assignees: [ '423346' ] Current user personid: 423316
+Task 16622870 assignees: [ '423317' ] Current user personid: 423316
+Task 16624478 assignees: [ '423346' ] Current user personid: 423316
+Task 16624479 assignees: [ '423346' ] Current user personid: 423316
+Task 16624486 assignees: [ '423346' ] Current user personid: 423316
+Task 16624494 assignees: [ '423346' ] Current user personid: 423316
+Task 16624498 assignees: [ '423346' ] Current user personid: 423316
+Task 16619697 assignees: [ '423316' ] Current user personid: 423316
+Task 16619697 is assigned to current user
+Task 16619698 assignees: [ '423316' ] Current user personid: 423316
+Task 16619698 is assigned to current user
+Task 16620188 assignees: [ '423317', '423346' ] Current user personid: 423316
+Task 16621997 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621997 is assigned to current user
+Task 16600387 assignees: [ '423155', '423346', '423316' ] Current user personid: 423316
+Task 16600387 is assigned to current user
+Task 16604686 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16604686 is assigned to current user
+Filtered from 31 to 17 tasks assigned to the current user and not closed
+Total tasks breakdown: 31 open, 0 closed
+Tasks assigned to current user: 17 total, 17 open
+Successfully fetched 17 tasks for the current user
+ GET /api/intervals/tasks 200 in 998ms
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'Debra Berger',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    image: 'data:image/jpeg;base64, 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'
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6ImNMdmZyd1pUME1mYXV0eS12RUVCX3diMTNDcTh3RWtnZTlGMjVaV1VXMXciLCJhbGciOiJSUzI1NiIsIng1dCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSIsImtpZCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9kNmI0OGFmYi1hZTkzLTQxODAtYmQwZi1hYTQ3YzVjNWI1N2IvIiwiaWF0IjoxNzQ0ODc0MDc1LCJuYmYiOjE3NDQ4NzQwNzUsImV4cCI6MTc0NDg3ODY3MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBNER1S1E2OEJCN0FxY25WblFoRWZBYi9aMnM1emtQK0R0c1lvaGc1aUJFbWVRNXVkOG5EdW43Y0VLcmVzaHBCSE5jMzVSOG5vN1FrQWlXNkVPeHpnZUNZaEJIamRFdkh0ZzVnY04xVlBQRTB5RzN6OTdDY0QzakNjYkpoaEVxTHMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGFyQXBwIiwiYXBwaWQiOiIxOGY1OWJlZS01NWExLTRiNjEtOTRhNC1iYzIyZWFlZTgzZTciLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkJlcmdlciIsImdpdmVuX25hbWUiOiJEZWJyYSIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjEuNy4yNS4yNTEiLCJuYW1lIjoiRGVicmEgQmVyZ2VyIiwib2lkIjoiNDEzYzFjMzQtM2QzYy00MTk2LTkwZGYtZGRjMDA4OGJlZjBjIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDA0NzkwMjFEMDgiLCJyaCI6IjEuQVdNQi00cTAxcE91Z0VHOUQ2cEh4Y1cxZXdNQUFBQUFBQUFBd0FBQUFBQUFBQURJQVF0akFRLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIEdyb3VwLlJlYWQuQWxsIE9ubGluZU1lZXRpbmdzLlJlYWQgUmVwb3J0cy5SZWFkLkFsbCBVc2VyLlJlYWQgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWQiOiIwMDNmYThmOS04ZWJiLTc5MTctMjkzZC01MjUxMTY1YzI3ZTciLCJzdWIiOiIzNWoyZXFZbXFwbGZqTUlLNVVHU2dWRVRBVWY5THctVG16YjRaemtVUnNNIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZDZiNDhhZmItYWU5My00MTgwLWJkMGYtYWE0N2M1YzViNTdiIiwidW5pcXVlX25hbWUiOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1cG4iOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1dGkiOiJVR1BFUjZreHowdVFjZy1GVEp4Q0FRIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlhlU0pNTDBrRkVUa094NE9QMXMwbmFybFdnZUVwZkZ4WThmelhzS0tGLUkiLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6IjdoYlFnM0xXNDF0Wi1nSzhSOWdZazhvdG1fTTdQOFpjTEVBZTRIaVp6aXcifSwieG1zX3RjZHQiOjE3NDM2MDE1NDB9.Zu-OXc7ff640huGM5BtAKdhXgA5pFAMyQjkQSChbskpR8dvY7fRCEhPMA77DuKwExEFte8Qs6renx3b8c532rDrwTC0BraUdKjx6w62UAjHS9RHmyNbABafj_WNMDqQ97la8Vi9QvDKsmwwdw-HwQcf130mBsy8QFFkU98_G8iZiUa8OPGjTLUavKmEb2HinN2ppFi4a3LHEN3tE2Me-H5MiG5EPl6iaKrHcOWYHynlsvPSB4fHnzFTvl_JE5ZwWgDL2Xct5P1Q8lFMcjqlJGa7qR8nK12jgppJ2uNqHdAlVbciZaeuT5m_O9NcxDMqej_r-_KbzrAEGXvuT0YzRzA'
+}
+Session user email: debrab@m365x92504196.onmicrosoft.com
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '5jurj7c9cf1',
+    lastSync: '2025-04-04T04:09:58.249Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '19juh5d4jh6',
+    lastSync: '2025-04-04T18:55:22.829Z'
+  },
+  {
+    userId: 'casio@m365x65088219.onmicrosoft.com',
+    email: 'casio@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-04-01T06:55:36.964Z'
+  },
+  {
+    userId: 'pushkar@m365x65088219.onmicrosoft.com',
+    email: 'pushkar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '0nmbnk23m1p',
+    lastSync: '2025-04-07T06:40:09.328Z'
+  },
+  {
+    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
+    email: 'pradeepg@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-11T05:13:56.285Z'
+  },
+  {
+    userId: 'debrab@m365x92504196.onmicrosoft.com',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-16T04:42:29.593Z'
+  },
+  {
+    userId: 'meganb@m365x92504196.onmicrosoft.com',
+    email: 'meganb@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '7otyrqdwaiw',
+    lastSync: '2025-04-16T12:34:14.488Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Fetching tasks directly from Intervals API...
+Direct fetcher: Fetching tasks with axios...
+Direct fetcher: API response status: 200
+Direct fetcher: API response structure: personid, status, code, listcount, task
+Direct fetcher: Found tasks in task array: 31
+Direct fetcher: Retrieved 31 tasks from Intervals API
+Retrieved 31 total tasks from Intervals API
+Getting current user to filter tasks...
+Current user information: {
+  personid: 423316,
+  status: 'OK',
+  code: 200,
+  listcount: 8,
+  person: [
+    {
+      id: '423155',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'Admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '423345',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'alexw',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423317',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'IrvinS',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423158',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423346',
+      localid: '8',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423316',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'pradeepg',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423157',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'Pushkar',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423156',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'Vishal',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Filtering tasks for user with personid: 423316
+Task 16600382: "Daily Status Report" - Assignees: 423317,423346,423316, Status: Open
+Task 16600383: "WD Stand Up Call with client" - Assignees: 423345,423346,423316, Status: Open
+Task 16600385: "UMG Stand Up Call With Client" - Assignees: 423345,423317,423316, Status: Open
+Task 16602377: "BMW Mainframe App Stand Up Call With Client" - Assignees: 423316, Status: Open
+Task 16602378: "JCET Migration Stand Up Call With Client" - Assignees: 423155, Status: Open
+Task 16602380: "Payroll website development stand up call with client" - Assignees: none, Status: Open
+Task 16614026: "Test My Task" - Assignees: 423158, Status: Open
+Task 16618320: "Pradeep Task" - Assignees: 423316, Status: Open
+Task 16620137: "DevOps Meeting" - Assignees: 423317, Status: Open
+Task 16620187: "coca cola" - Assignees: 423316, Status: Open
+Task 16620317: "Pesi" - Assignees: 423316, Status: Open
+Task 16620421: "mytask-1" - Assignees: 423317, Status: Open
+Task 16620422: "mytask-2" - Assignees: 423317, Status: Open
+Task 16620467: "Devops" - Assignees: 423316, Status: Open
+Task 16620471: "Devoloper" - Assignees: 423316, Status: Open
+Task 16621988: "HR Task" - Assignees: 423317,423316, Status: Open
+Task 16622021: "WD Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622023: "UMG Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622069: "QA testing" - Assignees: 423346, Status: Open
+Task 16622870: "Payroll website development stand up call with Internal team" - Assignees: 423317, Status: Open
+Task 16624478: "WD Dev project" - Assignees: 423346, Status: Open
+Task 16624479: "HR activities" - Assignees: 423346, Status: Open
+Task 16624486: "Training" - Assignees: 423346, Status: Open
+Task 16624494: "WD project internal QA" - Assignees: 423346, Status: Open
+Task 16624498: "infra WD project" - Assignees: 423346, Status: Open
+Task 16619697: "QA Task" - Assignees: 423316, Status: Open
+Task 16619698: "Skill Enhance Task" - Assignees: 423316, Status: Open
+Task 16620188: "IT Support" - Assignees: 423317,423346, Status: Open
+Task 16621997: "Dev Task" - Assignees: 423317,423316, Status: Open
+Task 16600387: "Sandisk Stand Up Call With Client" - Assignees: 423155,423346,423316, Status: Open
+Task 16604686: "Infra Task" - Assignees: 423317,423316, Status: Open
+Task 16600382 assignees: [ '423317', '423346', '423316' ] Current user personid: 423316
+Task 16600382 is assigned to current user
+Task 16600383 assignees: [ '423345', '423346', '423316' ] Current user personid: 423316
+Task 16600383 is assigned to current user
+Task 16600385 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16600385 is assigned to current user
+Task 16602377 assignees: [ '423316' ] Current user personid: 423316
+Task 16602377 is assigned to current user
+Task 16602378 assignees: [ '423155' ] Current user personid: 423316
+Skipping unassigned task: 16602380 - Payroll website development stand up call with client
+Task 16614026 assignees: [ '423158' ] Current user personid: 423316
+Task 16618320 assignees: [ '423316' ] Current user personid: 423316
+Task 16618320 is assigned to current user
+Task 16620137 assignees: [ '423317' ] Current user personid: 423316
+Task 16620187 assignees: [ '423316' ] Current user personid: 423316
+Task 16620187 is assigned to current user
+Task 16620317 assignees: [ '423316' ] Current user personid: 423316
+Task 16620317 is assigned to current user
+Task 16620421 assignees: [ '423317' ] Current user personid: 423316
+Task 16620422 assignees: [ '423317' ] Current user personid: 423316
+Task 16620467 assignees: [ '423316' ] Current user personid: 423316
+Task 16620467 is assigned to current user
+Task 16620471 assignees: [ '423316' ] Current user personid: 423316
+Task 16620471 is assigned to current user
+Task 16621988 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621988 is assigned to current user
+Task 16622021 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622021 is assigned to current user
+Task 16622023 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622023 is assigned to current user
+Task 16622069 assignees: [ '423346' ] Current user personid: 423316
+Task 16622870 assignees: [ '423317' ] Current user personid: 423316
+Task 16624478 assignees: [ '423346' ] Current user personid: 423316
+Task 16624479 assignees: [ '423346' ] Current user personid: 423316
+Task 16624486 assignees: [ '423346' ] Current user personid: 423316
+Task 16624494 assignees: [ '423346' ] Current user personid: 423316
+Task 16624498 assignees: [ '423346' ] Current user personid: 423316
+Task 16619697 assignees: [ '423316' ] Current user personid: 423316
+Task 16619697 is assigned to current user
+Task 16619698 assignees: [ '423316' ] Current user personid: 423316
+Task 16619698 is assigned to current user
+Task 16620188 assignees: [ '423317', '423346' ] Current user personid: 423316
+Task 16621997 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621997 is assigned to current user
+Task 16600387 assignees: [ '423155', '423346', '423316' ] Current user personid: 423316
+Task 16600387 is assigned to current user
+Task 16604686 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16604686 is assigned to current user
+Filtered from 31 to 17 tasks assigned to the current user and not closed
+Total tasks breakdown: 31 open, 0 closed
+Tasks assigned to current user: 17 total, 17 open
+Successfully fetched 17 tasks for the current user
+ GET /api/intervals/tasks 200 in 1048ms
+Starting tasks endpoint...
+Session: {
+  user: {
+    name: 'Debra Berger',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    image: 'data:image/jpeg;base64, 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'
+  },
+  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6ImNMdmZyd1pUME1mYXV0eS12RUVCX3diMTNDcTh3RWtnZTlGMjVaV1VXMXciLCJhbGciOiJSUzI1NiIsIng1dCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSIsImtpZCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9kNmI0OGFmYi1hZTkzLTQxODAtYmQwZi1hYTQ3YzVjNWI1N2IvIiwiaWF0IjoxNzQ0ODc0MDc1LCJuYmYiOjE3NDQ4NzQwNzUsImV4cCI6MTc0NDg3ODY3MywiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVdRQW0vOFpBQUFBNER1S1E2OEJCN0FxY25WblFoRWZBYi9aMnM1emtQK0R0c1lvaGc1aUJFbWVRNXVkOG5EdW43Y0VLcmVzaHBCSE5jMzVSOG5vN1FrQWlXNkVPeHpnZUNZaEJIamRFdkh0ZzVnY04xVlBQRTB5RzN6OTdDY0QzakNjYkpoaEVxTHMiLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkNhbGVuZGFyQXBwIiwiYXBwaWQiOiIxOGY1OWJlZS01NWExLTRiNjEtOTRhNC1iYzIyZWFlZTgzZTciLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkJlcmdlciIsImdpdmVuX25hbWUiOiJEZWJyYSIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjEuNy4yNS4yNTEiLCJuYW1lIjoiRGVicmEgQmVyZ2VyIiwib2lkIjoiNDEzYzFjMzQtM2QzYy00MTk2LTkwZGYtZGRjMDA4OGJlZjBjIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDA0NzkwMjFEMDgiLCJyaCI6IjEuQVdNQi00cTAxcE91Z0VHOUQ2cEh4Y1cxZXdNQUFBQUFBQUFBd0FBQUFBQUFBQURJQVF0akFRLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIEdyb3VwLlJlYWQuQWxsIE9ubGluZU1lZXRpbmdzLlJlYWQgUmVwb3J0cy5SZWFkLkFsbCBVc2VyLlJlYWQgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWQiOiIwMDNmYThmOS04ZWJiLTc5MTctMjkzZC01MjUxMTY1YzI3ZTciLCJzdWIiOiIzNWoyZXFZbXFwbGZqTUlLNVVHU2dWRVRBVWY5THctVG16YjRaemtVUnNNIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZDZiNDhhZmItYWU5My00MTgwLWJkMGYtYWE0N2M1YzViNTdiIiwidW5pcXVlX25hbWUiOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1cG4iOiJEZWJyYUJATTM2NXg5MjUwNDE5Ni5Pbk1pY3Jvc29mdC5jb20iLCJ1dGkiOiJVR1BFUjZreHowdVFjZy1GVEp4Q0FRIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2Z0ZCI6IlhlU0pNTDBrRkVUa094NE9QMXMwbmFybFdnZUVwZkZ4WThmelhzS0tGLUkiLCJ4bXNfaWRyZWwiOiIyOCAxIiwieG1zX3N0Ijp7InN1YiI6IjdoYlFnM0xXNDF0Wi1nSzhSOWdZazhvdG1fTTdQOFpjTEVBZTRIaVp6aXcifSwieG1zX3RjZHQiOjE3NDM2MDE1NDB9.Zu-OXc7ff640huGM5BtAKdhXgA5pFAMyQjkQSChbskpR8dvY7fRCEhPMA77DuKwExEFte8Qs6renx3b8c532rDrwTC0BraUdKjx6w62UAjHS9RHmyNbABafj_WNMDqQ97la8Vi9QvDKsmwwdw-HwQcf130mBsy8QFFkU98_G8iZiUa8OPGjTLUavKmEb2HinN2ppFi4a3LHEN3tE2Me-H5MiG5EPl6iaKrHcOWYHynlsvPSB4fHnzFTvl_JE5ZwWgDL2Xct5P1Q8lFMcjqlJGa7qR8nK12jgppJ2uNqHdAlVbciZaeuT5m_O9NcxDMqej_r-_KbzrAEGXvuT0YzRzA'
+}
+Session user email: debrab@m365x92504196.onmicrosoft.com
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '5jurj7c9cf1',
+    lastSync: '2025-04-04T04:09:58.249Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '19juh5d4jh6',
+    lastSync: '2025-04-04T18:55:22.829Z'
+  },
+  {
+    userId: 'casio@m365x65088219.onmicrosoft.com',
+    email: 'casio@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-04-01T06:55:36.964Z'
+  },
+  {
+    userId: 'pushkar@m365x65088219.onmicrosoft.com',
+    email: 'pushkar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '0nmbnk23m1p',
+    lastSync: '2025-04-07T06:40:09.328Z'
+  },
+  {
+    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
+    email: 'pradeepg@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-11T05:13:56.285Z'
+  },
+  {
+    userId: 'debrab@m365x92504196.onmicrosoft.com',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-16T04:42:29.593Z'
+  },
+  {
+    userId: 'meganb@m365x92504196.onmicrosoft.com',
+    email: 'meganb@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '7otyrqdwaiw',
+    lastSync: '2025-04-16T12:34:14.488Z'
+  }
+]
+Found user: Yes
+Using API key: From storage
+Initializing Intervals API with key...
+Fetching tasks directly from Intervals API...
+Direct fetcher: Fetching tasks with axios...
+Direct fetcher: API response status: 200
+Direct fetcher: API response structure: personid, status, code, listcount, task
+Direct fetcher: Found tasks in task array: 31
+Direct fetcher: Retrieved 31 tasks from Intervals API
+Retrieved 31 total tasks from Intervals API
+Getting current user to filter tasks...
+Current user information: {
+  personid: 423316,
+  status: 'OK',
+  code: 200,
+  listcount: 8,
+  person: [
+    {
+      id: '423155',
+      localid: '1',
+      clientid: null,
+      title: null,
+      firstname: 'Admin',
+      lastname: null,
+      active: 't',
+      tips: 't',
+      groupid: '2',
+      group: 'Administrator',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: null,
+      editordisabled: null
+    },
+    {
+      id: '423345',
+      localid: '7',
+      clientid: null,
+      title: '',
+      firstname: 'alexw',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423317',
+      localid: '6',
+      clientid: null,
+      title: '',
+      firstname: 'IrvinS',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423158',
+      localid: '4',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423346',
+      localid: '8',
+      clientid: null,
+      title: '',
+      firstname: 'Neha',
+      lastname: 'kumari',
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423316',
+      localid: '5',
+      clientid: null,
+      title: '',
+      firstname: 'pradeepg',
+      lastname: null,
+      active: 't',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423157',
+      localid: '3',
+      clientid: null,
+      title: '',
+      firstname: 'Pushkar',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    },
+    {
+      id: '423156',
+      localid: '2',
+      clientid: null,
+      title: '',
+      firstname: 'Vishal',
+      lastname: null,
+      active: 'f',
+      tips: 'f',
+      groupid: '4',
+      group: 'Resource',
+      client: null,
+      clientlocalid: null,
+      calendarorientation: '0',
+      editordisabled: '0'
+    }
+  ]
+}
+Filtering tasks for user with personid: 423316
+Task 16600382: "Daily Status Report" - Assignees: 423317,423346,423316, Status: Open
+Task 16600383: "WD Stand Up Call with client" - Assignees: 423345,423346,423316, Status: Open
+Task 16600385: "UMG Stand Up Call With Client" - Assignees: 423345,423317,423316, Status: Open
+Task 16602377: "BMW Mainframe App Stand Up Call With Client" - Assignees: 423316, Status: Open
+Task 16602378: "JCET Migration Stand Up Call With Client" - Assignees: 423155, Status: Open
+Task 16602380: "Payroll website development stand up call with client" - Assignees: none, Status: Open
+Task 16614026: "Test My Task" - Assignees: 423158, Status: Open
+Task 16618320: "Pradeep Task" - Assignees: 423316, Status: Open
+Task 16620137: "DevOps Meeting" - Assignees: 423317, Status: Open
+Task 16620187: "coca cola" - Assignees: 423316, Status: Open
+Task 16620317: "Pesi" - Assignees: 423316, Status: Open
+Task 16620421: "mytask-1" - Assignees: 423317, Status: Open
+Task 16620422: "mytask-2" - Assignees: 423317, Status: Open
+Task 16620467: "Devops" - Assignees: 423316, Status: Open
+Task 16620471: "Devoloper" - Assignees: 423316, Status: Open
+Task 16621988: "HR Task" - Assignees: 423317,423316, Status: Open
+Task 16622021: "WD Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622023: "UMG Stand Up Call With Internal Team" - Assignees: 423345,423317,423316, Status: Open
+Task 16622069: "QA testing" - Assignees: 423346, Status: Open
+Task 16622870: "Payroll website development stand up call with Internal team" - Assignees: 423317, Status: Open
+Task 16624478: "WD Dev project" - Assignees: 423346, Status: Open
+Task 16624479: "HR activities" - Assignees: 423346, Status: Open
+Task 16624486: "Training" - Assignees: 423346, Status: Open
+Task 16624494: "WD project internal QA" - Assignees: 423346, Status: Open
+Task 16624498: "infra WD project" - Assignees: 423346, Status: Open
+Task 16619697: "QA Task" - Assignees: 423316, Status: Open
+Task 16619698: "Skill Enhance Task" - Assignees: 423316, Status: Open
+Task 16620188: "IT Support" - Assignees: 423317,423346, Status: Open
+Task 16621997: "Dev Task" - Assignees: 423317,423316, Status: Open
+Task 16600387: "Sandisk Stand Up Call With Client" - Assignees: 423155,423346,423316, Status: Open
+Task 16604686: "Infra Task" - Assignees: 423317,423316, Status: Open
+Task 16600382 assignees: [ '423317', '423346', '423316' ] Current user personid: 423316
+Task 16600382 is assigned to current user
+Task 16600383 assignees: [ '423345', '423346', '423316' ] Current user personid: 423316
+Task 16600383 is assigned to current user
+Task 16600385 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16600385 is assigned to current user
+Task 16602377 assignees: [ '423316' ] Current user personid: 423316
+Task 16602377 is assigned to current user
+Task 16602378 assignees: [ '423155' ] Current user personid: 423316
+Skipping unassigned task: 16602380 - Payroll website development stand up call with client
+Task 16614026 assignees: [ '423158' ] Current user personid: 423316
+Task 16618320 assignees: [ '423316' ] Current user personid: 423316
+Task 16618320 is assigned to current user
+Task 16620137 assignees: [ '423317' ] Current user personid: 423316
+Task 16620187 assignees: [ '423316' ] Current user personid: 423316
+Task 16620187 is assigned to current user
+Task 16620317 assignees: [ '423316' ] Current user personid: 423316
+Task 16620317 is assigned to current user
+Task 16620421 assignees: [ '423317' ] Current user personid: 423316
+Task 16620422 assignees: [ '423317' ] Current user personid: 423316
+Task 16620467 assignees: [ '423316' ] Current user personid: 423316
+Task 16620467 is assigned to current user
+Task 16620471 assignees: [ '423316' ] Current user personid: 423316
+Task 16620471 is assigned to current user
+Task 16621988 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621988 is assigned to current user
+Task 16622021 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622021 is assigned to current user
+Task 16622023 assignees: [ '423345', '423317', '423316' ] Current user personid: 423316
+Task 16622023 is assigned to current user
+Task 16622069 assignees: [ '423346' ] Current user personid: 423316
+Task 16622870 assignees: [ '423317' ] Current user personid: 423316
+Task 16624478 assignees: [ '423346' ] Current user personid: 423316
+Task 16624479 assignees: [ '423346' ] Current user personid: 423316
+Task 16624486 assignees: [ '423346' ] Current user personid: 423316
+Task 16624494 assignees: [ '423346' ] Current user personid: 423316
+Task 16624498 assignees: [ '423346' ] Current user personid: 423316
+Task 16619697 assignees: [ '423316' ] Current user personid: 423316
+Task 16619697 is assigned to current user
+Task 16619698 assignees: [ '423316' ] Current user personid: 423316
+Task 16619698 is assigned to current user
+Task 16620188 assignees: [ '423317', '423346' ] Current user personid: 423316
+Task 16621997 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16621997 is assigned to current user
+Task 16600387 assignees: [ '423155', '423346', '423316' ] Current user personid: 423316
+Task 16600387 is assigned to current user
+Task 16604686 assignees: [ '423317', '423316' ] Current user personid: 423316
+Task 16604686 is assigned to current user
+Filtered from 31 to 17 tasks assigned to the current user and not closed
+Total tasks breakdown: 31 open, 0 closed
+Tasks assigned to current user: 17 total, 17 open
+Successfully fetched 17 tasks for the current user
+ GET /api/intervals/tasks 200 in 1097ms
+ GET /api/auth/session 200 in 42ms
+ ○ Compiling /api/intervals/time-entries ...
+ ✓ Compiled /api/intervals/time-entries in 1610ms (2158 modules)
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Getting API key for user: debrab@m365x92504196.onmicrosoft.com
+Current users in storage: [
+  {
+    userId: 'vijay@m365x65088219.onmicrosoft.com',
+    email: 'vijay@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1lk81z2y709',
+    lastSync: '2025-03-07T14:42:27.411Z'
+  },
+  {
+    userId: 'rajesh.alda@nathcorp.com',
+    email: 'rajesh.alda@nathcorp.com',
+    intervalsApiKey: '9bf2smemqha',
+    lastSync: '2025-01-20T19:09:47.297Z'
+  },
+  {
+    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '5jurj7c9cf1',
+    lastSync: '2025-04-04T04:09:58.249Z'
+  },
+  {
+    userId: 'ramesh@m365x65088219.onmicrosoft.com',
+    email: 'ramesh@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '1o8wmcmz99b',
+    lastSync: '2025-03-17T11:14:26.238Z'
+  },
+  {
+    userId: 'neha@m365x65088219.onmicrosoft.com',
+    email: 'neha@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '19juh5d4jh6',
+    lastSync: '2025-04-04T18:55:22.829Z'
+  },
+  {
+    userId: 'casio@m365x65088219.onmicrosoft.com',
+    email: 'casio@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '05tynt2z0ps',
+    lastSync: '2025-04-01T06:55:36.964Z'
+  },
+  {
+    userId: 'pushkar@m365x65088219.onmicrosoft.com',
+    email: 'pushkar@m365x65088219.onmicrosoft.com',
+    intervalsApiKey: '0nmbnk23m1p',
+    lastSync: '2025-04-07T06:40:09.328Z'
+  },
+  {
+    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
+    email: 'pradeepg@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-11T05:13:56.285Z'
+  },
+  {
+    userId: 'debrab@m365x92504196.onmicrosoft.com',
+    email: 'debrab@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '13kmcums5x7',
+    lastSync: '2025-04-16T04:42:29.593Z'
+  },
+  {
+    userId: 'meganb@m365x92504196.onmicrosoft.com',
+    email: 'meganb@m365x92504196.onmicrosoft.com',
+    intervalsApiKey: '7otyrqdwaiw',
+    lastSync: '2025-04-16T12:34:14.488Z'
+  }
+]
+Found user: Yes
+API key found: Yes
 Received time entry request: {
   taskId: '16600387',
-  date: '2025-04-19',
-  time: '118 seconds (0.03 hours)',
-  description: 'sandisk server',
+  date: '2025-04-16',
+  time: '312 seconds (0.09 hours)',
+  description: 'sandisk',
   workType: undefined,
   billable: undefined,
-  meetingId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabsAAA=',
-  subject: 'sandisk server',
+  meetingId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=',
+  subject: 'sandisk',
   confidence: 0.9,
   isManualPost: true,
   attendanceRecords: 'provided'
 }
-Actual meetingId received: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabsAAA=       
+Actual meetingId received: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=
 Is meetingId in Microsoft Graph format: true
-Marked meeting AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabsAAA= as approved in reviews.json
 Checking user attendance in provided records
-Found user's attendance record with duration: 118 seconds
+Found user's attendance record with duration: 312 seconds
+Time conversion: {
+  timeToUseSeconds: 312,
+  calculatedHours: 0.09,
+  rawCalculation: 0.08666666666666667
+}
 Fetching fresh tasks data from Intervals API
+Billable status determination: {
+  client: undefined,
+  project: undefined,
+  isInternal: false,
+  billableStatus: 't',
+  rule: 'Internal/Nathcorp = Non-billable, Everything else = Billable'
+}
+Checking for duplicates with meetingIds: {
+  standardMeetingId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=',
+  manualMeetingId: 'debrab@m365x92504196.onmicrosoft.com_sandisk_2025-04-16T18:00:00.0000000'
+}
+Manual post meeting duration: 324s (0.09 hours)
 Creating time entry with payload: {
   taskId: '16600387',
-  date: '2025-04-19',
-  time: 0.03,
-  description: 'sandisk server',
+  date: '2025-04-16',
+  time: 0.09,
+  description: 'sandisk',
   workType: 'Meeting',
   billable: 't'
 }
@@ -227,9 +2263,9 @@ Posting time entry with request body: {
   taskid: '16600387',
   projectid: '1425448',
   moduleid: '551327',
-  date: '2025-04-19',
-  time: '0.03',
-  description: 'sandisk server',
+  date: '2025-04-16',
+  time: '0.09',
+  description: 'sandisk',
   worktypeid: '803850',
   billable: 't'
 }
@@ -238,16 +2274,16 @@ Raw Intervals API response: {
   status: 'Created',
   code: 201,
   time: {
-    id: '107563279',
+    id: '107522025',
     projectid: '1425448',
     moduleid: '551327',
     taskid: '16600387',
     worktypeid: '803850',
     personid: '423316',
-    date: '2025-04-19',
-    datemodified: '2025-04-21 04:55:48',
-    time: '0.03',
-    description: 'sandisk server',
+    date: '2025-04-16',
+    datemodified: '2025-04-17 07:20:37',
+    time: '0.09',
+    description: 'sandisk',
     billable: 't',
     worktype: 'India-Meeting',
     milestoneid: null,
@@ -260,16 +2296,16 @@ Successfully created time entry with enhanced data: {
   status: 'Created',
   code: 201,
   time: {
-    id: '107563279',
+    id: '107522025',
     projectid: '1425448',
     moduleid: '551327',
     taskid: '16600387',
     worktypeid: '803850',
     personid: '423316',
-    date: '2025-04-19',
-    datemodified: '2025-04-21 04:55:48',
-    time: '0.03',
-    description: 'sandisk server',
+    date: '2025-04-16',
+    datemodified: '2025-04-17 07:20:37',
+    time: '0.09',
+    description: 'sandisk',
     billable: 't',
     worktype: 'India-Meeting',
     milestoneid: null,
@@ -280,28 +2316,36 @@ Successfully created time entry with enhanced data: {
     taskTitle: 'Sandisk Stand Up Call With Client'
   }
 }
-[2025-04-21T04:55:48.485Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabsAAA=
-[2025-04-21T04:55:48.485Z] Meeting time value: 0.03 hours
-[2025-04-21T04:55:48.485Z] Meeting worktypeid: 803850
-[2025-04-21T04:55:48.485Z] Generated unique storage ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabsAAA=_0.03_2025-04-21T04:55:48.485Z
-[2025-04-21T04:55:48.485Z] Meeting duration: 108s (0.03 hours)
-[2025-04-21T04:55:48.485Z] Adding new meeting instance with unique ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAKLabsAAA=_0.03_2025-04-21T04:55:48.485Z
-Meeting stored in AI Agent storage format
+Task details for manual posting: {
+  taskId: '16600387',
+  taskName: 'Task 16600387',
+  client: null,
+  project: null
+}
+Storing manual meeting with meetingId: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=
+[2025-04-17T07:20:37.727Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=
+[2025-04-17T07:20:37.727Z] Meeting time value: 0.09 hours
+[2025-04-17T07:20:37.727Z] Meeting worktypeid: 803850
+[2025-04-17T07:20:37.727Z] Generated unique storage ID: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=_0.09_2025-04-17T07:20:37.727Z
+[2025-04-17T07:20:37.727Z] Meeting duration: 324s (0.09 hours)
+[2025-04-17T07:20:37.727Z] Adding new meeting instance with unique ID: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=_0.09_2025-04-17T07:20:37.727Z
+Meeting stored in AI Agent storage format only to prevent duplication
+Marked meeting AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA= as approved in reviews.json
 Successfully created time entry: {
   personid: 423316,
   status: 'Created',
   code: 201,
   time: {
-    id: '107563279',
+    id: '107522025',
     projectid: '1425448',
     moduleid: '551327',
     taskid: '16600387',
     worktypeid: '803850',
     personid: '423316',
-    date: '2025-04-19',
-    datemodified: '2025-04-21 04:55:48',
-    time: '0.03',
-    description: 'sandisk server',
+    date: '2025-04-16',
+    datemodified: '2025-04-17 07:20:37',
+    time: '0.09',
+    description: 'sandisk',
     billable: 't',
     worktype: 'India-Meeting',
     milestoneid: null,
@@ -312,3 +2356,516 @@ Successfully created time entry: {
     taskTitle: 'Sandisk Stand Up Call With Client'
   }
 }
+ POST /api/intervals/time-entries 200 in 5086ms
+ GET /api/meetings/posted 200 in 14ms
+
+=== DATE RANGE DEBUG ===
+Original from: 2025-04-15T18:30:00.000Z
+Original to: 2025-04-16T18:29:59.000Z
+Start date with time: 2025-04-15T18:30:00.000Z
+End date with time: 2025-04-16T18:29:59.999Z
+======================
+
+Total meetings fetched: 7
+Processing meeting: {
+  subject: 'COLD',
+  start: '2025-04-16T09:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qMAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 223 483 790 696 2\r\n' +
+    'Passcode: Vq2oH2hB\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "223483790696",
+  "threadId": "MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 223 483 790 696 2\r\nPasscode: Vq2oH2hB\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qMAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qMAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_MDliMGIyMjAtYjFhMy00OGEzLTg2NDItN2Q4MzY2NWE3M2Q2@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'payroll',
+  start: '2025-04-17T12:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qLAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 262 754 573 298 6\r\n' +
+    'Passcode: Tr7Ku2Km\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "262754573298",
+  "threadId": "NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 262 754 573 298 6\r\nPasscode: Tr7Ku2Km\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qLAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qLAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NDIzMjJjZDItYTA0Yy00Nzg5LWIxYTUtODU5ODJhNWM3YzA3@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'sandisk',
+  start: '2025-04-17T11:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qKAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 293 658 736 727 8\r\n' +
+    'Passcode: uu9tc6oi\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "293658736727",
+  "threadId": "MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 293 658 736 727 8\r\nPasscode: uu9tc6oi\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qKAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qKAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_MzUwOWU4ZDEtNzdlNy00YjczLTg0NDQtYTRlYjM0YjAzMTM5@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'infra',
+  start: '2025-04-17T10:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qJAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 223 388 381 306 2\r\n' +
+    'Passcode: S2tH73jo\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "223388381306",
+  "threadId": "MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 223 388 381 306 2\r\nPasscode: S2tH73jo\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qJAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qJAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_MDg0ZGU4YjItZDljMS00M2Y1LTlmNmEtMTAzOTM5OTZiY2U2@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'UMG',
+  start: '2025-04-17T09:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qIAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 222 963 545 998 3\r\n' +
+    'Passcode: gr27A3qX\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-1840,,2'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "222963545998",
+  "threadId": "YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 222 963 545 998 3\r\nPasscode: gr27A3qX\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,,2"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qIAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qIAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_YWJhZDYzOTgtYzljMC00NWMyLTlhY2EtZmExNDU2YzE0ZmJj@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'sandisk',
+  start: '2025-04-16T18:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 217 016 813 478 7\r\n' +
+    'Passcode: t2cz7w7R\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "217016813478",
+  "threadId": "NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 016 813 478 7\r\nPasscode: t2cz7w7R\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NzYxOWE0YWMtMmM1OS00NzM0LTliY2QtYTg4YTIzYmMwNWU5@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy' 
+}
+Processing meeting: {
+  subject: 'infra',
+  start: '2025-04-16T17:00:00.0000000',
+  id: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=',   
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 262 130 764 868 5\r\n' +
+    'Passcode: qA6Jy7BX\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "262130764868",
+  "threadId": "NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 262 130 764 868 5\r\nPasscode: qA6Jy7BX\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy',
+  graphId: 'AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAIeGi1AAA=',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NTQxZGVlZjctNzA3ZS00ODlmLTk1YWQtYWRjYjQ0YjQ1OTIy@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy' 
+}
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy/attendanceReports
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "785c8471-1efc-4d82-89bb-8deceb301c79",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-15T11:36:24.121Z",
+      "meetingEndDateTime": "2025-04-15T11:39:37.857Z"
+    }
+  ]
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy/attendanceReports/785c8471-1efc-4d82-89bb-8deceb301c79/attendanceRecords
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "b8befd2b-d869-4707-869f-cc8f68132be8",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-16T12:12:36.062Z",
+      "meetingEndDateTime": "2025-04-16T12:17:51.969Z"
+    }
+  ]
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy/attendanceReports/b8befd2b-d869-4707-869f-cc8f68132be8/attendanceRecords
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OVFF4WkdWbFpqY3ROekEzWlMwME9EbG1MVGsxWVdRdFlXUmpZalEwWWpRMU9USXlAdGhyZWFkLnYy')/attendanceReports('785c8471-1efc-4d82-89bb-8deceb301c79')/attendanceRecords",
+  "value": [
+    {
+      "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+      "emailAddress": "DebraB@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 190,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+        "displayName": "Debra Berger",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-04-15T11:36:27.040624Z",
+          "leaveDateTime": "2025-04-15T11:39:37.8576297Z",
+          "durationInSeconds": 190
+        }
+      ]
+    }
+  ]
+}
+Records Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19Oell4T1dFMFlXTXRNbU0xT1MwME56TTBMVGxpWTJRdFlUZzRZVEl6WW1Nd05XVTVAdGhyZWFkLnYy')/attendanceReports('b8befd2b-d869-4707-869f-cc8f68132be8')/attendanceRecords",
+  "value": [
+    {
+      "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+      "emailAddress": "DebraB@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 312,
+      "role": "Organizer",
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+        "displayName": "Debra Berger",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-04-16T12:12:39.4103665Z",
+          "leaveDateTime": "2025-04-16T12:17:51.9696727Z",
+          "durationInSeconds": 312
+        }
+      ]
+    }
+  ]
+}
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NelV3T1dVNFpERXROemRsTnkwMFlqY3pMVGcwTkRRdFlUUmxZak0wWWpBek1UTTVAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGcwWkdVNFlqSXRaRGxqTVMwME0yWTFMVGxtTm1FdE1UQXpPVE01T1RaaVkyVTJAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19NRGxpTUdJeU1qQXRZakZoTXkwME9HRXpMVGcyTkRJdE4yUTRNelkyTldFM00yUTJAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+ GET /api/auth/session 200 in 33ms
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZV0poWkRZek9UZ3RZemxqTUMwME5XTXlMVGxoWTJFdFptRXhORFUyWXpFMFptSmpAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OREl6TWpKalpESXRZVEEwWXkwME56ZzVMV0l4WVRVdE9EVTVPREpoTldNM1l6QTNAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+No attendance reports found for the meeting
+
+Filtered 7 meetings to 3 within date range
+
+⚠️ WARNING: 4 meetings were filtered out for being outside the requested date range
+
+==== MEETINGS FILTERING DEBUG ====
+User Email: debrab@m365x92504196.onmicrosoft.com
+Total meetings fetched: 3
+Total posted meetings for user: 1
+
+Processing current meetings:
+Meeting: COLD ID: 223483790696 Duration: 0 Is Posted: false
+Adding to filtered meetings list
+Meeting: sandisk ID: 217016813478 Duration: 312 Is Posted: false
+Adding to filtered meetings list
+Meeting: infra ID: 262130764868 Duration: 190 Is Posted: false
+Adding to filtered meetings list
+
+=== FINAL RESPONSE DEBUG ===
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-15T18:30:00.000Z
+Parsed as Date: 2025-04-15T18:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-15T18:30:00.000Z
+After adding 5:30 hours: 2025-04-16T00:00:00.000Z
+Formatted IST result: 16/04/2025, 05:30 am IST
+===========================
+
+Final IST result: 16/04/2025, 05:30 am IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T18:29:59.999Z
+Parsed as Date: 2025-04-16T18:29:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T18:29:59.999Z
+After adding 5:30 hours: 2025-04-16T23:59:59.999Z
+Formatted IST result: 17/04/2025, 05:29 am IST
+===========================
+
+Final IST result: 17/04/2025, 05:29 am IST
+================================
+
+Time range: {
+  fromIST: '16/04/2025, 05:30 am IST',
+  toIST: '17/04/2025, 05:29 am IST',
+  fromUTC: '2025-04-15T18:30:00.000Z',
+  toUTC: '2025-04-16T18:29:59.999Z'
+}
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T09:00:00.0000000
+Parsed as Date: 2025-04-16T03:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T03:30:00.000Z
+After adding 5:30 hours: 2025-04-16T09:00:00.000Z
+Formatted IST result: 16/04/2025, 02:30 pm IST
+===========================
+
+Final IST result: 16/04/2025, 02:30 pm IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T09:30:00.0000000
+Parsed as Date: 2025-04-16T04:00:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T04:00:00.000Z
+After adding 5:30 hours: 2025-04-16T09:30:00.000Z
+Formatted IST result: 16/04/2025, 03:00 pm IST
+===========================
+
+Final IST result: 16/04/2025, 03:00 pm IST
+================================
+
+First meeting times (if any): {
+  subject: 'COLD',
+  displayStartTime: '16/04/2025, 02:30 pm IST',
+  displayEndTime: '16/04/2025, 03:00 pm IST'
+}
+===========================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-15T18:30:00.000Z
+Parsed as Date: 2025-04-15T18:30:00.000Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-15T18:30:00.000Z
+After adding 5:30 hours: 2025-04-16T00:00:00.000Z
+Formatted IST result: 16/04/2025, 05:30 am IST
+===========================
+
+Final IST result: 16/04/2025, 05:30 am IST
+================================
+
+
+=== UTC STRING CONVERSION DEBUG ===
+Input UTC string: 2025-04-16T18:29:59.999Z
+Parsed as Date: 2025-04-16T18:29:59.999Z
+
+=== TIME CONVERSION DEBUG ===
+Input UTC Date: 2025-04-16T18:29:59.999Z
+After adding 5:30 hours: 2025-04-16T23:59:59.999Z
+Formatted IST result: 17/04/2025, 05:29 am IST
+===========================
+
+Final IST result: 17/04/2025, 05:29 am IST
+================================
+
+ GET /api/meetings?from=2025-04-15T18%3A30%3A00.000Z&to=2025-04-16T18%3A29%3A59.000Z 200 in 4640ms

@@ -65,85 +65,48 @@ export class AIAgentPostedMeetingsStorage {
     async addPostedMeeting(userId: string, postedMeeting: PostedMeeting) {
         await this.loadData();
         
+        // Calculate timestamp for log messages
         const now = new Date().toISOString();
         
+        // Ensure we're using the GraphID if it's available
+        const isGraphIdFormat = typeof postedMeeting.meetingId === 'string' && 
+                                postedMeeting.meetingId.startsWith('AAMkA') && 
+                                postedMeeting.meetingId.includes('=');
+
         console.log(`[${now}] AIAgentPostedMeetingsStorage: Adding meeting with ID:`, postedMeeting.meetingId);
+        console.log(`[${now}] Is ID in Graph format?`, isGraphIdFormat);
         console.log(`[${now}] Meeting time value:`, postedMeeting.timeEntry?.time, 'hours');
         console.log(`[${now}] Meeting worktypeid:`, postedMeeting.timeEntry?.worktypeid);
         
-        // Normalize the date to YYYY-MM-DD format
-        const normalizeDate = (dateStr: string | undefined | null): string => {
-            if (!dateStr) return '';
-            try {
-                return new Date(dateStr).toISOString().split('T')[0];
-            } catch {
-                return '';
-            }
-        };
-
-        // Create a unique storage ID that includes more metadata
+        // Create a unique storage ID that includes time and timestamp to ensure uniqueness
+        // This ensures each instance of a recurring meeting gets its own unique entry
         const timeInHours = parseFloat(postedMeeting.timeEntry?.time?.toString() || '0');
         const durationInSeconds = Math.round(timeInHours * 3600);
-        const worktypeid = postedMeeting.timeEntry?.worktypeid || '';
-        const date = normalizeDate(postedMeeting.timeEntry?.date);
-        const uniqueStorageId = `${postedMeeting.meetingId}_${timeInHours}_${date}_${worktypeid}`;
+        const uniqueStorageId = `${postedMeeting.meetingId}_${timeInHours}_${now}`;
         
         console.log(`[${now}] Generated unique storage ID: ${uniqueStorageId}`);
         console.log(`[${now}] Meeting duration: ${durationInSeconds}s (${timeInHours} hours)`);
-        console.log(`[${now}] Normalized date: ${date}`);
         
-        // Enhanced duplicate detection with normalized dates
+        // Check if this EXACT entry already exists (shouldn't happen with the unique ID)
         const exactDuplicate = this.data.meetings.some(m => {
-            // Basic info must match
+            // Check for same meeting ID, user ID, and time (all must match to be a duplicate)
             const sameBasicInfo = (
                 m.meetingId === postedMeeting.meetingId && 
-                m.userId === userId
+                m.userId === userId &&
+                m.timeEntry?.time === postedMeeting.timeEntry?.time
             );
             
+            // If the basic info doesn't match, it's not a duplicate
             if (!sameBasicInfo) return false;
             
-            // Normalize stored meeting date for comparison
-            const storedDate = normalizeDate(m.timeEntry?.date);
-            const newDate = normalizeDate(postedMeeting.timeEntry?.date);
-            
-            // Time entry details must match with normalized date
-            const sameTimeEntry = (
-                m.timeEntry?.time === postedMeeting.timeEntry?.time &&
-                storedDate === newDate
-            );
-            
-            // If basic info and time entry match, check if it's the same type of meeting
-            // or if one entry is missing worktype (for backward compatibility)
-            if (sameTimeEntry) {
-                const storedWorkType = m.timeEntry?.worktypeid;
-                const newWorkType = postedMeeting.timeEntry?.worktypeid;
-                
-                // If either entry is missing worktype, consider it a match
-                if (!storedWorkType || !newWorkType) {
-                    console.log(`[${now}] Found duplicate with missing worktype`);
-                    return true;
-                }
-                
-                // Check if worktypes are the same
-                const sameWorkType = storedWorkType === newWorkType;
-                if (sameWorkType) {
-                    console.log(`[${now}] Found exact duplicate with matching worktype`);
-                    return true;
-                }
-                
-                // If worktypes are different but one is US-Meeting and other is India-Meeting,
-                // consider it a duplicate to prevent double posting
-                const isUsMeeting = (id: string) => id === "803851";
-                const isIndiaMeeting = (id: string) => id === "803850";
-                
-                if ((isUsMeeting(storedWorkType) && isIndiaMeeting(newWorkType)) ||
-                    (isIndiaMeeting(storedWorkType) && isUsMeeting(newWorkType))) {
-                    console.log(`[${now}] Found duplicate with different meeting types (US/India)`);
-                    return true;
-                }
+            // Check if the dates match (if date is available)
+            if (m.timeEntry?.date && postedMeeting.timeEntry?.date) {
+                return m.timeEntry.date === postedMeeting.timeEntry.date;
             }
             
-            return false;
+            // If we can't compare dates, consider it a duplicate if all other info matches
+            // This is safer than allowing potential duplicates
+            return true;
         });
         
         if (exactDuplicate) {
