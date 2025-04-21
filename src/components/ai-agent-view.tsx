@@ -1355,16 +1355,36 @@ export function AIAgentView() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Meeting Date</TableHead>
-                    <TableHead>Meeting Name</TableHead>
-                    <TableHead>Task Name</TableHead>
-                    <TableHead>Duration</TableHead>
-                    <TableHead>Client</TableHead>
-                    <TableHead>Project</TableHead>
-                    <TableHead>Module</TableHead>
-                    <TableHead>Work Type</TableHead>
-                    <TableHead>Billable</TableHead>
-                    <TableHead>Posted Date & Time</TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
+                      Meeting Date
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground">
+                      Meeting Name
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground">
+                      Task Name
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
+                      Duration
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground">
+                      Client
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground">
+                      Project
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground">
+                      Module
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
+                      Work Type
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
+                      Billable
+                    </TableHead>
+                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
+                      Posted Date & Time
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
