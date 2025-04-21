@@ -246,124 +246,17 @@ export class IntervalsTimeEntryService {
         }
     }
 
-    private async getUserDetailsFromGraph(userId: string): Promise<any> {
-        try {
-            console.log(`Fetching user details from Microsoft Graph for user: ${userId}`);
-            
-            // Get access token for Microsoft Graph
-            const tokenEndpoint = `https://login.microsoftonline.com/${process.env.AZURE_AD_APP_TENANT_ID}/oauth2/v2.0/token`;
-            console.log('Retrieving Microsoft Graph access token...');
-            
-            const tokenResponse = await fetch(tokenEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    client_id: process.env.AZURE_AD_APP_CLIENT_ID!,
-                    client_secret: process.env.AZURE_AD_APP_CLIENT_SECRET!,
-                    grant_type: 'client_credentials',
-                    scope: 'https://graph.microsoft.com/.default'
-                })
-            });
-
-            if (!tokenResponse.ok) {
-                const errorText = await tokenResponse.text();
-                throw new Error(`Failed to get Microsoft Graph access token: ${tokenResponse.status} ${tokenResponse.statusText} - ${errorText}`);
-            }
-
-            const tokenData = await tokenResponse.json();
-            const accessToken = tokenData.access_token;
-            console.log('Successfully obtained Microsoft Graph access token');
-
-            // Make request to Microsoft Graph API to get user details
-            const encodedUserId = encodeURIComponent(userId);
-            console.log(`Making request to Microsoft Graph API for user: ${encodedUserId}`);
-            
-            const graphResponse = await fetch(
-                `https://graph.microsoft.com/v1.0/users/${encodedUserId}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-
-            if (!graphResponse.ok) {
-                const errorText = await graphResponse.text();
-                throw new Error(`Failed to get user details from Microsoft Graph: ${graphResponse.status} ${graphResponse.statusText} - ${errorText}`);
-            }
-
-            const userDetails = await graphResponse.json();
-            console.log(`Successfully retrieved user details for ${userDetails.displayName} (${userDetails.userPrincipalName})`);
-            
-            return userDetails;
-        } catch (error) {
-            console.error('Error fetching user details from Microsoft Graph:', error);
-            // Don't fail the entire process if we can't get user details
-            // Just return null and let the system use the default worktype
-            return null;
-        }
-    }
-
-    private getWorktypeBasedOnUserLocation(userDetails: any): string {
-        // Default worktype IDs
-        const INDIA_MEETING_ID = '803850';
-        const US_MEETING_ID = '803851'; // US-Meeting worktype ID
-        
-        // Default to India-Meeting worktype if no user details available
-        if (!userDetails) {
-            console.log('No user details found from Microsoft Graph, using default India-Meeting worktype');
-            return INDIA_MEETING_ID;
-        }
-        
-        if (!userDetails.officeLocation) {
-            console.log(`User ${userDetails.displayName} (${userDetails.userPrincipalName}) has no office location set, using default India-Meeting worktype`);
-            return INDIA_MEETING_ID;
-        }
-
-        const officeLocation = userDetails.officeLocation.toLowerCase();
-        console.log(`User ${userDetails.displayName} has office location: ${userDetails.officeLocation}`);
-        
-        // Determine worktype based on office location
-        if (officeLocation.includes('irvine')) {
-            console.log('User office location is Irvine, using US-Meeting worktype');
-            return US_MEETING_ID;
-        } else if (officeLocation.includes('nathcorp india')) {
-            console.log('User office location is NathCorp India, using India-Meeting worktype');
-            return INDIA_MEETING_ID;
-        } else {
-            // Default to India-Meeting for any other location
-            console.log(`Unknown office location "${userDetails.officeLocation}", using default India-Meeting worktype`);
-            return INDIA_MEETING_ID;
-        }
-    }
-
     public async createTimeEntry(
         meeting: ProcessedMeeting,
         task: { taskId: string; taskTitle: string },
         userId: string
     ): Promise<TimeEntryResponse | TimeEntryErrorResponse> {
         try {
-            /*
-             * Time entry creation flow:
-             * 1. Get user information and task details
-             * 2. Verify task details (project ID, module ID, task status)
-             * 3. Get work types for the project
-             * 4. Get user details from Microsoft Graph API to determine worktype based on office location:
-             *    - If office location is "Irvine" -> Use US-Meeting worktype
-             *    - If office location is "NathCorp India" -> Use India-Meeting worktype
-             *    - For any other location or if user details not available -> Default to India-Meeting worktype
-             * 5. Find the user's attendance record and calculate time
-             * 6. Create time entry in Intervals
-             */
-            
-            // Get person info
-            const person = await this.getPersonInfo(userId);
-
-            // Get task details
-            const taskDetails = await this.getTaskDetails(task.taskId, userId);
+            // Get person info and task details
+            const [person, taskDetails] = await Promise.all([
+                this.getPersonInfo(userId),
+                this.getTaskDetails(task.taskId, userId)
+            ]);
 
             console.log('Person info:', { id: person.id, email: person.email });
             console.log('Task details:', {
@@ -408,10 +301,10 @@ export class IntervalsTimeEntryService {
             // Get work types for the project
             const workTypes = await this.getProjectWorkTypes(taskDetails.projectid, userId);
             
-            // Get user details from Microsoft Graph API to determine worktype
-            const userDetails = await this.getUserDetailsFromGraph(userId);
-            const worktypeId = this.getWorktypeBasedOnUserLocation(userDetails);
-            
+            // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
+            console.log('Using hardcoded worktype ID 803850 for India-Meeting');
+            const worktypeId = '803850';
+
             // Find the current user's attendance record
             let userDuration = 0;
             if (meeting.attendance?.records) {
