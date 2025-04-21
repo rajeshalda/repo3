@@ -7,35 +7,50 @@ export interface MatchingPattern {
   description: string;
 }
 
-export function findKeywordMatches(meetingTitle: string, task: Task): { matched: boolean; reason: string; confidence: number } {
-  const meetingWords = meetingTitle.toLowerCase().split(/\s+/);
-  const taskWords = task.title.toLowerCase().split(/\s+/);
+export function findKeywordMatches(meetingTitle: string, task: Task): { matched: boolean; reason: string } {
+  meetingTitle = meetingTitle.toLowerCase();
+  const taskTitle = task.title.toLowerCase();
+  const taskProject = task.project.toLowerCase();
+  const taskModule = task.module.toLowerCase();
   
-  // Check for exact match
-  if (meetingTitle.toLowerCase() === task.title.toLowerCase()) {
-    return {
-      matched: true,
-      reason: 'Exact match found between meeting title and task',
-      confidence: 1.0
-    };
-  }
+  // Split meeting title into keywords
+  const meetingKeywords = meetingTitle.split(/[\s-_]+/).filter(k => k.length > 1);
+  
+  // Split task details into keywords
+  const taskKeywords = [
+    ...taskTitle.split(/[\s-_]+/),
+    ...taskProject.split(/[\s-_]+/),
+    ...taskModule.split(/[\s-_]+/)
+  ].filter(k => k.length > 1);
 
   // Check for keyword matches
-  const commonWords = meetingWords.filter(word => taskWords.includes(word));
-  if (commonWords.length > 0) {
-    const confidence = commonWords.length / Math.max(meetingWords.length, taskWords.length);
+  const matchedKeywords = meetingKeywords.filter(mk => 
+    taskKeywords.some(tk => tk.includes(mk) || mk.includes(tk))
+  );
+
+  if (matchedKeywords.length > 0) {
     return {
       matched: true,
-      reason: `Found keyword matches: ${commonWords.join(', ')}`,
-      confidence
+      reason: `Found keyword matches: ${matchedKeywords.join(', ')} between meeting "${meetingTitle}" and task "${taskTitle}" (${taskProject})`
     };
   }
 
-  return {
-    matched: false,
-    reason: 'No keyword matches found',
-    confidence: 0
-  };
+  // Check common patterns from config
+  for (const pattern of matchingConfig.commonPatterns) {
+    const meetingHasPattern = pattern.meeting.some(m => meetingTitle.includes(m));
+    const taskHasPattern = pattern.task.some(t => 
+      taskTitle.includes(t) || taskProject.includes(t) || taskModule.includes(t)
+    );
+
+    if (meetingHasPattern && taskHasPattern) {
+      return {
+        matched: true,
+        reason: `Matched common pattern "${pattern.meeting[0]}" between meeting "${meetingTitle}" and task "${taskTitle}" (${taskProject})`
+      };
+    }
+  }
+
+  return { matched: false, reason: '' };
 }
 
 export function generateMatchingPrompt(meetingTitle: string, tasks: Task[]): string {

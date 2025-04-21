@@ -44,7 +44,8 @@
           "module": "Cloud &amp; Infra"
         }
       },
-      "postedAt": "2025-04-16T17:32:55.554 IST"
+      "postedAt": "2025-04-16T17:32:55.554 IST",
+      "taskName": "Infra Task"
     },
     {
       "meetingId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAI65qHAAA=",
@@ -92,56 +93,8 @@
           "project": null
         }
       },
-      "postedAt": "2025-04-16T17:52:00.340 IST"
-    },
-    {
-      "meetingId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAGNTXdAAA=",
-      "userId": "meganb@m365x92504196.onmicrosoft.com",
-      "timeEntry": {
-        "id": "107520112",
-        "projectid": "1425513",
-        "moduleid": "551330",
-        "taskid": "16622870",
-        "worktypeid": "803850",
-        "personid": "423317",
-        "date": "2025-04-17",
-        "datemodified": "2025-04-17 05:25:32",
-        "time": "0.07",
-        "description": "UMG call",
-        "billable": "t",
-        "worktype": "India-Meeting",
-        "milestoneid": null,
-        "ogmilestoneid": null,
-        "module": null,
-        "client": null,
-        "project": null
-      },
-      "rawResponse": {
-        "personid": 423317,
-        "status": "Created",
-        "code": 201,
-        "time": {
-          "id": "107520112",
-          "projectid": "1425513",
-          "moduleid": "551330",
-          "taskid": "16622870",
-          "worktypeid": "803850",
-          "personid": "423317",
-          "date": "2025-04-17",
-          "datemodified": "2025-04-17 05:25:32",
-          "time": "0.07",
-          "description": "UMG call",
-          "billable": "t",
-          "worktype": "India-Meeting",
-          "milestoneid": null,
-          "ogmilestoneid": null,
-          "module": null,
-          "client": null,
-          "project": null
-        }
-      },
-      "postedAt": "2025-04-17T10:55:30.994 IST",
-      "taskName": "Payroll website development stand up call with Internal team"
+      "postedAt": "2025-04-16T17:52:00.340 IST",
+      "taskName": "Sandisk Stand Up Call With Client"
     }
   ]
 }
