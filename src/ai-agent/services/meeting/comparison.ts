@@ -235,14 +235,10 @@ export class MeetingComparisonService {
             
             // Process meetings in smaller batches with longer delays
             const uniqueMeetings: ProcessedMeeting[] = [];
-            const matchedMeetings: ProcessedMeeting[] = [];
             
             for (let i = 0; i < meetings.length; i += this.BATCH_SIZE) {
                 const batch = meetings.slice(i, i + this.BATCH_SIZE);
                 console.log(`Processing batch ${Math.floor(i/this.BATCH_SIZE) + 1} of ${Math.ceil(meetings.length/this.BATCH_SIZE)}`);
-                
-                let batchMatched = 0;
-                let batchUnique = 0;
                 
                 // Check each meeting in the batch
                 for (const meeting of batch) {
@@ -262,28 +258,26 @@ export class MeetingComparisonService {
                     const isPosted = await storage.isPosted(meeting.userId, meeting.id, userDuration);
                     if (!isPosted) {
                         uniqueMeetings.push(meeting);
-                        batchUnique++;
-                    } else {
-                        matchedMeetings.push(meeting);
-                        batchMatched++;
                     }
                 }
-                
-                console.log(`Batch ${Math.floor(i/this.BATCH_SIZE) + 1} results: { total: ${batch.length}, duplicates: ${batchMatched}, unique: ${batchUnique} }`);
-                
-                // Wait between batches to avoid storage contention
+
+                // Log results for this batch
+                console.log(`Batch ${Math.floor(i/this.BATCH_SIZE) + 1} results:`, {
+                    total: batch.length,
+                    duplicates: batch.length - uniqueMeetings.length,
+                    unique: uniqueMeetings.length
+                });
+
+                // Add longer delay between batches
                 if (i + this.BATCH_SIZE < meetings.length) {
                     console.log(`Waiting ${this.DELAY_MS/1000} seconds before processing next batch...`);
                     await this.delay(this.DELAY_MS);
                 }
             }
-            
-            console.log(`===== MEETING MATCHING RESULTS =====`);
-            console.log(`Total meetings processed: ${meetings.length}`);
-            console.log(`Previously matched meetings: ${matchedMeetings.length}`);
-            console.log(`New unique meetings: ${uniqueMeetings.length}`);
-            console.log(`===================================`);
-            
+
+            console.log(`Filtered ${meetings.length - uniqueMeetings.length} duplicate meetings`);
+            console.log(`Proceeding with ${uniqueMeetings.length} unique meetings`);
+
             return uniqueMeetings;
         } catch (error) {
             console.error('Error filtering new meetings:', error);

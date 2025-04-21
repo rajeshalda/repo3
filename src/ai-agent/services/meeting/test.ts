@@ -227,69 +227,35 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             `start/dateTime ge '${startDateString}' and end/dateTime le '${endDateString}'`
         );
         
-        let allMeetings: any[] = [];
-        let nextLink = `https://graph.microsoft.com/v1.0/users/${userId}/events?$filter=${filter}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc`;
-        
-        console.log('Fetching meetings from URL:', nextLink);
+        const url = `https://graph.microsoft.com/v1.0/users/${userId}/events?$filter=${filter}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc`;
+        console.log('Fetching meetings from URL:', url);
 
-        // Use pagination to fetch all meetings
-        let pageCount = 0;
-        while (nextLink) {
-            pageCount++;
-            console.log(`Fetching meetings page ${pageCount}...`);
-            
-            const response = await fetch(nextLink, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'outlook.timezone="Asia/Kolkata"' // Request times in IST timezone
-                }
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Graph API Error:', errorText);
-                throw new Error(`Failed to fetch meetings: ${response.status} ${response.statusText}\n${errorText}`);
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'outlook.timezone="Asia/Kolkata"' // Request times in IST timezone
             }
+        });
 
-            const data = await response.json();
-            console.log(`Received page ${pageCount} with ${data.value.length} meetings`);
-            
-            allMeetings = [...allMeetings, ...data.value];
-            nextLink = data['@odata.nextLink'] || '';
-            
-            // If there's another page, add a small delay to avoid rate limiting
-            if (nextLink) {
-                console.log('More pages available, waiting before next request...');
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Graph API Error:', errorText);
+            throw new Error(`Failed to fetch meetings: ${response.status} ${response.statusText}\n${errorText}`);
         }
+
+        const data = await response.json();
+        console.log('Received meetings data:', JSON.stringify(data, null, 2));
         
-        console.log(`===== TOTAL MEETINGS FETCHED FROM GRAPH API: ${allMeetings.length} =====`);
-        
-        if (allMeetings.length === 0) {
-            console.log('No meetings found for the specified date range');
-            return { 
-                meetings: [], 
-                attendanceReport: {
-                    totalMeetings: 0,
-                    attendedMeetings: 0,
-                    organizedMeetings: 0,
-                    attendanceByPerson: {},
-                    organizerStats: {},
-                    detailedAttendance: {}
-                }
-            };
-        }
-        
-        console.log(`Found ${allMeetings.length} meetings for today:`, allMeetings.map((m: Meeting) => ({
+        const meetings = data.value;
+        console.log(`Found ${meetings.length} meetings for today:`, meetings.map((m: Meeting) => ({
             subject: m.subject,
             start: m.start.dateTime,
             end: m.end.dateTime
         })));
 
         const attendanceReport: AttendanceReport = {
-            totalMeetings: allMeetings.length,
+            totalMeetings: meetings.length,
             attendedMeetings: 0,
             organizedMeetings: 0,
             attendanceByPerson: {},
@@ -297,7 +263,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             detailedAttendance: {}
         };
 
-        for (const meeting of allMeetings) {
+        for (const meeting of meetings) {
             const organizerEmail = meeting.organizer.emailAddress.address.toLowerCase();
             attendanceReport.organizerStats[organizerEmail] = (attendanceReport.organizerStats[organizerEmail] || 0) + 1;
 
@@ -335,10 +301,13 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             }
         }
 
-        return { meetings: allMeetings, attendanceReport };
-    } catch (error) {
-        console.error('Error fetching user meetings:', error);
-        throw error;
+        return {
+            meetings,
+            attendanceReport
+        };
+    } catch (error: unknown) {
+        console.error('Error fetching meetings:', error);
+        throw new Error(error instanceof Error ? error.message : 'Failed to fetch meetings');
     }
 }
 

@@ -381,9 +381,8 @@ export class IntervalsTimeEntryService {
                 // Add client and project information to the response
                 const enhancedTimeEntryResponse = {
                     ...timeEntryResponse,
-                    client: taskDetails.client || null,
-                    project: taskDetails.project || null,
-                    module: taskDetails.module || null
+                    client: taskDetails.client || undefined,
+                    project: taskDetails.project || undefined
                 } as TimeEntryResponse;
 
                 console.log('Enhanced time entry with client/project:', JSON.stringify(enhancedTimeEntryResponse, null, 2));

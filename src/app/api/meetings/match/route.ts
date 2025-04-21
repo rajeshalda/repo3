@@ -79,19 +79,19 @@ async function processMeetingBatch(
         let bestMatch: { task: Task; confidence: number; reason: string } | null = null;
 
         for (const task of tasks) {
-          const { matched, reason } = findKeywordMatches(meeting.subject, task);
-          if (matched) {
-            if (!bestMatch || reason.length > bestMatch.reason.length) {
+          const { matched, reason, confidence } = findKeywordMatches(meeting.subject, task);
+          if (matched && confidence > 0.5) { // Only consider matches above 50% confidence
+            if (!bestMatch || confidence > bestMatch.confidence) {
               bestMatch = {
                 task,
-                confidence: 0.9,
+                confidence,
                 reason
               };
             }
           }
         }
 
-        if (bestMatch) {
+        if (bestMatch && bestMatch.confidence >= 0.7) { // Only use keyword matches with high confidence
           results.push({
             meeting,
             matchedTask: bestMatch.task,
@@ -131,13 +131,19 @@ async function processMeetingBatch(
         if (cachedResponse) {
           try {
             const matchData = JSON.parse(cachedResponse.response);
-            results.push({
-              meeting,
-              matchedTask: tasks.find(t => t.title.toLowerCase() === matchData.matchedTaskTitle?.toLowerCase()) || null,
-              confidence: matchData.confidence,
-              reason: matchData.reason
-            });
-            continue;
+            const foundTask = tasks.find(t => t.title.toLowerCase() === matchData.matchedTaskTitle?.toLowerCase());
+            const matchedTask = foundTask || null;
+            
+            // Only use cached match if confidence is high enough
+            if (matchedTask && matchData.confidence >= 0.7) {
+              results.push({
+                meeting,
+                matchedTask,
+                confidence: matchData.confidence,
+                reason: matchData.reason
+              });
+              continue;
+            }
           } catch (e) {
             console.log('Invalid cached response, proceeding with OpenAI call');
           }
@@ -160,44 +166,51 @@ async function processMeetingBatch(
           const matchData = JSON.parse(response);
           console.log('Parsed match data:', matchData);
 
-          // Analyze the reason text for confidence adjustment
+          // Only apply confidence adjustments if there's a potential match
           let adjustedConfidence = matchData.confidence;
-          const reasonLower = matchData.reason.toLowerCase();
-          
-          // Boost confidence based on strong indicators in the reason
-          if (reasonLower.includes('strongly aligns') || 
-              reasonLower.includes('direct match') || 
-              reasonLower.includes('most relevant match')) {
-              adjustedConfidence = Math.min(adjustedConfidence + 0.2, 1.0);
-          }
-          
-          // Boost confidence for infrastructure-related matches
-          if ((meeting.subject.toLowerCase().includes('infrastructure') || 
-               meeting.subject.toLowerCase().includes('system') ||
-               meeting.subject.toLowerCase().includes('server')) &&
-              reasonLower.includes('infrastructure')) {
-              adjustedConfidence = Math.min(adjustedConfidence + 0.1, 1.0);
+          if (matchData.matchedTaskTitle) {
+            const reasonLower = matchData.reason.toLowerCase();
+            
+            // More conservative confidence adjustments
+            if (reasonLower.includes('strongly aligns') || 
+                reasonLower.includes('direct match')) {
+                adjustedConfidence = Math.min(adjustedConfidence + 0.1, 0.9); // Cap at 90%
+            }
+            
+            // Smaller boost for infrastructure matches
+            if ((meeting.subject.toLowerCase().includes('infrastructure') || 
+                 meeting.subject.toLowerCase().includes('system')) &&
+                reasonLower.includes('infrastructure')) {
+                adjustedConfidence = Math.min(adjustedConfidence + 0.05, 0.9);
+            }
           }
 
           // Find the best matching task
           let matchedTask: Task | null = null;
           if (matchData.matchedTaskTitle) {
-              const foundTask = tasks.find(t => 
-                  t.title.toLowerCase() === matchData.matchedTaskTitle.toLowerCase() ||
-                  (t.title.toLowerCase().includes('infra') && 
-                   reasonLower.includes('infrastructure'))
-              );
-              if (foundTask) {
-                  matchedTask = foundTask;
-              }
+            const foundTask = tasks.find(t => 
+              t.title.toLowerCase() === matchData.matchedTaskTitle.toLowerCase()
+            );
+            matchedTask = foundTask || null;
           }
           
-          results.push({
-            meeting,
-            matchedTask: matchedTask,
-            confidence: matchedTask ? adjustedConfidence : 0,
-            reason: matchData.reason
-          });
+          // Only consider it a match if confidence is high enough
+          if (matchedTask && adjustedConfidence >= 0.7) {
+            results.push({
+              meeting,
+              matchedTask,
+              confidence: adjustedConfidence,
+              reason: matchData.reason
+            });
+          } else {
+            // If confidence is too low, treat as unmatched
+            results.push({
+              meeting,
+              matchedTask: null,
+              confidence: adjustedConfidence,
+              reason: matchData.reason || 'No confident match found'
+            });
+          }
         } catch (openaiError) {
           console.error(`OpenAI processing failed for meeting: ${meeting.subject}`, openaiError);
           results.push({
