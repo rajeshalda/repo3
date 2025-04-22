@@ -2,6 +2,30 @@
 
 ## Date: [Current Date]
 
+### Processing Cycle Improvements
+
+1. **Cycle Overlap Prevention**
+   - Added protection to prevent a new cycle from starting if the previous one is still running
+   - Eliminates race conditions when processing a large number of meetings
+   - Ensures all meetings are processed correctly without interference between cycles
+
+2. **Extended Processing Interval**
+   - Increased the processing cycle interval from 5 minutes to 30 minutes
+   - Provides more time to complete processing of multiple meetings
+   - Reduces system load and API calls while maintaining timely updates
+
+### Files Modified
+
+1. `ai-agent-server.js`
+   - Added processing cycle lock mechanism
+   - Updated interval timing from 5 to 30 minutes
+
+2. Documentation and UI
+   - Updated all references to the processing cycle interval
+   - Updated user-facing messages to reflect the new 30-minute cycle
+
+## Previous Changes
+
 ### Meeting Fetching Changes
 
 1. **Current Day Meetings Only**
@@ -11,8 +35,8 @@
    - End time: 23:59:59 IST of the current day
 
 2. **Processing Cycle**
-   - Confirmed the processing cycle runs every 5 minutes (no changes needed)
-   - This ensures new meetings are picked up promptly throughout the day
+   - Changed the processing cycle to run every 30 minutes (increased from 5 minutes)
+   - This ensures new meetings are picked up throughout the day while preventing overlap of cycles
 
 3. **Timezone Handling**
    - All date calculations properly handle the IST timezone (UTC+05:30)

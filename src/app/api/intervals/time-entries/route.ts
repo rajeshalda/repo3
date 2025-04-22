@@ -156,23 +156,30 @@ export async function POST(request: Request) {
             const tasks = await intervalsApi.getTasks();
             const task = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
             
+            // Fetch specific task details directly to get accurate client/project info
+            console.log('Fetching task directly by ID for billable determination:', taskId);
+            const initialTaskDetails = await intervalsApi.getTaskById(taskId);
+            
+            // Use taskDetails if available, otherwise fall back to task
+            const detailedTask = initialTaskDetails || task;
+            
             // Simplified billable status determination:
             // 1. If client is "Internal" OR "Nathcorp" OR project contains "Internal" -> non-billable ('f')
             // 2. All other meetings -> billable ('t')
-            const client = task?.client?.toLowerCase() || '';
-            const project = task?.project?.toLowerCase() || '';
+            const client = (detailedTask?.client || '').toLowerCase();
+            const project = (detailedTask?.project || '').toLowerCase();
             
             const isInternal = 
                 client === 'internal' || 
-                client === 'nathcorp' || 
+                client.includes('nathcorp') || 
                 project.includes('internal');
             
             // Set billable status based on internal check
             const billableStr = isInternal ? 'f' : 't';
             
             console.log('Billable status determination:', {
-                client: task?.client,
-                project: task?.project,
+                client: detailedTask?.client,
+                project: detailedTask?.project,
                 isInternal,
                 billableStatus: billableStr,
                 rule: 'Internal/Nathcorp = Non-billable, Everything else = Billable'
@@ -256,21 +263,44 @@ export async function POST(request: Request) {
                 billable: billableStr
             });
 
+            // Fetch the specific task details directly by ID to ensure we have complete data
+            console.log('Fetching task directly by ID:', taskId);
+            const taskInfo = await intervalsApi.getTaskById(taskId);
+            console.log('Fetching specific task by ID:', taskId);
+            const taskDetails = taskInfo ? taskInfo : tasks.find((t: any) => t.id === taskId);
+            console.log('Successfully fetched task by ID:', taskId);
+            
+            // Helper function to decode HTML entities (like &amp;)
+            const decodeHtml = (html: string | null | undefined): string | null => {
+                if (!html) return null;
+                return html.replace(/&amp;/g, '&')
+                          .replace(/&lt;/g, '<')
+                          .replace(/&gt;/g, '>')
+                          .replace(/&quot;/g, '"')
+                          .replace(/&#039;/g, "'");
+            };
+            
+            // Log full task details for debugging
+            console.log('Task details:', taskDetails);
+
             // Store in the appropriate storage system based on the source
             // Use isManualPost to determine storage destination
             if (isManualPost) {
                 // For manual posts, we'll use the same storage format as AI agent
                 // Get task details to store the task name
-                const taskDetails = tasks.find((t: { id: string; title?: string; client?: string; project?: string }) => t.id === taskId);
                 const taskName = taskDetails?.title || `Task ${taskId}`;
-                const client = taskDetails?.client || null;
-                const project = taskDetails?.project || null;
+                
+                // Ensure client, project, and module are extracted and decoded
+                const client = decodeHtml(taskDetails?.client) || null;
+                const project = decodeHtml(taskDetails?.project) || null;
+                const module = decodeHtml(taskDetails?.module) || null;
 
                 console.log('Task details for manual posting:', {
                     taskId,
                     taskName,
                     client,
-                    project
+                    project,
+                    module
                 });
 
                 console.log('Storing manual meeting with meetingId:', primaryMeetingId);
@@ -285,7 +315,7 @@ export async function POST(request: Request) {
                         // Get full task details from the taskInfo
                         result.time.client = client;
                         result.time.project = project;
-                        result.time.module = taskDetails?.module || null;
+                        result.time.module = module;
                         result.time.worktype = workType || 'India-Meeting';
                         
                         // Convert time to string format to match AI agent format
@@ -322,9 +352,15 @@ export async function POST(request: Request) {
                 // This is critical for displaying this information in the UI
                 if (result.time) {
                     try {
+                        // Ensure client, project, and module are extracted and decoded 
+                        const client = decodeHtml(taskDetails?.client) || null;
+                        const project = decodeHtml(taskDetails?.project) || null;
+                        const module = decodeHtml(taskDetails?.module) || null;
+                        
                         // Get full task details from the taskInfo
-                        result.time.client = task?.client || null;
-                        result.time.project = task?.project || null;
+                        result.time.client = client;
+                        result.time.project = project;
+                        result.time.module = module;
                         
                         // Convert time to string format to ensure consistency
                         if (typeof result.time.time === 'number') {
@@ -333,9 +369,10 @@ export async function POST(request: Request) {
                         
                         console.log('Task details for AI agent posting:', {
                             taskId,
-                            taskName: task?.title,
-                            client: task?.client,
-                            project: task?.project
+                            taskName: taskDetails?.title,
+                            client,
+                            project,
+                            module
                         });
                     } catch (error) {
                         console.error('Error enriching time entry with client/project info:', error);

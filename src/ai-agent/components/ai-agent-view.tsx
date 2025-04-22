@@ -267,7 +267,7 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
     localStorage.setItem('aiAgentEnabled', enabled.toString());
     
     if (enabled) {
-      addLog('AI Agent enabled - will check for meetings every 5 minutes', 'info');
+      addLog('AI Agent enabled - will check for meetings every 30 minutes', 'info');
       success('AI Agent enabled');
       
       handleProcessMeetings();
@@ -275,7 +275,7 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
       intervalRef.current = setInterval(() => {
         addLog('Scheduled check for new meetings...', 'info');
         handleProcessMeetings();
-      }, 5 * 60 * 1000);
+      }, 30 * 60 * 1000);
     } else {
       addLog('AI Agent disabled', 'info');
       success('AI Agent disabled');
@@ -383,7 +383,7 @@ export function AIAgentView({ userId }: AIAgentViewProps) {
                   ? "Cancelling the current process..."
                   : isProcessing 
                     ? "Click the toggle to stop the currently running process."
-                    : "When enabled, the AI Agent will automatically check for new meetings every 5 minutes."}
+                    : "When enabled, the AI Agent will automatically check for new meetings every 30 minutes."}
               </div>
               
               <div className="border-t pt-4 mt-2">

@@ -105,31 +105,46 @@ const processMeetingsForUser = async (userId) => {
 
 // Process meetings for all enabled users
 const processAllUsers = async () => {
-  console.log('Processing meetings for all enabled users...');
-  
-  for (const user of userData.users) {
-    if (user.enabled) {
-      try {
-        await processMeetingsForUser(user.userId);
-      } catch (error) {
-        console.error(`Failed to process meetings for user ${user.userId}:`, error);
-        // Continue with next user even if one fails
-      }
-    }
+  // Skip this cycle if already processing
+  if (global.isProcessingCycle) {
+    console.log('Skipping cycle as previous cycle is still processing...');
+    return;
   }
   
-  console.log('Finished processing for all users');
+  global.isProcessingCycle = true;
+  console.log('Processing meetings for all enabled users...');
+  
+  try {
+    for (const user of userData.users) {
+      if (user.enabled) {
+        try {
+          await processMeetingsForUser(user.userId);
+        } catch (error) {
+          console.error(`Failed to process meetings for user ${user.userId}:`, error);
+          // Continue with next user even if one fails
+        }
+      }
+    }
+    
+    console.log('Finished processing for all users');
+  } finally {
+    // Release the lock when done, regardless of success or failure
+    global.isProcessingCycle = false;
+  }
 };
 
 // Main function to start the processing cycle
 const startProcessingCycle = () => {
   console.log('AI Agent Server started');
   
+  // Add a flag to track if a cycle is in progress
+  global.isProcessingCycle = false;
+  
   // Process immediately on startup
   processAllUsers();
   
-  // Set up interval to process meetings every 5 minutes
-  setInterval(processAllUsers, 5 * 60 * 1000);
+  // Set up interval to process meetings every 30 minutes instead of 5
+  setInterval(processAllUsers, 30 * 60 * 1000);
 };
 
 // API server to handle enabling/disabling the AI agent

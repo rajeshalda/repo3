@@ -265,6 +265,23 @@ export class IntervalsAPI {
         }
     }
 
+    // Get a specific task by ID
+    async getTaskById(taskId: string) {
+        try {
+            console.log('Fetching specific task by ID:', taskId);
+            const taskDetails = await this.getTaskDetails(taskId);
+            if (!taskDetails) {
+                console.warn(`No task found with ID ${taskId}`);
+                return null;
+            }
+            console.log('Successfully fetched task by ID:', taskId);
+            return taskDetails;
+        } catch (error) {
+            console.error('Error fetching task by ID:', error instanceof Error ? error.message : 'Unknown error');
+            return null;
+        }
+    }
+
     // Get project information
     async getProject(projectId: string | number) {
         try {
@@ -317,22 +334,28 @@ export class IntervalsAPI {
         const user = await this.getCurrentUser();
         console.log('Current user:', user);
 
-        // Get task details - first try with regular API
+        // Get task details - first try with getTaskById for most accurate data
         console.log('Fetching task details for ID:', payload.taskId);
-        let tasks = await this.getTasks();
-        let task = tasks.find((t: Task) => t.id === payload.taskId);
+        let task = await this.getTaskById(payload.taskId);
         
-        // If task not found, try using the direct fetcher
+        // If task not found by ID, try with regular API
         if (!task) {
-            console.log('Task not found in regular API results, trying direct fetcher...');
-            const directTasks = await fetchAllTasksDirectly(this.userId);
-            console.log(`Direct fetcher found ${directTasks.length} tasks`);
-            task = directTasks.find(t => t.id === payload.taskId);
+            console.log('Task not found by ID, trying with regular API...');
+            const tasks = await this.getTasks();
+            task = tasks.find((t: Task) => t.id === payload.taskId);
             
+            // If still not found, try using the direct fetcher
             if (!task) {
-                console.error('Available tasks from both methods:',
-                  [...tasks, ...directTasks].map((t: any) => ({ id: t.id, title: t.title })).slice(0, 20));
-                throw new Error(`Task not found with ID: ${payload.taskId} in either API or direct fetch`);
+                console.log('Task not found in regular API results, trying direct fetcher...');
+                const directTasks = await fetchAllTasksDirectly(this.userId);
+                console.log(`Direct fetcher found ${directTasks.length} tasks`);
+                task = directTasks.find(t => t.id === payload.taskId);
+                
+                if (!task) {
+                    console.error('Available tasks from both methods:',
+                    [...tasks, ...directTasks].map((t: any) => ({ id: t.id, title: t.title })).slice(0, 20));
+                    throw new Error(`Task not found with ID: ${payload.taskId} in either API or direct fetch`);
+                }
             }
         }
         
@@ -346,12 +369,12 @@ export class IntervalsAPI {
         // Simplified billable status determination:
         // 1. If client is "Internal" OR "Nathcorp" OR project contains "Internal" -> non-billable ('f')
         // 2. All other meetings -> billable ('t')
-        const client = task.client?.toLowerCase() || '';
-        const project = task.project?.toLowerCase() || '';
+        const client = (task.client || '').toLowerCase();
+        const project = (task.project || '').toLowerCase();
         
         const isInternal = 
             client === 'internal' || 
-            client === 'nathcorp' || 
+            client.includes('nathcorp') || 
             project.includes('internal');
         
         // Set billable status based on internal check

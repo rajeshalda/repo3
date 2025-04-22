@@ -64,7 +64,7 @@ const toggleAgent = (enabled: boolean) => {
     
     intervalRef.current = setInterval(() => {
       processMeetings();
-    }, 5 * 60 * 1000); // 5 minutes in milliseconds
+    }, 30 * 60 * 1000); // 30 minutes in milliseconds
   } else {
     // Clear the interval
     if (intervalRef.current) {
@@ -105,7 +105,7 @@ The UI provides:
 
 When enabled:
 1. The agent immediately processes any pending meetings
-2. Sets up an interval to check for new meetings every 5 minutes
+2. Sets up an interval to check for new meetings every 30 minutes
 3. Continues running until explicitly disabled or the page is closed
 4. Automatically refreshes the dashboard data after each processing cycle
 5. Persists across page refreshes and browser sessions

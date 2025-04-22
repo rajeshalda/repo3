@@ -1101,7 +1101,7 @@ export function AIAgentView() {
                   ? "Click the toggle to stop the currently running process."
                   : agentEnabled
                     ? "Click the toggle to disable the AI Agent."
-                    : "Click the toggle to enable the AI Agent. AI Agent will automatically check for new meetings every 5 minutes."}
+                    : "Click the toggle to enable the AI Agent. AI Agent will automatically check for new meetings every 30 minutes."}
             </div>
           </div>
         </CardContent>
