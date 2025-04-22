@@ -1101,6 +1101,9 @@ export function AIAgentView() {
               <p className="text-muted-foreground">
                 Automatically process your meetings and create time entries using AI.
               </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Fetches meetings from 6:30 PM previous day to 6:00 PM present day (IST).
+              </p>
               <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border-2 border-yellow-500 rounded-md relative overflow-hidden">
                 <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#fef9c3,#fef9c3_10px,#fef08a_10px,#fef08a_20px)] opacity-20"></div>
                 <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 z-10" />
@@ -1158,7 +1161,7 @@ export function AIAgentView() {
                   ? "Click the toggle to stop the currently running process."
                   : agentEnabled
                     ? "Click the toggle to disable the AI Agent."
-                    : "Click the toggle to enable the AI Agent. AI Agent will automatically check for new meetings every 30 minutes."}
+                    : "Click the toggle to enable the AI Agent. AI Agent will automatically check for new meetings every 5 minutes."}
             </div>
           </div>
         </CardContent>
