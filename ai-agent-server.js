@@ -143,8 +143,8 @@ const startProcessingCycle = () => {
   // Process immediately on startup
   processAllUsers();
   
-  // Set up interval to process meetings every 30 minutes instead of 5
-  setInterval(processAllUsers, 30 * 60 * 1000);
+  // Set up interval to process meetings every 5 minutes
+  setInterval(processAllUsers, 5 * 60 * 1000);
 };
 
 // API server to handle enabling/disabling the AI agent
