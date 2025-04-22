@@ -324,7 +324,18 @@ export default function DashboardPage() {
     } catch (err: unknown) {
       console.error('Failed to fetch meetings:', err);
       if (err instanceof Error && err.message !== 'Session expired') {
-        toast("❌ Failed to fetch meetings");
+        toast("Session expired. Please Re-login", {
+          style: {
+            backgroundColor: "#dc2626",
+            color: "white",
+            fontSize: "16px",
+            padding: "16px",
+            borderRadius: "8px",
+            fontWeight: "500"
+          },
+          duration: 5000,
+          position: "top-center"
+        });
       }
     } finally {
       setMeetingsLoading(false);
@@ -767,21 +778,15 @@ export default function DashboardPage() {
                   <CardTitle className="text-sm font-medium">Meetings Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="px-3 sm:px-6">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-bold">
-                    {meetingsLoading ? (
-                      <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
-                    ) : (
-                      meetingsData?.meetings.length || 0
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Meetings waiting to be posted
-                  </p>
-                  <div className="mt-2 pt-2 border-t">
-                    <p className="text-xs text-muted-foreground flex justify-between items-center">
-                      <span>Total meetings in period:</span>
-                      <span className="font-medium">{meetingsData?.totalMeetingsInPeriod || 0}</span>
-                    </p>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Total meetings in period:</p>
+                    <div className="text-lg sm:text-xl lg:text-2xl font-bold mt-1">
+                      {meetingsLoading ? (
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                      ) : (
+                        meetingsData?.totalMeetingsInPeriod || 0
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -791,27 +796,15 @@ export default function DashboardPage() {
                   <CardTitle className="text-sm font-medium">Time Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
-                  <div className="text-xl sm:text-2xl font-bold">
-                    {meetingsLoading ? (
-                      <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
-                    ) : (
-                      formatDuration(meetingsData?.meetings.reduce((acc, meeting) => {
-                        if (meeting.attendanceRecords?.length) {
-                          const userRecord = meeting.attendanceRecords.find(record => record.name === session?.user?.name);
-                          return acc + (userRecord?.duration || 0);
-                        }
-                        return acc;
-                      }, 0) || 0)
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Time in meetings waiting to be posted
-                  </p>
-                  <div className="mt-2 pt-2 border-t">
-                    <p className="text-xs text-muted-foreground flex justify-between items-center">
-                      <span>Total time in all meetings:</span>
-                      <span className="font-medium">{formatDuration(meetingsData?.totalTimeInPeriod || 0)}</span>
-                    </p>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Total time in all meetings:</p>
+                    <div className="text-lg sm:text-xl lg:text-2xl font-bold mt-1">
+                      {meetingsLoading ? (
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                      ) : (
+                        formatDuration(meetingsData?.totalTimeInPeriod || 0)
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
