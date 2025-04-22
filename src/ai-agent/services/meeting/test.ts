@@ -227,35 +227,53 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             `start/dateTime ge '${startDateString}' and end/dateTime le '${endDateString}'`
         );
         
-        const url = `https://graph.microsoft.com/v1.0/users/${userId}/events?$filter=${filter}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc`;
-        console.log('Fetching meetings from URL:', url);
-
-        const response = await fetch(url, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'outlook.timezone="Asia/Kolkata"' // Request times in IST timezone
-            }
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Graph API Error:', errorText);
-            throw new Error(`Failed to fetch meetings: ${response.status} ${response.statusText}\n${errorText}`);
-        }
-
-        const data = await response.json();
-        console.log('Received meetings data:', JSON.stringify(data, null, 2));
+        const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/events?$filter=${filter}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc`;
         
-        const meetings = data.value;
-        console.log(`Found ${meetings.length} meetings for today:`, meetings.map((m: Meeting) => ({
+        // Function to fetch all meetings using pagination
+        async function fetchAllMeetings(url: string): Promise<Meeting[]> {
+            console.log('Fetching meetings from URL:', url);
+            
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'outlook.timezone="Asia/Kolkata"' // Request times in IST timezone
+                }
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Graph API Error:', errorText);
+                throw new Error(`Failed to fetch meetings: ${response.status} ${response.statusText}\n${errorText}`);
+            }
+
+            const data = await response.json();
+            console.log('Received meetings data:', JSON.stringify(data, null, 2));
+            
+            const meetings = data.value;
+            
+            // Check if there's a next page of results
+            if (data['@odata.nextLink']) {
+                console.log('Found more meetings, fetching next page...');
+                // Recursively fetch next page and combine results
+                const nextPageMeetings = await fetchAllMeetings(data['@odata.nextLink']);
+                return [...meetings, ...nextPageMeetings];
+            }
+            
+            return meetings;
+        }
+        
+        // Fetch all meetings using pagination
+        const allMeetings = await fetchAllMeetings(baseUrl);
+        
+        console.log(`Found ${allMeetings.length} meetings for today:`, allMeetings.map((m: Meeting) => ({
             subject: m.subject,
             start: m.start.dateTime,
             end: m.end.dateTime
         })));
 
         const attendanceReport: AttendanceReport = {
-            totalMeetings: meetings.length,
+            totalMeetings: allMeetings.length,
             attendedMeetings: 0,
             organizedMeetings: 0,
             attendanceByPerson: {},
@@ -263,8 +281,8 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             detailedAttendance: {}
         };
 
-        for (const meeting of meetings) {
-            const organizerEmail = meeting.organizer.emailAddress.address.toLowerCase();
+        for (const meeting of allMeetings) {
+            const organizerEmail = (meeting.organizer?.email || '').toLowerCase();
             attendanceReport.organizerStats[organizerEmail] = (attendanceReport.organizerStats[organizerEmail] || 0) + 1;
 
             if (meeting.onlineMeeting?.joinUrl) {
@@ -302,7 +320,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         }
 
         return {
-            meetings,
+            meetings: allMeetings,
             attendanceReport
         };
     } catch (error: unknown) {
