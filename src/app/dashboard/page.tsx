@@ -724,9 +724,9 @@ export default function DashboardPage() {
     }
   };
 
-  const getLastPostedDate = () => {
-    if (postedMeetings.length === 0) return null;
-    return postedMeetings[postedMeetings.length - 1].postedDate;
+  const getDateRangeText = () => {
+    if (!dateRange?.from || !dateRange?.to) return 'Select date range';
+    return `${formatDate(dateRange.from.toISOString())} - ${formatDate(dateRange.to.toISOString())}`;
   };
 
   // Add a loading screen during logout
@@ -757,11 +757,6 @@ export default function DashboardPage() {
   
   const averageAttendanceSeconds = totalMeetings > 0 ? Math.round(totalAttendanceSeconds / totalMeetings) : 0;
 
-  const getDateRangeText = () => {
-    if (!dateRange?.from || !dateRange?.to) return 'Select date range';
-    return `${formatDate(dateRange.from.toISOString())} - ${formatDate(dateRange.to.toISOString())}`;
-  };
-
   const renderCurrentView = () => {
     switch (currentView) {
       case 'posted-meetings':
@@ -772,17 +767,17 @@ export default function DashboardPage() {
         return (
           <>
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8 px-4 sm:px-6">
-              <Card className="w-full min-w-[250px]">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 px-4 sm:px-6">
+              <Card className="w-full">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
                   <CardTitle className="text-sm font-medium">Meetings Overview</CardTitle>
                 </CardHeader>
-                <CardContent className="px-3 sm:px-6">
-                  <div>
+                <CardContent className="px-4 sm:px-6">
+                  <div className="space-y-2">
                     <p className="text-xs text-muted-foreground">Total meetings in period:</p>
-                    <div className="text-lg sm:text-xl lg:text-2xl font-bold mt-1">
+                    <div className="text-2xl sm:text-3xl font-bold">
                       {meetingsLoading ? (
-                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                        <Loader2 className="h-6 w-6 sm:h-7 sm:w-7 animate-spin" />
                       ) : (
                         meetingsData?.totalMeetingsInPeriod || 0
                       )}
@@ -796,32 +791,15 @@ export default function DashboardPage() {
                   <CardTitle className="text-sm font-medium">Time Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
-                  <div>
+                  <div className="space-y-2">
                     <p className="text-xs text-muted-foreground">Total time in all meetings:</p>
-                    <div className="text-lg sm:text-xl lg:text-2xl font-bold mt-1">
+                    <div className="text-2xl sm:text-3xl font-bold">
                       {meetingsLoading ? (
-                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                        <Loader2 className="h-6 w-6 sm:h-7 sm:w-7 animate-spin" />
                       ) : (
                         formatDuration(meetingsData?.totalTimeInPeriod || 0)
                       )}
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="w-full">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
-                  <CardTitle className="text-sm font-medium">Last Update Made On</CardTitle>
-                </CardHeader>
-                <CardContent className="px-4 sm:px-6">
-                  <div className="text-xl sm:text-2xl font-bold">
-                    {meetingsLoading ? (
-                      <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
-                    ) : getLastPostedDate() ? (
-                      formatDateIST(getLastPostedDate()!, { dateStyle: 'long' })
-                    ) : (
-                      'No posts yet'
-                    )}
                   </div>
                 </CardContent>
               </Card>
