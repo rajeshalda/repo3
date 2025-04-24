@@ -40,35 +40,40 @@ export function convertLocalDateToUTC(date: Date, timeString: string): Date {
 export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
   if (!dateRange?.from || !dateRange?.to) return null;
 
+  // Get user's timezone first
   const userTimezone = getUserTimezone();
-
-  // For start date: Convert local midnight to UTC
-  const localStartDate = convertLocalDateToUTC(dateRange.from, '00:00:00');
   
-  // For end date: Convert local 23:59:59.999 to UTC
-  const localEndDate = convertLocalDateToUTC(dateRange.to, '23:59:59.999');
+  // Determine which timezone to use - if IST is specifically required, use it, otherwise use user's timezone
+  const useIST = process.env.NEXT_PUBLIC_FORCE_IST_TIMEZONE === 'true';
+  const effectiveTimezone = useIST ? IST_TIMEZONE : userTimezone;
+
+  // Create dates in the effective timezone
+  const startDate = new Date(dateRange.from);
+  const endDate = new Date(dateRange.to);
+
+  // Format the dates with specific times in the effective timezone
+  const startInTZ = new Date(`${startDate.toLocaleDateString('en-US', { timeZone: effectiveTimezone })} 00:00:00`);
+  const endInTZ = new Date(`${endDate.toLocaleDateString('en-US', { timeZone: effectiveTimezone })} 23:59:59.999`);
 
   // Log the conversions for verification
   console.log('Date range conversion:', {
     userTimezone,
+    effectiveTimezone,
+    isISTForced: useIST,
     selectedRange: {
-      start: dateRange.from.toLocaleDateString('en-US', { timeZone: userTimezone }),
-      end: dateRange.to.toLocaleDateString('en-US', { timeZone: userTimezone })
-    },
-    localTimes: {
-      start: localStartDate.toLocaleString('en-US', { timeZone: userTimezone }),
-      end: localEndDate.toLocaleString('en-US', { timeZone: userTimezone })
+      start: startInTZ.toLocaleString('en-US', { timeZone: effectiveTimezone }),
+      end: endInTZ.toLocaleString('en-US', { timeZone: effectiveTimezone })
     },
     utcTimes: {
-      start: localStartDate.toISOString(),
-      end: localEndDate.toISOString()
+      start: startInTZ.toISOString(),
+      end: endInTZ.toISOString()
     }
   });
 
   return {
-    start: localStartDate.toISOString(),
-    end: localEndDate.toISOString(),
-    timezone: userTimezone // This can be used for the Prefer: outlook.timezone header
+    start: startInTZ.toISOString(),
+    end: endInTZ.toISOString(),
+    timezone: effectiveTimezone
   };
 }
 
