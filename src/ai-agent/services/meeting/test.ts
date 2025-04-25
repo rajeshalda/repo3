@@ -223,11 +223,8 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         console.log('Fetching meetings for current day in IST (UTC+05:30)');
         console.log('Date range (UTC):', startDateString, 'to', endDateString);
         
-        const filter = encodeURIComponent(
-            `start/dateTime ge '${startDateString}' and end/dateTime le '${endDateString}'`
-        );
-        
-        const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/events?$filter=${filter}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting&$orderby=start/dateTime desc`;
+        // Using calendarView endpoint instead of events endpoint for better handling of recurring meetings
+        const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/calendarView?startDateTime=${startDateString}&endDateTime=${endDateString}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId&$orderby=start/dateTime desc`;
         
         // Function to fetch all meetings using pagination
         async function fetchAllMeetings(url: string): Promise<Meeting[]> {
@@ -249,6 +246,18 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
 
             const data = await response.json();
             console.log('Received meetings data:', JSON.stringify(data, null, 2));
+            
+            // Add debug logging for recurring meetings
+            data.value?.forEach((meeting: any) => {
+                if (meeting.seriesMasterId) {
+                    console.log('Found recurring meeting instance:', {
+                        subject: meeting.subject,
+                        start: meeting.start.dateTime,
+                        seriesMasterId: meeting.seriesMasterId,
+                        type: meeting.type
+                    });
+                }
+            });
             
             const meetings = data.value;
             

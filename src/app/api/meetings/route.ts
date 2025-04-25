@@ -35,6 +35,8 @@ interface GraphMeeting {
       address: string;
     }
   };
+  seriesMasterId?: string;
+  type?: string;
 }
 
 interface AttendanceInterval {
@@ -72,6 +74,8 @@ interface MeetingData {
   meetingInfo: ReturnType<typeof extractMeetingInfo> | null;
   attendanceRecords: AttendanceRecord[];
   rawData: GraphMeeting;
+  isRecurring: boolean;
+  seriesMasterId: string | null;
 }
 
 async function getAttendanceReport(organizerId: string, meetingId: string) {
@@ -229,14 +233,17 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
   const adjustedEndDate = new Date(endDate);
   adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
 
-  const filter = encodeURIComponent(
-    `start/dateTime ge '${startDate.toISOString()}' and start/dateTime lt '${adjustedEndDate.toISOString()}'`
-  );
+  console.log('Fetching meetings with date range:', {
+    startDate: startDate.toISOString(),
+    endDate: adjustedEndDate.toISOString()
+  });
 
   let allMeetings: any[] = [];
-  let nextLink = `https://graph.microsoft.com/v1.0/me/events?$filter=${filter}&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer`;
+  // Using calendarView endpoint instead of events to properly handle recurring meetings
+  let nextLink = `https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=${startDate.toISOString()}&endDateTime=${adjustedEndDate.toISOString()}&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer,type,seriesMasterId`;
 
   while (nextLink) {
+    console.log('Fetching from:', nextLink);
     const response = await fetch(nextLink, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -252,6 +259,20 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
     }
 
     const data = await response.json();
+    console.log(`Fetched ${data.value?.length || 0} meetings in this batch`);
+    
+    // Add debug logging for recurring meetings
+    data.value?.forEach((meeting: any) => {
+      if (meeting.seriesMasterId) {
+        console.log('Found recurring meeting instance:', {
+          subject: meeting.subject,
+          start: meeting.start.dateTime,
+          seriesMasterId: meeting.seriesMasterId,
+          type: meeting.type
+        });
+      }
+    });
+
     allMeetings = [...allMeetings, ...data.value];
     nextLink = data['@odata.nextLink'] || '';
   }
@@ -267,7 +288,8 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
         start: meeting.start.dateTime,
         id: meeting.id,
         bodyPreview: meeting.bodyPreview?.substring(0, 50) + '...',
-        hasOnlineMeeting: !!meeting.onlineMeeting
+        hasOnlineMeeting: !!meeting.onlineMeeting,
+        isRecurring: !!meeting.seriesMasterId
       });
 
       const meetingData: MeetingData = {
@@ -277,7 +299,9 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
         isTeamsMeeting: false,
         meetingInfo: null,
         attendanceRecords: [],
-        rawData: meeting
+        rawData: meeting,
+        isRecurring: !!meeting.seriesMasterId,
+        seriesMasterId: meeting.seriesMasterId || null
       };
 
       if (meeting.onlineMeeting) {
