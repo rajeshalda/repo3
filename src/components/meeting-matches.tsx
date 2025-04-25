@@ -571,7 +571,7 @@ function MatchRow({
               size="sm"
               onClick={handleTaskSelect}
               disabled={isLoadingTasks}
-              className="mt-2 text-sm border border-gray-300 hover:bg-accent hover:text-accent-foreground font-medium px-3 bg-gray-50 dark:bg-gray-800"
+              className="mt-2 text-sm border border-gray-300 dark:border-gray-600 hover:bg-accent hover:text-accent-foreground font-medium px-3 bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
             >
               Change Task
             </Button>

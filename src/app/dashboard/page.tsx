@@ -284,26 +284,31 @@ export default function DashboardPage() {
         ? rawData.meetings.filter((meeting: Meeting) => {
             const meetingDate = new Date(meeting.startTime);
             
-            // Convert meeting time to IST for comparison
-            const meetingIST = new Date(meetingDate.getTime() + (5.5 * 60 * 60 * 1000));
+            // Create dates in IST
+            const meetingIST = new Date(meetingDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
             
             // Get start of day for selected start date in IST
-            const startIST = new Date(startDate);
+            const startIST = new Date(startDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
             startIST.setHours(0, 0, 0, 0);
             
             // Get end of day for selected end date in IST
-            const endIST = new Date(endDate);
+            const endIST = new Date(endDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
             endIST.setHours(23, 59, 59, 999);
+            
+            // Convert all dates to timestamps for comparison
+            const meetingTime = meetingIST.getTime();
+            const startTime = startIST.getTime();
+            const endTime = endIST.getTime();
             
             console.log('Meeting time check:', {
               meeting: meeting.subject,
-              meetingIST: meetingIST.toISOString(),
-              startIST: startIST.toISOString(),
-              endIST: endIST.toISOString(),
-              isWithinRange: meetingIST >= startIST && meetingIST <= endIST
+              meetingTime: new Date(meetingTime).toISOString(),
+              startTime: new Date(startTime).toISOString(),
+              endTime: new Date(endTime).toISOString(),
+              isWithinRange: meetingTime >= startTime && meetingTime <= endTime
             });
             
-            return meetingIST >= startIST && meetingIST <= endIST;
+            return meetingTime >= startTime && meetingTime <= endTime;
           })
         : rawData.meetings;
       

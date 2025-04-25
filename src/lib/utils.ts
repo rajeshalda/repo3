@@ -47,34 +47,75 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
   const useIST = process.env.NEXT_PUBLIC_FORCE_IST_TIMEZONE === 'true';
   const effectiveTimezone = useIST ? IST_TIMEZONE : userTimezone;
 
-  // Create dates in the effective timezone
-  const startDate = new Date(dateRange.from);
-  const endDate = new Date(dateRange.to);
+  try {
+    // Create a formatter for the effective timezone
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: effectiveTimezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
 
-  // Format the dates with specific times in the effective timezone
-  const startInTZ = new Date(`${startDate.toLocaleDateString('en-US', { timeZone: effectiveTimezone })} 00:00:00`);
-  const endInTZ = new Date(`${endDate.toLocaleDateString('en-US', { timeZone: effectiveTimezone })} 23:59:59.999`);
+    // Get start and end dates in the effective timezone
+    const startParts = formatter.formatToParts(dateRange.from);
+    const endParts = formatter.formatToParts(dateRange.to);
 
-  // Log the conversions for verification
-  console.log('Date range conversion:', {
-    userTimezone,
-    effectiveTimezone,
-    isISTForced: useIST,
-    selectedRange: {
-      start: startInTZ.toLocaleString('en-US', { timeZone: effectiveTimezone }),
-      end: endInTZ.toLocaleString('en-US', { timeZone: effectiveTimezone })
-    },
-    utcTimes: {
+    // Build date strings with specific times (start at 00:00:00, end at 23:59:59.999)
+    const startStr = `${startParts.find(p => p.type === 'year')?.value}-${startParts.find(p => p.type === 'month')?.value}-${startParts.find(p => p.type === 'day')?.value}T00:00:00.000`;
+    const endStr = `${endParts.find(p => p.type === 'year')?.value}-${endParts.find(p => p.type === 'month')?.value}-${endParts.find(p => p.type === 'day')?.value}T23:59:59.999`;
+
+    // Create Date objects in the effective timezone
+    const startInTZ = new Date(startStr);
+    const endInTZ = new Date(endStr);
+
+    // Log the conversions for verification
+    console.log('Date range conversion:', {
+      userTimezone,
+      effectiveTimezone,
+      isISTForced: useIST,
+      inputDates: {
+        from: dateRange.from.toISOString(),
+        to: dateRange.to.toISOString()
+      },
+      processedDates: {
+        startStr,
+        endStr
+      },
+      selectedRange: {
+        start: startInTZ.toLocaleString('en-US', { timeZone: effectiveTimezone }),
+        end: endInTZ.toLocaleString('en-US', { timeZone: effectiveTimezone })
+      },
+      utcTimes: {
+        start: startInTZ.toISOString(),
+        end: endInTZ.toISOString()
+      }
+    });
+
+    return {
       start: startInTZ.toISOString(),
-      end: endInTZ.toISOString()
-    }
-  });
-
-  return {
-    start: startInTZ.toISOString(),
-    end: endInTZ.toISOString(),
-    timezone: effectiveTimezone
-  };
+      end: endInTZ.toISOString(),
+      timezone: effectiveTimezone
+    };
+  } catch (error) {
+    console.error('Error in date range conversion:', error);
+    
+    // Fallback method if the above fails
+    const startDate = new Date(dateRange.from);
+    const endDate = new Date(dateRange.to);
+    
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+    
+    return {
+      start: startDate.toISOString(),
+      end: endDate.toISOString(),
+      timezone: effectiveTimezone
+    };
+  }
 }
 
 // Format date with specific timezone
