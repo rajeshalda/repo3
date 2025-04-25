@@ -561,9 +561,9 @@ function MatchRow({
           </div>
         </div>
       </TableCell>
-      <TableCell className="max-w-[200px]">
+      <TableCell className="max-w-[200px] relative z-10">
         {selectedTask ? (
-          <div className="space-y-1">
+          <div className="space-y-1 relative">
             <div className="truncate font-medium text-foreground">{selectedTask.title}</div>
             <div className="text-xs text-muted-foreground dark:text-gray-400 truncate">{selectedTask.project}</div>
             <Button
@@ -571,7 +571,7 @@ function MatchRow({
               size="sm"
               onClick={handleTaskSelect}
               disabled={isLoadingTasks}
-              className="mt-2 text-sm border border-gray-300 dark:border-gray-600 hover:bg-accent hover:text-accent-foreground font-medium px-3 bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
+              className="mt-2 text-sm border border-gray-200 hover:bg-accent hover:text-accent-foreground font-medium px-3 bg-background dark:bg-slate-600 dark:border-slate-400 dark:text-white dark:hover:bg-slate-500 relative z-20"
             >
               Change Task
             </Button>
@@ -626,7 +626,7 @@ function MatchRow({
                     }}
                   />
                 </div>
-                <div className="max-h-[300px] overflow-y-auto">
+                <div className="max-h-[300px] overflow-y-auto bg-background">
                   {filteredTasks.length === 0 ? (
                     <div className="p-4 text-sm text-muted-foreground">
                       {availableTasks.length === 0 ? 'No tasks found.' : 'No matching tasks found.'}
