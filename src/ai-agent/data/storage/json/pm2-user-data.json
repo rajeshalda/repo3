@@ -31,6 +31,10 @@
     {
       "userId": "debrab@m365x92504196.onmicrosoft.com",
       "enabled": false
+    },
+    {
+      "userId": "irvins@m365x92504196.onmicrosoft.com",
+      "enabled": true
     }
   ]
 }

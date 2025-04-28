@@ -664,8 +664,17 @@ function MatchRow({
         </div>
       </TableCell>
       <TableCell className="max-w-[300px]">
-        <div className="text-sm text-foreground dark:text-gray-100">
-          {formatMatchReason(result.reason)}
+        <div 
+          className="text-sm text-foreground dark:text-gray-100 relative group cursor-help"
+          title={result.reason} // Show full text on hover
+        >
+          <div className="line-clamp-2 hover:text-clip">
+            {formatMatchReason(result.reason)}
+          </div>
+          {/* Show tooltip on hover for truncated text */}
+          <div className="hidden group-hover:block absolute z-50 p-2 bg-popover text-popover-foreground rounded shadow-lg border max-w-[400px] whitespace-normal left-0 mt-1">
+            {formatMatchReason(result.reason)}
+          </div>
         </div>
       </TableCell>
       <TableCell>
@@ -910,11 +919,12 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     setIsPostingMultiple(true);
     let successCount = 0;
     let failCount = 0;
+    const errors: string[] = [];
 
     try {
       // Get meetings based on active tab
       const meetingsToPost = activeTab === 'matched' 
-        ? meetings.high.filter(m => {
+        ? [...meetings.high, ...meetings.medium, ...meetings.low].filter(m => {
             const meetingKey = generateMeetingKey(m.meeting, userId);
             const hasAttendance = m.meeting.attendanceRecords.some(
               record => record.name === session?.user?.name && record.duration > 0
@@ -929,18 +939,27 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
           });
 
-      const postedIds = new Set<string>();
+      console.log('Posting meetings batch:', {
+        count: meetingsToPost.length,
+        meetings: meetingsToPost.map(m => ({
+          subject: m.meeting.subject,
+          key: generateMeetingKey(m.meeting, userId)
+        }))
+      });
 
-      for (const result of meetingsToPost) {
+      // Use Promise.all to post all meetings concurrently
+      const results = await Promise.all(meetingsToPost.map(async (result) => {
         const userAttendance = result.meeting.attendanceRecords.find(
           record => record.name === session?.user?.name
         );
 
-        if (!userAttendance) continue;
+        if (!userAttendance) {
+          errors.push(`No attendance record found for meeting: ${result.meeting.subject}`);
+          return { success: false, meetingKey: '', error: 'No attendance record' };
+        }
 
         try {
           const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
-          // Calculate total duration in seconds from attendance intervals
           const totalDurationInSeconds = userAttendance.intervals.reduce(
             (total, interval) => total + interval.durationInSeconds,
             0
@@ -948,26 +967,16 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
           const meetingKey = generateMeetingKey(result.meeting, userId);
           const taskToUse = activeTab === 'matched' ? result.matchedTask! : selectedTasks.get(meetingKey)!;
 
-          console.log('Meeting data before posting in batch:', {
-            meetingId: result.meeting.meetingInfo?.meetingId,
-            subject: result.meeting.subject,
-            meetingInfo: result.meeting.meetingInfo,
-            rawMeeting: result.meeting // Log the entire meeting object
-          });
+          if (!taskToUse) {
+            errors.push(`No task selected for meeting: ${result.meeting.subject}`);
+            return { success: false, meetingKey, error: 'No task selected' };
+          }
 
-          // Use the proper ID hierarchy: Graph ID in meetingInfo or fall back to other properties
           const meetingGraphId = result.meeting.meetingInfo?.meetingId || 
-                                result.meeting.meetingInfo?.graphId || // Try using the graphId from meetingInfo first
-                                (result.meeting as any).id || // Then try the id property
-                                (result.meeting.rawData?.id) || // Then try the raw data id if available
-                                `${session?.user?.email}_${result.meeting.subject}_${result.meeting.startTime}`; // Last resort fallback
-          
-          console.log('Using meetingId for batch posting:', meetingGraphId, 'Source:', {
-            hasMeetingInfo: !!result.meeting.meetingInfo,
-            meetingInfoId: result.meeting.meetingInfo?.meetingId,
-            graphId: result.meeting.meetingInfo?.graphId,
-            rawId: result.meeting.rawData?.id
-          });
+                                result.meeting.meetingInfo?.graphId ||
+                                (result.meeting as any).id ||
+                                (result.meeting.rawData?.id) ||
+                                `${session?.user?.email}_${result.meeting.subject}_${result.meeting.startTime}`;
 
           const response = await fetch('/api/intervals/time-entries', {
             method: 'POST',
@@ -979,7 +988,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
               date: meetingDate,
               time: totalDurationInSeconds,
               description: result.meeting.subject,
-              meetingId: meetingGraphId, // Use the properly extracted ID
+              meetingId: meetingGraphId,
               meetingInfo: result.meeting.meetingInfo ? {
                 meetingId: result.meeting.meetingInfo.meetingId,
                 graphId: result.meeting.meetingInfo.graphId,
@@ -998,19 +1007,46 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             }),
           });
 
-          if (response.ok) {
-            successCount++;
-            postedIds.add(result.meeting.meetingInfo?.meetingId || result.meeting.subject || '');
+          const responseData = await response.json();
+
+          if (response.ok && responseData.success) {
+            return { success: true, meetingKey, error: null };
           } else {
-            failCount++;
+            errors.push(`Failed to post meeting "${result.meeting.subject}": ${responseData.error || 'Unknown error'}`);
+            return { success: false, meetingKey, error: responseData.error };
           }
         } catch (error) {
-          console.error('Error posting meeting:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          errors.push(`Error posting meeting "${result.meeting.subject}": ${errorMessage}`);
+          return { success: false, meetingKey: generateMeetingKey(result.meeting, userId), error: errorMessage };
+        }
+      }));
+
+      // Process results
+      results.forEach(result => {
+        if (result.success) {
+          successCount++;
+          if (result.meetingKey) {
+            // Remove from selected meetings and tasks
+            setSelectedMeetingKeys(prev => {
+              const next = new Set(prev);
+              next.delete(result.meetingKey);
+              return next;
+            });
+            
+            const updatedTasks = new Map(selectedTasks);
+            updatedTasks.delete(result.meetingKey);
+            setSelectedTasks(updatedTasks);
+            
+            // Call onMeetingPosted for UI update
+            onMeetingPosted?.(result.meetingKey);
+          }
+        } else {
           failCount++;
         }
-      }
+      });
 
-      // Show notifications
+      // Show success notification if any meetings were posted successfully
       if (successCount > 0) {
         toast.success(`Successfully posted ${successCount} ${activeTab} meetings`, {
           position: "top-center",
@@ -1022,11 +1058,16 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         });
       }
 
+      // Show error notification if any meetings failed
       if (failCount > 0) {
+        const errorMessage = errors.length > 3 
+          ? `${errors.slice(0, 3).join('\n')}\n...and ${errors.length - 3} more errors`
+          : errors.join('\n');
+
         setTimeout(() => {
-          toast.error(`Failed to post ${failCount} ${activeTab} meetings`, {
+          toast.error(`Failed to post ${failCount} meetings:\n${errorMessage}`, {
             position: "top-center",
-            duration: 4000,
+            duration: 6000,
             style: {
               backgroundColor: "rgb(255 0 0 / 0.9)",
               color: "#fff",
@@ -1035,14 +1076,17 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         }, successCount > 0 ? 3500 : 0);
       }
 
-      // Update posted meetings
-      if (postedIds.size > 0) {
-        postedIds.forEach(id => {
-          onMeetingPosted(id);
-        });
-      }
+      // Force refresh the meetings list
+      setMeetings(prev => ({
+        high: filterMeetings(prev.high),
+        medium: filterMeetings(prev.medium),
+        low: filterMeetings(prev.low),
+        unmatched: filterMeetings(prev.unmatched)
+      }));
+
     } catch (error) {
       console.error('Error in postAllMeetings:', error);
+      toast.error('An unexpected error occurred while posting meetings');
     } finally {
       setIsPostingMultiple(false);
     }
