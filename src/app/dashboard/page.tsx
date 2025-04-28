@@ -1198,7 +1198,7 @@ export default function DashboardPage() {
         {/* Main Content Area */}
         <main className="flex-1 overflow-hidden px-2 sm:px-0">
           <div className="h-full overflow-y-auto">
-            <div className="space-y-4 pb-16">
+            <div className="space-y-4 pb-16 pt-6 sm:pt-8">
               {renderCurrentView()}
             </div>
           </div>
