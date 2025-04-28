@@ -1013,63 +1013,6 @@ export function AIAgentView() {
     }
   };
 
-  const [isPostingAll, setIsPostingAll] = useState(false);
-  
-  // Add a postAllMeetings function to post all unmatched meetings
-  const postAllMeetings = async () => {
-    console.log("Post All button clicked");
-    console.log("Unmatched meetings:", matchResults?.unmatched);
-    
-    if (!matchResults || !matchResults.unmatched || matchResults.unmatched.length === 0) {
-      console.log("No unmatched meetings found");
-      return;
-    }
-
-    setIsPostingAll(true);
-    let successCount = 0;
-    let failCount = 0;
-
-    try {
-      // Find all "Post" buttons in the meeting-matches-component div
-      // Use this approach to directly click the same buttons the user would click
-      const postButtons = document.querySelectorAll('.meeting-matches-component button');
-      console.log(`Found ${postButtons.length} buttons in the meeting reviews section`);
-      
-      let postButtonsClicked = 0;
-      
-      // Click any button that has text content "Post" (not "Posting...")
-      postButtons.forEach(button => {
-        const buttonText = button.textContent?.trim();
-        const isDisabled = button.hasAttribute('disabled');
-        
-        if (buttonText === 'Post' && !isDisabled) {
-          console.log('Clicking Post button');
-          (button as HTMLButtonElement).click();
-          postButtonsClicked++;
-        } else if (buttonText === 'Post' && isDisabled) {
-          console.log('Found Post button but it is disabled, skipping');
-        } else if (buttonText?.includes('Posting')) {
-          console.log('Found button in Posting state, skipping');
-        }
-      });
-      
-      console.log(`Clicked ${postButtonsClicked} Post buttons`);
-      
-      // No need for notifications as each individual Post button click will show its own toast
-      
-      // Wait a moment for all the posts to complete
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Refresh data after posting
-      await fetchPostedMeetings();
-    } catch (error) {
-      console.error('Error in postAllMeetings:', error);
-      toast.error('Error posting meetings');
-    } finally {
-      setIsPostingAll(false);
-    }
-  };
-
   return (
     <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
       {/* Header Card */}
@@ -1171,22 +1114,6 @@ export function AIAgentView() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle>Meeting Review</CardTitle>
-          {matchResults && matchResults.unmatched && matchResults.unmatched.length > 0 && (
-            <Button 
-              size="sm" 
-              onClick={postAllMeetings}
-              disabled={isPostingAll}
-            >
-              {isPostingAll ? (
-                <>
-                  <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
-                  Posting...
-                </>
-              ) : (
-                'Post All'
-              )}
-            </Button>
-          )}
         </CardHeader>
         <CardContent className="max-h-[350px] overflow-auto">
           <div className="meeting-matches-component">
