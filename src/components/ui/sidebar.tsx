@@ -48,11 +48,6 @@ export function Sidebar({ currentView, onViewChange, className }: SidebarProps) 
       view: 'dashboard'
     },
     {
-      name: 'Posted Meetings',
-      icon: FileCheck,
-      view: 'posted-meetings'
-    },
-    {
       name: 'AI Agent',
       icon: AIChipIcon,
       view: 'ai-agent'
