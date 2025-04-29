@@ -24,10 +24,8 @@ import { MeetingMatches } from '@/components/meeting-matches';
 import { DateRangePicker } from '@/components/date-range-picker';
 import { DateRange } from 'react-day-picker';
 import { Logo } from '@/components/ui/logo';
-import { PostedMeetings } from "@/components/posted-meetings";
 import { useTheme } from "next-themes";
 import { Sidebar } from '@/components/ui/sidebar';
-import { PostedMeetingsView } from '@/components/posted-meetings-view';
 import { SessionWarning } from '@/components/session-warning';
 import {
   DropdownMenu,
@@ -764,8 +762,6 @@ export default function DashboardPage() {
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'posted-meetings':
-        return <PostedMeetingsView />;
       case 'ai-agent':
         return <AIAgentView />;
       default:
@@ -1198,7 +1194,7 @@ export default function DashboardPage() {
         {/* Main Content Area */}
         <main className="flex-1 overflow-hidden px-2 sm:px-0">
           <div className="h-full overflow-y-auto">
-            <div className="space-y-4 pb-16">
+            <div className="space-y-4 pb-16 pt-6 sm:pt-8">
               {renderCurrentView()}
             </div>
           </div>
