@@ -1,0 +1,110 @@
+Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
+Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching meetings for current day in IST (UTC+05:30)
+Date range (UTC): 2025-04-28T18:30:00.000Z to 2025-04-29T18:29:59.999Z
+Fetching meetings from URL: https://graph.microsoft.com/v1.0/users/pradeepg@m365x92504196.onmicrosoft.com/calendarView?startDateTime=2025-04-28T18:30:00.000Z&endDateTime=2025-04-29T18:29:59.999Z&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId&$orderby=start/dateTime desc
+Received meetings data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('pradeepg%40m365x92504196.onmicrosoft.com')/calendarView(id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId)",
+  "value": [
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAEE+Apw==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3YawyO-AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==",
+      "categories": [],
+      "subject": "Internal Strategy Sync",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 212 581 948 692 1\r\nPasscode: pR6KK96S\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAQWdhBAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-04-29T12:00:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "end": {
+        "dateTime": "2025-04-29T12:30:00.0000000",
+        "timeZone": "Asia/Kolkata"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "943781369",
+        "tollNumber": "+1 323-618-1840"
+      }
+    }
+  ]
+}
+Found recurring meeting instance: {
+  subject: 'Internal Strategy Sync',
+  start: '2025-04-29T12:00:00.0000000',
+  seriesMasterId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAQWdhBAAA=',
+  type: 'occurrence'
+}
+Found 1 meetings for today: [
+  {
+    subject: 'Internal Strategy Sync',
+    start: '2025-04-29T12:00:00.0000000',
+    end: '2025-04-29T12:30:00.0000000'
+  }
+]
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZakZrTURBMVltRXRNbVl5TnkwME1qTXhMV0ZsTkRJdE5qTXpaVE14TmpBd00yUmtAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZakZrTURBMVltRXRNbVl5TnkwME1qTXhMV0ZsTkRJdE5qTXpaVE14TmpBd00yUmtAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "511c3487-7b29-4653-8c3b-510546c505cc",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-29T06:29:19.173Z",
+      "meetingEndDateTime": "2025-04-29T06:35:33.487Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "60543194-caf0-4548-940b-e456dbda121d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-28T15:54:28.952Z",
+      "meetingEndDateTime": "2025-04-28T15:57:17.079Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Report ID: 511c3487-7b29-4653-8c3b-510546c505cc
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZakZrTURBMVltRXRNbVl5TnkwME1qTXhMV0ZsTkRJdE5qTXpaVE14TmpBd00yUmtAdGhyZWFkLnYy')/attendanceReports('511c3487-7b29-4653-8c3b-510546c505cc')/attendanceRecords",
+  "value": [
+    {
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 371,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-04-29T06:29:22.4070409Z",
+          "leaveDateTime": "2025-04-29T06:35:33.4877153Z",
+          "durationInSeconds": 371
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
+}
+Found 1 meetings for processing

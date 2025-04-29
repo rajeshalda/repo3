@@ -194,24 +194,24 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const now = new Date();
         
         // Create a Date object for the start of today in IST (00:00:00)
-        // 00:00:00 IST = Previous day 18:30:00 UTC (UTC+5:30)
+        // For IST midnight (00:00), we need previous day 18:30 UTC
         const startDate = new Date(Date.UTC(
             now.getUTCFullYear(),
             now.getUTCMonth(),
             now.getUTCDate() - 1, // Previous day
-            18, // 18:30 UTC 
+            18, // 18:30 UTC = 00:00 IST
             30,
             0,
             0
         ));
         
         // Create a Date object for the end of today in IST (23:59:59.999)
-        // 23:59:59.999 IST = Today 18:29:59.999 UTC (UTC+5:30)
+        // For IST 23:59:59.999, we need current day 18:29:59.999 UTC
         const endDate = new Date(Date.UTC(
             now.getUTCFullYear(),
             now.getUTCMonth(),
             now.getUTCDate(),
-            18, // 18:29:59.999 UTC of current day
+            18, // 18:29:59.999 UTC = 23:59:59.999 IST
             29,
             59,
             999
@@ -275,14 +275,40 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         // Fetch all meetings using pagination
         const allMeetings = await fetchAllMeetings(baseUrl);
         
-        console.log(`Found ${allMeetings.length} meetings for today:`, allMeetings.map((m: Meeting) => ({
-            subject: m.subject,
-            start: m.start.dateTime,
-            end: m.end.dateTime
-        })));
+        // Filter out meetings that start before our target IST day
+        const filteredMeetings = allMeetings.filter((meeting: Meeting) => {
+            // Parse the meeting start time (which is already in IST as per the API response)
+            const meetingStartTime = new Date(meeting.start.dateTime);
+            
+            // Create start and end of IST day for comparison
+            const startOfDay = new Date(now);
+            startOfDay.setHours(0, 0, 0, 0);  // Set to start of day in IST
+            
+            const endOfDay = new Date(now);
+            endOfDay.setHours(23, 59, 59, 999);  // Set to end of day in IST
+
+            console.log('Meeting filter debug:', {
+                subject: meeting.subject,
+                meetingStart: meetingStartTime.toISOString(),
+                startOfDay: startOfDay.toISOString(),
+                endOfDay: endOfDay.toISOString(),
+                isIncluded: meetingStartTime >= startOfDay && meetingStartTime <= endOfDay
+            });
+
+            // Only include meetings that start within the IST day
+            return meetingStartTime >= startOfDay && meetingStartTime <= endOfDay;
+        });
+        
+        console.log(`Found ${allMeetings.length} meetings, filtered to ${filteredMeetings.length} meetings for today:`, 
+            filteredMeetings.map((m: Meeting) => ({
+                subject: m.subject,
+                start: m.start.dateTime,
+                end: m.end.dateTime
+            }))
+        );
 
         const attendanceReport: AttendanceReport = {
-            totalMeetings: allMeetings.length,
+            totalMeetings: filteredMeetings.length,
             attendedMeetings: 0,
             organizedMeetings: 0,
             attendanceByPerson: {},
@@ -290,7 +316,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             detailedAttendance: {}
         };
 
-        for (const meeting of allMeetings) {
+        for (const meeting of filteredMeetings) {
             const organizerEmail = (meeting.organizer?.email || '').toLowerCase();
             attendanceReport.organizerStats[organizerEmail] = (attendanceReport.organizerStats[organizerEmail] || 0) + 1;
 
@@ -329,7 +355,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         }
 
         return {
-            meetings: allMeetings,
+            meetings: filteredMeetings,
             attendanceReport
         };
     } catch (error: unknown) {
