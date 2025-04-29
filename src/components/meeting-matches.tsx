@@ -706,7 +706,6 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const { toast } = useToast();
   const userId = session?.user?.email || '';
   const [selectedMeetings, setSelectedMeetings] = useState<Record<string, boolean>>({});
-  const [isPostingMultiple, setIsPostingMultiple] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState<Map<string, Task>>(new Map());
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState('matched');
@@ -749,28 +748,37 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       
       // After clearing, set the new filtered meetings
       setMeetings({
-        high: filterMeetings(matches.high),
-        medium: filterMeetings(matches.medium),
-        low: filterMeetings(matches.low),
-        unmatched: filterMeetings(matches.unmatched)
+        high: filterMeetings(matches.high, 'high'),
+        medium: filterMeetings(matches.medium, 'medium'),
+        low: filterMeetings(matches.low, 'low'),
+        unmatched: filterMeetings(matches.unmatched, 'unmatched')
       });
     }
   }, [matches, clearAllStates, haveMeetingsChanged]);
 
-  const filterMeetings = (matchResults: MatchResult[]) => {
+  const filterMeetings = (matchResults: MatchResult[], category: MatchCategory) => {
     // Convert postedMeetingIds to a Set if it isn't already one
     const postedIds = postedMeetingIds instanceof Set ? postedMeetingIds : new Set(postedMeetingIds);
     
     console.log('Filtering meetings:', {
+      category,
       totalMeetings: matchResults.length,
       postedIds: Array.from(postedIds)
     });
+
+    // Get all matched meeting keys (from high, medium, low confidence)
+    const allMatchedMeetingKeys = new Set([
+      ...matches.high.map(m => generateMeetingKey(m.meeting, userId)),
+      ...matches.medium.map(m => generateMeetingKey(m.meeting, userId)),
+      ...matches.low.map(m => generateMeetingKey(m.meeting, userId))
+    ]);
     
     return matchResults.filter((m: MatchResult) => {
       const meetingKey = generateMeetingKey(m.meeting, userId);
       const meetingId = m.meeting.meetingInfo?.meetingId;
       
       console.log('Processing meeting:', {
+        category,
         subject: m.meeting.subject,
         meetingKey,
         meetingId,
@@ -778,8 +786,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         matchedTask: m.matchedTask?.title
       });
       
-      // Improved logic to check if meeting is already posted
-      // First check the full key which includes duration
+      // Check if meeting is already posted
       let isPosted = postedIds.has(meetingKey);
       
       // If not found by key, check if it's a recurring meeting with same ID but different instance
@@ -804,15 +811,27 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       if (userAttendance) {
         hasDuration = userAttendance.duration > 0;
       }
+
+      // Critical: Check category-specific conditions
+      let isValidForCategory = true;
+      if (category === 'unmatched') {
+        // For unmatched category, ensure the meeting is not in any matched categories
+        isValidForCategory = !allMatchedMeetingKeys.has(meetingKey);
+      } else {
+        // For matched categories (high/medium/low), ensure it has a matched task
+        isValidForCategory = m.matchedTask !== null;
+      }
       
-      // Only include meetings that are not posted and have duration
-      const isIncluded = !isPosted && hasDuration && hasAttendance;
+      // Only include meetings that meet all criteria
+      const isIncluded = !isPosted && hasDuration && hasAttendance && isValidForCategory;
       
       console.log('Meeting filter results:', {
         subject: m.meeting.subject,
+        category,
         isPosted,
         hasDuration,
         hasAttendance,
+        isValidForCategory,
         isIncluded
       });
       
@@ -821,19 +840,19 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   };
 
   const [meetings, setMeetings] = useState<MatchGroups>(() => ({
-    high: filterMeetings(matches.high),
-    medium: filterMeetings(matches.medium),
-    low: filterMeetings(matches.low),
-    unmatched: filterMeetings(matches.unmatched)
+    high: filterMeetings(matches.high, 'high'),
+    medium: filterMeetings(matches.medium, 'medium'),
+    low: filterMeetings(matches.low, 'low'),
+    unmatched: filterMeetings(matches.unmatched, 'unmatched')
   }));
 
   // Update meetings when props change
   useEffect(() => {
     setMeetings({
-      high: filterMeetings(matches.high),
-      medium: filterMeetings(matches.medium),
-      low: filterMeetings(matches.low),
-      unmatched: filterMeetings(matches.unmatched)
+      high: filterMeetings(matches.high, 'high'),
+      medium: filterMeetings(matches.medium, 'medium'),
+      low: filterMeetings(matches.low, 'low'),
+      unmatched: filterMeetings(matches.unmatched, 'unmatched')
     });
   }, [matches, postedMeetingIds, userId]);
 
@@ -841,10 +860,10 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   useEffect(() => {
     if (postedMeetingIds) {
       setMeetings(prev => ({
-        high: filterMeetings(prev.high),
-        medium: filterMeetings(prev.medium),
-        low: filterMeetings(prev.low),
-        unmatched: filterMeetings(prev.unmatched)
+        high: filterMeetings(prev.high, 'high'),
+        medium: filterMeetings(prev.medium, 'medium'),
+        low: filterMeetings(prev.low, 'low'),
+        unmatched: filterMeetings(prev.unmatched, 'unmatched')
       }));
     }
   }, [postedMeetingIds]);
@@ -890,222 +909,6 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       onMeetingPosted(meetingId);
     }
   };
-
-  // Update getPostableMeetingsCount function to be more specific
-  const getPostableMeetingsCount = () => {
-    if (activeTab === 'matched') {
-      return [...meetings.high, ...meetings.medium, ...meetings.low].filter(m => {
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        const hasMatchedTask = m.matchedTask !== null;
-        return hasMatchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      }).length;
-    } else {
-      return meetings.unmatched.filter(m => {
-        const hasAttendance = m.meeting.attendanceRecords.some(
-          record => record.name === session?.user?.name && record.duration > 0
-        );
-        const meetingKey = generateMeetingKey(m.meeting, userId);
-        const hasSelectedTask = selectedTasks.has(meetingKey);
-        return hasSelectedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-      }).length;
-    }
-  };
-
-  // Update postAllMeetings function to handle both sections
-  const postAllMeetings = async () => {
-    setIsPostingMultiple(true);
-    let successCount = 0;
-    let failCount = 0;
-    const errors: string[] = [];
-
-    try {
-      // Get meetings based on active tab
-      const meetingsToPost = activeTab === 'matched' 
-        ? [...meetings.high, ...meetings.medium, ...meetings.low].filter(m => {
-            const meetingKey = generateMeetingKey(m.meeting, userId);
-            const hasAttendance = m.meeting.attendanceRecords.some(
-              record => record.name === session?.user?.name && record.duration > 0
-            );
-            return m.matchedTask && hasAttendance && selectedMeetingKeys.has(meetingKey);
-          })
-        : meetings.unmatched.filter(m => {
-            const meetingKey = generateMeetingKey(m.meeting, userId);
-            const hasAttendance = m.meeting.attendanceRecords.some(
-              record => record.name === session?.user?.name && record.duration > 0
-            );
-            return selectedTasks.has(meetingKey) && hasAttendance && selectedMeetingKeys.has(meetingKey);
-          });
-
-      console.log('Posting meetings batch:', {
-        count: meetingsToPost.length,
-        meetings: meetingsToPost.map(m => ({
-          subject: m.meeting.subject,
-          key: generateMeetingKey(m.meeting, userId)
-        }))
-      });
-
-      // Use Promise.all to post all meetings concurrently
-      const results = await Promise.all(meetingsToPost.map(async (result) => {
-        const userAttendance = result.meeting.attendanceRecords.find(
-          record => record.name === session?.user?.name
-        );
-
-        if (!userAttendance) {
-          errors.push(`No attendance record found for meeting: ${result.meeting.subject}`);
-          return { success: false, meetingKey: '', error: 'No attendance record' };
-        }
-
-        try {
-          const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
-          const totalDurationInSeconds = userAttendance.intervals.reduce(
-            (total, interval) => total + interval.durationInSeconds,
-            0
-          );
-          const meetingKey = generateMeetingKey(result.meeting, userId);
-          const taskToUse = activeTab === 'matched' ? result.matchedTask! : selectedTasks.get(meetingKey)!;
-
-          if (!taskToUse) {
-            errors.push(`No task selected for meeting: ${result.meeting.subject}`);
-            return { success: false, meetingKey, error: 'No task selected' };
-          }
-
-          const meetingGraphId = result.meeting.meetingInfo?.meetingId || 
-                                result.meeting.meetingInfo?.graphId ||
-                                (result.meeting as any).id ||
-                                (result.meeting.rawData?.id) ||
-                                `${session?.user?.email}_${result.meeting.subject}_${result.meeting.startTime}`;
-
-          const response = await fetch('/api/intervals/time-entries', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              taskId: taskToUse.id,
-              date: meetingDate,
-              time: totalDurationInSeconds,
-              description: result.meeting.subject,
-              meetingId: meetingGraphId,
-              meetingInfo: result.meeting.meetingInfo ? {
-                meetingId: result.meeting.meetingInfo.meetingId,
-                graphId: result.meeting.meetingInfo.graphId,
-                threadId: result.meeting.meetingInfo.threadId,
-                organizerId: result.meeting.meetingInfo.organizerId
-              } : undefined,
-              subject: result.meeting.subject,
-              startTime: result.meeting.startTime,
-              isManualPost: source !== 'ai-agent',
-              attendanceRecords: [{
-                email: session?.user?.email || '',
-                name: session?.user?.name || '',
-                duration: totalDurationInSeconds,
-                intervals: userAttendance.intervals
-              }]
-            }),
-          });
-
-          const responseData = await response.json();
-
-          if (response.ok && responseData.success) {
-            return { success: true, meetingKey, error: null };
-          } else {
-            errors.push(`Failed to post meeting "${result.meeting.subject}": ${responseData.error || 'Unknown error'}`);
-            return { success: false, meetingKey, error: responseData.error };
-          }
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          errors.push(`Error posting meeting "${result.meeting.subject}": ${errorMessage}`);
-          return { success: false, meetingKey: generateMeetingKey(result.meeting, userId), error: errorMessage };
-        }
-      }));
-
-      // Process results
-      results.forEach(result => {
-        if (result.success) {
-          successCount++;
-          if (result.meetingKey) {
-            // Remove from selected meetings and tasks
-            setSelectedMeetingKeys(prev => {
-              const next = new Set(prev);
-              next.delete(result.meetingKey);
-              return next;
-            });
-            
-            const updatedTasks = new Map(selectedTasks);
-            updatedTasks.delete(result.meetingKey);
-            setSelectedTasks(updatedTasks);
-            
-            // Call onMeetingPosted for UI update
-            onMeetingPosted?.(result.meetingKey);
-          }
-        } else {
-          failCount++;
-        }
-      });
-
-      // Show success notification if any meetings were posted successfully
-      if (successCount > 0) {
-        toast.success(`Successfully posted ${successCount} ${activeTab} meetings`, {
-          position: "top-center",
-          duration: 3000,
-          style: {
-            backgroundColor: "rgb(0 192 97 / 0.9)",
-            color: "#fff",
-          }
-        });
-      }
-
-      // Show error notification if any meetings failed
-      if (failCount > 0) {
-        const errorMessage = errors.length > 3 
-          ? `${errors.slice(0, 3).join('\n')}\n...and ${errors.length - 3} more errors`
-          : errors.join('\n');
-
-        setTimeout(() => {
-          toast.error(`Failed to post ${failCount} meetings:\n${errorMessage}`, {
-            position: "top-center",
-            duration: 6000,
-            style: {
-              backgroundColor: "rgb(255 0 0 / 0.9)",
-              color: "#fff",
-            }
-          });
-        }, successCount > 0 ? 3500 : 0);
-      }
-
-      // Force refresh the meetings list
-      setMeetings(prev => ({
-        high: filterMeetings(prev.high),
-        medium: filterMeetings(prev.medium),
-        low: filterMeetings(prev.low),
-        unmatched: filterMeetings(prev.unmatched)
-      }));
-
-    } catch (error) {
-      console.error('Error in postAllMeetings:', error);
-      toast.error('An unexpected error occurred while posting meetings');
-    } finally {
-      setIsPostingMultiple(false);
-    }
-  };
-
-  // Add useEffect to initialize selected meetings
-  useEffect(() => {
-    // Initialize selected meetings when meetings change
-    const newSelectedMeetings = new Set<string>();
-    
-    meetings.unmatched.forEach(m => {
-      const meetingKey = generateMeetingKey(m.meeting, userId);
-      if (m.matchedTask) {
-        newSelectedMeetings.add(meetingKey);
-      }
-    });
-    
-    setSelectedMeetingKeys(newSelectedMeetings);
-  }, [meetings, userId]);
 
   // Helper functions for unmatched meetings
   const isSelected = (meetingId: string) => !!selectedMeetings[meetingId];
@@ -1176,24 +979,6 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                   Unmatched ({meetings.unmatched.length})
                 </TabsTrigger>
               </TabsList>
-              {/* Post All button for each section */}
-              {getPostableMeetingsCount() > 0 && (
-                <Button
-                  onClick={postAllMeetings}
-                  disabled={isPostingMultiple}
-                  size="sm"
-                  className="mr-4"
-                >
-                  {isPostingMultiple ? (
-                    <>
-                      <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
-                      Posting...
-                    </>
-                  ) : (
-                    <>Post All {activeTab === "matched" ? "Matched" : "Unmatched"} ({getPostableMeetingsCount()})</>
-                  )}
-                </Button>
-              )}
             </div>
           </div>
 
