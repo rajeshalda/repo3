@@ -912,7 +912,7 @@ export default function DashboardPage() {
                               const startDate = new Date(meeting.startTime);
                               const endDate = new Date(meeting.endTime);
                               return (
-                                <TableRow key={meeting.meetingInfo?.meetingId || meeting.subject}>
+                                <TableRow key={`${meeting.meetingInfo?.meetingId || meeting.subject}_${meeting.startTime}`}>
                                   <TableCell className="px-4 py-3">
                                     <div className="flex flex-col">
                                       <div className="font-medium truncate max-w-[200px] sm:max-w-[300px]">

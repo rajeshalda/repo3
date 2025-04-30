@@ -1020,7 +1020,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         {/* Show high confidence matches first */}
                         {meetings.high.map((result, index) => (
                           <MatchRow
-                            key={`high-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                            key={`high-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
@@ -1060,7 +1060,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         {/* Show medium confidence matches */}
                         {meetings.medium.map((result, index) => (
                           <MatchRow
-                            key={`medium-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                            key={`medium-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
@@ -1100,7 +1100,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         {/* Show low confidence matches */}
                         {meetings.low.map((result, index) => (
                           <MatchRow
-                            key={`low-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                            key={`low-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
@@ -1180,7 +1180,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                     <TableBody>
                       {meetings.unmatched.map((result, index) => (
                         <MatchRow
-                          key={`unmatched-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${index}`}
+                          key={`unmatched-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
                           result={result}
                           onMeetingPosted={handleMeetingPosted}
                           postedMeetingIds={Array.from(postedMeetingIds)}
