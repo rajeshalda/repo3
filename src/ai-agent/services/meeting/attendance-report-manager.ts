@@ -1,0 +1,171 @@
+import { AttendanceReportInfo, EnhancedAttendanceReport, AttendanceReportSelection, ReportValidationResult } from './types/attendance';
+import { openAIClient } from '../../core/azure-openai/client';
+
+export class AttendanceReportManager {
+    constructor() {}
+
+    public async processAttendanceReports(
+        reports: AttendanceReportInfo[],
+        meetingDate: string,
+        isRecurring: boolean
+    ): Promise<AttendanceReportSelection> {
+        // Create enhanced report structure
+        const enhancedReport: EnhancedAttendanceReport = {
+            reports,
+            meetingDate,
+            isRecurring
+        };
+
+        // Filter reports by date for recurring meetings
+        const validReports = await this.validateReports(enhancedReport);
+        
+        if (validReports.length === 0) {
+            return {
+                selectedReportId: '',
+                confidence: 0,
+                reason: 'No valid reports found for the specified date',
+                metadata: {
+                    date: meetingDate,
+                    duration: 0,
+                    isRecurring,
+                    totalReports: reports.length
+                }
+            };
+        }
+
+        // Use AI to select the most appropriate report
+        const selection = await this.selectBestReport(validReports, meetingDate);
+        
+        return {
+            selectedReportId: selection.reportId,
+            confidence: selection.confidence,
+            reason: selection.reason,
+            metadata: {
+                date: meetingDate,
+                duration: selection.duration,
+                isRecurring,
+                totalReports: reports.length
+            }
+        };
+    }
+
+    private async validateReports(report: EnhancedAttendanceReport): Promise<AttendanceReportInfo[]> {
+        const validReports: AttendanceReportInfo[] = [];
+
+        for (const reportInfo of report.reports) {
+            const validation = await this.validateReport(reportInfo, report.meetingDate);
+            if (validation.isValid) {
+                validReports.push(reportInfo);
+            }
+        }
+
+        return validReports;
+    }
+
+    private async validateReport(
+        report: AttendanceReportInfo,
+        targetDate: string
+    ): Promise<ReportValidationResult> {
+        // Extract date from report's start time
+        const reportDate = new Date(report.meetingStartDateTime).toISOString().split('T')[0];
+        const targetDateStr = new Date(targetDate).toISOString().split('T')[0];
+
+        // Calculate duration in seconds
+        const startTime = new Date(report.meetingStartDateTime).getTime();
+        const endTime = new Date(report.meetingEndDateTime).getTime();
+        const duration = (endTime - startTime) / 1000;
+
+        // Validate the report
+        if (reportDate !== targetDateStr) {
+            return {
+                isValid: false,
+                reason: 'Report date does not match target date',
+                reportDate,
+                duration
+            };
+        }
+
+        if (duration <= 0) {
+            return {
+                isValid: false,
+                reason: 'Invalid meeting duration',
+                reportDate,
+                duration
+            };
+        }
+
+        return {
+            isValid: true,
+            reason: 'Report is valid for the specified date',
+            reportDate,
+            duration
+        };
+    }
+
+    private async selectBestReport(
+        reports: AttendanceReportInfo[],
+        targetDate: string
+    ): Promise<{
+        reportId: string;
+        confidence: number;
+        reason: string;
+        duration: number;
+    }> {
+        if (reports.length === 1) {
+            const report = reports[0];
+            const duration = (new Date(report.meetingEndDateTime).getTime() - 
+                            new Date(report.meetingStartDateTime).getTime()) / 1000;
+            
+            return {
+                reportId: report.id,
+                confidence: 1,
+                reason: 'Single valid report available',
+                duration
+            };
+        }
+
+        // Prepare meeting info for AI analysis
+        const meetingInfo = {
+            targetDate,
+            totalReports: reports.length,
+            isRecurring: true // This should come from meeting data
+        };
+
+        // Use OpenAI to select the best report
+        const aiSelection = await openAIClient.selectAttendanceReport(meetingInfo, reports);
+
+        if (!aiSelection.selectedReport) {
+            // If AI couldn't make a selection, fall back to most recent
+            const sortedReports = [...reports].sort((a, b) => 
+                new Date(b.meetingStartDateTime).getTime() - new Date(a.meetingStartDateTime).getTime()
+            );
+
+            const selectedReport = sortedReports[0];
+            const duration = (new Date(selectedReport.meetingEndDateTime).getTime() - 
+                            new Date(selectedReport.meetingStartDateTime).getTime()) / 1000;
+
+            return {
+                reportId: selectedReport.id,
+                confidence: 0.5,
+                reason: 'Fallback to most recent report due to AI selection failure',
+                duration
+            };
+        }
+
+        // Use AI-selected report
+        const selectedReport = reports.find(r => r.id === aiSelection.selectedReport!.id);
+        if (!selectedReport) {
+            throw new Error('AI selected a report that does not exist in the valid reports list');
+        }
+
+        const duration = (new Date(selectedReport.meetingEndDateTime).getTime() - 
+                         new Date(selectedReport.meetingStartDateTime).getTime()) / 1000;
+
+        return {
+            reportId: selectedReport.id,
+            confidence: aiSelection.selectedReport.confidence,
+            reason: aiSelection.selectedReport.reason,
+            duration
+        };
+    }
+} 

@@ -1,6 +1,7 @@
 import { AzureOpenAIConfig, validateConfig } from '../../config/azure-openai';
 import { RateLimiter } from '../rate-limiter/token-bucket';
 import { generateMeetingAnalysisPrompt } from './prompts/meeting-analysis';
+import { reportSelectionPrompt } from './prompts/report-selection';
 
 interface OpenAIResponse {
     choices: {
@@ -112,6 +113,48 @@ class AzureOpenAIClient {
     
     public updateRateLimit(requestsPerMinute: number): void {
         this.rateLimiter.updateRateLimit(requestsPerMinute);
+    }
+
+    public async selectAttendanceReport(
+        meetingInfo: any,
+        reports: any[]
+    ): Promise<{
+        selectedReport: {
+            id: string;
+            confidence: number;
+            reason: string;
+        } | null;
+        analysis: {
+            dateMatch: boolean;
+            durationValid: boolean;
+            isRecurringInstance: boolean;
+            totalValidReports: number;
+        };
+    }> {
+        try {
+            const prompt = reportSelectionPrompt
+                .replace('{meetingInfo}', JSON.stringify(meetingInfo, null, 2))
+                .replace('{reports}', JSON.stringify(reports, null, 2));
+
+            const response = await this.sendRequest(prompt, {
+                temperature: 0.1,
+                maxTokens: 500
+            });
+
+            const result = JSON.parse(response);
+            return result;
+        } catch (error) {
+            console.error('Error in report selection:', error);
+            return {
+                selectedReport: null,
+                analysis: {
+                    dateMatch: false,
+                    durationValid: false,
+                    isRecurringInstance: false,
+                    totalValidReports: 0
+                }
+            };
+        }
     }
 }
 

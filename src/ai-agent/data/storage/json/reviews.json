@@ -5,11 +5,25 @@
     "subject": "Internal Strategy Sync",
     "startTime": "2025-04-29T12:00:00.0000000",
     "endTime": "2025-04-29T12:30:00.0000000",
-    "duration": 371,
+    "duration": 650,
     "participants": [],
     "keyPoints": [],
     "suggestedTasks": [],
-    "status": "pending",
+    "status": "approved",
+    "confidence": 0,
+    "reason": "No matching tasks found"
+  },
+  {
+    "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Yd581mAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==",
+    "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+    "subject": "Internal Strategy Sync",
+    "startTime": "2025-04-30T12:00:00.0000000",
+    "endTime": "2025-04-30T12:30:00.0000000",
+    "duration": 953,
+    "participants": [],
+    "keyPoints": [],
+    "suggestedTasks": [],
+    "status": "approved",
     "confidence": 0,
     "reason": "No matching tasks found"
   }

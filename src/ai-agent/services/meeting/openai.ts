@@ -4,6 +4,7 @@ import { storageManager } from '../../data/storage/manager';
 import { QueueManager } from '../queue/queue-manager';
 import { BatchProcessor } from './batch-processor';
 import { RateLimiter } from '../../core/rate-limiter/token-bucket';
+import { AttendanceReportManager } from './attendance-report-manager';
 
 export class MeetingService {
     private static instance: MeetingService;
@@ -126,9 +127,29 @@ export class MeetingService {
                 return [];
             }
 
-            const reportId = reportsData.value[0].id;
+            // Initialize the attendance report manager
+            const reportManager = new AttendanceReportManager();
+            
+            // Process all reports using the manager
+            const meetingDate = new Date().toISOString(); // Use current date or get from meeting
+            const isRecurring = true; // This should be determined from the meeting data
+            
+            const reportSelection = await reportManager.processAttendanceReports(
+                reportsData.value,
+                meetingDate,
+                isRecurring
+            );
 
-            // Get attendance records
+            if (!reportSelection.selectedReportId) {
+                console.log('No valid report selected:', reportSelection.reason);
+                return [];
+            }
+
+            // Use the selected report ID
+            const reportId = reportSelection.selectedReportId;
+            console.log('Selected report ID:', reportId, 'Reason:', reportSelection.reason);
+
+            // Get attendance records for the selected report
             const recordsResponse = await fetch(
                 `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${reportId}/attendanceRecords`,
                 {
