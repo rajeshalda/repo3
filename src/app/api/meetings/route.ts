@@ -78,11 +78,12 @@ interface MeetingData {
   seriesMasterId: string | null;
 }
 
-async function getAttendanceReport(organizerId: string, meetingId: string) {
+async function getAttendanceReport(organizerId: string, meetingId: string, instanceDate?: string) {
   try {
     console.log('Fetching attendance for meeting:', {
       organizerId,
-      meetingId
+      meetingId,
+      instanceDate
     });
     
     // Get app-level token instead of using user's token
@@ -106,8 +107,6 @@ async function getAttendanceReport(organizerId: string, meetingId: string) {
         statusText: reportsResponse.statusText,
         body: errorText
       });
-      
-      // Early return on error
       return null;
     }
     
@@ -119,38 +118,105 @@ async function getAttendanceReport(organizerId: string, meetingId: string) {
       return null;
     }
 
-    const reportId = reportsData.value[0].id;
+    // For recurring meetings, we need to fetch all reports
+    const allAttendanceRecords: RawAttendanceRecord[] = [];
     
-    // Get attendance records - use the same URL format as AI agent
-    const recordsUrl = `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${meetingId}/attendanceReports/${reportId}/attendanceRecords`;
-    console.log('Fetching attendance records from:', recordsUrl);
-    
-    const recordsResponse = await fetch(recordsUrl, {
-      headers: {
-        Authorization: `Bearer ${appToken}`,
-        'Content-Type': 'application/json',
-      },
+    // Process all reports, not just the first one
+    for (const report of reportsData.value) {
+      console.log('Processing report:', {
+        reportId: report.id,
+        meetingStart: report.meetingStartDateTime,
+        meetingEnd: report.meetingEndDateTime
+      });
+
+      const recordsUrl = `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${meetingId}/attendanceReports/${report.id}/attendanceRecords`;
+      console.log('Fetching attendance records from:', recordsUrl);
+      
+      const recordsResponse = await fetch(recordsUrl, {
+        headers: {
+          Authorization: `Bearer ${appToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!recordsResponse.ok) {
+        console.error('Error fetching attendance records for report:', report.id);
+        continue; // Continue with next report if this one fails
+      }
+      
+      const recordsData = await recordsResponse.json();
+      
+      if (recordsData.value && recordsData.value.length > 0) {
+        // Merge attendance records
+        for (const record of recordsData.value) {
+          const existingRecord = allAttendanceRecords.find(r => r.emailAddress === record.emailAddress);
+          
+          if (existingRecord) {
+            // Merge intervals into existing record
+            existingRecord.attendanceIntervals = [
+              ...existingRecord.attendanceIntervals,
+              ...record.attendanceIntervals
+            ];
+            // Update total duration
+            existingRecord.totalAttendanceInSeconds += record.totalAttendanceInSeconds;
+          } else {
+            // Add new record
+            allAttendanceRecords.push(record);
+          }
+        }
+      }
+    }
+
+    console.log('Combined all attendance records:', {
+      totalRecords: allAttendanceRecords.length,
+      totalReports: reportsData.value.length
     });
 
-    if (!recordsResponse.ok) {
-      const errorText = await recordsResponse.text();
-      console.error('Error fetching attendance records:', {
-        status: recordsResponse.status,
-        statusText: recordsResponse.statusText,
-        body: errorText
+    // If instanceDate is provided (for recurring meetings), filter the intervals
+    if (instanceDate) {
+      console.log('Filtering attendance records for date:', instanceDate);
+      
+      const filteredRecords = allAttendanceRecords.map(record => {
+        // Filter intervals for the specific date
+        const dateSpecificIntervals = record.attendanceIntervals.filter(interval => {
+          const intervalDate = new Date(interval.joinDateTime).toISOString().split('T')[0];
+          const matches = intervalDate === instanceDate;
+          console.log('Interval comparison:', {
+            email: record.emailAddress,
+            intervalDate,
+            instanceDate,
+            matches,
+            joinTime: interval.joinDateTime,
+            leaveTime: interval.leaveDateTime
+          });
+          return matches;
+        });
+
+        // Recalculate total duration based on filtered intervals
+        const totalDuration = dateSpecificIntervals.reduce((sum, interval) => 
+          sum + interval.durationInSeconds, 0);
+
+        console.log('Filtered record:', {
+          email: record.emailAddress,
+          originalIntervals: record.attendanceIntervals.length,
+          filteredIntervals: dateSpecificIntervals.length,
+          originalDuration: record.totalAttendanceInSeconds,
+          newDuration: totalDuration,
+          date: instanceDate
+        });
+
+        return {
+          ...record,
+          attendanceIntervals: dateSpecificIntervals,
+          totalAttendanceInSeconds: totalDuration
+        };
       });
-      return null;
+
+      // Only return records that have intervals for this date
+      return filteredRecords.filter(record => record.attendanceIntervals.length > 0);
     }
     
-    const recordsData = await recordsResponse.json();
-    console.log('Records Data:', JSON.stringify(recordsData, null, 2));
-    
-    if (!recordsData.value || recordsData.value.length === 0) {
-      console.log('No attendance records found for the report');
-      return null;
-    }
-    
-    return recordsData.value;
+    return allAttendanceRecords;
   } catch (error) {
     console.error('Error in getAttendanceReport:', error);
     return null;
@@ -327,12 +393,20 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
             threadId: meetingInfo.threadId,
             graphId: meetingInfo.graphId,
             formattedString,
-            base64MeetingId
+            base64MeetingId,
+            isRecurring: meetingData.isRecurring,
+            instanceDate: meetingData.isRecurring ? new Date(meeting.start.dateTime).toISOString().split('T')[0] : undefined
           });
+
+          // For recurring meetings, pass the specific instance date
+          const instanceDate = meetingData.isRecurring ? 
+            new Date(meeting.start.dateTime).toISOString().split('T')[0] : 
+            undefined;
 
           const attendanceRecords = await getAttendanceReport(
             meetingInfo.organizerId,
-            base64MeetingId
+            base64MeetingId,
+            instanceDate
           );
           
           if (attendanceRecords) {
@@ -555,4 +629,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-} 
+}
