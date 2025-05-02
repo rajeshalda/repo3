@@ -138,22 +138,30 @@ declare global {
 }
 
 function generateMeetingKey(meeting: Meeting, userId: string): string {
-  const meetingId = (meeting.meetingInfo?.meetingId || '').trim();
-  const meetingName = meeting.subject.trim();
-  const meetingTime = meeting.startTime.trim();
+  // Safely handle potentially null/undefined values
+  const meetingId = meeting.meetingInfo?.meetingId?.trim() || '';
+  const meetingName = meeting.subject?.trim() || 'Untitled Meeting';
+  const meetingTime = meeting.startTime?.trim() || new Date().toISOString();
   
   // Calculate total duration for this meeting
   let totalDuration = 0;
-  const userAttendance = meeting.attendanceRecords.find(
-    record => record.email === userId
+  const userAttendance = meeting.attendanceRecords?.find(
+    record => record?.email === userId
   );
   if (userAttendance) {
-    totalDuration = userAttendance.duration;
+    totalDuration = userAttendance.duration || 0;
   }
   
   // Include duration in the key to differentiate recurring meetings with different durations
-  const key = `${userId.trim()}_${meetingName}_${meetingId}_${meetingTime}_${totalDuration}`;
-  console.log('Generated key:', key);
+  const key = `${(userId || '').trim()}_${meetingName}_${meetingId}_${meetingTime}_${totalDuration}`;
+  console.log('Generated key:', {
+    userId,
+    meetingName,
+    meetingId,
+    meetingTime,
+    totalDuration,
+    finalKey: key
+  });
   return key;
 }
 

@@ -327,7 +327,7 @@ export default function DashboardPage() {
     } catch (err: unknown) {
       console.error('Failed to fetch meetings:', err);
       if (err instanceof Error && err.message !== 'Session expired') {
-        toast("Session expired. Please Re-login", {
+        toast.error("Session expired. You will be redirected to login in a few seconds.", {
           style: {
             backgroundColor: "#dc2626",
             color: "white",
@@ -339,6 +339,11 @@ export default function DashboardPage() {
           duration: 5000,
           position: "top-center"
         });
+        
+        // Add redirection after a short delay
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 3000);
       }
     } finally {
       setMeetingsLoading(false);
@@ -1028,34 +1033,76 @@ export default function DashboardPage() {
                   </TabsContent>
 
                   <TabsContent value="task-matches" className="mt-0">
-                    {matchResults ? (
-                      <div className="rounded-lg border">
-                        <MeetingMatches 
-                          summary={matchResults.summary} 
-                          matches={matchResults.matches}
-                          onMeetingPosted={handleMeetingPosted}
-                          postedMeetingIds={postedMeetingIds}
-                          source="manual"
-                        />
-                      </div>
-                    ) : (
-                      <div className="rounded-lg border bg-background p-8">
-                        <div className="flex flex-col items-center justify-center text-center space-y-4">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                            <path d="m16 6 4 14" />
-                            <path d="M12 6v14" />
-                            <path d="M8 8v12" />
-                            <path d="M4 4v16" />
-                          </svg>
-                          <div className="space-y-2">
-                            <h3 className="text-lg font-semibold">No Task Matches Yet</h3>
-                            <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                              Click the "Match Tasks" button to analyze your meetings and find matching tasks in Intervals.
-                            </p>
+                    {(() => {
+                      // Ensure matchResults has the expected structure
+                      const isValidMatchResults = matchResults && 
+                        typeof matchResults === 'object' &&
+                        matchResults.summary &&
+                        matchResults.matches &&
+                        typeof matchResults.matches === 'object' &&
+                        'high' in matchResults.matches &&
+                        'medium' in matchResults.matches &&
+                        'low' in matchResults.matches &&
+                        'unmatched' in matchResults.matches;
+
+                      console.log('Task Matches Debug:', {
+                        hasMatchResults: !!matchResults,
+                        isValidMatchResults,
+                        matchResultsSummary: matchResults?.summary,
+                        matchResultsMatches: matchResults?.matches,
+                        postedMeetingIds
+                      });
+                      
+                      if (matchResults && !isValidMatchResults) {
+                        console.error('Invalid match results structure:', matchResults);
+                        return (
+                          <div className="rounded-lg border bg-background p-8">
+                            <div className="flex flex-col items-center justify-center text-center space-y-4">
+                              <div className="space-y-2">
+                                <h3 className="text-lg font-semibold">Error Loading Task Matches</h3>
+                                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                                  There was an error loading the task matches. Please try matching tasks again.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                      
+                      return matchResults ? (
+                        <div className="rounded-lg border">
+                          <MeetingMatches 
+                            summary={matchResults.summary} 
+                            matches={{
+                              high: matchResults.matches.high || [],
+                              medium: matchResults.matches.medium || [],
+                              low: matchResults.matches.low || [],
+                              unmatched: matchResults.matches.unmatched || []
+                            }}
+                            onMeetingPosted={handleMeetingPosted}
+                            postedMeetingIds={postedMeetingIds || []}
+                            source="manual"
+                          />
+                        </div>
+                      ) : (
+                        <div className="rounded-lg border bg-background p-8">
+                          <div className="flex flex-col items-center justify-center text-center space-y-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
+                              <path d="m16 6 4 14" />
+                              <path d="M12 6v14" />
+                              <path d="M8 8v12" />
+                              <path d="M4 4v16" />
+                            </svg>
+                            <div className="space-y-2">
+                              <h3 className="text-lg font-semibold">No Task Matches Yet</h3>
+                              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                                Click the "Match Tasks" button to analyze your meetings and find matching tasks in Intervals.
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      );
+                    })()}
                   </TabsContent>
                 </Tabs>
               </div>

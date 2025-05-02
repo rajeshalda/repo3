@@ -21,8 +21,8 @@ export function SessionWarning() {
 
   // Function to show session expired notification
   const showSessionExpiredNotification = () => {
-    toast.error("Your session has expired. Please refresh the page to continue.", {
-      duration: 0, // Keep the toast until user dismisses it
+    toast.error("Your session has expired. You will be redirected to login in a few seconds.", {
+      duration: 5000, // Changed from 0 to 5000 to match other implementations
       position: "top-center",
       style: {
         backgroundColor: "#fee2e2",
@@ -33,6 +33,11 @@ export function SessionWarning() {
         border: "1px solid #ef4444"
       }
     });
+
+    // Add redirection after a short delay
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
   };
 
   useEffect(() => {
