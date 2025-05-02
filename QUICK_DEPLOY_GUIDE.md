@@ -1,87 +1,32 @@
 # Quick Deployment Guide for Azure Web App (Basic Free Plan)
 
-This guide provides the specific steps to deploy the Meeting Time Tracker application to your Azure Web App using Docker Hub.
+This guide provides steps to deploy the Meeting Time Tracker application to your Azure Web App using Docker Hub.
 
-## Prerequisites
+## Step 1: Deploy the Application
 
-- Docker Desktop installed on your computer
-- Docker Hub account (username: rajeshalda)
-- Azure CLI installed
-- Azure account with resource group "intervaltime" already created
-- Azure Web App "basic-v2" already created
+1. Build and push the Docker image:
+   ```
+   .\scripts\deploy-azure-docker.ps1
+   ```
+   This script will:
+   - Build the Docker image
+   - Push it to Docker Hub
+   - Configure your Azure Web App to use this image
 
-## Deployment Steps
+2. Set up environment variables:
+   ```
+   .\scripts\setup-minimal-env-vars.ps1
+   ```
+   This script will:
+   - Set up essential environment variables in Azure
+   - Restart the Web App
 
-### Step 1: Build and Push Docker Image
+## Step 2: Verify Deployment
 
-1. Open a terminal/PowerShell window in the project root directory
-2. Build the Docker image:
-   ```
-   docker build -t rajeshalda/meeting-time-tracker:latest .
-   ```
-3. Log in to Docker Hub:
-   ```
-   docker login
-   ```
-4. Push the image to Docker Hub:
-   ```
-   docker push rajeshalda/meeting-time-tracker:latest
-   ```
-
-### Step 2: Deploy to Azure Web App
-
-1. Log in to Azure (if not already logged in):
-   ```
-   az login
-   ```
-
-2. Configure the Web App to use your Docker image:
-   ```
-   az webapp config container set --name basic-v2 --resource-group intervaltime --docker-custom-image-name rajeshalda/meeting-time-tracker:latest --docker-registry-server-url https://index.docker.io
-   ```
-
-3. Configure the Web App startup file:
-   ```
-   az webapp config set --name basic-v2 --resource-group intervaltime --startup-file "/app/start.sh"
-   ```
-
-4. Set required environment variables:
-   ```
-   az webapp config appsettings set --name basic-v2 --resource-group intervaltime --settings PORT=8080 NODE_ENV=production
-   ```
-
-5. Restart the Web App:
-   ```
-   az webapp restart --name basic-v2 --resource-group intervaltime
-   ```
-
-### Step 3: Verify Deployment
-
-1. Wait a few minutes for the deployment to complete
-2. Check the status of your Web App:
-   ```
-   az webapp show --name basic-v2 --resource-group intervaltime --query state
-   ```
-3. Visit your application at https://basic-v2.azurewebsites.net
-4. Check the logs if there are any issues:
-   ```
-   az webapp log tail --name basic-v2 --resource-group intervaltime
-   ```
-
-## Using the Deployment Scripts
-
-For convenience, you can use the deployment scripts provided:
-
-- **Windows**: Run in PowerShell
-  ```
-  .\scripts\deploy-azure-docker.ps1
-  ```
-
-- **Linux/Mac**: Run in terminal
-  ```
-  chmod +x scripts/deploy-azure-docker.sh
-  ./scripts/deploy-azure-docker.sh
-  ```
+Your application should be available at:
+```
+https://basic-v2.azurewebsites.net
+```
 
 ## Troubleshooting
 
@@ -94,6 +39,10 @@ If your application doesn't start correctly:
 
 2. SSH into the container:
    ```
+   .\scripts\ssh-azure-container.ps1
+   ```
+   Or directly:
+   ```
    az webapp ssh --name basic-v2 --resource-group intervaltime
    ```
 
@@ -102,8 +51,22 @@ If your application doesn't start correctly:
    pm2 status
    ```
 
-4. If needed, manually start the application:
-   ```
-   cd /app
-   ./start.sh
-   ``` 
+## What We've Done
+
+1. Created a Docker container with:
+   - Node.js 20
+   - PM2 for background processes
+   - Next.js application
+
+2. Set up the required environment variables in Azure:
+   - Authentication credentials
+   - Port configuration
+   - Next.js configuration
+
+3. Created scripts to simplify deployment and troubleshooting
+
+## Additional Notes
+
+- The application uses PM2 to run an AI agent in the background
+- We've configured Next.js to use the correct URLs in the Azure environment
+- The Azure free tier has limitations, so performance may vary 

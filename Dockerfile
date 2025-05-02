@@ -1,51 +1,44 @@
+# Use Node.js 20 LTS as base image
 FROM node:20-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Install PM2 globally
-RUN npm install -g pm2
+# Install PM2 globally and other utilities
+RUN npm install -g pm2 && \
+    apk add --no-cache bash curl
 
 # Copy package.json and package-lock.json
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
-# Install all dependencies including dev dependencies
-RUN npm install --legacy-peer-deps
+# Install dependencies with --force flag as specified
+RUN npm install --force
 
-# Copy rest of the application
+# Copy .env.local first (to be used during build)
+COPY .env.local ./.env.local
+
+# Update .env.local for Azure
+RUN sed -i "s|http://localhost:8080|https://basic-v2.azurewebsites.net|g" .env.local && \
+    sed -i "s|http://localhost:3100|http://localhost:3100|g" .env.local
+
+# Copy the rest of the application
 COPY . .
 
-# Create a dummy .env.local file for build process
-RUN echo "AZURE_AD_APP_CLIENT_ID=dummy-client-id" > .env.local && \
-    echo "AZURE_AD_APP_CLIENT_SECRET=dummy-secret" >> .env.local && \
-    echo "AZURE_AD_APP_TENANT_ID=dummy-tenant-id" >> .env.local && \
-    echo "NEXTAUTH_URL=http://localhost:8080" >> .env.local && \
-    echo "NEXTAUTH_SECRET=dummy-secret" >> .env.local && \
-    echo "AZURE_OPENAI_ENDPOINT=dummy-endpoint" >> .env.local && \
-    echo "AZURE_OPENAI_API_KEY=dummy-api-key" >> .env.local && \
-    echo "AZURE_OPENAI_DEPLOYMENT=dummy-deployment" >> .env.local
+# Create a simple startup file
+RUN echo '#!/bin/bash' > /app/start.sh && \
+    echo 'echo "Starting PM2 for AI agent..."' >> /app/start.sh && \
+    echo 'pm2 start pm2.config.js' >> /app/start.sh && \
+    echo 'echo "Starting Next.js..."' >> /app/start.sh && \
+    echo 'cd /app && exec node node_modules/next/dist/bin/next start -p 8080' >> /app/start.sh
 
-# Build the Next.js application
+# Make the startup script executable
+RUN chmod +x /app/start.sh
+
+# Build the Next.js application (with environment variables from .env.local)
 RUN npm run build
 
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=8080
-
-# Create directories for PM2
-RUN mkdir -p logs .pm2/logs
-
-# Create a properly formatted startup script
-RUN printf '#!/bin/sh\n\
-# Start PM2 with pm2-runtime to run in foreground\n\
-pm2-runtime start pm2.config.js &\n\
-# Wait a moment for PM2 to start\n\
-sleep 5\n\
-# Start Next.js server\n\
-node server.js\n' > start.sh && \
-chmod +x start.sh
-
-# Expose the port
+# Expose the port the app runs on
 EXPOSE 8080
 
-# Start the application
-CMD ["./start.sh"] 
+# Command to run the app
+CMD ["/app/start.sh"]
