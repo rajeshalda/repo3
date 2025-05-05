@@ -286,8 +286,8 @@ class IntervalsAPI {
         console.log('Using India-Meeting work type:', indiaMeetingType);
         */
         // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-        console.log('Using hardcoded worktype ID 803850 for India-Meeting');
-        const worktypeId = '803850'; // Hardcoded ID for India-Meeting
+        console.log('Using hardcoded worktype ID 804786 for India-Meeting');
+        const worktypeId = '804786'; // Hardcoded ID for India-Meeting
         // Ensure time is always a string with 2 decimal places to match AI agent format
         const timeValue = typeof payload.time === 'number' ? payload.time.toFixed(2) : String(payload.time);
         

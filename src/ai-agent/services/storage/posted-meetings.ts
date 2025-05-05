@@ -119,7 +119,7 @@ export class AIAgentPostedMeetingsStorage {
         
         // Ensure default worktypeid value if missing
         if (!timeEntryCopy.worktypeid) {
-            timeEntryCopy.worktypeid = "803850"; // Default worktype ID for India-Meeting
+            timeEntryCopy.worktypeid = "804786"; // Default worktype ID for India-Meeting
         }
         
         // Convert postedAt to IST time format

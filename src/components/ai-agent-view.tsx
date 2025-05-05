@@ -164,8 +164,8 @@ export function AIAgentView() {
       return meeting.timeEntry.worktype;
     }
     
-    // If there's no worktype but there's a worktypeid of "803850", return "India-Meeting"
-    if (meeting.timeEntry.worktypeid === "803850") {
+    // If there's no worktype but there's a worktypeid of "804786", return "India-Meeting"
+    if (meeting.timeEntry.worktypeid === "804786") {
       return "India-Meeting";
     }
     
