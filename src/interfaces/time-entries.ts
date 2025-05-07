@@ -40,4 +40,7 @@ export interface TimeEntry {
 export interface TimeEntryResponse extends TimeEntry {
     created: string;
     updated: string;
+    taskTitle?: string;    // Task title for display in UI
+    module?: string | null; // Module name for display in UI
+    worktype?: string | null; // Work type name for display in UI
 } 

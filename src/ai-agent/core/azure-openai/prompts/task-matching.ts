@@ -55,6 +55,7 @@ MATCHING RULES:
 7. NEVER match with tasks that have a "Closed" status
 8. If the client is "Nathcorp", note that these are internal non-billable tasks
 9. If no assigned tasks match well, return an empty matchedTasks array
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
 
 CONFIDENCE SCORE GUIDELINES:
 - Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
@@ -68,6 +69,7 @@ EXAMPLES:
 ✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
 ✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
 ✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
+✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
 ✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
 ✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
 ✗ BAD: Any match with a task that has status "Closed" (should be excluded)
@@ -98,8 +100,8 @@ Notes:
 4. Return valid JSON that can be parsed directly
 5. Include all required fields for each task
 6. The actualDuration should be taken from the attendance records and is in seconds
-7. If no task has a confidence score above 0.4, return an empty matchedTasks array
-8. Tasks with status "Closed" should NEVER be included in matchedTasks
+7. Tasks with status "Closed" should NEVER be included in matchedTasks
+8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
 `.trim();
 
 export const generateTaskMatchingPrompt = (meetingAnalysis: string, tasksData: string): string => {

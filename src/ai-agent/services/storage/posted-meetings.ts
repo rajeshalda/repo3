@@ -168,15 +168,20 @@ export class AIAgentPostedMeetingsStorage {
     async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string): Promise<boolean> {
         await this.loadData();
         
-        // If we have duration and startTime, use them to check for specific recurring meeting instances
-        if (duration !== undefined) {
+        console.log(`Checking if meeting is posted - ID: ${meetingId}, Duration: ${duration}s, StartTime: ${startTime}`);
+        
+        // For recurring meetings, we MUST check both ID, date, and duration
+        if (duration !== undefined && startTime) {
+            // Extract the date part from startTime for proper comparison
+            const requestDate = new Date(startTime).toISOString().split('T')[0]; // Get YYYY-MM-DD
+            console.log(`Checking for recurring meeting instance on date: ${requestDate}`);
+            
             // Find meetings with the same ID and user
             const matchingMeetings = this.data.meetings.filter(m => 
                 m.meetingId === meetingId && m.userId === userId
             );
 
             // For name-based matching, also check if the description matches the meetingId
-            // This helps catch manually posted meetings with the same name as AI agent posts
             const descriptionMatches = this.data.meetings.filter(m => 
                 m.userId === userId && 
                 m.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase()
@@ -190,46 +195,89 @@ export class AIAgentPostedMeetingsStorage {
                 }
             }
             
+            console.log(`Found ${combinedMatches.length} potential matching meetings by ID/description`);
+            
             // If no matching meetings found at all, it's not a duplicate
             if (combinedMatches.length === 0) {
+                console.log(`No matching meetings found for ID: ${meetingId}`);
                 return false;
             }
             
-            // For recurring meetings, check if there's a meeting with similar duration
-            // Consider it a duplicate only if there's a meeting with similar duration and on the same day (if startTime provided)
+            // Check for very recent entries (potentially from other batches)
+            const now = new Date().getTime();
+            const recentEntries = combinedMatches.filter(meeting => {
+                // Consider entries from the last 5 minutes as "recent"
+                const postedAt = new Date(meeting.postedAt.replace(' IST', '')).getTime();
+                const isRecent = (now - postedAt) < 5 * 60 * 1000; // 5 minutes in milliseconds
+                
+                // Check if the meeting happened on the same day
+                const storedDate = meeting.timeEntry?.date;
+                const sameDateAndRecent = storedDate === requestDate && isRecent;
+                
+                if (sameDateAndRecent) {
+                    console.log(`Found a very recent entry (< 5 min) for this meeting on the same date`);
+                    return true;
+                }
+                return false;
+            });
+            
+            // If we have any recent entries for the same meeting date, consider it a duplicate
+            // This helps prevent multi-batch processing issues
+            if (recentEntries.length > 0) {
+                console.log(`Found ${recentEntries.length} recent entries - considering as duplicate`);
+                return true;
+            }
+            
+            // For recurring meetings, first check if this exact date already exists
+            // Only then check if there's a meeting with similar duration
+            let dateMatches = 0;
+            
             for (const meeting of combinedMatches) {
-                // Convert timeEntry.time (hours) to seconds for comparison
+                const storedDate = meeting.timeEntry?.date;
+                
+                // If there's a date mismatch, this is definitely a different instance of a recurring meeting
+                if (storedDate !== requestDate) {
+                    console.log(`Date mismatch: Stored ${storedDate} vs Requested ${requestDate} - different instance`);
+                    continue;
+                }
+                
+                // Count date matches for debugging
+                dateMatches++;
+                
+                // When dates match, check durations
                 const timeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
                 const storedDuration = Math.round(timeInHours * 3600); // Convert hours to seconds
                 const durationDiff = Math.abs(storedDuration - duration);
                 
-                // If startTime is provided, also check the date
-                if (startTime) {
-                    const requestDate = new Date(startTime).toISOString().split('T')[0]; // Get YYYY-MM-DD
-                    const storedDate = meeting.timeEntry?.date;
-                    
-                    // If dates don't match, this instance is not a duplicate
-                    if (storedDate !== requestDate) {
-                        continue;
-                    }
+                // Use a very strict tolerance of 10 seconds for duration comparison
+                if (durationDiff < 10) { // 10 seconds tolerance
+                    console.log(`Found a duplicate meeting instance: ${meetingId} on ${requestDate} with similar duration (diff: ${durationDiff}s)`);
+                    return true;
+                } else {
+                    console.log(`Same date but duration difference too large: ${durationDiff}s - not a duplicate`);
                 }
                 
-                // If durations are similar (within 1 minute), consider it a duplicate
-                if (durationDiff < 60) { // 1 minute = 60 seconds
-                    console.log(`Found a potential duplicate meeting: ${meetingId} with similar duration (diff: ${durationDiff}s)`);
+                // Additional check: if the meeting description and meeting date are the same,
+                // it's likely the same meeting instance, even with duration differences
+                if (meeting.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase() && 
+                    storedDate === requestDate) {
+                    console.log(`Same meeting description and date found - considering as duplicate despite duration difference`);
                     return true;
                 }
             }
             
-            console.log(`Meeting ${meetingId} has same ID but different duration/date, not considered a duplicate`);
-            // If we have meetings with the same ID but different durations or dates, it's not a duplicate
+            console.log(`Found ${dateMatches} meetings on the same date, but no duration matches - not a duplicate`);
+            // If we have meetings with the same ID but no matching dates+durations, it's not a duplicate
             return false;
         }
         
-        // Original behavior if duration is not provided - check for same ID and user
-        return this.data.meetings.some(m => 
+        // When no duration/startTime provided, fall back to basic ID matching (not recommended for recurring meetings)
+        const isBasicMatch = this.data.meetings.some(m => 
             (m.meetingId === meetingId || m.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase()) && 
             m.userId === userId
         );
+        
+        console.log(`Basic ID matching (no duration/date): ${isBasicMatch}`);
+        return isBasicMatch;
     }
 } 

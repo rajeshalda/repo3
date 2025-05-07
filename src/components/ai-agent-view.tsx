@@ -53,9 +53,9 @@ interface PostedMeeting {
     module: string;
     client?: string;
     project?: string;
+    taskTitle?: string;
   };
   postedAt: string;
-  taskName?: string;
 }
 
 interface DailyCount {
@@ -134,7 +134,7 @@ export function AIAgentView() {
   const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
   
   // Update sorting state to be more user-friendly with proper typing
-  type SortField = keyof PostedMeeting['timeEntry'] | 'meetingId' | 'postedAt' | 'taskName';
+  type SortField = keyof PostedMeeting['timeEntry'] | 'meetingId' | 'postedAt';
   
   const [sortConfig, setSortConfig] = useState<{
     field: SortField;
@@ -148,7 +148,7 @@ export function AIAgentView() {
   const sortOptions: { label: string; value: SortField }[] = [
     { label: 'Meeting Date', value: 'date' },
     { label: 'Meeting Name', value: 'description' },
-    { label: 'Task Name', value: 'taskName' },
+    { label: 'Task Name', value: 'taskTitle' },
     { label: 'Duration', value: 'time' },
     { label: 'Client', value: 'client' },
     { label: 'Project', value: 'project' },
@@ -187,7 +187,7 @@ export function AIAgentView() {
       let aValue: string = '';
       let bValue: string = '';
 
-      if (sortConfig.field === 'meetingId' || sortConfig.field === 'postedAt' || sortConfig.field === 'taskName') {
+      if (sortConfig.field === 'meetingId' || sortConfig.field === 'postedAt') {
         aValue = String(a[sortConfig.field] || '');
         bValue = String(b[sortConfig.field] || '');
       } else {
@@ -230,7 +230,7 @@ export function AIAgentView() {
       const searchLower = filterText.toLowerCase();
       filtered = filtered.filter(meeting => 
         meeting.timeEntry.description.toLowerCase().includes(searchLower) ||
-        (meeting.taskName && meeting.taskName.toLowerCase().includes(searchLower))
+        (meeting.timeEntry.taskTitle && meeting.timeEntry.taskTitle.toLowerCase().includes(searchLower))
       );
     }
     
@@ -1375,9 +1375,9 @@ export function AIAgentView() {
                       <TableCell>{meeting.timeEntry.date}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.description)}</TableCell>
                       <TableCell>
-                        {meeting.taskName ? decodeHtmlEntities(meeting.taskName) : (
+                        {meeting.timeEntry.taskTitle ? decodeHtmlEntities(meeting.timeEntry.taskTitle) : (
                           <span className="text-muted-foreground">
-                            {`Loading task name...`}
+                            {`No task title available`}
                           </span>
                         )}
                       </TableCell>

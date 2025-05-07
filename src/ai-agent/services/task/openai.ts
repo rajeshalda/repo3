@@ -227,41 +227,15 @@ export class TaskService {
                 return null; // Return null to prevent time entry creation
             }
 
-            // Check confidence of best match
-            const bestMatch = result.matchedTasks[0];
-            if (reviewService.shouldReview(bestMatch.confidence)) {
-                console.log(`Low confidence match (${bestMatch.confidence}) for meeting: ${meeting.subject}, queueing for review`);
-                // Convert matched tasks to suggested tasks format
-                const suggestedTasks = result.matchedTasks.map(match => ({
-                    id: match.taskId,
-                    title: match.taskTitle,
-                    project: tasksData.find(t => t.id === match.taskId)?.project || '',
-                    module: tasksData.find(t => t.id === match.taskId)?.module || '',
-                    confidence: match.confidence,
-                    reason: match.reason
-                }));
-
-                // Queue for review with suggested tasks
-                const reviewMeeting: ReviewMeeting = {
-                    id: meeting.id,
-                    userId: userId,
-                    subject: meeting.subject,
-                    startTime: meeting.start.dateTime,
-                    endTime: meeting.end.dateTime,
-                    duration: meetingAnalysis.duration,
-                    participants: meeting.attendees?.map(a => a.email) || [],
-                    keyPoints: meeting.analysis?.keyPoints,
-                    suggestedTasks: suggestedTasks,
-                    status: 'pending',
-                    confidence: bestMatch.confidence,
-                    reason: 'Low confidence match'
-                };
-
-                await reviewService.queueForReview(reviewMeeting);
-                return null; // Return null to prevent time entry creation
-            }
-
-            // Only return the result if confidence is high enough
+            // If we have any matches, use the best one regardless of confidence score
+            // Find the best match by confidence
+            const bestMatch = result.matchedTasks.reduce((a, b) => 
+                a.confidence > b.confidence ? a : b
+            );
+            
+            console.log(`Using best match for meeting "${meeting.subject}": Task ${bestMatch.taskId} (${bestMatch.taskTitle}) with confidence ${bestMatch.confidence}`);
+            
+            // Return the result with the best match
             return result;
 
         } catch (error) {

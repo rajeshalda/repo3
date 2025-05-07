@@ -90,7 +90,9 @@ class ReviewService {
   }
 
   public shouldReview(confidence: number): boolean {
-    return confidence < this.CONFIDENCE_THRESHOLD;
+    // We're disabling confidence-based review - meetings should only go to review
+    // if no matching task is found, not because of low confidence
+    return false;
   }
 
   private async storeDecisionForLearning(decision: ReviewDecision): Promise<void> {

@@ -227,6 +227,11 @@ export class IntervalsTimeEntryService {
                 ist: istTimestamp
             });
 
+            // Add taskTitle to the timeEntry object
+            if (timeEntry) {
+                timeEntry.taskTitle = taskName;
+            }
+
             // Only save the meeting in the time entry format
             const postedMeeting = {
                 meetingId: meeting.id,
@@ -340,9 +345,11 @@ export class IntervalsTimeEntryService {
             }
 
             // Determine if the time entry should be billable based on client
-            // If client is Nathcorp, it's non-billable; otherwise, it's billable
-            const isBillable = taskDetails.client?.toLowerCase() !== 'nathcorp';
-            console.log(`Client: ${taskDetails.client}, Setting billable flag to: ${isBillable ? 'true' : 'false'}`);
+            // If client is Nathcorp or Internal, it's non-billable; otherwise, it's billable
+            const isNonBillableClient = taskDetails.client?.toLowerCase() === 'nathcorp' || 
+                                      taskDetails.client?.toLowerCase() === 'internal';
+            const isBillable = !isNonBillableClient;
+            console.log(`Client: ${taskDetails.client}, Setting billable flag to: ${isBillable ? 'true (t)' : 'false (f)'} (Non-billable client: ${isNonBillableClient})`);
 
             // Prepare time entry data
             const timeEntry: TimeEntry = {
@@ -382,10 +389,12 @@ export class IntervalsTimeEntryService {
                 const enhancedTimeEntryResponse = {
                     ...timeEntryResponse,
                     client: taskDetails.client || undefined,
-                    project: taskDetails.project || undefined
+                    project: taskDetails.project || undefined,
+                    module: taskDetails.module || undefined,
+                    taskTitle: task.taskTitle || taskDetails.title || undefined
                 } as TimeEntryResponse;
 
-                console.log('Enhanced time entry with client/project:', JSON.stringify(enhancedTimeEntryResponse, null, 2));
+                console.log('Enhanced time entry with client/project/taskTitle:', JSON.stringify(enhancedTimeEntryResponse, null, 2));
 
                 // Save to posted-meetings.json
                 await this.savePostedMeeting(meeting, enhancedTimeEntryResponse, rawResponse, userId, task.taskTitle);

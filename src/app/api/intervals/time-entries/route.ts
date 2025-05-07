@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         const { 
             taskId, date, time, description, workType, billable, 
             meetingId, subject, startTime, confidence, isManualPost,
-            attendanceRecords 
+            attendanceRecords, taskTitle 
         } = payload;
 
         console.log('Received time entry request:', {
@@ -45,6 +45,7 @@ export async function POST(request: Request) {
             subject,
             confidence,
             isManualPost,
+            taskTitle,
             attendanceRecords: attendanceRecords ? 'provided' : 'not provided'
         });
 
@@ -287,8 +288,8 @@ export async function POST(request: Request) {
             // Use isManualPost to determine storage destination
             if (isManualPost) {
                 // For manual posts, we'll use the same storage format as AI agent
-                // Get task details to store the task name
-                const taskName = taskDetails?.title || `Task ${taskId}`;
+                // Get task details to store the task name - prefer the passed taskTitle if available
+                const taskName = taskTitle || taskDetails?.title || `Task ${taskId}`;
                 
                 // Ensure client, project, and module are extracted and decoded
                 const client = decodeHtml(taskDetails?.client) || null;
@@ -317,6 +318,7 @@ export async function POST(request: Request) {
                         result.time.project = project;
                         result.time.module = module;
                         result.time.worktype = workType || 'India-Meeting';
+                        result.time.taskTitle = taskName;
                         
                         // Convert time to string format to match AI agent format
                         if (typeof result.time.time === 'number') {
@@ -335,7 +337,10 @@ export async function POST(request: Request) {
                     {
                         meetingId: primaryMeetingId || '', // Use the primary ID (Graph ID if available)
                         userId: session.user.email,
-                        timeEntry: result.time,
+                        timeEntry: result.time ? { 
+                            ...result.time,
+                            taskTitle: taskTitle || taskName  // Prefer passed taskTitle, then fall back to taskName
+                        } : null,
                         rawResponse: result,
                         postedAt: convertToIST(date) // Convert date to IST format
                     }
@@ -361,6 +366,7 @@ export async function POST(request: Request) {
                         result.time.client = client;
                         result.time.project = project;
                         result.time.module = module;
+                        result.time.taskTitle = taskTitle || taskDetails?.title || `Task ${taskId}`; // Prefer passed taskTitle
                         
                         // Convert time to string format to ensure consistency
                         if (typeof result.time.time === 'number') {
@@ -387,7 +393,10 @@ export async function POST(request: Request) {
                     {
                         meetingId: primaryMeetingId || '',  // Use the Graph ID when available
                         userId: session.user.email,
-                        timeEntry: result.time,
+                        timeEntry: result.time ? { 
+                            ...result.time,
+                            taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}` // Prefer passed taskTitle
+                        } : null,
                         rawResponse: result,
                         postedAt: convertToIST(date) // Convert date to IST format
                     }

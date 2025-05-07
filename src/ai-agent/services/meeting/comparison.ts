@@ -104,9 +104,9 @@ export class MeetingComparisonService {
             }
 
             // For meetings with same ID and date, consider them the same only 
-            // if they have similar durations (within 1 minute)
+            // if they have similar durations (within 10 seconds)
             const durationDiff = Math.abs(duration1 - duration2);
-            const isSimilarDuration = durationDiff < 60; // 1 minute threshold
+            const isSimilarDuration = durationDiff < 10; // 10 second threshold
 
             if (meeting1.id === meeting2.id && meeting1Date === meeting2Date && !isSimilarDuration) {
                 console.log(`Meetings have same ID and date but different durations (diff: ${durationDiff}s), considered different meetings`);
@@ -151,8 +151,14 @@ export class MeetingComparisonService {
                             }
                         }
                         
-                        // Pass duration to isPosted to handle recurring meetings correctly
-                        const hasTimeEntry = await storage.isPosted(postedMeeting.userId, postedMeeting.id, userDuration);
+                        // Pass both duration and start time to isPosted to handle recurring meetings correctly
+                        const hasTimeEntry = await storage.isPosted(
+                            postedMeeting.userId, 
+                            postedMeeting.id, 
+                            userDuration,
+                            newMeeting.start?.dateTime // Pass the dateTime string, not the entire object
+                        );
+                        
                         if (hasTimeEntry) {
                             simpleResult.duplicates.push(newMeeting);
                             isDuplicate = true;
@@ -255,7 +261,13 @@ export class MeetingComparisonService {
                     }
                     
                     // Pass duration to isPosted to handle recurring meetings correctly
-                    const isPosted = await storage.isPosted(meeting.userId, meeting.id, userDuration);
+                    const isPosted = await storage.isPosted(
+                        meeting.userId, 
+                        meeting.id, 
+                        userDuration,
+                        meeting.start?.dateTime // Also pass the start time here
+                    );
+                    
                     if (!isPosted) {
                         uniqueMeetings.push(meeting);
                     }

@@ -502,6 +502,7 @@ function MatchRow({
           startTime: result.meeting.startTime,
           confidence: result.confidence,
           isManualPost: source !== 'ai-agent',
+          taskTitle: selectedTask.title,
           attendanceRecords: [{
             email: session?.user?.email || '',
             name: session?.user?.name || '',
