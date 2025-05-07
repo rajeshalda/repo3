@@ -257,26 +257,31 @@ export class IntervalsTimeEntryService {
         userId: string
     ): Promise<TimeEntryResponse | TimeEntryErrorResponse> {
         try {
+            console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🚀 TIME ENTRY CREATION STARTED                         
+║ 📝 Meeting: ${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''} 
+║ 🔄 Task: ${task.taskTitle?.substring(0, 30)}${task.taskTitle && task.taskTitle.length > 30 ? '...' : ''}
+╚════════════════════════════════════════════════════════╝`);
+
             // Get person info and task details
+            console.log(`⏳ Fetching person & task information...`);
             const [person, taskDetails] = await Promise.all([
                 this.getPersonInfo(userId),
                 this.getTaskDetails(task.taskId, userId)
             ]);
 
-            console.log('Person info:', { id: person.id, email: person.email });
-            console.log('Task details:', {
-                id: taskDetails.id,
-                projectid: taskDetails.projectid,
-                moduleid: taskDetails.moduleid,
-                assignees: taskDetails.assigneeid,
-                client: taskDetails.client,
-                project: taskDetails.project,
-                status: taskDetails.status
-            });
+            console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✓ USER & TASK INFO RETRIEVED                    │
+│ 👤 User: ${person.email}                         │
+│ 📋 Task: #${taskDetails.id} - ${taskDetails.title?.substring(0, 25)}${taskDetails.title && taskDetails.title.length > 25 ? '...' : ''} │
+│ 🏢 Client: ${taskDetails.client || 'N/A'} | Project: ${taskDetails.project || 'N/A'} │
+└─────────────────────────────────────────────────┘`);
 
             // Verify all required fields are present
             if (!taskDetails.projectid) {
-                console.error('Task is missing projectid');
+                console.error(`❌ ERROR: Task #${taskDetails.id} is missing projectid`);
                 return {
                     success: false,
                     error: 'Task is missing required project ID',
@@ -285,7 +290,7 @@ export class IntervalsTimeEntryService {
             }
             
             if (!taskDetails.moduleid) {
-                console.error('Task is missing moduleid');
+                console.error(`❌ ERROR: Task #${taskDetails.id} is missing moduleid`);
                 return {
                     success: false,
                     error: 'Task is missing required module ID',
@@ -295,7 +300,7 @@ export class IntervalsTimeEntryService {
 
             // Check if task is closed
             if (taskDetails.status === 'Closed') {
-                console.log(`Task ${taskDetails.id} (${taskDetails.title}) is closed. Cannot create time entry.`);
+                console.log(`⚠️ WARNING: Task #${taskDetails.id} is closed. Cannot create time entry.`);
                 return {
                     success: false,
                     error: `The selected task "${taskDetails.title}" is closed. Please select an open task.`,
@@ -304,24 +309,26 @@ export class IntervalsTimeEntryService {
             }
 
             // Get work types for the project
+            console.log(`⏳ Fetching work types for project ${taskDetails.projectid}...`);
             const workTypes = await this.getProjectWorkTypes(taskDetails.projectid, userId);
             
             // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-            console.log('Using hardcoded worktype ID 804786 for India-Meeting');
+            console.log(`ℹ️ Using worktype ID 804786 for India-Meeting`);
             const worktypeId = '804786';
 
             // Find the current user's attendance record
             let userDuration = 0;
             if (meeting.attendance?.records) {
+                console.log(`🔍 Checking attendance records for user ${userId}...`);
                 const userRecord = meeting.attendance.records.find(record => 
                     record.email.toLowerCase() === userId.toLowerCase()
                 );
                 
                 if (userRecord) {
                     userDuration = userRecord.duration;
-                    console.log(`Found user's attendance record with duration: ${userDuration} seconds`);
+                    console.log(`✅ Found user's attendance record with duration: ${Math.floor(userDuration/60)}m ${userDuration%60}s`);
                 } else {
-                    console.log(`User ${userId} did not attend meeting "${meeting.subject}"`);
+                    console.log(`❌ User ${userId} did not attend meeting "${meeting.subject}"`);
                     return {
                         success: false,
                         error: `User ${userId} did not attend this meeting. No attendance record found.`,
@@ -329,14 +336,14 @@ export class IntervalsTimeEntryService {
                     };
                 }
             } else {
-                console.log(`No attendance records found for meeting "${meeting.subject}"`);
+                console.log(`⚠️ No attendance records found for meeting "${meeting.subject}"`);
             }
 
             // Calculate time in decimal hours from user's attendance record
             const timeInHours = this.convertSecondsToDecimalHours(userDuration);
 
             if (timeInHours <= 0) {
-                console.log(`User ${userId} has zero duration for meeting "${meeting.subject}". Skipping time entry creation.`);
+                console.log(`⚠️ User ${userId} has zero duration for meeting "${meeting.subject}". Skipping time entry creation.`);
                 return {
                     success: false,
                     error: `User ${userId} has zero duration for this meeting. The meeting may not have been attended.`,
@@ -349,7 +356,7 @@ export class IntervalsTimeEntryService {
             const isNonBillableClient = taskDetails.client?.toLowerCase() === 'nathcorp' || 
                                       taskDetails.client?.toLowerCase() === 'internal';
             const isBillable = !isNonBillableClient;
-            console.log(`Client: ${taskDetails.client}, Setting billable flag to: ${isBillable ? 'true (t)' : 'false (f)'} (Non-billable client: ${isNonBillableClient})`);
+            console.log(`💰 Billable status: ${isBillable ? 'YES ✓' : 'NO ✗'} (Client: ${taskDetails.client})`);
 
             // Prepare time entry data
             const timeEntry: TimeEntry = {
@@ -365,13 +372,15 @@ export class IntervalsTimeEntryService {
             };
 
             // Add debug log to show date conversion
-            console.log('Date Conversion:', {
-                originalUtcDate: meeting.start.dateTime,
-                originalDatePortion: meeting.start.dateTime.split('T')[0],
-                convertedIstDate: this.formatDate(meeting.start.dateTime),
-            });
+            console.log(`
+┌─────────────────────────────────────────────────┐
+│ 📊 TIME ENTRY DETAILS                           │
+│ 📆 Date: ${timeEntry.date} (from UTC ${meeting.start.dateTime.split('T')[0]})  │
+│ ⏱️ Duration: ${timeInHours} hours (${Math.floor(userDuration/60)}m ${userDuration%60}s)  │
+│ 💰 Billable: ${isBillable ? 'Yes' : 'No'}                              │
+└─────────────────────────────────────────────────┘`);
 
-            console.log('Creating time entry with data:', JSON.stringify(timeEntry, null, 2));
+            console.log(`📡 Sending time entry request to Intervals API...`);
 
             try {
                 // Create time entry using proxy
@@ -380,7 +389,7 @@ export class IntervalsTimeEntryService {
                     body: JSON.stringify(timeEntry)
                 }, userId);
 
-                console.log('Time entry creation successful. Response:', JSON.stringify(rawResponse, null, 2));
+                console.log(`✅ Time entry creation successful!`);
 
                 // Parse as TimeEntryResponse
                 const timeEntryResponse = rawResponse.time as TimeEntryResponse;
@@ -394,14 +403,23 @@ export class IntervalsTimeEntryService {
                     taskTitle: task.taskTitle || taskDetails.title || undefined
                 } as TimeEntryResponse;
 
-                console.log('Enhanced time entry with client/project/taskTitle:', JSON.stringify(enhancedTimeEntryResponse, null, 2));
+                console.log(`📝 Time entry created with ID: ${enhancedTimeEntryResponse.id}`);
 
                 // Save to posted-meetings.json
+                console.log(`💾 Saving meeting details to storage...`);
                 await this.savePostedMeeting(meeting, enhancedTimeEntryResponse, rawResponse, userId, task.taskTitle);
+                console.log(`✅ Meeting details saved successfully`);
+
+                console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🏁 TIME ENTRY CREATION COMPLETED                       
+║ ✅ Time Entry ID: ${enhancedTimeEntryResponse.id}                  
+║ ⏱️ Duration: ${timeInHours} hours                      
+╚════════════════════════════════════════════════════════╝`);
 
                 return enhancedTimeEntryResponse;
             } catch (apiError) {
-                console.error('Error from Intervals API:', apiError);
+                console.error(`❌ ERROR from Intervals API:`, apiError);
                 return {
                     success: false,
                     error: apiError instanceof Error 
@@ -411,7 +429,7 @@ export class IntervalsTimeEntryService {
                 };
             }
         } catch (error) {
-            console.error('Error creating time entry:', error);
+            console.error(`❌ ERROR creating time entry:`, error);
             return {
                 success: false,
                 error: error instanceof Error ? error.message : 'Unknown error',

@@ -73,10 +73,13 @@ export class AIAgentPostedMeetingsStorage {
                                 postedMeeting.meetingId.startsWith('AAMkA') && 
                                 postedMeeting.meetingId.includes('=');
 
-        console.log(`[${now}] AIAgentPostedMeetingsStorage: Adding meeting with ID:`, postedMeeting.meetingId);
-        console.log(`[${now}] Is ID in Graph format?`, isGraphIdFormat);
-        console.log(`[${now}] Meeting time value:`, postedMeeting.timeEntry?.time, 'hours');
-        console.log(`[${now}] Meeting worktypeid:`, postedMeeting.timeEntry?.worktypeid);
+        console.log(`
+┌─────────────────────────────────────────────────────────┐
+│ 💾 STORING POSTED MEETING                               │
+│ 🔑 Meeting ID: ${postedMeeting.meetingId.substring(0, 15)}...            │
+│ 📤 Time Entry: ${postedMeeting.timeEntry?.time || 0} hours                │
+│ 🏷️ Work Type: ${postedMeeting.timeEntry?.worktypeid || 'N/A'}                │
+└─────────────────────────────────────────────────────────┘`);
         
         // Create a unique storage ID that includes time and timestamp to ensure uniqueness
         // This ensures each instance of a recurring meeting gets its own unique entry
@@ -84,8 +87,8 @@ export class AIAgentPostedMeetingsStorage {
         const durationInSeconds = Math.round(timeInHours * 3600);
         const uniqueStorageId = `${postedMeeting.meetingId}_${timeInHours}_${now}`;
         
-        console.log(`[${now}] Generated unique storage ID: ${uniqueStorageId}`);
-        console.log(`[${now}] Meeting duration: ${durationInSeconds}s (${timeInHours} hours)`);
+        console.log(`🆔 Generated unique storage ID: ${uniqueStorageId.substring(0, 25)}...`);
+        console.log(`⏱️ Meeting duration: ${durationInSeconds}s (${timeInHours} hours)`);
         
         // Check if this EXACT entry already exists (shouldn't happen with the unique ID)
         const exactDuplicate = this.data.meetings.some(m => {
@@ -140,6 +143,8 @@ export class AIAgentPostedMeetingsStorage {
         });
 
         await this.saveData();
+        console.log(`✅ Meeting added to storage. Total posted meetings for user: ${this.data.meetings.length}`);
+        console.log(`✅ Storage data saved successfully`);
     }
 
     // Helper method to get formatted IST date
@@ -165,119 +170,60 @@ export class AIAgentPostedMeetingsStorage {
         await this.saveData();
     }
 
-    async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string): Promise<boolean> {
+    async isPosted(userId: string, meetingId: string, duration: number = 0, dateTime: string = ''): Promise<boolean> {
         await this.loadData();
         
-        console.log(`Checking if meeting is posted - ID: ${meetingId}, Duration: ${duration}s, StartTime: ${startTime}`);
-        
-        // For recurring meetings, we MUST check both ID, date, and duration
-        if (duration !== undefined && startTime) {
-            // Extract the date part from startTime for proper comparison
-            const requestDate = new Date(startTime).toISOString().split('T')[0]; // Get YYYY-MM-DD
-            console.log(`Checking for recurring meeting instance on date: ${requestDate}`);
-            
-            // Find meetings with the same ID and user
-            const matchingMeetings = this.data.meetings.filter(m => 
-                m.meetingId === meetingId && m.userId === userId
-            );
-
-            // For name-based matching, also check if the description matches the meetingId
-            const descriptionMatches = this.data.meetings.filter(m => 
-                m.userId === userId && 
-                m.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase()
-            );
-            
-            // Combine both sets of matches without duplicates
-            const combinedMatches = [...matchingMeetings];
-            for (const match of descriptionMatches) {
-                if (!matchingMeetings.some(m => m.meetingId === match.meetingId)) {
-                    combinedMatches.push(match);
-                }
-            }
-            
-            console.log(`Found ${combinedMatches.length} potential matching meetings by ID/description`);
-            
-            // If no matching meetings found at all, it's not a duplicate
-            if (combinedMatches.length === 0) {
-                console.log(`No matching meetings found for ID: ${meetingId}`);
-                return false;
-            }
-            
-            // Check for very recent entries (potentially from other batches)
-            const now = new Date().getTime();
-            const recentEntries = combinedMatches.filter(meeting => {
-                // Consider entries from the last 5 minutes as "recent"
-                const postedAt = new Date(meeting.postedAt.replace(' IST', '')).getTime();
-                const isRecent = (now - postedAt) < 5 * 60 * 1000; // 5 minutes in milliseconds
-                
-                // Check if the meeting happened on the same day
-                const storedDate = meeting.timeEntry?.date;
-                const sameDateAndRecent = storedDate === requestDate && isRecent;
-                
-                if (sameDateAndRecent) {
-                    console.log(`Found a very recent entry (< 5 min) for this meeting on the same date`);
-                    return true;
-                }
-                return false;
-            });
-            
-            // If we have any recent entries for the same meeting date, consider it a duplicate
-            // This helps prevent multi-batch processing issues
-            if (recentEntries.length > 0) {
-                console.log(`Found ${recentEntries.length} recent entries - considering as duplicate`);
-                return true;
-            }
-            
-            // For recurring meetings, first check if this exact date already exists
-            // Only then check if there's a meeting with similar duration
-            let dateMatches = 0;
-            
-            for (const meeting of combinedMatches) {
-                const storedDate = meeting.timeEntry?.date;
-                
-                // If there's a date mismatch, this is definitely a different instance of a recurring meeting
-                if (storedDate !== requestDate) {
-                    console.log(`Date mismatch: Stored ${storedDate} vs Requested ${requestDate} - different instance`);
-                    continue;
-                }
-                
-                // Count date matches for debugging
-                dateMatches++;
-                
-                // When dates match, check durations
-                const timeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
-                const storedDuration = Math.round(timeInHours * 3600); // Convert hours to seconds
-                const durationDiff = Math.abs(storedDuration - duration);
-                
-                // Use a very strict tolerance of 10 seconds for duration comparison
-                if (durationDiff < 10) { // 10 seconds tolerance
-                    console.log(`Found a duplicate meeting instance: ${meetingId} on ${requestDate} with similar duration (diff: ${durationDiff}s)`);
-                    return true;
-                } else {
-                    console.log(`Same date but duration difference too large: ${durationDiff}s - not a duplicate`);
-                }
-                
-                // Additional check: if the meeting description and meeting date are the same,
-                // it's likely the same meeting instance, even with duration differences
-                if (meeting.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase() && 
-                    storedDate === requestDate) {
-                    console.log(`Same meeting description and date found - considering as duplicate despite duration difference`);
-                    return true;
-                }
-            }
-            
-            console.log(`Found ${dateMatches} meetings on the same date, but no duration matches - not a duplicate`);
-            // If we have meetings with the same ID but no matching dates+durations, it's not a duplicate
+        if (!this.data.meetings.some(m => m.userId === userId)) {
             return false;
         }
         
-        // When no duration/startTime provided, fall back to basic ID matching (not recommended for recurring meetings)
-        const isBasicMatch = this.data.meetings.some(m => 
-            (m.meetingId === meetingId || m.timeEntry?.description?.toLowerCase() === meetingId.toLowerCase()) && 
-            m.userId === userId
-        );
+        // Format the date from the meeting date string in YYY-MM-DD format
+        const meetingDate = dateTime ? dateTime.split('T')[0] : '';
         
-        console.log(`Basic ID matching (no duration/date): ${isBasicMatch}`);
-        return isBasicMatch;
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: ${meetingId.substring(0, 15)}...           │
+│ 📅 Date: ${meetingDate || 'N/A'}                         │
+│ ⏱️ Duration: ${Math.floor(duration/60)}m ${duration%60}s                    │
+└─────────────────────────────────────────────────┘`);
+        
+        // Check if this meeting with this specific duration is already posted
+        const result = this.data.meetings.some(meeting => {
+            // Check if meeting IDs match
+            const idMatch = meeting.meetingId === meetingId;
+            
+            // If we have duration, use it for comparison
+            let durationMatch = true;
+            if (duration > 0 && meeting.timeEntry?.time) {
+                // Allow a 10-second margin for rounding errors
+                const timeInHours = parseFloat(meeting.timeEntry.time.toString());
+                const durationDiff = Math.abs(timeInHours * 3600 - duration);
+                durationMatch = durationDiff < 10;
+            }
+            
+            // If we have a date, use it for comparison with posted meeting date
+            let dateMatch = true;
+            if (meetingDate && meeting.timeEntry?.date) {
+                dateMatch = meeting.timeEntry.date === meetingDate;
+            }
+            
+            const isMatch = idMatch && durationMatch && dateMatch;
+            
+            if (isMatch) {
+                console.log(`✓ MATCH FOUND - Meeting already posted on ${meeting.timeEntry?.date} with duration ${meeting.timeEntry?.time} hours`);
+                if (meeting.taskName) {
+                    console.log(`📋 Task: ${meeting.taskName}`);
+        }
+            }
+            
+            return isMatch;
+        });
+        
+        if (!result) {
+            console.log(`✅ Meeting not yet posted - can proceed with creating time entry`);
+        }
+        
+        return result;
     }
 } 

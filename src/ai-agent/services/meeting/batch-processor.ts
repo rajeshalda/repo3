@@ -44,6 +44,12 @@ export class BatchProcessor {
 
     const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
+    console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🚀 BATCH PROCESSING STARTED [${batchId}]               
+║ 📊 Total meetings: ${meetings.length} | Batch size: ${this.batchSize}
+╚════════════════════════════════════════════════════════╝`);
+    
     // Initialize batch result
     this.processingResults.set(batchId, {
       batchId,
@@ -57,9 +63,24 @@ export class BatchProcessor {
     // Process meetings in smaller batches
     for (let i = 0; i < meetings.length; i += this.batchSize) {
       const batch = meetings.slice(i, i + this.batchSize);
+      const batchNumber = Math.floor(i/this.batchSize) + 1;
+      const totalBatches = Math.ceil(meetings.length/this.batchSize);
+      
+      console.log(`
+┌─────────────────────────────────────────────────┐
+│ ▶️ Processing batch ${batchNumber}/${totalBatches} (${batch.length} meetings) │
+└─────────────────────────────────────────────────┘`);
       
       // Wait for rate limiter to allow processing this batch
+      const tokensAvailable = this.rateLimiter.getAvailableTokens();
+      console.log(`📶 Rate limiter status: ${tokensAvailable}/${this.batchSize} tokens available`);
+      
+      if (tokensAvailable < this.batchSize) {
+        console.log(`⏳ Waiting for rate limiter tokens (need ${this.batchSize - tokensAvailable} more)...`);
+      }
+      
       await this.rateLimiter.acquireToken(this.batchSize);
+      console.log(`✅ Rate limiter tokens acquired`);
 
       // Process each meeting in the batch
       await Promise.all(batch.map(meeting => 
@@ -67,13 +88,33 @@ export class BatchProcessor {
       ));
 
       // Add a small delay between batches
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const batchResult = this.processingResults.get(batchId);
+      if (batchResult) {
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch ${batchNumber}/${totalBatches} completed                      │
+│ ✓ Progress: ${batchResult.completedMeetings}/${batchResult.totalMeetings} meetings (${Math.round(batchResult.completedMeetings/batchResult.totalMeetings*100)}%)    │
+│ ✓ Success: ${batchResult.processed.length} | Failed: ${batchResult.failed.length}               │
+└─────────────────────────────────────────────────┘`);
+      }
+
+      if (i + this.batchSize < meetings.length) {
+        console.log(`⏱️ Adding 1 second delay before next batch...`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
     }
 
     // Update batch status
     const result = this.processingResults.get(batchId);
     if (result) {
       result.status = result.failed.length === meetings.length ? 'failed' : 'completed';
+      
+      console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🏁 BATCH PROCESSING COMPLETED [${batchId}]             
+║ 📊 Total: ${result.totalMeetings} | Success: ${result.processed.length} | Failed: ${result.failed.length}
+║ 📈 Success rate: ${Math.round((result.processed.length/result.totalMeetings)*100)}%
+╚════════════════════════════════════════════════════════╝`);
     }
 
     return batchId;
@@ -81,6 +122,8 @@ export class BatchProcessor {
 
   private async processMeeting(meeting: Meeting, userId: string, batchId: string): Promise<void> {
     try {
+      console.log(`📑 Processing meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" [${meeting.id}]`);
+      
       const result = await this.queueManager.queueMeetingAnalysis(
         meeting, 
         userId,
@@ -93,8 +136,10 @@ export class BatchProcessor {
         batchResult.processed.push(result);
         batchResult.completedMeetings++;
       }
+      
+      console.log(`✅ Successfully processed: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" [${meeting.id}]`);
     } catch (error) {
-      console.error(`Error processing meeting ${meeting.id} in batch ${batchId}:`, error);
+      console.error(`❌ ERROR processing meeting [${meeting.id}] in batch ${batchId}:`, error);
       
       // Update batch processing result with failure
       const batchResult = this.processingResults.get(batchId);

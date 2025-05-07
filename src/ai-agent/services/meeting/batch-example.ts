@@ -34,22 +34,54 @@ export async function processMeetingBatchExample(meetings: Meeting[], userId: st
  */
 async function pollBatchStatus(meetingService: MeetingService, batchId: string): Promise<void> {
   return new Promise((resolve) => {
+    console.log(`
+╔═════════════════════════════════════════════════╗
+║ 📊 BATCH MONITOR STARTED [${batchId}]           
+║ ⏱️ Polling interval: 5 seconds                   
+╚═════════════════════════════════════════════════╝`);
+    
+    let lastCompletedCount = 0;
+    let consecutiveNoChange = 0;
+    
     const interval = setInterval(() => {
       const status = meetingService.getBatchStatus(batchId);
       
       if (!status) {
-        console.log('Batch not found');
+        console.log(`❌ MONITOR: Batch ${batchId} not found`);
         clearInterval(interval);
         resolve();
         return;
       }
       
       const { totalMeetings, completedMeetings, processed, failed } = status;
-      console.log(`Progress: ${completedMeetings}/${totalMeetings} meetings processed`);
-      console.log(`Successful: ${processed.length}, Failed: ${failed.length}`);
+      const percentComplete = Math.round((completedMeetings / totalMeetings) * 100);
+      
+      // Check if progress is stalled
+      if (completedMeetings === lastCompletedCount) {
+        consecutiveNoChange++;
+      } else {
+        consecutiveNoChange = 0;
+      }
+      lastCompletedCount = completedMeetings;
+      
+      console.log(`
+┌─────────────────────────────────────────────────┐
+│ 🔄 BATCH PROGRESS                               │
+│ ✓ Progress: ${completedMeetings}/${totalMeetings} meetings (${percentComplete}%)         │
+│ ✓ Success: ${processed.length} | Failed: ${failed.length}                     │
+└─────────────────────────────────────────────────┘`);
+      
+      if (consecutiveNoChange >= 6) {
+        console.log(`⚠️ MONITOR: No progress for 30 seconds, batch may be stalled`);
+      }
       
       if (completedMeetings >= totalMeetings) {
-        console.log('All meetings processed');
+        console.log(`
+╔═════════════════════════════════════════════════╗
+║ 🏁 BATCH PROCESSING COMPLETE [${batchId}]        
+║ ✅ Successfully processed: ${processed.length}/${totalMeetings} (${Math.round((processed.length/totalMeetings)*100)}%)        
+║ ❌ Failed: ${failed.length}/${totalMeetings} (${Math.round((failed.length/totalMeetings)*100)}%)                          
+╚═════════════════════════════════════════════════╝`);
         clearInterval(interval);
         resolve();
       }
@@ -63,17 +95,42 @@ async function pollBatchStatus(meetingService: MeetingService, batchId: string):
  */
 export async function processSingleMeetingExample(meeting: Meeting, userId: string): Promise<void> {
   try {
-    console.log(`Processing single meeting: ${meeting.id}`);
+    const truncatedSubject = meeting.subject 
+      ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
+      : 'Untitled meeting';
+      
+    console.log(`
+┌─────────────────────────────────────────────────┐
+│ 🔄 PROCESSING SINGLE MEETING                    │
+│ 📝 Meeting: ${truncatedSubject}                 │
+│ 🆔 ID: ${meeting.id}                            │
+└─────────────────────────────────────────────────┘`);
     
     // Get the meeting service
     const meetingService = MeetingService.getInstance();
     
+    const startTime = Date.now();
+    
     // Process the meeting (this will automatically use the queue system)
     const result = await meetingService.analyzeMeeting(meeting, userId);
     
-    console.log(`Meeting processed successfully: ${result.id}`);
-    console.log(`Key points: ${result.analysis?.keyPoints?.join(', ')}`);
+    const processingTime = Date.now() - startTime;
+    
+    console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✅ MEETING PROCESSED SUCCESSFULLY               │
+│ ⏱️ Processing time: ${(processingTime/1000).toFixed(2)}s               │
+│ 📊 Key points: ${result.analysis?.keyPoints?.length || 0}                          │
+└─────────────────────────────────────────────────┘`);
+    
+    if (result.analysis?.keyPoints?.length) {
+      console.log(`📝 KEY POINTS: ${result.analysis.keyPoints.join(' | ')}`);
+    }
   } catch (error) {
-    console.error('Error processing single meeting:', error);
+    console.error(`
+┌─────────────────────────────────────────────────┐
+│ ❌ ERROR PROCESSING MEETING                     │
+│ 🆔 ID: ${meeting.id}                            │
+└─────────────────────────────────────────────────┘`, error);
   }
 } 

@@ -37,10 +37,17 @@ export class QueueManager {
         reject,
         processFunction 
       });
-      console.log(`Meeting ${meeting.id} added to queue. Queue length: ${this.queue.length}`);
+      
+      const truncatedSubject = meeting.subject 
+        ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
+        : 'Untitled meeting';
+        
+      console.log(`📥 QUEUE: Added meeting ${truncatedSubject} [${meeting.id}]`);
+      console.log(`📊 QUEUE STATUS: ${this.queue.length} item${this.queue.length !== 1 ? 's' : ''} waiting`);
       
       // Start processing if not already running
       if (!this.isProcessing) {
+        console.log(`⚙️ QUEUE: Starting queue processor...`);
         this.processQueue();
       }
     });
@@ -52,29 +59,53 @@ export class QueueManager {
     }
 
     this.isProcessing = true;
+    console.log(`🔄 QUEUE PROCESSOR: Started with ${this.queue.length} item${this.queue.length !== 1 ? 's' : ''}`);
 
     try {
       while (this.queue.length > 0) {
         // Wait for rate limiter to allow the request
+        const tokensAvailable = this.rateLimiter.getAvailableTokens();
+        if (tokensAvailable < 1) {
+          console.log(`⏳ RATE LIMITER: Waiting for token availability...`);
+        }
+        
         await this.rateLimiter.acquireToken();
+        console.log(`✅ RATE LIMITER: Token acquired, processing next queue item`);
 
         const item = this.queue.shift();
         if (!item) continue;
 
+        const truncatedSubject = item.meeting.subject 
+          ? `"${item.meeting.subject.substring(0, 30)}${item.meeting.subject.length > 30 ? '...' : ''}"`
+          : 'Untitled meeting';
+
         try {
-          console.log(`Processing meeting: ${item.meeting.subject}`);
+          console.log(`🔍 PROCESSING: ${truncatedSubject} [${item.meeting.id}]`);
+          
+          const startTime = Date.now();
           const result = await item.processFunction(item.meeting, item.userId);
-          console.log(`Successfully processed meeting: ${item.meeting.subject}`);
+          const processingTime = Date.now() - startTime;
+          
+          console.log(`✅ COMPLETED: ${truncatedSubject} [${item.meeting.id}] in ${(processingTime/1000).toFixed(2)}s`);
+          
+          if (result.analysis?.keyPoints?.length) {
+            console.log(`📝 KEY POINTS: Found ${result.analysis.keyPoints.length} key points`);
+          }
+          
           item.resolve(result);
         } catch (error) {
-          console.error(`Error processing meeting: ${item.meeting.subject}`, error);
+          console.error(`❌ ERROR: Failed to process ${truncatedSubject} [${item.meeting.id}]`, error);
           item.reject(error);
         }
 
         // Add a small delay between processing items to prevent rate limit issues
-        await new Promise(resolve => setTimeout(resolve, this.processingInterval));
+        if (this.queue.length > 0) {
+          console.log(`⏱️ QUEUE PROCESSOR: Waiting ${(this.processingInterval/1000).toFixed(2)}s before next item`);
+          await new Promise(resolve => setTimeout(resolve, this.processingInterval));
+        }
       }
     } finally {
+      console.log(`🛑 QUEUE PROCESSOR: Finished, queue is empty`);
       this.isProcessing = false;
     }
   }
@@ -89,12 +120,15 @@ export class QueueManager {
       item.reject(new Error('Queue was cleared'));
     });
     this.queue = [];
-    console.log(`Queue cleared. ${queueLength} items were removed.`);
+    console.log(`🧹 QUEUE: Cleared ${queueLength} item${queueLength !== 1 ? 's' : ''}`);
   }
 
   public updateRateLimit(requestsPerMinute: number): void {
+    const oldRate = this.requestsPerMinute;
     this.requestsPerMinute = requestsPerMinute;
     this.processingInterval = Math.ceil(60000 / requestsPerMinute);
     this.rateLimiter.updateRateLimit(requestsPerMinute);
+    console.log(`⚙️ RATE LIMIT: Updated from ${oldRate} to ${requestsPerMinute} requests per minute`);
+    console.log(`⚙️ DELAY: Set to ${(this.processingInterval/1000).toFixed(2)}s between requests`);
   }
 } 

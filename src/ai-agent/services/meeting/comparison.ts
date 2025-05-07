@@ -127,6 +127,12 @@ export class MeetingComparisonService {
             const storage = new AIAgentPostedMeetingsStorage();
             await storage.loadData();
 
+            console.log(`
+┌─────────────────────────────────────────────────────────┐
+│ 🔄 AI COMPARISON: Starting comparative analysis         │
+│ 📊 New meetings: ${newMeetings.length} | Posted: ${postedMeetings.length}  │
+└─────────────────────────────────────────────────────────┘`);
+
             // First try simple comparison
             const simpleResult: BatchComparisonResult = {
                 duplicates: [],
@@ -162,6 +168,12 @@ export class MeetingComparisonService {
                         if (hasTimeEntry) {
                             simpleResult.duplicates.push(newMeeting);
                             isDuplicate = true;
+                            
+                            const truncatedSubject = newMeeting.subject 
+                                ? `"${newMeeting.subject.substring(0, 30)}${newMeeting.subject.length > 30 ? '...' : ''}"`
+                                : 'Untitled meeting';
+                            console.log(`🔄 Found duplicate: ${truncatedSubject} [${newMeeting.id}] (simple comparison)`);
+                            
                             break;
                         }
                     }
@@ -172,9 +184,18 @@ export class MeetingComparisonService {
                 }
             }
 
+            console.log(`
+┌─────────────────────────────────────────────┐
+│ 🔍 SIMPLE COMPARISON RESULTS:               │
+│    ✓ Duplicates found: ${simpleResult.duplicates.length}                   │
+│    ✓ Unique meetings: ${simpleResult.unique.length}                     │
+└─────────────────────────────────────────────┘`);
+
             // If we have meetings that didn't match with simple comparison,
             // use OpenAI for more complex comparison
             if (simpleResult.unique.length > 0) {
+                console.log(`📡 Starting AI-based deep comparison for ${simpleResult.unique.length} meetings...`);
+                
                 const formattedNewMeetings = simpleResult.unique
                     .map(m => this.formatMeetingForComparison(m))
                     .filter(m => m !== null);
@@ -199,15 +220,29 @@ export class MeetingComparisonService {
                 }
                 `;
 
+                console.log(`🧠 Sending comparison request to AI service...`);
+                const startTime = Date.now();
+                
                 const response = await openAIClient.sendRequest(prompt, {
                     temperature: 0.3,
                     maxTokens: 1000
                 });
+                
+                const processingTime = Date.now() - startTime;
+                console.log(`✅ AI comparison completed in ${(processingTime/1000).toFixed(2)}s`);
 
                 // Parse the response
                 const jsonMatch = response.match(/\{[\s\S]*\}/);
                 if (jsonMatch) {
                     const result = JSON.parse(jsonMatch[0]);
+                    
+                    // Log AI results
+                    console.log(`
+┌─────────────────────────────────────────────┐
+│ 🧠 AI COMPARISON RESULTS:                    │
+│    ✓ Duplicates identified: ${result.duplicateIds.length}               │
+│    ✓ Unique meetings: ${result.uniqueIds.length}                     │
+└─────────────────────────────────────────────┘`);
                     
                     // Update the results based on AI analysis
                     const aiDuplicates = simpleResult.unique.filter(m => result.duplicateIds.includes(m.id));
@@ -217,12 +252,14 @@ export class MeetingComparisonService {
                         duplicates: [...simpleResult.duplicates, ...aiDuplicates],
                         unique: aiUnique
                     };
+                } else {
+                    console.warn(`⚠️ AI response did not contain valid JSON format, falling back to simple comparison`);
                 }
             }
 
             return simpleResult;
         } catch (error) {
-            console.error('Error in batch comparison:', error);
+            console.error(`❌ ERROR in batch comparison:`, error);
             // If AI comparison fails, return simple comparison results
             return {
                 duplicates: [],
@@ -233,7 +270,12 @@ export class MeetingComparisonService {
 
     public async filterNewMeetings(meetings: ProcessedMeeting[]): Promise<ProcessedMeeting[]> {
         try {
-            console.log(`Starting comparison of ${meetings.length} meetings against posted meetings...`);
+            console.log(`
+╔══════════════════════════════════════════════════════════╗
+║ 🔍 MEETING FILTER STARTING                                ║
+║ 📊 Total meetings to check: ${meetings.length}                           ║
+║ 🔄 Batch size: ${this.BATCH_SIZE} | Delay: ${this.DELAY_MS/1000}s                        ║
+╚══════════════════════════════════════════════════════════╝`);
             
             // Get posted meetings from the new storage
             const storage = new AIAgentPostedMeetingsStorage();
@@ -244,10 +286,22 @@ export class MeetingComparisonService {
             
             for (let i = 0; i < meetings.length; i += this.BATCH_SIZE) {
                 const batch = meetings.slice(i, i + this.BATCH_SIZE);
-                console.log(`Processing batch ${Math.floor(i/this.BATCH_SIZE) + 1} of ${Math.ceil(meetings.length/this.BATCH_SIZE)}`);
+                const batchNumber = Math.floor(i/this.BATCH_SIZE) + 1;
+                const totalBatches = Math.ceil(meetings.length/this.BATCH_SIZE);
+                
+                console.log(`
+┌─────────────────────────────────────────────────┐
+│ 📦 Processing batch ${batchNumber}/${totalBatches} (${batch.length} meetings) │
+└─────────────────────────────────────────────────┘`);
+                
+                let batchDuplicates = 0;
                 
                 // Check each meeting in the batch
                 for (const meeting of batch) {
+                    const truncatedSubject = meeting.subject 
+                        ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
+                        : 'Untitled meeting';
+                        
                     // Get user's duration for this meeting
                     let userDuration = 0;
                     if (meeting.attendance?.records && meeting.userId) {
@@ -270,29 +324,37 @@ export class MeetingComparisonService {
                     
                     if (!isPosted) {
                         uniqueMeetings.push(meeting);
+                        console.log(`✅ Unique: ${truncatedSubject} [${meeting.id}]`);
+                    } else {
+                        batchDuplicates++;
+                        console.log(`⏭️ Duplicate: ${truncatedSubject} [${meeting.id}]`);
                     }
                 }
 
                 // Log results for this batch
-                console.log(`Batch ${Math.floor(i/this.BATCH_SIZE) + 1} results:`, {
-                    total: batch.length,
-                    duplicates: batch.length - uniqueMeetings.length,
-                    unique: uniqueMeetings.length
-                });
+                console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch ${batchNumber}/${totalBatches} completed                      │
+│ 📊 Total: ${batch.length} | Unique: ${batch.length - batchDuplicates} | Duplicates: ${batchDuplicates}   │
+└─────────────────────────────────────────────────┘`);
 
                 // Add longer delay between batches
                 if (i + this.BATCH_SIZE < meetings.length) {
-                    console.log(`Waiting ${this.DELAY_MS/1000} seconds before processing next batch...`);
+                    console.log(`⏱️ Waiting ${this.DELAY_MS/1000} seconds before next batch...`);
                     await this.delay(this.DELAY_MS);
                 }
             }
 
-            console.log(`Filtered ${meetings.length - uniqueMeetings.length} duplicate meetings`);
-            console.log(`Proceeding with ${uniqueMeetings.length} unique meetings`);
+            console.log(`
+╔══════════════════════════════════════════════════════════╗
+║ 🏁 MEETING FILTER COMPLETED                               ║
+║ 📊 Total: ${meetings.length} | Duplicates: ${meetings.length - uniqueMeetings.length} | Unique: ${uniqueMeetings.length}     ║
+║ 📈 Duplication rate: ${Math.round(((meetings.length - uniqueMeetings.length)/meetings.length)*100)}%                                   ║
+╚══════════════════════════════════════════════════════════╝`);
 
             return uniqueMeetings;
         } catch (error) {
-            console.error('Error filtering new meetings:', error);
+            console.error('❌ ERROR filtering new meetings:', error);
             throw error;
         }
     }

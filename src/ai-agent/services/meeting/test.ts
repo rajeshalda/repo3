@@ -188,7 +188,15 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
 export async function fetchUserMeetings(userId: string): Promise<{ meetings: Meeting[], attendanceReport: AttendanceReport }> {
     try {
+        console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🚀 MEETING FETCH STARTED                                
+║ 👤 User: ${userId.substring(0, 15)}...                            
+╚════════════════════════════════════════════════════════╝`);
+        
+        console.log(`🔑 Getting Graph API access token...`);
         const accessToken = await getGraphToken();
+        console.log(`✅ Access token acquired successfully`);
         
         // Get meetings for the current day (today) in IST timezone (UTC+05:30)
         const now = new Date();
@@ -220,15 +228,19 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const startDateString = startDate.toISOString();
         const endDateString = endDate.toISOString();
         
-        console.log('Fetching meetings for current day in IST (UTC+05:30)');
-        console.log('Date range (UTC):', startDateString, 'to', endDateString);
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ 📅 FETCHING MEETINGS - IST TIMEZONE (UTC+05:30) │
+│ 📆 Date range (UTC): ${startDateString.split('T')[0]} to ${endDateString.split('T')[0]} │
+│ ⏰ Time range: ${startDateString.split('T')[1].substring(0, 8)} to ${endDateString.split('T')[1].substring(0, 8)}          │
+└─────────────────────────────────────────────────┘`);
         
         // Using calendarView endpoint instead of events endpoint for better handling of recurring meetings
         const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/calendarView?startDateTime=${startDateString}&endDateTime=${endDateString}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId&$orderby=start/dateTime desc`;
         
         // Function to fetch all meetings using pagination
         async function fetchAllMeetings(url: string): Promise<Meeting[]> {
-            console.log('Fetching meetings from URL:', url);
+            console.log(`📡 Fetching meetings from Graph API...`);
             
             const response = await fetch(url, {
                 headers: {
@@ -240,30 +252,28 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Graph API Error:', errorText);
+                console.error(`❌ GRAPH API ERROR: Status ${response.status} ${response.statusText}`);
+                console.error(`❌ Error details: ${errorText}`);
                 throw new Error(`Failed to fetch meetings: ${response.status} ${response.statusText}\n${errorText}`);
             }
 
             const data = await response.json();
-            console.log('Received meetings data:', JSON.stringify(data, null, 2));
+            console.log(`✅ Received ${data.value?.length || 0} meetings from API`);
             
             // Add debug logging for recurring meetings
-            data.value?.forEach((meeting: any) => {
-                if (meeting.seriesMasterId) {
-                    console.log('Found recurring meeting instance:', {
-                        subject: meeting.subject,
-                        start: meeting.start.dateTime,
-                        seriesMasterId: meeting.seriesMasterId,
-                        type: meeting.type
-                    });
-                }
-            });
+            const recurringMeetings = data.value?.filter((m: any) => m.seriesMasterId) || [];
+            if (recurringMeetings.length > 0) {
+                console.log(`🔄 Found ${recurringMeetings.length} recurring meeting instances:`);
+                recurringMeetings.forEach((meeting: any, index: number) => {
+                    console.log(`   ${index + 1}. "${meeting.subject}" (${meeting.start.dateTime})`);
+                });
+            }
             
             const meetings = data.value;
             
             // Check if there's a next page of results
             if (data['@odata.nextLink']) {
-                console.log('Found more meetings, fetching next page...');
+                console.log(`📄 Found more meetings, fetching next page...`);
                 // Recursively fetch next page and combine results
                 const nextPageMeetings = await fetchAllMeetings(data['@odata.nextLink']);
                 return [...meetings, ...nextPageMeetings];
@@ -276,6 +286,12 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const allMeetings = await fetchAllMeetings(baseUrl);
         
         // Filter out meetings that start before our target IST day
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ 🔍 FILTERING MEETINGS FOR IST DAY               │
+│ 📊 Total meetings before filtering: ${allMeetings.length}            │
+└─────────────────────────────────────────────────┘`);
+        
         const filteredMeetings = allMeetings.filter((meeting: Meeting) => {
             // Parse the meeting start time (which is already in IST as per the API response)
             const meetingStartTime = new Date(meeting.start.dateTime);
@@ -287,25 +303,35 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             const endOfDay = new Date(now);
             endOfDay.setHours(23, 59, 59, 999);  // Set to end of day in IST
 
-            console.log('Meeting filter debug:', {
-                subject: meeting.subject,
-                meetingStart: meetingStartTime.toISOString(),
-                startOfDay: startOfDay.toISOString(),
-                endOfDay: endOfDay.toISOString(),
-                isIncluded: meetingStartTime >= startOfDay && meetingStartTime <= endOfDay
-            });
+            const isIncluded = meetingStartTime >= startOfDay && meetingStartTime <= endOfDay;
+            if (!isIncluded) {
+                console.log(`⏩ Skipping meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" (outside IST day)`);
+            }
 
             // Only include meetings that start within the IST day
-            return meetingStartTime >= startOfDay && meetingStartTime <= endOfDay;
+            return isIncluded;
         });
         
-        console.log(`Found ${allMeetings.length} meetings, filtered to ${filteredMeetings.length} meetings for today:`, 
-            filteredMeetings.map((m: Meeting) => ({
-                subject: m.subject,
-                start: m.start.dateTime,
-                end: m.end.dateTime
-            }))
-        );
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✓ MEETINGS FILTERED                            │
+│ 📊 Total meetings after filtering: ${filteredMeetings.length}           │
+└─────────────────────────────────────────────────┘`);
+        
+        if (filteredMeetings.length > 0) {
+            console.log(`📋 Today's meetings:`);
+            filteredMeetings.forEach((meeting, index) => {
+                const startTime = new Date(meeting.start.dateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const endTime = new Date(meeting.end.dateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const truncatedSubject = meeting.subject 
+                    ? `"${meeting.subject.substring(0, 40)}${meeting.subject.length > 40 ? '...' : ''}"`
+                    : 'Untitled meeting';
+                    
+                console.log(`   ${index + 1}. ${truncatedSubject} (${startTime} - ${endTime})`);
+            });
+        } else {
+            console.log(`ℹ️ No meetings found for today in IST timezone`);
+        }
 
         const attendanceReport: AttendanceReport = {
             totalMeetings: filteredMeetings.length,
@@ -316,19 +342,39 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             detailedAttendance: {}
         };
 
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ 🔍 FETCHING ATTENDANCE RECORDS                  │
+└─────────────────────────────────────────────────┘`);
+
         for (const meeting of filteredMeetings) {
             const organizerEmail = (meeting.organizer?.email || '').toLowerCase();
             attendanceReport.organizerStats[organizerEmail] = (attendanceReport.organizerStats[organizerEmail] || 0) + 1;
 
+            const truncatedSubject = meeting.subject 
+                ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
+                : 'Untitled meeting';
+
             if (meeting.onlineMeeting?.joinUrl) {
+                console.log(`📝 Processing online meeting: ${truncatedSubject}`);
                 const decodedJoinUrl = decodeURIComponent(meeting.onlineMeeting.joinUrl);
                 const { meetingId, organizerId } = extractMeetingInfo(decodedJoinUrl);
                 
                 if (meetingId && organizerId) {
+                    console.log(`🔍 Fetching attendance for meeting ID: ${meetingId.substring(0, 8)}...`);
                     const records = await getAttendanceRecords(userId, meetingId, organizerId, accessToken);
                     
                     if (records.length > 0) {
                         attendanceReport.attendedMeetings++;
+                        console.log(`✅ Found ${records.length} attendance records for ${truncatedSubject}`);
+                        
+                        // Calculate total meeting duration from records
+                        const totalDuration = records.reduce((sum, record) => sum + record.totalAttendanceInSeconds, 0);
+                        const avgDuration = records.length > 0 ? Math.round(totalDuration / records.length) : 0;
+                        const maxDuration = Math.max(...records.map(r => r.totalAttendanceInSeconds));
+                        
+                        console.log(`⏱️ Meeting stats: Avg duration ${Math.floor(avgDuration/60)}m ${avgDuration%60}s, Max duration ${Math.floor(maxDuration/60)}m ${maxDuration%60}s`);
+                        
                         attendanceReport.detailedAttendance[meeting.id] = {
                             subject: meeting.subject,
                             startTime: meeting.start.dateTime,
@@ -349,17 +395,30 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                                     (attendanceReport.attendanceByPerson[email] || 0) + 1;
                             }
                         });
+                    } else {
+                        console.log(`ℹ️ No attendance records found for ${truncatedSubject}`);
                     }
+                } else {
+                    console.log(`⚠️ Could not extract meeting info from Teams URL for ${truncatedSubject}`);
                 }
+            } else {
+                console.log(`ℹ️ Not an online meeting: ${truncatedSubject}`);
             }
         }
+
+        console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🏁 MEETING FETCH COMPLETED                             
+║ 📊 Total meetings: ${filteredMeetings.length} | With attendance: ${attendanceReport.attendedMeetings}
+║ 👥 Unique attendees: ${Object.keys(attendanceReport.attendanceByPerson).length}
+╚════════════════════════════════════════════════════════╝`);
 
         return {
             meetings: filteredMeetings,
             attendanceReport
         };
     } catch (error: unknown) {
-        console.error('Error fetching meetings:', error);
+        console.error('❌ ERROR fetching meetings:', error);
         throw new Error(error instanceof Error ? error.message : 'Failed to fetch meetings');
     }
 }
