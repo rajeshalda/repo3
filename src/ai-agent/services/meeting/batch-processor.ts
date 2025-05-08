@@ -100,7 +100,7 @@ export class BatchProcessor {
 
       if (i + this.batchSize < meetings.length) {
         console.log(`⏱️ Adding 1 second delay before next batch...`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
 

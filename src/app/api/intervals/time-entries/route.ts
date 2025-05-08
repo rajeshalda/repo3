@@ -386,41 +386,66 @@ export async function POST(request: Request) {
                     }
                 }
                 
-                console.log('AI Agent: Storing meeting with meetingId:', primaryMeetingId);
-                
+                console.log(`
+╔══════════════════════ TIME ENTRY OPERATION ══════════════════════╗
+║ 📝 CREATING TIME ENTRY                                           ║
+║ 🎯 Meeting ID: ${primaryMeetingId?.substring(0, 15) || 'N/A'}   ║
+║ 👤 User: ${session.user.email}                                   ║
+║ 📊 Task: ${taskTitle || taskDetails?.title || `Task ${taskId}`}  ║
+╚═════════════════════════════════════════════════════════════════╝`);
+
                 await storageForAgent.addPostedMeeting(
                     session.user.email,
                     {
-                        meetingId: primaryMeetingId || '',  // Use the Graph ID when available
+                        meetingId: primaryMeetingId || '',
                         userId: session.user.email,
                         timeEntry: result.time ? { 
                             ...result.time,
-                            taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}` // Prefer passed taskTitle
+                            taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}`
                         } : null,
                         rawResponse: result,
-                        postedAt: convertToIST(date) // Convert date to IST format
+                        postedAt: convertToIST(date)
                     }
                 );
-                console.log('Meeting stored in AI Agent storage');
+
+                console.log(`
+┌─────────────────── STORAGE STATUS ───────────────────┐
+│ ✅ Meeting stored in AI Agent storage                │
+└─────────────────────────────────────────────────────┘`);
+
+                // Update review status logging
+                try {
+                    const storageManager = StorageManager.getInstance();
+                    await storageManager.updateReviewStatus({
+                        meetingId: primaryMeetingId || '',
+                        status: 'approved',
+                        decidedAt: new Date().toISOString(),
+                        decidedBy: session.user.email,
+                        feedback: 'Meeting successfully posted to Intervals'
+                    });
+                    
+                    console.log(`
+┌─────────────────── REVIEW STATUS ───────────────────┐
+│ ✅ Meeting marked as approved                       │
+│ 🔑 ID: ${primaryMeetingId?.substring(0, 15) || 'N/A'}... │
+└─────────────────────────────────────────────────────┘`);
+                } catch (error) {
+                    console.error(`
+┌─────────────────── ERROR DETAILS ───────────────────┐
+│ ❌ Failed to update review status                   │
+│ 🔍 Error: ${error instanceof Error ? error.message : 'Unknown error'}  │
+└─────────────────────────────────────────────────────┘`);
+                    // Don't fail the request if this fails
+                }
+
+                console.log(`
+╔══════════════════════ OPERATION COMPLETE ══════════════════════╗
+║ ✅ Time entry created successfully                             ║
+║ ⏱️ Duration: ${result.time?.time || 0} hours                  ║
+║ 📅 Date: ${result.time?.date || 'N/A'}                        ║
+╚═════════════════════════════════════════════════════════════════╝`);
             }
             
-            // Remove the meeting from reviews.json after successful posting
-            try {
-                const storageManager = StorageManager.getInstance();
-                // Create a decision to mark the meeting as 'approved'
-                await storageManager.updateReviewStatus({
-                    meetingId: primaryMeetingId || '',
-                    status: 'approved',
-                    decidedAt: new Date().toISOString(),
-                    decidedBy: session.user.email,
-                    feedback: 'Meeting successfully posted to Intervals'
-                });
-                console.log(`Marked meeting ${primaryMeetingId} as approved in reviews.json`);
-            } catch (error) {
-                console.error('Error updating meeting status in reviews.json:', error);
-                // Don't fail the request if this fails
-            }
-
             console.log('Successfully created time entry:', result);
             return NextResponse.json({
                 success: true,

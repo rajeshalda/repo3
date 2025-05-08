@@ -83,10 +83,28 @@ class ReviewService {
     }
     async storeDecisionForLearning(decision) {
         try {
+            console.log(`
+╔═════════════════════ REVIEW DECISION ═════════════════════╗
+║ 📝 STORING REVIEW FEEDBACK                                ║
+║ 🎯 Meeting ID: ${decision.meetingId.substring(0, 15)}...  ║
+║ ✍️ Decision By: ${decision.decidedBy}                     ║
+║ 📊 Status: ${decision.status}                             ║
+╚══════════════════════════════════════════════════════════╝`);
+
             await manager_1.storageManager.storeReviewDecision(decision);
+
+            console.log(`
+┌────────────────── LEARNING STATUS ──────────────────┐
+│ ✅ Decision stored successfully                     │
+│ 📚 Added to learning dataset                        │
+└──────────────────────────────────────────────────────┘`);
         }
         catch (error) {
-            console.error('Error storing review decision for learning:', error);
+            console.error(`
+┌────────────────── ERROR DETAILS ──────────────────┐
+│ ❌ Failed to store review decision                │
+│ 🔍 Error: ${error.message}                        │
+└─────────────────────────────────────────────────────┘`);
             // Don't throw here as this is not critical for the main flow
         }
     }

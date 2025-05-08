@@ -128,10 +128,10 @@ export class MeetingComparisonService {
             await storage.loadData();
 
             console.log(`
-┌─────────────────────────────────────────────────────────┐
-│ 🔄 AI COMPARISON: Starting comparative analysis         │
-│ 📊 New meetings: ${newMeetings.length} | Posted: ${postedMeetings.length}  │
-└─────────────────────────────────────────────────────────┘`);
+╔══════════════════════════════════════════════════════════╗
+║ 🔄 AI COMPARISON: Starting comparative analysis         ║
+║ 📊 New meetings: ${newMeetings.length} | Posted: ${postedMeetings.length}  ║
+╚══════════════════════════════════════════════════════════╝`);
 
             // First try simple comparison
             const simpleResult: BatchComparisonResult = {
@@ -185,11 +185,11 @@ export class MeetingComparisonService {
             }
 
             console.log(`
-┌─────────────────────────────────────────────┐
-│ 🔍 SIMPLE COMPARISON RESULTS:               │
-│    ✓ Duplicates found: ${simpleResult.duplicates.length}                   │
-│    ✓ Unique meetings: ${simpleResult.unique.length}                     │
-└─────────────────────────────────────────────┘`);
+╔════════════════════════════════════════─────┐
+│ 🔍 SIMPLE COMPARISON RESULTS:               ║
+│    ✓ Duplicates found: ${simpleResult.duplicates.length}                   ║
+│    ✓ Unique meetings: ${simpleResult.unique.length}                     ║
+╚════════════════════════════════════════─────┘`);
 
             // If we have meetings that didn't match with simple comparison,
             // use OpenAI for more complex comparison
@@ -222,7 +222,7 @@ export class MeetingComparisonService {
 
                 console.log(`🧠 Sending comparison request to AI service...`);
                 const startTime = Date.now();
-                
+
                 const response = await openAIClient.sendRequest(prompt, {
                     temperature: 0.3,
                     maxTokens: 1000
@@ -238,11 +238,12 @@ export class MeetingComparisonService {
                     
                     // Log AI results
                     console.log(`
-┌─────────────────────────────────────────────┐
-│ 🧠 AI COMPARISON RESULTS:                    │
-│    ✓ Duplicates identified: ${result.duplicateIds.length}               │
-│    ✓ Unique meetings: ${result.uniqueIds.length}                     │
-└─────────────────────────────────────────────┘`);
+╔═════════════════════ AI COMPARISON RESULTS ═════════════════════╗
+║ 🧠 ANALYSIS COMPLETE                                            ║
+║ 📊 Duplicates Found: ${result.duplicateIds.length}              ║
+║ 🆕 Unique Meetings: ${result.uniqueIds.length}                  ║
+║ ✨ Confidence Score: ${(result.confidence || 0).toFixed(2)}     ║
+╚═══════════════════════════════════════════════════════════════╝`);
                     
                     // Update the results based on AI analysis
                     const aiDuplicates = simpleResult.unique.filter(m => result.duplicateIds.includes(m.id));
@@ -253,13 +254,22 @@ export class MeetingComparisonService {
                         unique: aiUnique
                     };
                 } else {
-                    console.warn(`⚠️ AI response did not contain valid JSON format, falling back to simple comparison`);
+                    console.warn(`
+┌─────────────────── WARNING ───────────────────┐
+│ ⚠️ AI Response Format Invalid                 │
+│ 📝 Falling back to simple comparison          │
+└───────────────────────────────────────────────┘`);
                 }
             }
 
             return simpleResult;
         } catch (error) {
-            console.error(`❌ ERROR in batch comparison:`, error);
+            console.error(`
+┌─────────────────── ERROR DETAILS ───────────────────┐
+│ ❌ Batch comparison failed                          │
+│ 🔍 Error: ${error instanceof Error ? error.message : 'Unknown error'} │
+│ ℹ️ Falling back to simple comparison                │
+└─────────────────────────────────────────────────────┘`);
             // If AI comparison fails, return simple comparison results
             return {
                 duplicates: [],
@@ -291,7 +301,7 @@ export class MeetingComparisonService {
                 
                 console.log(`
 ┌─────────────────────────────────────────────────┐
-│ 📦 Processing batch ${batchNumber}/${totalBatches} (${batch.length} meetings) │
+│ 📦 Processing batch ${batchNumber}/${totalBatches} (${batch.length} meetings) ║
 └─────────────────────────────────────────────────┘`);
                 
                 let batchDuplicates = 0;
@@ -334,8 +344,8 @@ export class MeetingComparisonService {
                 // Log results for this batch
                 console.log(`
 ┌─────────────────────────────────────────────────┐
-│ ✓ Batch ${batchNumber}/${totalBatches} completed                      │
-│ 📊 Total: ${batch.length} | Unique: ${batch.length - batchDuplicates} | Duplicates: ${batchDuplicates}   │
+│ ✓ Batch ${batchNumber}/${totalBatches} completed                      ║
+│ 📊 Total: ${batch.length} | Unique: ${batch.length - batchDuplicates} | Duplicates: ${batchDuplicates}   ║
 └─────────────────────────────────────────────────┘`);
 
                 // Add longer delay between batches

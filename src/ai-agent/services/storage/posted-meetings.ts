@@ -74,21 +74,24 @@ export class AIAgentPostedMeetingsStorage {
                                 postedMeeting.meetingId.includes('=');
 
         console.log(`
-┌─────────────────────────────────────────────────────────┐
-│ 💾 STORING POSTED MEETING                               │
-│ 🔑 Meeting ID: ${postedMeeting.meetingId.substring(0, 15)}...            │
-│ 📤 Time Entry: ${postedMeeting.timeEntry?.time || 0} hours                │
-│ 🏷️ Work Type: ${postedMeeting.timeEntry?.worktypeid || 'N/A'}                │
-└─────────────────────────────────────────────────────────┘`);
+╔════════════════════════ STORAGE OPERATION ════════════════════════╗
+║ 💾 STORING POSTED MEETING                                         ║
+║ 👤 User: ${userId}                                               ║
+║ 🔑 Meeting ID: ${postedMeeting.meetingId.substring(0, 15)}...    ║
+║ ⏱️ Duration: ${postedMeeting.timeEntry?.time || 0} hours         ║
+║ 🏷️ Work Type: ${postedMeeting.timeEntry?.worktypeid || 'N/A'}   ║
+╚═══════════════════════════════════════════════════════════════════╝`);
         
-        // Create a unique storage ID that includes time and timestamp to ensure uniqueness
-        // This ensures each instance of a recurring meeting gets its own unique entry
+        // Create a unique storage ID that includes time and timestamp
         const timeInHours = parseFloat(postedMeeting.timeEntry?.time?.toString() || '0');
         const durationInSeconds = Math.round(timeInHours * 3600);
         const uniqueStorageId = `${postedMeeting.meetingId}_${timeInHours}_${now}`;
         
-        console.log(`🆔 Generated unique storage ID: ${uniqueStorageId.substring(0, 25)}...`);
-        console.log(`⏱️ Meeting duration: ${durationInSeconds}s (${timeInHours} hours)`);
+        console.log(`
+┌─────────────────────── STORAGE DETAILS ───────────────────────┐
+│ 🆔 Storage ID: ${uniqueStorageId.substring(0, 25)}...         │
+│ ⏱️ Duration: ${durationInSeconds}s (${timeInHours} hours)     │
+└───────────────────────────────────────────────────────────────┘`);
         
         // Check if this EXACT entry already exists (shouldn't happen with the unique ID)
         const exactDuplicate = this.data.meetings.some(m => {
@@ -143,8 +146,12 @@ export class AIAgentPostedMeetingsStorage {
         });
 
         await this.saveData();
-        console.log(`✅ Meeting added to storage. Total posted meetings for user: ${this.data.meetings.length}`);
-        console.log(`✅ Storage data saved successfully`);
+        console.log(`
+┌─────────────────────── STORAGE STATUS ───────────────────────┐
+│ ✅ Meeting added to storage                                  │
+│ 📊 Total meetings for user: ${this.data.meetings.length}     │
+│ 💾 Storage data saved successfully                           │
+└───────────────────────────────────────────────────────────────┘`);
     }
 
     // Helper method to get formatted IST date

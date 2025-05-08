@@ -1,0 +1,2244 @@
+Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
+Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 MEETING FETCH STARTED
+║ 👤 User: pradeepg@m365x9...
+╚════════════════════════════════════════════════════════╝
+🔑 Getting Graph API access token...
+✅ Access token acquired successfully
+
+┌─────────────────────────────────────────────────┐
+│ 📅 FETCHING MEETINGS - IST TIMEZONE (UTC+05:30) │
+│ 📆 Date range (UTC): 2025-05-07 to 2025-05-08 │
+│ ⏰ Time range: 13:00:00 to 12:59:59          │
+└─────────────────────────────────────────────────┘
+📡 Fetching meetings from Graph API...
+✅ Received 5 meetings from API
+🔄 Found 4 recurring meeting instances:
+   1. "wd task" (2025-05-08T12:30:00.0000000)
+   2. "Internal Strategy Sync" (2025-05-08T12:00:00.0000000)
+   3. "daily infra meeting" (2025-05-08T09:30:00.0000000)
+   4. "sandisk task" (2025-05-08T03:00:00.0000000)
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 FILTERING MEETINGS FOR IST DAY               │
+│ 📊 Total meetings before filtering: 5            │
+└─────────────────────────────────────────────────┘
+Meeting filter debug: {
+  subject: 'wd task',
+  meetingStart: '2025-05-08T07:00:00.000Z',
+  startOfDay: '2025-05-07T18:30:00.000Z',
+  endOfDay: '2025-05-08T18:29:59.999Z',
+  isIncluded: true
+}
+Meeting filter debug: {
+  subject: 'Internal Strategy Sync',
+  meetingStart: '2025-05-08T06:30:00.000Z',
+  startOfDay: '2025-05-07T18:30:00.000Z',
+  endOfDay: '2025-05-08T18:29:59.999Z',
+  isIncluded: true
+}
+Meeting filter debug: {
+  subject: 'daily infra meeting',
+  meetingStart: '2025-05-08T04:00:00.000Z',
+  startOfDay: '2025-05-07T18:30:00.000Z',
+  endOfDay: '2025-05-08T18:29:59.999Z',
+  isIncluded: true
+}
+Meeting filter debug: {
+  subject: 'sandisk task',
+  meetingStart: '2025-05-07T21:30:00.000Z',
+  startOfDay: '2025-05-07T18:30:00.000Z',
+  endOfDay: '2025-05-08T18:29:59.999Z',
+  isIncluded: true
+}
+Meeting filter debug: {
+  subject: 'sandisk task meet',
+  meetingStart: '2025-05-07T16:30:00.000Z',
+  startOfDay: '2025-05-07T18:30:00.000Z',
+  endOfDay: '2025-05-08T18:29:59.999Z',
+  isIncluded: false
+}
+⏩ Skipping meeting: "sandisk task meet" (outside IST day)
+
+┌─────────────────────────────────────────────────┐
+│ ✓ MEETINGS FILTERED                            │
+│ 📊 Total meetings after filtering: 4           │
+└─────────────────────────────────────────────────┘
+📋 Today's meetings:
+   1. "wd task" (12:30 PM - 01:00 PM)
+   2. "Internal Strategy Sync" (12:00 PM - 12:30 PM)
+   3. "daily infra meeting" (09:30 AM - 10:00 AM)
+   4. "sandisk task" (03:00 AM - 03:30 AM)
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 FETCHING ATTENDANCE RECORDS                  │
+└─────────────────────────────────────────────────┘
+📝 Processing online meeting: "wd task"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZTFmMTcwZGMtMWVhNy00ODIwLTk0NjAtYmU5OTNlOWUyMTQ2@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_ZTFmMTcwZGMtMWVhNy00ODIwLTk0NjAtYmU5OTNlOWUyMTQ2@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZTFmMTcwZGMtMWVhNy00ODIwLTk0NjAtYmU5OTNlOWUyMTQ2@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aVEZtTVRjd1pHTXRNV1ZoTnkwME9ESXdMVGswTmpBdFltVTVPVE5sT1dVeU1UUTJAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aVEZtTVRjd1pHTXRNV1ZoTnkwME9ESXdMVGswTmpBdFltVTVPVE5sT1dVeU1UUTJAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "f14449fd-6649-4994-9f49-2200ab4ff31c",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-07T16:36:49.493Z",
+      "meetingEndDateTime": "2025-05-07T16:40:27.332Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "7dbb3251-03e9-4763-a205-746a99d486fe",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T06:27:37.059Z",
+      "meetingEndDateTime": "2025-05-06T06:34:41.517Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "13ef394e-6f5c-4256-8697-3b791edfbd90",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T06:06:21.554Z",
+      "meetingEndDateTime": "2025-05-06T06:07:42.226Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "71a59109-af59-4572-80c8-ffbfc0084dc1",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T05:38:43.16Z",
+      "meetingEndDateTime": "2025-05-06T05:40:14.839Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "5ad518e2-c61f-4be6-8f92-e73eb81fc64d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T04:53:00.356Z",
+      "meetingEndDateTime": "2025-05-06T05:07:47.499Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "4b13ab90-6c6e-4bf2-92d7-86b7844d2d1e",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-05T11:01:28.344Z",
+      "meetingEndDateTime": "2025-05-05T11:06:18.384Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Report ID: f14449fd-6649-4994-9f49-2200ab4ff31c
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aVEZtTVRjd1pHTXRNV1ZoTnkwME9ESXdMVGswTmpBdFltVTVPVE5sT1dVeU1UUTJAdGhyZWFkLnYy')/attendanceReports('f14449fd-6649-4994-9f49-2200ab4ff31c')/attendanceRecords",
+  "value": [
+    {
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 213,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-05-07T16:36:54.1642407Z",
+          "leaveDateTime": "2025-05-07T16:40:27.3327402Z",
+          "durationInSeconds": 213
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
+}
+✅ Found 1 attendance records for "wd task"
+⏱️ Meeting stats: Avg duration 3m 33s, Max duration 3m 33s
+📝 Processing online meeting: "Internal Strategy Sync"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_YjFkMDA1YmEtMmYyNy00MjMxLWFlNDItNjMzZTMxNjAwM2Rk@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZakZrTURBMVltRXRNbVl5TnkwME1qTXhMV0ZsTkRJdE5qTXpaVE14TmpBd00yUmtAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZakZrTURBMVltRXRNbVl5TnkwME1qTXhMV0ZsTkRJdE5qTXpaVE14TmpBd00yUmtAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "597cd001-33c4-445e-ab8a-210017a27ae5",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T05:36:05.104Z",
+      "meetingEndDateTime": "2025-05-06T05:38:33.928Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "eacc0960-0b8a-4cfc-a90f-47122f653c45",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-30T04:26:22.932Z",
+      "meetingEndDateTime": "2025-04-30T04:42:21.945Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "5adee039-db19-4350-bb30-db66447675f7",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-29T16:50:14.467Z",
+      "meetingEndDateTime": "2025-04-29T17:01:08.862Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "511c3487-7b29-4653-8c3b-510546c505cc",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-29T06:29:19.173Z",
+      "meetingEndDateTime": "2025-04-29T06:35:33.487Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "60543194-caf0-4548-940b-e456dbda121d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-04-28T15:54:28.952Z",
+      "meetingEndDateTime": "2025-04-28T15:57:17.079Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Report ID: 597cd001-33c4-445e-ab8a-210017a27ae5
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZakZrTURBMVltRXRNbVl5TnkwME1qTXhMV0ZsTkRJdE5qTXpaVE14TmpBd00yUmtAdGhyZWFkLnYy')/attendanceReports('597cd001-33c4-445e-ab8a-210017a27ae5')/attendanceRecords",
+  "value": [
+    {
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 144,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-05-06T05:36:09.130619Z",
+          "leaveDateTime": "2025-05-06T05:38:33.9286962Z",
+          "durationInSeconds": 144
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
+}
+✅ Found 1 attendance records for "Internal Strategy Sync"
+⏱️ Meeting stats: Avg duration 2m 24s, Max duration 2m 24s
+📝 Processing online meeting: "daily infra meeting"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_OTlhMDRjODgtNTUzMi00OTM5LWEwOTYtMjY3NGIyZDA5ZGZh@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_OTlhMDRjODgtNTUzMi00OTM5LWEwOTYtMjY3NGIyZDA5ZGZh@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_OTlhMDRjODgtNTUzMi00OTM5LWEwOTYtMjY3NGIyZDA5ZGZh@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PVGxoTURSak9EZ3ROVFV6TWkwME9UTTVMV0V3T1RZdE1qWTNOR0l5WkRBNVpHWmhAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PVGxoTURSak9EZ3ROVFV6TWkwME9UTTVMV0V3T1RZdE1qWTNOR0l5WkRBNVpHWmhAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "2b366487-8e6e-4de5-9d51-7e95eaab931a",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T05:35:47.419Z",
+      "meetingEndDateTime": "2025-05-06T05:38:34.731Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "c9f0f029-e77e-4a48-825e-5e99d4ff784a",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T04:14:26.302Z",
+      "meetingEndDateTime": "2025-05-06T04:16:40.665Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Report ID: 2b366487-8e6e-4de5-9d51-7e95eaab931a
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PVGxoTURSak9EZ3ROVFV6TWkwME9UTTVMV0V3T1RZdE1qWTNOR0l5WkRBNVpHWmhAdGhyZWFkLnYy')/attendanceReports('2b366487-8e6e-4de5-9d51-7e95eaab931a')/attendanceRecords",
+  "value": [
+    {
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 164,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-05-06T05:35:49.9206274Z",
+          "leaveDateTime": "2025-05-06T05:38:34.7316745Z",
+          "durationInSeconds": 164
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
+}
+✅ Found 1 attendance records for "daily infra meeting"
+⏱️ Meeting stats: Avg duration 2m 44s, Max duration 2m 44s
+📝 Processing online meeting: "sandisk task"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzJiYzU1MjgtMzA3My00NzQwLThiMWEtNzY0Njg1ZDU5ZjEz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_MzJiYzU1MjgtMzA3My00NzQwLThiMWEtNzY0Njg1ZDU5ZjEz@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_MzJiYzU1MjgtMzA3My00NzQwLThiMWEtNzY0Njg1ZDU5ZjEz@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NekppWXpVMU1qZ3RNekEzTXkwME56UXdMVGhpTVdFdE56WTBOamcxWkRVNVpqRXpAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NekppWXpVMU1qZ3RNekEzTXkwME56UXdMVGhpTVdFdE56WTBOamcxWkRVNVpqRXpAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "ab868187-6662-45ae-ac4e-a926add60160",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-07T19:31:07.102Z",
+      "meetingEndDateTime": "2025-05-07T19:32:41.19Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "f2179470-947b-4549-a329-3d22beb0845b",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-07T19:06:36.772Z",
+      "meetingEndDateTime": "2025-05-07T19:08:07.889Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "95a01eef-9b26-4cfa-81a9-e7a2c61d8362",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T05:35:36.511Z",
+      "meetingEndDateTime": "2025-05-06T05:38:34.86Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "1c996c5c-dd5e-45d9-9a0b-439ff2c1ac03",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-06T04:53:25.131Z",
+      "meetingEndDateTime": "2025-05-06T05:07:46.997Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "b80d9d67-6a91-43df-81a0-b63500cd126e",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-05T11:01:08.891Z",
+      "meetingEndDateTime": "2025-05-05T11:06:19.505Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Report ID: ab868187-6662-45ae-ac4e-a926add60160
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NekppWXpVMU1qZ3RNekEzTXkwME56UXdMVGhpTVdFdE56WTBOamcxWkRVNVpqRXpAdGhyZWFkLnYy')/attendanceReports('ab868187-6662-45ae-ac4e-a926add60160')/attendanceRecords",
+  "value": [
+    {
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 89,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-05-07T19:31:11.3310359Z",
+          "leaveDateTime": "2025-05-07T19:32:41.1908198Z",
+          "durationInSeconds": 89
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
+}
+✅ Found 1 attendance records for "sandisk task"
+⏱️ Meeting stats: Avg duration 1m 29s, Max duration 1m 29s
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 MEETING FETCH COMPLETED
+║ 📊 Total meetings: 4 | With attendance: 4
+║ 👥 Unique attendees: 1
+╚════════════════════════════════════════════════════════╝
+Found 4 meetings for processing
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 BATCH PROCESSING STARTED [batch_1746653439688_8c5tiytdp]
+║ 📊 Total meetings: 4 | Batch size: 5
+╚════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ ▶️ Processing batch 1/1 (4 meetings) │
+└─────────────────────────────────────────────────┘
+📶 Rate limiter status: 48/5 tokens available
+✅ Rate limiter tokens acquired
+📑 Processing meeting: "wd task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==]
+📥 QUEUE: Added meeting "wd task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==]
+📊 QUEUE STATUS: 1 item waiting
+⚙️ QUEUE: Starting queue processor...
+🔄 QUEUE PROCESSOR: Started with 1 item
+📑 Processing meeting: "Internal Strategy Sync" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==]
+📥 QUEUE: Added meeting "Internal Strategy Sync" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==]
+📊 QUEUE STATUS: 2 items waiting
+📑 Processing meeting: "daily infra meeting" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2wAAEA==]
+📥 QUEUE: Added meeting "daily infra meeting" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2wAAEA==]
+📊 QUEUE STATUS: 3 items waiting
+📑 Processing meeting: "sandisk task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==]
+📥 QUEUE: Added meeting "sandisk task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==]
+📊 QUEUE STATUS: 4 items waiting
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "wd task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==]
+ GET /api/pm2/status 200 in 9ms
+Selected report ID: f14449fd-6649-4994-9f49-2200ab4ff31c Reason: Single valid report available
+✅ COMPLETED: "wd task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==] in 4.21s
+⏱️ QUEUE PROCESSOR: Waiting 1.25s before next item
+✅ Successfully processed: "wd task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Internal Strategy Sync" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==]
+No valid report selected: No valid reports found for the specified date
+✅ COMPLETED: "Internal Strategy Sync" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==] in 4.72s
+⏱️ QUEUE PROCESSOR: Waiting 1.25s before next item
+✅ Successfully processed: "Internal Strategy Sync" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "daily infra meeting" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2wAAEA==]
+No valid report selected: No valid reports found for the specified date
+✅ COMPLETED: "daily infra meeting" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2wAAEA==] in 4.73s
+⏱️ QUEUE PROCESSOR: Waiting 1.25s before next item
+✅ Successfully processed: "daily infra meeting" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2wAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "sandisk task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==]
+ GET /api/auth/session 200 in 110ms
+ GET /api/pm2/agent-status?userId=pradeepg%40m365x92504196.onmicrosoft.com 200 in 11ms
+Selected report ID: ab868187-6662-45ae-ac4e-a926add60160 Reason: This report matches the meeting date, has a valid (positive) duration, and is the closest in time to the target meeting instance for this recurring meeting.
+✅ COMPLETED: "sandisk task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==] in 4.63s
+🛑 QUEUE PROCESSOR: Finished, queue is empty
+✅ Successfully processed: "sandisk task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 1/1 completed                      │
+│ ✓ Progress: 4/4 meetings (100%)    │
+│ ✓ Success: 4 | Failed: 0               │
+└─────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 BATCH PROCESSING COMPLETED [batch_1746653439688_8c5tiytdp]
+║ 📊 Total: 4 | Success: 4 | Failed: 0
+║ 📈 Success rate: 100%
+╚════════════════════════════════════════════════════════╝
+Started batch processing with ID: batch_1746653439688_8c5tiytdp
+Progress: 4/4 meetings processed
+All meetings processed
+Successfully processed 4 meetings
+Filtering out already processed meetings and meetings the user didn't attend...
+
+╔══════════════════════════════════════════════════════════╗
+║ 🔍 MEETING FILTER STARTING                                ║
+║ 📊 Total meetings to check: 4                           ║
+║ 🔄 Batch size: 3 | Delay: 15s                        ║
+╚══════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ 📦 Processing batch 1/2 (3 meetings) │
+└─────────────────────────────────────────────────┘
+✅ Unique: "wd task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==]
+✅ Unique: "Internal Strategy Sync" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAEFnYQQAAEA==]
+✅ Unique: "daily infra meeting" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2wAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 1/2 completed                      │
+│ 📊 Total: 3 | Unique: 3 | Duplicates: 0   │
+└─────────────────────────────────────────────────┘
+⏱️ Waiting 15 seconds before next batch...
+ POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 30046ms
+ GET /api/pm2/status 200 in 6ms
+
+┌─────────────────────────────────────────────────┐
+│ 📦 Processing batch 2/2 (1 meetings) │
+└─────────────────────────────────────────────────┘
+✅ Unique: "sandisk task" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 2/2 completed                      │
+│ 📊 Total: 1 | Unique: 1 | Duplicates: 0   │
+└─────────────────────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════╗
+║ 🏁 MEETING FILTER COMPLETED                               ║
+║ 📊 Total: 4 | Duplicates: 0 | Unique: 4     ║
+║ 📈 Duplication rate: 0%                                   ║
+╚══════════════════════════════════════════════════════════╝
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "wd task" for 213 seconds
+No attendance records found for meeting "Internal Strategy Sync". Skipping.
+No attendance records found for meeting "daily infra meeting". Skipping.
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "sandisk task" for 89 seconds
+Found 4 unique meetings, 2 of which were attended by the user
+Matching tasks to attended meetings...
+Matching tasks for meeting: wd task
+Found user's attendance record with duration: 213 seconds
+Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching tasks using standard API implementation...
+Current user personid: 423842
+Raw tasks API response: Found 12 total tasks
+Total tasks from API: 12
+Found 12 open tasks assigned to user 423842
+Standard API returned 12 tasks
+Found 12 tasks in Intervals:
+- Daily Status Report (16660111)
+- WD Task (16660112)
+- UMG Task (16660113)
+- Sandisk Task (16660114)
+- Infra  Task (16660116)
+- Pradeep Task (16662754)
+- JCET Discussion (16663154)
+- Internal QA (16663158)
+- 3 AM Task Project (16663162)
+- Apple ios Development (16663166)
+- Balaji Mixture Closing State (16663168)
+- HR Monthly Report (16663171)
+Meeting analysis for matching: {
+  "subject": "wd task",
+  "startTime": "2025-05-08T12:30:00.0000000",
+  "endTime": "2025-05-08T13:00:00.0000000",
+  "duration": 213,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 213,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-05-07T16:36:54.1642407Z",
+            "leaveDateTime": "2025-05-07T16:40:27.3327402Z",
+            "durationInSeconds": 213
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 213,
+      "averageDuration": 213,
+      "totalParticipants": 1
+    }
+  }
+}
+Tasks data for matching: [
+  {
+    "id": "16660111",
+    "title": "Daily Status Report",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16660112",
+    "title": "WD Task",
+    "projectid": "1428055",
+    "project": "WD Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391397",
+    "client": "WD",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "WD Project"
+    }
+  },
+  {
+    "id": "16660113",
+    "title": "UMG Task",
+    "projectid": "1428054",
+    "project": "UMG Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391396",
+    "client": "UMG",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "UMG Project"
+    }
+  },
+  {
+    "id": "16660114",
+    "title": "Sandisk Task",
+    "projectid": "1428053",
+    "project": "SanDisk Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391395",
+    "client": "SanDisk",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk Project"
+    }
+  },
+  {
+    "id": "16660116",
+    "title": "Infra  Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16662754",
+    "title": "Pradeep Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663154",
+    "title": "JCET Discussion",
+    "projectid": "1428199",
+    "project": "JCET Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391429",
+    "client": "JCET",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "JCET Project"
+    }
+  },
+  {
+    "id": "16663158",
+    "title": "Internal QA",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552134",
+    "module": "Quality Assurance",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663162",
+    "title": "3 AM Task Project",
+    "projectid": "1428201",
+    "project": "3 AM Blue-Print",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391430",
+    "client": "3 AM",
+    "moduleid": "552130",
+    "module": "Design",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "3 AM Blue-Print"
+    }
+  },
+  {
+    "id": "16663166",
+    "title": "Apple ios Development",
+    "projectid": "1428202",
+    "project": "Apple ios Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391431",
+    "client": "Apple",
+    "moduleid": "552129",
+    "module": "Discovery",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Apple ios Project"
+    }
+  },
+  {
+    "id": "16663168",
+    "title": "Balaji Mixture Closing State",
+    "projectid": "1428203",
+    "project": "Balaji Mixture Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391432",
+    "client": "Balaji Mixture",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Balaji Mixture Project"
+    }
+  },
+  {
+    "id": "16663171",
+    "title": "HR Monthly Report",
+    "projectid": "1428206",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  }
+]
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
+
+Meeting Details:
+{
+  "subject": "wd task",
+  "startTime": "2025-05-08T12:30:00.0000000",
+  "endTime": "2025-05-08T13:00:00.0000000",
+  "duration": 213,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 213,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-05-07T16:36:54.1642407Z",
+            "leaveDateTime": "2025-05-07T16:40:27.3327402Z",
+            "durationInSeconds": 213
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 213,
+      "averageDuration": 213,
+      "totalParticipants": 1
+    }
+  }
+}
+
+Available Tasks:
+[
+  {
+    "id": "16660111",
+    "title": "Daily Status Report",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16660112",
+    "title": "WD Task",
+    "projectid": "1428055",
+    "project": "WD Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391397",
+    "client": "WD",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "WD Project"
+    }
+  },
+  {
+    "id": "16660113",
+    "title": "UMG Task",
+    "projectid": "1428054",
+    "project": "UMG Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391396",
+    "client": "UMG",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "UMG Project"
+    }
+  },
+  {
+    "id": "16660114",
+    "title": "Sandisk Task",
+    "projectid": "1428053",
+    "project": "SanDisk Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391395",
+    "client": "SanDisk",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk Project"
+    }
+  },
+  {
+    "id": "16660116",
+    "title": "Infra  Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16662754",
+    "title": "Pradeep Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663154",
+    "title": "JCET Discussion",
+    "projectid": "1428199",
+    "project": "JCET Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391429",
+    "client": "JCET",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "JCET Project"
+    }
+  },
+  {
+    "id": "16663158",
+    "title": "Internal QA",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552134",
+    "module": "Quality Assurance",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663162",
+    "title": "3 AM Task Project",
+    "projectid": "1428201",
+    "project": "3 AM Blue-Print",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391430",
+    "client": "3 AM",
+    "moduleid": "552130",
+    "module": "Design",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "3 AM Blue-Print"
+    }
+  },
+  {
+    "id": "16663166",
+    "title": "Apple ios Development",
+    "projectid": "1428202",
+    "project": "Apple ios Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391431",
+    "client": "Apple",
+    "moduleid": "552129",
+    "module": "Discovery",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Apple ios Project"
+    }
+  },
+  {
+    "id": "16663168",
+    "title": "Balaji Mixture Closing State",
+    "projectid": "1428203",
+    "project": "Balaji Mixture Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391432",
+    "client": "Balaji Mixture",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Balaji Mixture Project"
+    }
+  },
+  {
+    "id": "16663171",
+    "title": "HR Monthly Report",
+    "projectid": "1428206",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  }
+]
+
+IT COMPANY CONTEXT:
+- We are an IT company with specialized departments handling various technical responsibilities
+- Meetings are typically focused on specific departmental tasks and projects
+- Each department has its own typical projects, tools, and terminology
+
+IT DEPARTMENT SPECIALIZATIONS:
+1. Software Development:
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development        
+   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
+
+2. DevOps & CI/CD:
+   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
+   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
+
+3. Infrastructure & Cloud:
+   - Topics: server management, cloud architecture, network configuration, capacity planning
+   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
+
+4. QA & Testing:
+   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing
+   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
+
+5. IT Support & Helpdesk:
+   - Topics: incident management, user support, troubleshooting, ticket resolution
+   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
+
+6. Security & Compliance:
+   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
+   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
+
+7. Data & Analytics:
+   - Topics: data modeling, analytics implementation, reporting, database management
+   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
+
+8. System Administration:
+   - Topics: system maintenance, updates, monitoring, user management
+   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
+
+MATCHING RULES:
+1. Prioritize tasks with direct keyword matches to the meeting subject or description
+2. Match meetings to the most specific department based on technical keywords in the subject/description
+3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
+4. If still unclear, default to the department where the user has the most assigned tasks
+5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
+6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
+7. NEVER match with tasks that have a "Closed" status
+8. If the client is "Nathcorp", note that these are internal non-billable tasks
+9. If no assigned tasks match well, return an empty matchedTasks array
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+
+CONFIDENCE SCORE GUIDELINES:
+- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
+- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
+- High (0.7-0.9): Strong evidence with clear technical keyword matches
+- Perfect (1.0): Exact match between meeting subject and technical task
+- Score of 0: Task is not assigned to the user or task is closed
+
+EXAMPLES:
+✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
+✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
+✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
+✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
+✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
+✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
+✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
+✗ BAD: Any match with a task that has status "Closed" (should be excluded)
+
+Analyze the meeting and tasks, then provide your response in the following JSON format:
+
+{
+    "matchedTasks": [
+        {
+            "taskId": "string",
+            "taskTitle": "string",
+            "meetingDetails": {
+                "subject": "string",
+                "startTime": "string",
+                "endTime": "string",
+                "actualDuration": number  // Use the duration from attendance records in seconds
+            },
+            "confidence": number,
+            "reason": "string"
+        }
+    ]
+}
+
+Notes:
+1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
+2. Confidence should be a number between 0 and 1
+3. Provide clear reasons for each match based on specific evidence
+4. Return valid JSON that can be parsed directly
+5. Include all required fields for each task
+6. The actualDuration should be taken from the attendance records and is in seconds
+7. Tasks with status "Closed" should NEVER be included in matchedTasks
+8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
+OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16660112",
+            "taskTitle": "WD Task",
+            "meetingDetails": {
+                "subject": "wd task",
+                "startTime": "2025-05-08T12:30:00.0000000",
+                "endTime": "2025-05-08T13:00:00.0000000",
+                "actualDuration": 213
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'wd task' is an exact match to the task title 'WD Task'. Both refer to 'WD', indicating a direct and perfect match. The task is open and assigned to the user."
+        }
+    ]
+}
+Raw OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16660112",
+            "taskTitle": "WD Task",
+            "meetingDetails": {
+                "subject": "wd task",
+                "startTime": "2025-05-08T12:30:00.0000000",
+                "endTime": "2025-05-08T13:00:00.0000000",
+                "actualDuration": 213
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'wd task' is an exact match to the task title 'WD Task'. Both refer to 'WD', indicating a direct and perfect match. The task is open and assigned to the user."
+        }
+    ]
+}
+Extracted JSON: {
+    "matchedTasks": [
+        {
+            "taskId": "16660112",
+            "taskTitle": "WD Task",
+            "meetingDetails": {
+                "subject": "wd task",
+                "startTime": "2025-05-08T12:30:00.0000000",
+                "endTime": "2025-05-08T13:00:00.0000000",
+                "actualDuration": 213
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'wd task' is an exact match to the task title 'WD Task'. Both refer to 'WD', indicating a direct and perfect match. The task is open and assigned to the user."
+        }
+    ]
+}
+Parsed tasks: [
+  {
+    "taskId": "16660112",
+    "taskTitle": "WD Task",
+    "meetingDetails": {
+      "subject": "wd task",
+      "startTime": "2025-05-08T12:30:00.0000000",
+      "endTime": "2025-05-08T13:00:00.0000000",
+      "actualDuration": 213
+    },
+    "confidence": 1,
+    "reason": "The meeting subject 'wd task' is an exact match to the task title 'WD Task'. Both refer to 'WD', indicating a direct and perfect match. The task is open and assigned to the user."
+  }
+]
+Parsed matching result: {
+  "meetingSubject": "wd task",
+  "matchedTasks": [
+    {
+      "taskId": "16660112",
+      "taskTitle": "WD Task",
+      "meetingDetails": {
+        "subject": "wd task",
+        "startTime": "2025-05-08T12:30:00.0000000",
+        "endTime": "2025-05-08T13:00:00.0000000",
+        "actualDuration": 213
+      },
+      "confidence": 1,
+      "reason": "The meeting subject 'wd task' is an exact match to the task title 'WD Task'. Both refer to 'WD', indicating a direct and perfect match. The task is open and assigned to the user."
+    }
+  ]
+}
+Using best match for meeting "wd task": Task 16660112 (WD Task) with confidence 1
+Found 1 matches for meeting: wd task
+Matching tasks for meeting: sandisk task
+Found user's attendance record with duration: 89 seconds
+Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching tasks using standard API implementation...
+Current user personid: 423842
+Raw tasks API response: Found 12 total tasks
+Total tasks from API: 12
+Found 12 open tasks assigned to user 423842
+Standard API returned 12 tasks
+Found 12 tasks in Intervals:
+- Daily Status Report (16660111)
+- WD Task (16660112)
+- UMG Task (16660113)
+- Sandisk Task (16660114)
+- Infra  Task (16660116)
+- Pradeep Task (16662754)
+- JCET Discussion (16663154)
+- Internal QA (16663158)
+- 3 AM Task Project (16663162)
+- Apple ios Development (16663166)
+- Balaji Mixture Closing State (16663168)
+- HR Monthly Report (16663171)
+Meeting analysis for matching: {
+  "subject": "sandisk task",
+  "startTime": "2025-05-08T03:00:00.0000000",
+  "endTime": "2025-05-08T03:30:00.0000000",
+  "duration": 89,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 89,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-05-07T19:31:11.3310359Z",
+            "leaveDateTime": "2025-05-07T19:32:41.1908198Z",
+            "durationInSeconds": 89
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 89,
+      "averageDuration": 89,
+      "totalParticipants": 1
+    }
+  }
+}
+Tasks data for matching: [
+  {
+    "id": "16660111",
+    "title": "Daily Status Report",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16660112",
+    "title": "WD Task",
+    "projectid": "1428055",
+    "project": "WD Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391397",
+    "client": "WD",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "WD Project"
+    }
+  },
+  {
+    "id": "16660113",
+    "title": "UMG Task",
+    "projectid": "1428054",
+    "project": "UMG Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391396",
+    "client": "UMG",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "UMG Project"
+    }
+  },
+  {
+    "id": "16660114",
+    "title": "Sandisk Task",
+    "projectid": "1428053",
+    "project": "SanDisk Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391395",
+    "client": "SanDisk",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk Project"
+    }
+  },
+  {
+    "id": "16660116",
+    "title": "Infra  Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16662754",
+    "title": "Pradeep Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663154",
+    "title": "JCET Discussion",
+    "projectid": "1428199",
+    "project": "JCET Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391429",
+    "client": "JCET",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "JCET Project"
+    }
+  },
+  {
+    "id": "16663158",
+    "title": "Internal QA",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552134",
+    "module": "Quality Assurance",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663162",
+    "title": "3 AM Task Project",
+    "projectid": "1428201",
+    "project": "3 AM Blue-Print",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391430",
+    "client": "3 AM",
+    "moduleid": "552130",
+    "module": "Design",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "3 AM Blue-Print"
+    }
+  },
+  {
+    "id": "16663166",
+    "title": "Apple ios Development",
+    "projectid": "1428202",
+    "project": "Apple ios Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391431",
+    "client": "Apple",
+    "moduleid": "552129",
+    "module": "Discovery",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Apple ios Project"
+    }
+  },
+  {
+    "id": "16663168",
+    "title": "Balaji Mixture Closing State",
+    "projectid": "1428203",
+    "project": "Balaji Mixture Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391432",
+    "client": "Balaji Mixture",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Balaji Mixture Project"
+    }
+  },
+  {
+    "id": "16663171",
+    "title": "HR Monthly Report",
+    "projectid": "1428206",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  }
+]
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
+
+Meeting Details:
+{
+  "subject": "sandisk task",
+  "startTime": "2025-05-08T03:00:00.0000000",
+  "endTime": "2025-05-08T03:30:00.0000000",
+  "duration": 89,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 89,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-05-07T19:31:11.3310359Z",
+            "leaveDateTime": "2025-05-07T19:32:41.1908198Z",
+            "durationInSeconds": 89
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 89,
+      "averageDuration": 89,
+      "totalParticipants": 1
+    }
+  }
+}
+
+Available Tasks:
+[
+  {
+    "id": "16660111",
+    "title": "Daily Status Report",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16660112",
+    "title": "WD Task",
+    "projectid": "1428055",
+    "project": "WD Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391397",
+    "client": "WD",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "WD Project"
+    }
+  },
+  {
+    "id": "16660113",
+    "title": "UMG Task",
+    "projectid": "1428054",
+    "project": "UMG Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391396",
+    "client": "UMG",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "UMG Project"
+    }
+  },
+  {
+    "id": "16660114",
+    "title": "Sandisk Task",
+    "projectid": "1428053",
+    "project": "SanDisk Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391395",
+    "client": "SanDisk",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "SanDisk Project"
+    }
+  },
+  {
+    "id": "16660116",
+    "title": "Infra  Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16662754",
+    "title": "Pradeep Task",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663154",
+    "title": "JCET Discussion",
+    "projectid": "1428199",
+    "project": "JCET Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391429",
+    "client": "JCET",
+    "moduleid": "552133",
+    "module": "Development",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "JCET Project"
+    }
+  },
+  {
+    "id": "16663158",
+    "title": "Internal QA",
+    "projectid": "1428052",
+    "project": "Nathcorp",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552134",
+    "module": "Quality Assurance",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Nathcorp"
+    }
+  },
+  {
+    "id": "16663162",
+    "title": "3 AM Task Project",
+    "projectid": "1428201",
+    "project": "3 AM Blue-Print",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391430",
+    "client": "3 AM",
+    "moduleid": "552130",
+    "module": "Design",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "3 AM Blue-Print"
+    }
+  },
+  {
+    "id": "16663166",
+    "title": "Apple ios Development",
+    "projectid": "1428202",
+    "project": "Apple ios Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391431",
+    "client": "Apple",
+    "moduleid": "552129",
+    "module": "Discovery",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Apple ios Project"
+    }
+  },
+  {
+    "id": "16663168",
+    "title": "Balaji Mixture Closing State",
+    "projectid": "1428203",
+    "project": "Balaji Mixture Project",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391432",
+    "client": "Balaji Mixture",
+    "moduleid": "552132",
+    "module": "Production",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Balaji Mixture Project"
+    }
+  },
+  {
+    "id": "16663171",
+    "title": "HR Monthly Report",
+    "projectid": "1428206",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391394",
+    "client": "Internal",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "423852,423842",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  }
+]
+
+IT COMPANY CONTEXT:
+- We are an IT company with specialized departments handling various technical responsibilities
+- Meetings are typically focused on specific departmental tasks and projects
+- Each department has its own typical projects, tools, and terminology
+
+IT DEPARTMENT SPECIALIZATIONS:
+1. Software Development:
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development        
+   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
+
+2. DevOps & CI/CD:
+   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
+   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
+
+3. Infrastructure & Cloud:
+   - Topics: server management, cloud architecture, network configuration, capacity planning
+   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
+
+4. QA & Testing:
+   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing
+   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
+
+5. IT Support & Helpdesk:
+   - Topics: incident management, user support, troubleshooting, ticket resolution
+   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
+
+6. Security & Compliance:
+   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
+   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
+
+7. Data & Analytics:
+   - Topics: data modeling, analytics implementation, reporting, database management
+   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
+
+8. System Administration:
+   - Topics: system maintenance, updates, monitoring, user management
+   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
+
+MATCHING RULES:
+1. Prioritize tasks with direct keyword matches to the meeting subject or description
+2. Match meetings to the most specific department based on technical keywords in the subject/description
+3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
+4. If still unclear, default to the department where the user has the most assigned tasks
+5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
+6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
+7. NEVER match with tasks that have a "Closed" status
+8. If the client is "Nathcorp", note that these are internal non-billable tasks
+9. If no assigned tasks match well, return an empty matchedTasks array
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+
+CONFIDENCE SCORE GUIDELINES:
+- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
+- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
+- High (0.7-0.9): Strong evidence with clear technical keyword matches
+- Perfect (1.0): Exact match between meeting subject and technical task
+- Score of 0: Task is not assigned to the user or task is closed
+
+EXAMPLES:
+✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
+✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
+✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
+✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
+✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
+✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
+✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
+✗ BAD: Any match with a task that has status "Closed" (should be excluded)
+
+Analyze the meeting and tasks, then provide your response in the following JSON format:
+
+{
+    "matchedTasks": [
+        {
+            "taskId": "string",
+            "taskTitle": "string",
+            "meetingDetails": {
+                "subject": "string",
+                "startTime": "string",
+                "endTime": "string",
+                "actualDuration": number  // Use the duration from attendance records in seconds
+            },
+            "confidence": number,
+            "reason": "string"
+        }
+    ]
+}
+
+Notes:
+1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
+2. Confidence should be a number between 0 and 1
+3. Provide clear reasons for each match based on specific evidence
+4. Return valid JSON that can be parsed directly
+5. Include all required fields for each task
+6. The actualDuration should be taken from the attendance records and is in seconds
+7. Tasks with status "Closed" should NEVER be included in matchedTasks
+8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
+OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16660114",
+            "taskTitle": "Sandisk Task",
+            "meetingDetails": {
+                "subject": "sandisk task",
+                "startTime": "2025-05-08T03:00:00.0000000",
+                "endTime": "2025-05-08T03:30:00.0000000",
+                "actualDuration": 89
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'sandisk task' exactly matches the task title 'Sandisk Task' and both reference the 'SanDisk Project'. This is a perfect match based on direct keyword alignment."
+        }
+    ]
+}
+Raw OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16660114",
+            "taskTitle": "Sandisk Task",
+            "meetingDetails": {
+                "subject": "sandisk task",
+                "startTime": "2025-05-08T03:00:00.0000000",
+                "endTime": "2025-05-08T03:30:00.0000000",
+                "actualDuration": 89
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'sandisk task' exactly matches the task title 'Sandisk Task' and both reference the 'SanDisk Project'. This is a perfect match based on direct keyword alignment."
+        }
+    ]
+}
+Extracted JSON: {
+    "matchedTasks": [
+        {
+            "taskId": "16660114",
+            "taskTitle": "Sandisk Task",
+            "meetingDetails": {
+                "subject": "sandisk task",
+                "startTime": "2025-05-08T03:00:00.0000000",
+                "endTime": "2025-05-08T03:30:00.0000000",
+                "actualDuration": 89
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'sandisk task' exactly matches the task title 'Sandisk Task' and both reference the 'SanDisk Project'. This is a perfect match based on direct keyword alignment."
+        }
+    ]
+}
+Parsed tasks: [
+  {
+    "taskId": "16660114",
+    "taskTitle": "Sandisk Task",
+    "meetingDetails": {
+      "subject": "sandisk task",
+      "startTime": "2025-05-08T03:00:00.0000000",
+      "endTime": "2025-05-08T03:30:00.0000000",
+      "actualDuration": 89
+    },
+    "confidence": 1,
+    "reason": "The meeting subject 'sandisk task' exactly matches the task title 'Sandisk Task' and both reference the 'SanDisk Project'. This is a perfect match based on direct keyword alignment."
+  }
+]
+Parsed matching result: {
+  "meetingSubject": "sandisk task",
+  "matchedTasks": [
+    {
+      "taskId": "16660114",
+      "taskTitle": "Sandisk Task",
+      "meetingDetails": {
+        "subject": "sandisk task",
+        "startTime": "2025-05-08T03:00:00.0000000",
+        "endTime": "2025-05-08T03:30:00.0000000",
+        "actualDuration": 89
+      },
+      "confidence": 1,
+      "reason": "The meeting subject 'sandisk task' exactly matches the task title 'Sandisk Task' and both reference the 'SanDisk Project'. This is a perfect match based on direct keyword alignment."
+    }
+  ]
+}
+Using best match for meeting "sandisk task": Task 16660114 (Sandisk Task) with confidence 1
+Found 1 matches for meeting: sandisk task
+Creating time entries...
+Creating time entry for meeting: wd task
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 TIME ENTRY CREATION STARTED
+║ 📝 Meeting: wd task
+║ 🔄 Task: WD Task
+╚════════════════════════════════════════════════════════╝
+⏳ Fetching person & task information...
+ ○ Compiling /api/intervals-proxy ...
+ ✓ Compiled /api/intervals-proxy in 935ms (3179 modules)
+Making request to intervals API: https://api.myintervals.com/me/
+Making request to intervals API: https://api.myintervals.com/task/16660112?limit=500
+ GET /dashboard 200 in 234ms
+ GET /dashboard 200 in 15ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"OK","code":200,"listcount":1,"me":[{"id":"423842","localid":"2","clientid":null,"title":"","firstname":"pradeepg","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeepg","groupid":"4","group":"Resource","client":nu...
+ POST /api/intervals-proxy 200 in 2246ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"OK","code":200,"task":{"id":"16660112","localid":"2","assignee":[{"personid":"423852","assignee":"irvins","assigneeactive":"t","personlocalid":"3"},{"personid":"423842","assignee":"pradeepg","assigneeactive":"t","personlocalid":"2"}],"assigneeid":"423852,423842","followe...
+ POST /api/intervals-proxy 200 in 2320ms
+Retrieved task details: {
+  id: '16660112',
+  title: 'WD Task',
+  status: 'Open',
+  client: 'WD',
+  assigneeid: '423852,423842'
+}
+
+┌─────────────────────────────────────────────────┐
+│ ✓ USER & TASK INFO RETRIEVED                    │
+│ 👤 User:                          │
+│ 📋 Task: #16660112 - WD Task │
+│ 🏢 Client: WD | Project: WD Project │
+└─────────────────────────────────────────────────┘
+⏳ Fetching work types for project 1428055...
+Making request to intervals API: https://api.myintervals.com/projectworktype/
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"OK","code":200,"listcount":110,"projectworktype":[{"id":"31439430","projectid":"1428052","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439441","projectid":"1428053","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439452","projectid":"142...
+ POST /api/intervals-proxy 200 in 518ms
+Found 1 work types for project 1428055: [
+  {
+    id: '804776',
+    name: 'Admin',
+    projectId: '1428055',
+    workTypeId: '804776',
+    projectWorkTypeId: '31439463'
+  }
+]
+ℹ️ Using worktype ID 804786 for India-Meeting
+🔍 Checking attendance records for user pradeepg@m365x92504196.onmicrosoft.com...
+✅ Found user's attendance record with duration: 3m 33s
+💰 Billable status: YES ✓ (Client: WD)
+
+┌─────────────────────────────────────────────────┐
+│ 📊 TIME ENTRY DETAILS                           │
+│ 📆 Date: 2025-05-08 (from UTC 2025-05-08)  │
+│ ⏱️ Duration: 0.06 hours (3m 33s)  │
+│ 💰 Billable: Yes                              │
+└─────────────────────────────────────────────────┘
+📡 Sending time entry request to Intervals API...
+Making request to intervals API: https://api.myintervals.com/time
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"Created","code":201,"time":{"id":"107906138","projectid":"1428055","moduleid":"552132","taskid":"16660112","worktypeid":"804786","personid":"423842","date":"2025-05-08","datemodified":"2025-05-07 21:31:54","time":"0.06","description":"wd task","billable":"t","worktype":"...
+ POST /api/intervals-proxy 200 in 733ms
+✅ Time entry creation successful!
+📝 Time entry created with ID: 107906138
+💾 Saving meeting details to storage...
+Saving posted meeting with time entry...
+Posted timestamp: { utc: '2025-05-07T21:31:33.132Z', ist: '2025-05-08T03:01:33.132 IST' }
+[2025-05-07T21:31:33.137Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==
+[2025-05-07T21:31:33.137Z] Meeting time value: 0.06 hours
+[2025-05-07T21:31:33.137Z] Meeting worktypeid: 804786
+[2025-05-07T21:31:33.137Z] Generated unique storage ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==_0.06_2025-05-07T21:31:33.137Z
+[2025-05-07T21:31:33.137Z] Meeting duration: 216s (0.06 hours)
+[2025-05-07T21:31:33.137Z] Adding new meeting instance with unique ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K2AAAEA==_0.06_2025-05-07T21:31:33.137Z
+Successfully saved posted meeting with time entry
+✅ Meeting details saved successfully
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 TIME ENTRY CREATION COMPLETED
+║ ✅ Time Entry ID: 107906138
+║ ⏱️ Duration: 0.06 hours
+╚════════════════════════════════════════════════════════╝
+Successfully created time entry for: wd task
+Creating time entry for meeting: sandisk task
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 TIME ENTRY CREATION STARTED
+║ 📝 Meeting: sandisk task
+║ 🔄 Task: Sandisk Task
+╚════════════════════════════════════════════════════════╝
+⏳ Fetching person & task information...
+Making request to intervals API: https://api.myintervals.com/me/
+Making request to intervals API: https://api.myintervals.com/task/16660114?limit=500
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"OK","code":200,"listcount":1,"me":[{"id":"423842","localid":"2","clientid":null,"title":"","firstname":"pradeepg","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeepg","groupid":"4","group":"Resource","client":nu...
+ POST /api/intervals-proxy 200 in 463ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"OK","code":200,"task":{"id":"16660114","localid":"4","assignee":[{"personid":"423852","assignee":"irvins","assigneeactive":"t","personlocalid":"3"},{"personid":"423842","assignee":"pradeepg","assigneeactive":"t","personlocalid":"2"}],"assigneeid":"423852,423842","followe...
+ POST /api/intervals-proxy 200 in 543ms
+Retrieved task details: {
+  id: '16660114',
+  title: 'Sandisk Task',
+  status: 'Open',
+  client: 'SanDisk',
+  assigneeid: '423852,423842'
+}
+
+┌─────────────────────────────────────────────────┐
+│ ✓ USER & TASK INFO RETRIEVED                    │
+│ 👤 User:                          │
+│ 📋 Task: #16660114 - Sandisk Task │
+│ 🏢 Client: SanDisk | Project: SanDisk Project │
+└─────────────────────────────────────────────────┘
+⏳ Fetching work types for project 1428053...
+Making request to intervals API: https://api.myintervals.com/projectworktype/
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"OK","code":200,"listcount":110,"projectworktype":[{"id":"31439430","projectid":"1428052","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439441","projectid":"1428053","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439452","projectid":"142...
+ POST /api/intervals-proxy 200 in 400ms
+Found 1 work types for project 1428053: [
+  {
+    id: '804776',
+    name: 'Admin',
+    projectId: '1428053',
+    workTypeId: '804776',
+    projectWorkTypeId: '31439441'
+  }
+]
+ℹ️ Using worktype ID 804786 for India-Meeting
+🔍 Checking attendance records for user pradeepg@m365x92504196.onmicrosoft.com...
+✅ Found user's attendance record with duration: 1m 29s
+💰 Billable status: YES ✓ (Client: SanDisk)
+
+┌─────────────────────────────────────────────────┐
+│ 📊 TIME ENTRY DETAILS                           │
+│ 📆 Date: 2025-05-08 (from UTC 2025-05-08)  │
+│ ⏱️ Duration: 0.02 hours (1m 29s)  │
+│ 💰 Billable: Yes                              │
+└─────────────────────────────────────────────────┘
+📡 Sending time entry request to Intervals API...
+Making request to intervals API: https://api.myintervals.com/time
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":423842,"status":"Created","code":201,"time":{"id":"107906139","projectid":"1428053","moduleid":"552132","taskid":"16660114","worktypeid":"804786","personid":"423842","date":"2025-05-08","datemodified":"2025-05-07 21:31:58","time":"0.02","description":"sandisk task","billable":"t","workty...
+ POST /api/intervals-proxy 200 in 749ms
+✅ Time entry creation successful!
+📝 Time entry created with ID: 107906139
+💾 Saving meeting details to storage...
+Saving posted meeting with time entry...
+Posted timestamp: { utc: '2025-05-07T21:31:36.865Z', ist: '2025-05-08T03:01:36.865 IST' }
+[2025-05-07T21:31:36.867Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==
+[2025-05-07T21:31:36.867Z] Meeting time value: 0.02 hours
+[2025-05-07T21:31:36.867Z] Meeting worktypeid: 804786
+[2025-05-07T21:31:36.867Z] Generated unique storage ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==_0.02_2025-05-07T21:31:36.867Z
+[2025-05-07T21:31:36.867Z] Meeting duration: 72s (0.02 hours)
+[2025-05-07T21:31:36.867Z] Adding new meeting instance with unique ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y3DRqeAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAE17K1wAAEA==_0.02_2025-05-07T21:31:36.867Z
+Successfully saved posted meeting with time entry
+✅ Meeting details saved successfully
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 TIME ENTRY CREATION COMPLETED
+║ ✅ Time Entry ID: 107906139
+║ ⏱️ Duration: 0.02 hours
+╚════════════════════════════════════════════════════════╝
+Successfully created time entry for: sandisk task
+
+╔════════════════════════════════════════════════════════╗
+║ 🔄 QUEUE PROCESSOR STATUS
+║ 📊 Items Remaining: 4
+║ ⏱️ Next Process Delay: 1.25s
+╚════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ 🎯 PROCESSING MEETING                           │
+│ 📝 Subject: "daily infra meeting"               │
+│ 🔑 ID: AAMkA...2wAAEA==                        │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ 📊 PROCESSING RESULTS                           │
+│ ⏱️ Duration: 4.73s                             │
+│ ✅ Status: Completed                            │
+│ ℹ️ Details: No valid reports found              │
+└─────────────────────────────────────────────────┘
+
+// ... existing code ...
+
+╔════════════════════════════════════════════════════════╗
+║ 📡 API REQUEST DETAILS
+║ 🎯 Endpoint: /api/intervals-proxy
+║ 📊 Status: 200
+║ ⏱️ Response Time: 461ms
+╚════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ 📊 RESPONSE SUMMARY                             │
+│ 👤 User ID: 423842                             │
+│ ✅ Status: OK                                   │
+│ 📝 Code: 200                                    │
+└─────────────────────────────────────────────────┘
+
+// ... existing code ...
+
+╔════════════════════════════════════════════════════════╗
+║ 💾 STORAGE OPERATION
+║ 📝 Operation: Adding Meeting
+║ 🔑 ID: AAMkA...2wAAEA==
+║ ⏱️ Duration: 0.03 hours
+╚════════════════════════════════════════════════════════╝
+
+// ... existing code ...
+
+╔══════════════════════ MEETING PROCESSING ══════════════════════╗
+║ 📅 CURRENT BATCH
+║ 📊 Total Meetings: 4
+║ 🔄 Processing: 2/4 (50%)
+╚═══════════════════════════════════════════════════════════════╝
+
+┌────────────── MEETING DETAILS ──────────────┐
+│ 📝 Subject: "daily infra meeting"           │
+│ ⏰ Time: 09:30 AM - 10:00 AM                │
+│ 👥 Attendees: 1                             │
+└───────────────────────────────────────────────┘
+
+┌────────────── TASK MATCHING ──────────────┐
+│ 🎯 Task: Infra Task                       │
+│ 📊 Confidence: 95%                        │
+│ ⏱️ Duration: 2m 44s                      │
+└───────────────────────────────────────────┘
+
+╔═════════════ API OPERATIONS ═════════════╗
+║ 📡 Endpoints Called: 3                    ║
+║ ⚡ Average Response: 461ms                ║
+║ ✅ Success Rate: 100%                     ║
+╚═══════════════════════════════════════════╝
+
+// ... existing code ...
+
+┌────────────── RATE LIMITING ──────────────┐
+│ 🎟️ Tokens Available: 48/50               │
+│ ⏳ Reset Time: 60s                        │
+│ 📊 Queue Length: 2                        │
+└───────────────────────────────────────────┘
+
+╔════════════ STORAGE SUMMARY ════════════╗
+║ 💾 Operations: 2                        ║
+║ ✅ Successful: 2                        ║
+║ ❌ Failed: 0                            ║
+╚═══════════════════════════════════════════╝
+
+// ... existing code ...
+
+┌────────────── WARNING ──────────────┐
+│ ⚠️ Rate Limit Approaching           │
+│ 📊 Tokens: 3/50 remaining           │
+│ ⏳ Next reset in: 30s               │
+└─────────────────────────────────────┘
+
+┌────────────── ERROR ──────────────┐
+│ ❌ API Request Failed              │
+│ 🔍 Endpoint: /api/task-match      │
+│ ℹ️ Reason: Timeout                │
+│ 🔄 Retrying in 5s...              │
+└───────────────────────────────────┘
+
+╔══════════════ BATCH SUMMARY ══════════════╗
+║ 📊 PROCESSING COMPLETE                    ║
+║ ✅ Successful: 4                          ║
+║ ⚠️ Warnings: 1                           ║
+║ ❌ Errors: 1                              ║
+║                                          ║
+║ ⏱️ Total Duration: 12.5s                 ║
+║ 📈 Success Rate: 80%                      ║
+╚══════════════════════════════════════════╝

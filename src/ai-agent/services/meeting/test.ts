@@ -159,7 +159,24 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             return [];
         }
 
-        const reportId = reportsData.value[0].id;
+        // Get the current UTC day's start and end
+        const now = new Date();
+        const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+        const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
+        // Find the most recent report for the current UTC day
+        const todayReports = reportsData.value.filter((report: any) => {
+            const reportStartTime = new Date(report.meetingStartDateTime);
+            return reportStartTime >= startOfDay && reportStartTime <= endOfDay;
+        });
+
+        if (todayReports.length === 0) {
+            console.log('No attendance reports found for the current UTC day');
+            return [];
+        }
+
+        // Use the most recent report
+        const reportId = todayReports[0].id;
         console.log('Report ID:', reportId);
 
         // Get attendance records
@@ -198,29 +215,27 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const accessToken = await getGraphToken();
         console.log(`✅ Access token acquired successfully`);
         
-        // Get meetings for the current day (today) in IST timezone (UTC+05:30)
+        // Get meetings for the current day in UTC
         const now = new Date();
         
-        // Create a Date object for the start of today in IST (00:00:00)
-        // For IST midnight (00:00), we need previous day 18:30 UTC
+        // Start of day in UTC (00:00:00)
         const startDate = new Date(Date.UTC(
             now.getUTCFullYear(),
             now.getUTCMonth(),
-            now.getUTCDate() - 1, // Previous day
-            18, // 18:30 UTC = 00:00 IST
-            30,
+            now.getUTCDate(),
+            0, // 00:00:00 UTC
+            0,
             0,
             0
         ));
         
-        // Create a Date object for the end of today in IST (23:59:59.999)
-        // For IST 23:59:59.999, we need current day 18:29:59.999 UTC
+        // End of day in UTC (23:59:59.999)
         const endDate = new Date(Date.UTC(
             now.getUTCFullYear(),
             now.getUTCMonth(),
             now.getUTCDate(),
-            18, // 18:29:59.999 UTC = 23:59:59.999 IST
-            29,
+            23, // 23:59:59.999 UTC
+            59,
             59,
             999
         ));
@@ -230,12 +245,12 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         
         console.log(`
 ┌─────────────────────────────────────────────────┐
-│ 📅 FETCHING MEETINGS - IST TIMEZONE (UTC+05:30) │
-│ 📆 Date range (UTC): ${startDateString.split('T')[0]} to ${endDateString.split('T')[0]} │
+│ 📅 FETCHING MEETINGS - UTC TIMEZONE             │
+│ 📆 Date range: ${startDateString.split('T')[0]}              │
 │ ⏰ Time range: ${startDateString.split('T')[1].substring(0, 8)} to ${endDateString.split('T')[1].substring(0, 8)}          │
 └─────────────────────────────────────────────────┘`);
         
-        // Using calendarView endpoint instead of events endpoint for better handling of recurring meetings
+        // Using calendarView endpoint for better handling of recurring meetings
         const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/calendarView?startDateTime=${startDateString}&endDateTime=${endDateString}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId&$orderby=start/dateTime desc`;
         
         // Function to fetch all meetings using pagination
@@ -245,8 +260,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'outlook.timezone="Asia/Kolkata"' // Request times in IST timezone
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -258,14 +272,14 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             }
 
             const data = await response.json();
-            console.log(`✅ Received ${data.value?.length || 0} meetings from API`);
+            console.log(`✅ Received ${data.value?.length || 0} meetings from API (UTC)`);
             
             // Add debug logging for recurring meetings
             const recurringMeetings = data.value?.filter((m: any) => m.seriesMasterId) || [];
             if (recurringMeetings.length > 0) {
-                console.log(`🔄 Found ${recurringMeetings.length} recurring meeting instances:`);
+                console.log(`🔄 Found ${recurringMeetings.length} recurring meeting instances (UTC):`);
                 recurringMeetings.forEach((meeting: any, index: number) => {
-                    console.log(`   ${index + 1}. "${meeting.subject}" (${meeting.start.dateTime})`);
+                    console.log(`   ${index + 1}. "${meeting.subject}" (UTC: ${meeting.start.dateTime})`);
                 });
             }
             
@@ -285,30 +299,23 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         // Fetch all meetings using pagination
         const allMeetings = await fetchAllMeetings(baseUrl);
         
-        // Filter out meetings that start before our target IST day
+        // Filter meetings based on UTC day
         console.log(`
 ┌─────────────────────────────────────────────────┐
-│ 🔍 FILTERING MEETINGS FOR IST DAY               │
+│ 🔍 FILTERING MEETINGS FOR UTC DAY               │
 │ 📊 Total meetings before filtering: ${allMeetings.length}            │
 └─────────────────────────────────────────────────┘`);
         
         const filteredMeetings = allMeetings.filter((meeting: Meeting) => {
-            // Parse the meeting start time (which is already in IST as per the API response)
+            // Parse the meeting start time in UTC
             const meetingStartTime = new Date(meeting.start.dateTime);
             
-            // Create start and end of IST day for comparison
-            const startOfDay = new Date(now);
-            startOfDay.setHours(0, 0, 0, 0);  // Set to start of day in IST
-            
-            const endOfDay = new Date(now);
-            endOfDay.setHours(23, 59, 59, 999);  // Set to end of day in IST
-
-            const isIncluded = meetingStartTime >= startOfDay && meetingStartTime <= endOfDay;
+            // Check if meeting is within the UTC day
+            const isIncluded = meetingStartTime >= startDate && meetingStartTime <= endDate;
             if (!isIncluded) {
-                console.log(`⏩ Skipping meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" (outside IST day)`);
+                console.log(`⏩ Skipping meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" (outside UTC day)`);
             }
 
-            // Only include meetings that start within the IST day
             return isIncluded;
         });
         
@@ -330,7 +337,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                 console.log(`   ${index + 1}. ${truncatedSubject} (${startTime} - ${endTime})`);
             });
         } else {
-            console.log(`ℹ️ No meetings found for today in IST timezone`);
+            console.log(`ℹ️ No meetings found for today in UTC timezone`);
         }
 
         const attendanceReport: AttendanceReport = {
