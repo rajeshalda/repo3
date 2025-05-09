@@ -31,6 +31,9 @@ import {
 } from "@/components/ui/popover";
 import { PM2Status } from './pm2-status';
 import { formatDateIST, DEFAULT_DATE_FORMAT } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { ScrollArea } from './ui/scroll-area';
+import ReactMarkdown from 'react-markdown';
 
 interface PostedMeeting {
   meetingId: string;
@@ -1019,7 +1022,7 @@ export function AIAgentView() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">AI Agent Dashboard</CardTitle>
-          <div className="h-10 w-10 flex items-center justify-center border-2 border-blue-500 rounded-md relative">
+          <div className="relative w-10 h-10 border-2 border-blue-500 rounded-lg">
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-blue-500 font-bold text-sm">AI</span>
             </div>
@@ -1044,9 +1047,15 @@ export function AIAgentView() {
               <p className="text-muted-foreground">
                 Automatically process your meetings and create time entries using AI.
               </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Fetches meetings from 6:30 PM previous day to 6:00 PM present day (IST).
-              </p>
+              <div className="text-sm text-muted-foreground mt-2 space-y-2">
+                <p>Fetches meetings for full IST day (Indian Standard Time):</p>
+                <div className="bg-slate-50 p-3 rounded-md font-mono text-xs">
+                  <p>IST (Current Day)     | UTC (Previous & Current Day)</p>
+                  <p>00:00 - 05:29 IST     | Previous Day 18:30 - 23:59 UTC</p>
+                  <p>05:30 - 23:59 IST     | Current Day 00:00 - 18:29 UTC</p>
+                </div>
+                <p className="text-xs">All times are processed in UTC and converted to IST for display.</p>
+              </div>
               <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border-2 border-yellow-500 rounded-md relative overflow-hidden">
                 <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#fef9c3,#fef9c3_10px,#fef08a_10px,#fef08a_20px)] opacity-20"></div>
                 <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 z-10" />

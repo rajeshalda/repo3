@@ -5,31 +5,65 @@ import { ScrollArea } from './ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
 
 const releaseNotes = `
-# Meeting Time Tracker - Release Notes
+# 📌 Meeting Time Tracker - Release Notes
 
-## Version 2.1.0 (March 2024)
+&nbsp;
 
-### New Features
-- Enhanced User-Specific Data Handling
-  - Improved data isolation between users
-  - User-specific meeting views and time entries
-  - Fixed shared data visibility issues
+## 🌟 Version 2.2.0 (May 2025)
 
-- Improved AI Agent Task Matching
-  - Enhanced matching algorithm
-  - Better confidence scoring
-  - More accurate task suggestions
+&nbsp;
 
-### Improvements
-- Better performance and reliability
-- Enhanced user interface
-- Improved error handling
-- Updated dependencies
+### 🔄 Core System Updates
 
-### Bug Fixes
-- Fixed various UI/UX issues
-- Resolved data synchronization problems
-- Improved error messaging
+#### Time & Timezone Improvements
+- 🌏 Fixed Timezone handling for IST attendance reports
+- ⏰ Resolved Agent Time Issues - Implemented UTC for Deployment
+- 🕒 Enhanced Task Name Loading and Agent Stability improvements
+
+#### Infrastructure & Performance
+- 🐳 Successful Docker Implementation
+- 🛠️ Fixed runtime error and session handling issues
+- 🇮🇳 Updated India-Meeting configurations
+
+&nbsp;
+
+### 🎯 Meeting Management
+
+#### Deduplication System Enhancements
+- 🔍 Enhanced Meeting Deduplication System
+- ⚡ Improved time proximity detection (5-minute threshold)
+- 🔄 Better handling of recurring meetings
+- 📊 Enhanced subject comparison logic
+- ⚖️ Reduced duration similarity threshold to 30 seconds
+- 📝 Added comprehensive logging for better tracking
+
+&nbsp;
+
+### 👥 User Experience
+
+#### Data Management
+- 🔒 Enhanced User-Specific Data Handling
+- 🛡️ Improved data isolation between users
+- 👀 User-specific meeting views and time entries
+- 🔐 Fixed shared data visibility issues
+
+#### AI Features
+- 🤖 Improved AI Agent Task Matching
+- 🎯 Enhanced matching algorithm
+- ⭐ Better confidence scoring
+- 🎨 More accurate task suggestions
+
+&nbsp;
+
+---
+
+&nbsp;
+
+## 📜 Previous Updates (Version 2.1.0)
+- 📊 Performance optimizations
+- 🎨 UI/UX improvements
+- 🔧 Bug fixes and stability improvements
+- 📦 Updated dependencies
 `;
 
 export function ReleaseNotes() {
