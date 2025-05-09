@@ -1,6 +1,6 @@
 # Script to set up environment variables in Azure Web App
 $RESOURCE_GROUP = "intervaltime"
-$APP_NAME = "basic-v2"
+$APP_NAME = "basic-v22"
 
 # Load environment variables from .env.local
 $envContent = Get-Content -Path ".env.local" -ErrorAction SilentlyContinue
@@ -31,7 +31,7 @@ foreach ($line in $envContent) {
 $settings["PORT"] = "8080"
 $settings["NODE_ENV"] = "production"
 $settings["WEBSITES_PORT"] = "8080"
-$settings["NEXTAUTH_URL"] = "https://basic-v2.azurewebsites.net"
+$settings["NEXTAUTH_URL"] = "https://basic-v22.azurewebsites.net"
 
 # Show the settings to be applied
 Write-Host "Applying the following environment variables to Azure Web App:" -ForegroundColor Yellow
