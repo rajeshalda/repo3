@@ -71,50 +71,77 @@ export class MeetingComparisonService {
             // Safely extract dates and handle potential undefined values
             const meeting1Date = meeting1?.start?.dateTime?.split('T')[0] || '';
             const meeting2Date = meeting2?.start?.dateTime?.split('T')[0] || '';
+            const meeting1Time = meeting1?.start?.dateTime?.split('T')[1] || '';
+            const meeting2Time = meeting2?.start?.dateTime?.split('T')[1] || '';
             
             if (!meeting1Date || !meeting2Date) {
                 return false;
             }
 
-            // If meeting IDs match (possibly a recurring meeting), but dates differ,
-            // we should not consider them duplicate meetings
-            if (meeting1.id === meeting2.id && meeting1Date !== meeting2Date) {
-                return false;
-            }
-
-            // Get user duration if available
-            let duration1 = 0;
-            if (meeting1?.attendance?.records && meeting1.userId) {
-                const userRecord = meeting1.attendance.records.find(record => 
-                    record.email.toLowerCase() === meeting1.userId.toLowerCase()
-                );
-                if (userRecord) {
-                    duration1 = userRecord.duration;
+            // If meeting IDs match exactly, check if they're the same instance
+            if (meeting1.id === meeting2.id) {
+                // For same ID, they must be on the same date and have similar duration to be considered duplicate
+                const sameDate = meeting1Date === meeting2Date;
+                
+                // Get user durations
+                let duration1 = 0;
+                if (meeting1?.attendance?.records && meeting1.userId) {
+                    const userRecord = meeting1.attendance.records.find(record => 
+                        record.email.toLowerCase() === meeting1.userId.toLowerCase()
+                    );
+                    duration1 = userRecord?.duration || 0;
                 }
-            }
 
-            let duration2 = 0;
-            if (meeting2?.attendance?.records && meeting2.userId) {
-                const userRecord = meeting2.attendance.records.find(record => 
-                    record.email.toLowerCase() === meeting2.userId.toLowerCase()
-                );
-                if (userRecord) {
-                    duration2 = userRecord.duration;
+                let duration2 = 0;
+                if (meeting2?.attendance?.records && meeting2.userId) {
+                    const userRecord = meeting2.attendance.records.find(record => 
+                        record.email.toLowerCase() === meeting2.userId.toLowerCase()
+                    );
+                    duration2 = userRecord?.duration || 0;
                 }
+
+                // Check if durations are similar (within 30 seconds)
+                const durationDiff = Math.abs(duration1 - duration2);
+                const similarDuration = durationDiff <= 30;
+
+                // For recurring meetings, they must match both date and duration to be considered the same instance
+                return sameDate && similarDuration;
             }
 
-            // For meetings with same ID and date, consider them the same only 
-            // if they have similar durations (within 10 seconds)
-            const durationDiff = Math.abs(duration1 - duration2);
-            const isSimilarDuration = durationDiff < 10; // 10 second threshold
+            // For different IDs, check if they might be the same meeting recorded differently
+            // This helps catch cases where the same meeting might have slightly different IDs
+            if (meeting1.subject === meeting2.subject && meeting1Date === meeting2Date) {
+                // If subjects and dates match, check time proximity
+                const time1 = new Date(`${meeting1Date}T${meeting1Time}`).getTime();
+                const time2 = new Date(`${meeting2Date}T${meeting2Time}`).getTime();
+                const timeProximity = Math.abs(time1 - time2) <= 5 * 60 * 1000; // 5 minutes
 
-            if (meeting1.id === meeting2.id && meeting1Date === meeting2Date && !isSimilarDuration) {
-                console.log(`Meetings have same ID and date but different durations (diff: ${durationDiff}s), considered different meetings`);
+                // Get user durations for comparison
+                let duration1 = 0;
+                if (meeting1?.attendance?.records && meeting1.userId) {
+                    const userRecord = meeting1.attendance.records.find(record => 
+                        record.email.toLowerCase() === meeting1.userId.toLowerCase()
+                    );
+                    duration1 = userRecord?.duration || 0;
+                }
+
+                let duration2 = 0;
+                if (meeting2?.attendance?.records && meeting2.userId) {
+                    const userRecord = meeting2.attendance.records.find(record => 
+                        record.email.toLowerCase() === meeting2.userId.toLowerCase()
+                    );
+                    duration2 = userRecord?.duration || 0;
+                }
+
+                // Check if durations are similar (within 30 seconds)
+                const durationDiff = Math.abs(duration1 - duration2);
+                const similarDuration = durationDiff <= 30;
+
+                // Consider them the same meeting if they have similar timing and duration
+                return timeProximity && similarDuration;
             }
 
-            return meeting1.id === meeting2.id && 
-                   meeting1Date === meeting2Date && 
-                   isSimilarDuration;
+            return false;
         } catch (error) {
             console.error('Error in simpleCompare:', error);
             return false;

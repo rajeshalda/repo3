@@ -107,14 +107,38 @@ const processMeetingsForUser = async (userId) => {
 const processAllUsers = async () => {
   // Skip this cycle if already processing
   if (global.isProcessingCycle) {
-    console.log('Skipping cycle as previous cycle is still processing...');
+    console.log('╔════════════════════════════════════════════════════════╗');
+    console.log('║ ⚠️ CYCLE OVERLAP PREVENTED                              ║');
+    console.log('║ Previous cycle still in progress. Skipping new cycle.  ║');
+    console.log('╚════════════════════════════════════════════════════════╝');
     return;
   }
-  
+
+  // Set cycle lock with timestamp
   global.isProcessingCycle = true;
-  console.log('Processing meetings for all enabled users...');
-  
+  global.cycleStartTime = Date.now();
+  const cycleId = `cycle_${Date.now()}`;
+  console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🔄 STARTING NEW PROCESSING CYCLE                       ║
+║ 🆔 Cycle ID: ${cycleId}                               ║
+║ ⏰ Start Time: ${new Date().toISOString()}            ║
+╚════════════════════════════════════════════════════════╝`);
+
   try {
+    // Add cycle timeout protection (30 minutes)
+    const cycleTimeout = setTimeout(() => {
+      if (global.isProcessingCycle && global.cycleStartTime === cycleStartTime) {
+        console.log(`
+╔════════════════════════════════════════════════════════╗
+║ ⚠️ CYCLE TIMEOUT                                       ║
+║ Cycle ${cycleId} exceeded 30 minute timeout.           ║
+║ Force releasing cycle lock.                            ║
+╚════════════════════════════════════════════════════════╝`);
+        global.isProcessingCycle = false;
+      }
+    }, 30 * 60 * 1000);
+
     for (const user of userData.users) {
       if (user.enabled) {
         try {
@@ -125,11 +149,20 @@ const processAllUsers = async () => {
         }
       }
     }
-    
-    console.log('Finished processing for all users');
+
+    clearTimeout(cycleTimeout);
+    console.log(`
+╔════════════════════════════════════════════════════════╗
+║ ✅ CYCLE COMPLETED SUCCESSFULLY                        ║
+║ 🆔 Cycle ID: ${cycleId}                               ║
+║ ⏱️ Duration: ${((Date.now() - global.cycleStartTime)/1000).toFixed(2)}s ║
+╚════════════════════════════════════════════════════════╝`);
+  } catch (error) {
+    console.error('Error in processing cycle:', error);
   } finally {
     // Release the lock when done, regardless of success or failure
     global.isProcessingCycle = false;
+    global.cycleStartTime = null;
   }
 };
 
@@ -137,14 +170,15 @@ const processAllUsers = async () => {
 const startProcessingCycle = () => {
   console.log('AI Agent Server started');
   
-  // Add a flag to track if a cycle is in progress
+  // Initialize cycle control variables
   global.isProcessingCycle = false;
+  global.cycleStartTime = null;
   
   // Process immediately on startup
   processAllUsers();
   
-  // Set up interval to process meetings every 5 minutes
-  setInterval(processAllUsers, 5 * 60 * 1000);
+  // Set up interval to process meetings every 30 minutes (increased from 5 minutes)
+  setInterval(processAllUsers, 30 * 60 * 1000);
 };
 
 // API server to handle enabling/disabling the AI agent

@@ -110,7 +110,7 @@ class AIAgentPostedMeetingsStorage {
         this.data.meetings = this.data.meetings.filter(m => m.userId !== userId);
         await this.saveData();
     }
-    async isPosted(userId, meetingId, duration) {
+    async isPosted(userId, meetingId, duration, startTime) {
         await this.loadData();
         
         // For backward compatibility, first check if this exact meetingId exists
@@ -118,46 +118,51 @@ class AIAgentPostedMeetingsStorage {
             m.meetingId === meetingId && m.userId === userId
         );
         
-        // If we found an exact match and no duration is specified, return true
-        if (hasExactMatch && duration === undefined) {
+        // If we found an exact match and no duration/startTime is specified, return true
+        if (hasExactMatch && duration === undefined && startTime === undefined) {
             return true;
         }
         
-        // If duration is provided, use it as part of the duplicate check
-        if (duration !== undefined) {
-            // Find meetings with the same ID and user
-            const matchingMeetings = this.data.meetings.filter(m => 
-                m.meetingId === meetingId && m.userId === userId
-            );
-            
-            // If no matching meetings found, it's not a duplicate
-            if (matchingMeetings.length === 0) {
-                return false;
-            }
-            
-            // For recurring meetings, check if there's a meeting with similar duration
-            // Consider it a duplicate only if there's a meeting with similar duration (within 1 minute)
-            for (const meeting of matchingMeetings) {
-                // Convert timeEntry.time (hours) to seconds for comparison
-                // Note: timeEntry.time could be a string like "0.05" or a number
-                const timeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
-                const storedDuration = Math.round(timeInHours * 3600); // Convert hours to seconds
-                const durationDiff = Math.abs(storedDuration - duration);
-                
-                // If durations are similar (within 1 minute), consider it a duplicate
-                if (durationDiff < 60) { // 1 minute = 60 seconds
-                    console.log(`Found a potential duplicate meeting: ${meetingId} with similar duration (diff: ${durationDiff}s)`);
-                    return true;
-                }
-            }
-            
-            console.log(`Meeting ${meetingId} has same ID but different duration, not considered a duplicate`);
-            // If we have meetings with the same ID but different durations, it's not a duplicate
+        // Find meetings with the same ID and user
+        const matchingMeetings = this.data.meetings.filter(m => 
+            m.meetingId === meetingId && m.userId === userId
+        );
+        
+        // If no matching meetings found, it's not a duplicate
+        if (matchingMeetings.length === 0) {
             return false;
         }
         
-        // Original behavior if duration is not provided
-        return this.data.meetings.some(m => m.meetingId === meetingId && m.userId === userId);
+        // For recurring meetings, check multiple criteria:
+        // 1. Meeting ID match
+        // 2. Similar duration (within 30 seconds)
+        // 3. Same start time (if provided)
+        for (const meeting of matchingMeetings) {
+            // Get stored duration in seconds
+            const timeInHours = parseFloat(meeting.timeEntry?.time?.toString() || '0');
+            const storedDuration = Math.round(timeInHours * 3600); // Convert hours to seconds
+            
+            // Check duration similarity if provided
+            const durationMatch = duration === undefined || 
+                Math.abs(storedDuration - duration) <= 30; // Allow 30 seconds difference
+            
+            // Check start time if provided
+            const startTimeMatch = startTime === undefined ||
+                meeting.timeEntry?.date === startTime?.split('T')[0]; // Compare just the date part
+            
+            // Consider it a duplicate if all provided criteria match
+            if (durationMatch && startTimeMatch) {
+                console.log(`Found a potential duplicate meeting: ${meetingId}`, {
+                    durationDiff: duration ? Math.abs(storedDuration - duration) : 'N/A',
+                    storedDate: meeting.timeEntry?.date,
+                    newDate: startTime?.split('T')[0],
+                    isDuplicate: true
+                });
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
 exports.AIAgentPostedMeetingsStorage = AIAgentPostedMeetingsStorage;

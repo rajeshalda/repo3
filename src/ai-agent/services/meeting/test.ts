@@ -159,25 +159,63 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             return [];
         }
 
-        // Get the current UTC day's start and end
+        // Calculate UTC time window that covers the full IST day
         const now = new Date();
-        const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
-        const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+        
+        // Start time is previous UTC day at 18:30 (IST 00:00)
+        const startOfWindow = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate() - 1, // Previous UTC day
+            18, // 18:30 UTC = 00:00 IST
+            30,
+            0,
+            0
+        ));
+        
+        // End time is current UTC day at 18:29:59.999 (IST 23:59:59.999)
+        const endOfWindow = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            18,
+            29,
+            59,
+            999
+        ));
 
-        // Find the most recent report for the current UTC day
-        const todayReports = reportsData.value.filter((report: any) => {
+        console.log(`
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: ${startOfWindow.toISOString()} to       │
+│     ${endOfWindow.toISOString()}                │
+│ 🕒 IST: ${new Date(startOfWindow.getTime() + 5.5 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to │
+│     ${new Date(endOfWindow.getTime() + 5.5 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}    │
+└─────────────────────────────────────────────────┘`);
+
+        // Find reports within our UTC window that covers the IST day
+        const relevantReports = reportsData.value.filter((report: any) => {
             const reportStartTime = new Date(report.meetingStartDateTime);
-            return reportStartTime >= startOfDay && reportStartTime <= endOfDay;
+            const isRelevant = reportStartTime >= startOfWindow && reportStartTime <= endOfWindow;
+            
+            console.log('Report time check:', {
+                reportTime: report.meetingStartDateTime,
+                reportTimeUTC: reportStartTime.toISOString(),
+                reportTimeIST: new Date(reportStartTime.getTime() + 5.5 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                isWithinWindow: isRelevant
+            });
+            
+            return isRelevant;
         });
 
-        if (todayReports.length === 0) {
-            console.log('No attendance reports found for the current UTC day');
+        if (relevantReports.length === 0) {
+            console.log('No attendance reports found within the IST day window');
             return [];
         }
 
         // Use the most recent report
-        const reportId = todayReports[0].id;
-        console.log('Report ID:', reportId);
+        const reportId = relevantReports[0].id;
+        console.log(`Found ${relevantReports.length} relevant reports, using most recent: ${reportId}`);
 
         // Get attendance records
         const recordsResponse = await fetch(
@@ -196,7 +234,19 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
         const recordsData = await recordsResponse.json();
         console.log('Records data:', JSON.stringify(recordsData, null, 2));
-        return recordsData.value || [];
+        
+        // Process and return the attendance records
+        const records = recordsData.value || [];
+        if (records.length > 0) {
+            console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✅ ATTENDANCE RECORDS FOUND                     │
+│ 📊 Total Records: ${records.length}             │
+│ 🕒 Meeting Start: ${relevantReports[0].meetingStartDateTime} │
+└─────────────────────────────────────────────────┘`);
+        }
+        
+        return records;
     } catch (error) {
         console.error('Error fetching attendance records:', error);
         return [];
@@ -215,39 +265,31 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const accessToken = await getGraphToken();
         console.log(`✅ Access token acquired successfully`);
         
-        // Get meetings for the current day in UTC
-        const now = new Date();
+        // Get current time in IST
+        const istNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
         
-        // Start of day in UTC (00:00:00)
-        const startDate = new Date(Date.UTC(
-            now.getUTCFullYear(),
-            now.getUTCMonth(),
-            now.getUTCDate(),
-            0, // 00:00:00 UTC
-            0,
-            0,
-            0
-        ));
+        // Start of day in IST (00:00:00)
+        const istStartDate = new Date(istNow);
+        istStartDate.setHours(0, 0, 0, 0);
         
-        // End of day in UTC (23:59:59.999)
-        const endDate = new Date(Date.UTC(
-            now.getUTCFullYear(),
-            now.getUTCMonth(),
-            now.getUTCDate(),
-            23, // 23:59:59.999 UTC
-            59,
-            59,
-            999
-        ));
-
+        // End of day in IST (23:59:59.999)
+        const istEndDate = new Date(istNow);
+        istEndDate.setHours(23, 59, 59, 999);
+        
+        // Convert IST dates to UTC for API call
+        const startDate = new Date(istStartDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+        const endDate = new Date(istEndDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+        
         const startDateString = startDate.toISOString();
         const endDateString = endDate.toISOString();
         
         console.log(`
 ┌─────────────────────────────────────────────────┐
-│ 📅 FETCHING MEETINGS - UTC TIMEZONE             │
-│ 📆 Date range: ${startDateString.split('T')[0]}              │
-│ ⏰ Time range: ${startDateString.split('T')[1].substring(0, 8)} to ${endDateString.split('T')[1].substring(0, 8)}          │
+│ 📅 FETCHING MEETINGS FOR IST DAY                │
+│ 📆 IST range: ${istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to              │
+│             ${istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}              │
+│ 🌐 UTC range: ${startDateString} to              │
+│             ${endDateString}              │
 └─────────────────────────────────────────────────┘`);
         
         // Using calendarView endpoint for better handling of recurring meetings
@@ -260,7 +302,8 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Prefer': 'outlook.timezone="India Standard Time"'
                 }
             });
 
@@ -272,14 +315,14 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             }
 
             const data = await response.json();
-            console.log(`✅ Received ${data.value?.length || 0} meetings from API (UTC)`);
+            console.log(`✅ Received ${data.value?.length || 0} meetings from API`);
             
             // Add debug logging for recurring meetings
             const recurringMeetings = data.value?.filter((m: any) => m.seriesMasterId) || [];
             if (recurringMeetings.length > 0) {
-                console.log(`🔄 Found ${recurringMeetings.length} recurring meeting instances (UTC):`);
+                console.log(`🔄 Found ${recurringMeetings.length} recurring meeting instances:`);
                 recurringMeetings.forEach((meeting: any, index: number) => {
-                    console.log(`   ${index + 1}. "${meeting.subject}" (UTC: ${meeting.start.dateTime})`);
+                    console.log(`   ${index + 1}. "${meeting.subject}" (${meeting.start.dateTime})`);
                 });
             }
             
@@ -299,21 +342,32 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         // Fetch all meetings using pagination
         const allMeetings = await fetchAllMeetings(baseUrl);
         
-        // Filter meetings based on UTC day
+        // Filter meetings based on IST day
         console.log(`
 ┌─────────────────────────────────────────────────┐
-│ 🔍 FILTERING MEETINGS FOR UTC DAY               │
+│ 🔍 FILTERING MEETINGS FOR IST DAY               │
 │ 📊 Total meetings before filtering: ${allMeetings.length}            │
 └─────────────────────────────────────────────────┘`);
         
         const filteredMeetings = allMeetings.filter((meeting: Meeting) => {
-            // Parse the meeting start time in UTC
-            const meetingStartTime = new Date(meeting.start.dateTime);
+            // Convert meeting time to IST for comparison
+            const meetingTimeIST = new Date(meeting.start.dateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+            const meetingDateIST = new Date(meetingTimeIST);
             
-            // Check if meeting is within the UTC day
-            const isIncluded = meetingStartTime >= startDate && meetingStartTime <= endDate;
+            // Debug log
+            console.log('Meeting filter debug:', {
+                subject: meeting.subject,
+                originalTime: meeting.start.dateTime,
+                meetingTimeIST: meetingTimeIST,
+                istStartDate: istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                istEndDate: istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                isIncluded: meetingDateIST >= istStartDate && meetingDateIST <= istEndDate
+            });
+            
+            // Check if meeting is within the IST day
+            const isIncluded = meetingDateIST >= istStartDate && meetingDateIST <= istEndDate;
             if (!isIncluded) {
-                console.log(`⏩ Skipping meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" (outside UTC day)`);
+                console.log(`⏩ Skipping meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" (outside IST day)`);
             }
 
             return isIncluded;
@@ -337,7 +391,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                 console.log(`   ${index + 1}. ${truncatedSubject} (${startTime} - ${endTime})`);
             });
         } else {
-            console.log(`ℹ️ No meetings found for today in UTC timezone`);
+            console.log(`ℹ️ No meetings found for today in IST timezone`);
         }
 
         const attendanceReport: AttendanceReport = {

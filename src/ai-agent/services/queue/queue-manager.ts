@@ -7,10 +7,12 @@ export class QueueManager {
   private queue: QueueItem[] = [];
   private isProcessing: boolean = false;
   private rateLimiter: RateLimiter;
+  private currentCycleId: string | null = null;
   
   // Rate limit settings
   private requestsPerMinute: number = 48; // Azure OpenAI S0 tier limit
   private processingInterval: number = Math.ceil(60000 / this.requestsPerMinute);
+  private cycleTimeout: number = 30 * 60 * 1000; // 30 minutes
   
   private constructor() {
     this.rateLimiter = RateLimiter.getInstance();
@@ -24,30 +26,21 @@ export class QueueManager {
   }
 
   public async queueMeetingAnalysis(
-    meeting: Meeting, 
+    meeting: Meeting,
     userId: string,
     processFunction: (meeting: Meeting, userId: string) => Promise<ProcessedMeeting>
   ): Promise<ProcessedMeeting> {
-    return new Promise<ProcessedMeeting>((resolve, reject) => {
-      // Add to queue
-      this.queue.push({ 
-        meeting, 
-        userId, 
-        resolve, 
-        reject,
-        processFunction 
-      });
-      
+    return new Promise((resolve, reject) => {
       const truncatedSubject = meeting.subject 
         ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
         : 'Untitled meeting';
         
       console.log(`📥 QUEUE: Added meeting ${truncatedSubject} [${meeting.id}]`);
+      this.queue.push({ meeting, userId, processFunction, resolve, reject });
       console.log(`📊 QUEUE STATUS: ${this.queue.length} item${this.queue.length !== 1 ? 's' : ''} waiting`);
       
-      // Start processing if not already running
       if (!this.isProcessing) {
-        console.log(`⚙️ QUEUE: Starting queue processor...`);
+        console.log('⚙️ QUEUE: Starting queue processor...');
         this.processQueue();
       }
     });
@@ -59,7 +52,29 @@ export class QueueManager {
     }
 
     this.isProcessing = true;
-    console.log(`🔄 QUEUE PROCESSOR: Started with ${this.queue.length} item${this.queue.length !== 1 ? 's' : ''}`);
+    this.currentCycleId = `cycle_${Date.now()}`;
+    const cycleStartTime = Date.now();
+    
+    console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🔄 QUEUE PROCESSOR STARTED                             ║
+║ 🆔 Cycle ID: ${this.currentCycleId}                   ║
+║ 📊 Queue Length: ${this.queue.length}                  ║
+╚════════════════════════════════════════════════════════╝`);
+
+    // Set up cycle timeout
+    const timeoutId = setTimeout(() => {
+      if (this.isProcessing && this.currentCycleId) {
+        console.log(`
+╔════════════════════════════════════════════════════════╗
+║ ⚠️ QUEUE CYCLE TIMEOUT                                 ║
+║ 🆔 Cycle ID: ${this.currentCycleId}                   ║
+║ ⏱️ Exceeded ${this.cycleTimeout/60000} minutes         ║
+╚════════════════════════════════════════════════════════╝`);
+        this.isProcessing = false;
+        this.currentCycleId = null;
+      }
+    }, this.cycleTimeout);
 
     try {
       while (this.queue.length > 0) {
@@ -88,25 +103,28 @@ export class QueueManager {
           
           console.log(`✅ COMPLETED: ${truncatedSubject} [${item.meeting.id}] in ${(processingTime/1000).toFixed(2)}s`);
           
-          if (result.analysis?.keyPoints?.length) {
-            console.log(`📝 KEY POINTS: Found ${result.analysis.keyPoints.length} key points`);
-          }
+          // Add delay between items to prevent overwhelming the system
+          await new Promise(resolve => setTimeout(resolve, this.processingInterval));
           
           item.resolve(result);
         } catch (error) {
           console.error(`❌ ERROR: Failed to process ${truncatedSubject} [${item.meeting.id}]`, error);
           item.reject(error);
         }
-
-        // Add a small delay between processing items to prevent rate limit issues
-        if (this.queue.length > 0) {
-          console.log(`⏱️ QUEUE PROCESSOR: Waiting ${(this.processingInterval/1000).toFixed(2)}s before next item`);
-          await new Promise(resolve => setTimeout(resolve, this.processingInterval));
-        }
       }
     } finally {
-      console.log(`🛑 QUEUE PROCESSOR: Finished, queue is empty`);
+      clearTimeout(timeoutId);
       this.isProcessing = false;
+      const cycleDuration = Date.now() - cycleStartTime;
+      
+      console.log(`
+╔════════════════════════════════════════════════════════╗
+║ ✅ QUEUE PROCESSOR COMPLETED                           ║
+║ 🆔 Cycle ID: ${this.currentCycleId}                   ║
+║ ⏱️ Duration: ${(cycleDuration/1000).toFixed(2)}s      ║
+╚════════════════════════════════════════════════════════╝`);
+      
+      this.currentCycleId = null;
     }
   }
 
