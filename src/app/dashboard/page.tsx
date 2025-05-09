@@ -27,6 +27,7 @@ import { Logo } from '@/components/ui/logo';
 import { useTheme } from "next-themes";
 import { Sidebar } from '@/components/ui/sidebar';
 import { SessionWarning } from '@/components/session-warning';
+import { ReleaseNotes } from '@/components/ReleaseNotes';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -1197,6 +1198,8 @@ export default function DashboardPage() {
                     />
                   </div>
                 )}
+                
+                <ReleaseNotes />
                 
                 <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
                   <DropdownMenuTrigger asChild>
