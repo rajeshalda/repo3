@@ -215,33 +215,105 @@ export class MeetingService {
 
             // Get attendance records if it's an online meeting
             let attendance;
+            let selectedReportId: string | undefined;
+            
             if (meeting.onlineMeeting?.joinUrl) {
                 try {
                     const accessToken = await this.getGraphToken();
                     const { meetingId, organizerId } = this.extractMeetingInfo(meeting.onlineMeeting.joinUrl);
                     
                     if (meetingId && organizerId) {
-                        const records = await this.getAttendanceRecords(userId, meetingId, organizerId, accessToken);
+                        // Get attendance reports first to find the report ID
+                        const formattedString = `1*${organizerId}*0**${meetingId}`;
+                        const base64MeetingId = Buffer.from(formattedString).toString('base64');
                         
-                        if (records.length > 0) {
-                            const attendanceRecords = records.map(record => ({
-                                name: record.identity?.displayName || 'Unknown',
-                                email: record.emailAddress || '',
-                                duration: record.totalAttendanceInSeconds,
-                                role: record.role,
-                                attendanceIntervals: record.attendanceIntervals
-                            }));
-
-                            const totalDuration = attendanceRecords.reduce((sum, record) => sum + record.duration, 0);
-                            
-                            attendance = {
-                                records: attendanceRecords,
-                                summary: {
-                                    totalDuration,
-                                    averageDuration: totalDuration / attendanceRecords.length,
-                                    totalParticipants: attendanceRecords.length
+                        // Get user info
+                        const userResponse = await fetch(
+                            `https://graph.microsoft.com/v1.0/users/${userId}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${accessToken}`,
+                                    'Content-Type': 'application/json'
                                 }
-                            };
+                            }
+                        );
+                        
+                        if (userResponse.ok) {
+                            const userData = await userResponse.json();
+                            const targetUserId = userData.id;
+                            
+                            // Get attendance reports
+                            const reportsResponse = await fetch(
+                                `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports`,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${accessToken}`,
+                                        'Content-Type': 'application/json'
+                                    }
+                                }
+                            );
+                            
+                            if (reportsResponse.ok) {
+                                const reportsData = await reportsResponse.json();
+                                
+                                if (reportsData.value && reportsData.value.length > 0) {
+                                    // Initialize the attendance report manager
+                                    const reportManager = new AttendanceReportManager();
+                                    
+                                    // Process all reports using the manager
+                                    const meetingDate = meeting.start.dateTime;
+                                    const isRecurring = !!meeting.seriesMasterId;
+                                    
+                                    const reportSelection = await reportManager.processAttendanceReports(
+                                        reportsData.value,
+                                        meetingDate,
+                                        isRecurring
+                                    );
+                                    
+                                    if (reportSelection.selectedReportId) {
+                                        selectedReportId = reportSelection.selectedReportId;
+                                        console.log('Selected report ID:', selectedReportId, 'Reason:', reportSelection.reason);
+                                        
+                                        // Get attendance records for the selected report
+                                        const recordsResponse = await fetch(
+                                            `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${selectedReportId}/attendanceRecords`,
+                                            {
+                                                headers: {
+                                                    'Authorization': `Bearer ${accessToken}`,
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            }
+                                        );
+                                        
+                                        if (recordsResponse.ok) {
+                                            const recordsData = await recordsResponse.json();
+                                            const records = recordsData.value || [];
+                                            
+                                            if (records.length > 0) {
+                                                const attendanceRecords = records.map((record: any) => ({
+                                                    name: record.identity?.displayName || 'Unknown',
+                                                    email: record.emailAddress || '',
+                                                    duration: record.totalAttendanceInSeconds,
+                                                    role: record.role,
+                                                    attendanceIntervals: record.attendanceIntervals
+                                                }));
+                                                
+                                                const totalDuration = attendanceRecords.reduce((sum: number, record: any) => sum + record.duration, 0);
+                                                
+                                                attendance = {
+                                                    records: attendanceRecords,
+                                                    summary: {
+                                                        totalDuration,
+                                                        averageDuration: totalDuration / attendanceRecords.length,
+                                                        totalParticipants: attendanceRecords.length
+                                                    },
+                                                    reportId: selectedReportId // Store the selected report ID
+                                                };
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 } catch (error) {
@@ -270,10 +342,17 @@ export class MeetingService {
             // Parse AI response
             const analysis = this.parseAnalysis(analysisResult, meeting.id);
             
-            // Create processed meeting
+            // Create processed meeting with properly formatted analysis
             const processedMeeting: ProcessedMeeting = {
                 ...meeting,
-                analysis,
+                analysis: {
+                    keyPoints: analysis.keyPoints || [],
+                    suggestedCategories: analysis.suggestedCategories || [],
+                    confidence: analysis.confidence || 0,
+                    context: {
+                        patterns: analysis.context?.patterns || []
+                    }
+                },
                 attendance,
                 lastProcessed: new Date().toISOString(),
                 userId

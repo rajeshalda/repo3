@@ -184,12 +184,16 @@ export class MeetingComparisonService {
                             }
                         }
                         
-                        // Pass both duration and start time to isPosted to handle recurring meetings correctly
+                        // Get report ID if available
+                        const reportId = newMeeting.attendance?.reportId;
+                        
+                        // Pass both duration, start time and report ID to isPosted
                         const hasTimeEntry = await storage.isPosted(
                             postedMeeting.userId, 
                             postedMeeting.id, 
                             userDuration,
-                            newMeeting.start?.dateTime // Pass the dateTime string, not the entire object
+                            newMeeting.start?.dateTime, // Pass the dateTime string, not the entire object
+                            reportId // Pass the report ID
                         );
                         
                         if (hasTimeEntry) {
@@ -351,12 +355,16 @@ export class MeetingComparisonService {
                         }
                     }
                     
-                    // Pass duration to isPosted to handle recurring meetings correctly
+                    // Get report ID if available
+                    const reportId = meeting.attendance?.reportId;
+                    
+                    // Pass duration and reportId to isPosted to handle recurring meetings correctly
                     const isPosted = await storage.isPosted(
                         meeting.userId, 
                         meeting.id, 
                         userDuration,
-                        meeting.start?.dateTime // Also pass the start time here
+                        meeting.start?.dateTime, // Pass the start time
+                        reportId // Pass the report ID if available
                     );
                     
                     if (!isPosted) {

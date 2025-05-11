@@ -1,3 +1,102 @@
 {
-  "meetings": []
+  "meetings": [
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "107960235",
+        "projectid": "1428052",
+        "moduleid": "552134",
+        "taskid": "16663158",
+        "worktypeid": "804786",
+        "personid": "423842",
+        "date": "2025-05-11",
+        "datemodified": "2025-05-11 06:14:08",
+        "time": "0.21",
+        "description": "Internal QA Test Case Prioritization",
+        "billable": "f",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Quality Assurance",
+        "client": "Internal",
+        "project": "Nathcorp",
+        "taskTitle": "Internal QA"
+      },
+      "rawResponse": {
+        "personid": 423842,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "107960235",
+          "projectid": "1428052",
+          "moduleid": "552134",
+          "taskid": "16663158",
+          "worktypeid": "804786",
+          "personid": "423842",
+          "date": "2025-05-11",
+          "datemodified": "2025-05-11 06:14:08",
+          "time": "0.21",
+          "description": "Internal QA Test Case Prioritization",
+          "billable": "f",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Quality Assurance"
+        }
+      },
+      "postedAt": "2025-05-11T11:44:06.470 IST",
+      "taskName": "Internal QA",
+      "reportId": "dca0993b-d485-46df-8543-dc82daae82c0"
+    },
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "107960302",
+        "projectid": "1428052",
+        "moduleid": "552134",
+        "taskid": "16663158",
+        "worktypeid": "804786",
+        "personid": "423842",
+        "date": "2025-05-11",
+        "datemodified": "2025-05-11 07:07:23",
+        "time": "0.11",
+        "description": "Internal QA Test Case Prioritization",
+        "billable": "f",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Quality Assurance",
+        "client": "Internal",
+        "project": "Nathcorp",
+        "taskTitle": "Internal QA"
+      },
+      "rawResponse": {
+        "personid": 423842,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "107960302",
+          "projectid": "1428052",
+          "moduleid": "552134",
+          "taskid": "16663158",
+          "worktypeid": "804786",
+          "personid": "423842",
+          "date": "2025-05-11",
+          "datemodified": "2025-05-11 07:07:23",
+          "time": "0.11",
+          "description": "Internal QA Test Case Prioritization",
+          "billable": "f",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Quality Assurance"
+        }
+      },
+      "postedAt": "2025-05-11T12:37:21.906 IST",
+      "taskName": "Internal QA",
+      "reportId": "f1fe858a-5727-40b8-b7bd-af837079d91f"
+    }
+  ]
 }

@@ -208,7 +208,13 @@ export class IntervalsTimeEntryService {
         return istDate.toISOString().split('T')[0];
     }
 
-    private async savePostedMeeting(meeting: ProcessedMeeting, timeEntry: TimeEntryResponse, rawResponse: any, userId: string, taskName: string): Promise<void> {
+    private async savePostedMeeting(
+        meeting: ProcessedMeeting, 
+        timeEntry: TimeEntryResponse, 
+        rawResponse: any, 
+        userId: string, 
+        taskName: string
+    ): Promise<void> {
         try {
             console.log('Saving posted meeting with time entry...');
             
@@ -233,6 +239,13 @@ export class IntervalsTimeEntryService {
                 timeEntry.taskTitle = taskName;
             }
 
+            // Extract the reportId from meeting attendance data if available
+            let reportId: string | undefined;
+            if (meeting.attendance?.reportId) {
+                reportId = meeting.attendance.reportId;
+                console.log(`[${now.toISOString()}] Found report ID in meeting data: ${reportId}`);
+            }
+
             // Only save the meeting in the time entry format
             const postedMeeting = {
                 meetingId: meeting.id,
@@ -240,7 +253,8 @@ export class IntervalsTimeEntryService {
                 timeEntry: timeEntry,
                 rawResponse: rawResponse,
                 postedAt: istTimestamp, // Use explicitly formatted IST timestamp
-                taskName: taskName
+                taskName: taskName,
+                reportId: reportId // Add the report ID if available
             };
 
             await storage.addPostedMeeting(userId, postedMeeting);

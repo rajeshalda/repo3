@@ -4,12 +4,12 @@ import { TimeEntryResponse } from '@/interfaces/time-entries';
 
 interface PostedMeeting {
     meetingId: string;
-    uniqueStorageId?: string;
     userId: string;
     timeEntry: TimeEntryResponse;
     rawResponse: any;
     postedAt: string;
     taskName?: string;
+    reportId?: string;
 }
 
 interface PostedMeetingsFile {
@@ -39,7 +39,8 @@ export class AIAgentPostedMeetingsStorage {
                         timeEntry: m.timeEntry,
                         rawResponse: m.rawResponse,
                         postedAt: m.postedAt || new Date().toISOString(),
-                        taskName: m.taskName // Preserve taskName if it exists
+                        taskName: m.taskName, // Preserve taskName if it exists
+                        reportId: m.reportId // Preserve reportId if it exists
                     }))
             };
 
@@ -80,44 +81,55 @@ export class AIAgentPostedMeetingsStorage {
 ║ 🔑 Meeting ID: ${postedMeeting.meetingId.substring(0, 15)}...    ║
 ║ ⏱️ Duration: ${postedMeeting.timeEntry?.time || 0} hours         ║
 ║ 🏷️ Work Type: ${postedMeeting.timeEntry?.worktypeid || 'N/A'}   ║
+${postedMeeting.reportId ? `║ 📊 Report ID: ${postedMeeting.reportId.substring(0, 15)}...   ║` : ''}
 ╚═══════════════════════════════════════════════════════════════════╝`);
         
-        // Create a unique storage ID that includes time and timestamp
+        // Get time in hours for logging
         const timeInHours = parseFloat(postedMeeting.timeEntry?.time?.toString() || '0');
         const durationInSeconds = Math.round(timeInHours * 3600);
-        const uniqueStorageId = `${postedMeeting.meetingId}_${timeInHours}_${now}`;
         
         console.log(`
 ┌─────────────────────── STORAGE DETAILS ───────────────────────┐
-│ 🆔 Storage ID: ${uniqueStorageId.substring(0, 25)}...         │
 │ ⏱️ Duration: ${durationInSeconds}s (${timeInHours} hours)     │
+${postedMeeting.reportId ? `│ 📊 Attendance Report ID: ${postedMeeting.reportId}     │` : ''}
 └───────────────────────────────────────────────────────────────┘`);
         
-        // Check if this EXACT entry already exists (shouldn't happen with the unique ID)
-        const exactDuplicate = this.data.meetings.some(m => {
-            // Check for same meeting ID, user ID, and time (all must match to be a duplicate)
-            const sameBasicInfo = (
-                m.meetingId === postedMeeting.meetingId && 
-                m.userId === userId &&
-                m.timeEntry?.time === postedMeeting.timeEntry?.time
+        // Check if a meeting with this report ID already exists
+        // Only apply this check if a reportId is available
+        if (postedMeeting.reportId) {
+            const existingMeeting = this.data.meetings.find(m => 
+                m.reportId === postedMeeting.reportId && 
+                m.userId === userId
             );
             
-            // If the basic info doesn't match, it's not a duplicate
-            if (!sameBasicInfo) return false;
-            
-            // Check if the dates match (if date is available)
-            if (m.timeEntry?.date && postedMeeting.timeEntry?.date) {
-                return m.timeEntry.date === postedMeeting.timeEntry.date;
+            if (existingMeeting) {
+                console.log(`[${now}] Duplicate found based on report ID: ${postedMeeting.reportId}, skipping storage`);
+                return;
             }
+        } else {
+            // If no reportId, fall back to checking meetingId, userId, and date
+            const existingMeeting = this.data.meetings.find(m => {
+                const sameBasicInfo = (
+                    m.meetingId === postedMeeting.meetingId && 
+                    m.userId === userId
+                );
+                
+                // If basic info doesn't match, it's not a duplicate
+                if (!sameBasicInfo) return false;
+                
+                // Check if the dates match (if date is available)
+                if (m.timeEntry?.date && postedMeeting.timeEntry?.date) {
+                    return m.timeEntry.date === postedMeeting.timeEntry.date;
+                }
+                
+                // If we can't compare dates, consider it a duplicate if all other info matches
+                return true;
+            });
             
-            // If we can't compare dates, consider it a duplicate if all other info matches
-            // This is safer than allowing potential duplicates
-            return true;
-        });
-        
-        if (exactDuplicate) {
-            console.log(`[${now}] Exact duplicate found, skipping storage`);
-            return;
+            if (existingMeeting) {
+                console.log(`[${now}] Duplicate found based on meeting ID and date, skipping storage`);
+                return;
+            }
         }
         
         // Create a proper copy of the timeEntry object
@@ -131,25 +143,36 @@ export class AIAgentPostedMeetingsStorage {
         // Convert postedAt to IST time format
         const postedAtIST = this.getISTFormattedDate(postedMeeting.postedAt);
         
-        // We're always adding as a new entry with the unique ID
-        console.log(`[${now}] Adding new meeting instance with unique ID: ${uniqueStorageId}`);
+        console.log(`[${now}] Adding new meeting with ${postedMeeting.reportId ? `report ID: ${postedMeeting.reportId}` : `meeting ID: ${postedMeeting.meetingId}`}`);
         
-        // Store both the original meetingId and our unique storage ID
+        // Store both the original meetingId and report ID
         this.data.meetings.push({
-            meetingId: postedMeeting.meetingId, // Original meetingId for reference/lookups
-            uniqueStorageId, // Our unique storage ID
+            meetingId: postedMeeting.meetingId,
             userId: postedMeeting.userId,
             timeEntry: timeEntryCopy,
             rawResponse: postedMeeting.rawResponse,
             postedAt: postedAtIST,
-            taskName: postedMeeting.taskName
+            taskName: postedMeeting.taskName,
+            reportId: postedMeeting.reportId
         });
 
         await this.saveData();
+        
+        // DEVELOPER CHECK - Log a more prominent marker for stored report ID
+        if (postedMeeting.reportId) {
+            console.log(`
+╔════════════════════════ REPORT ID STORAGE ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Successfully stored meeting with report ID   ║ 
+║ 📊 Report ID: ${postedMeeting.reportId}                        ║
+║ 🆔 Meeting ID: ${postedMeeting.meetingId.substring(0, 20)}...  ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+        }
+
         console.log(`
 ┌─────────────────────── STORAGE STATUS ───────────────────────┐
 │ ✅ Meeting added to storage                                  │
 │ 📊 Total meetings for user: ${this.data.meetings.length}     │
+${postedMeeting.reportId ? `│ 📑 Report ID saved: ${postedMeeting.reportId}              │` : ''}
 │ 💾 Storage data saved successfully                           │
 └───────────────────────────────────────────────────────────────┘`);
     }
@@ -177,7 +200,7 @@ export class AIAgentPostedMeetingsStorage {
         await this.saveData();
     }
 
-    async isPosted(userId: string, meetingId: string, duration: number = 0, dateTime: string = ''): Promise<boolean> {
+    async isPosted(userId: string, meetingId: string, duration: number = 0, dateTime: string = '', reportId?: string): Promise<boolean> {
         await this.loadData();
         
         if (!this.data.meetings.some(m => m.userId === userId)) {
@@ -187,50 +210,66 @@ export class AIAgentPostedMeetingsStorage {
         // Format the date from the meeting date string in YYY-MM-DD format
         const meetingDate = dateTime ? dateTime.split('T')[0] : '';
         
+        // DEVELOPER CHECK - Log a more prominent marker when using report ID
+        if (reportId) {
+            console.log(`
+╔════════════════════════ REPORT ID DEDUPLICATION ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Using ONLY report ID for duplication detection     ║ 
+║ 📊 Report ID: ${reportId}                                            ║
+║ 👤 User ID: ${userId.substring(0, 15)}...                            ║
+╚═══════════════════════════════════════════════════════════════════════╝`);
+        }
+        
         console.log(`
 ┌─────────────────────────────────────────────────┐
 │ 🔍 CHECKING IF MEETING IS POSTED                │
 │ 🆔 Meeting ID: ${meetingId.substring(0, 15)}...           │
 │ 📅 Date: ${meetingDate || 'N/A'}                         │
 │ ⏱️ Duration: ${Math.floor(duration/60)}m ${duration%60}s                    │
+${reportId ? `│ 📊 Report ID: ${reportId}              │` : ''}
 └─────────────────────────────────────────────────┘`);
         
-        // Check if this meeting with this specific duration is already posted
-        const result = this.data.meetings.some(meeting => {
-            // Check if meeting IDs match
-            const idMatch = meeting.meetingId === meetingId;
+        // Only check using report ID - never fall back to old method
+        if (reportId) {
+            const reportMatch = this.data.meetings.find(meeting => 
+                meeting.reportId === reportId && meeting.userId === userId
+            );
             
-            // If we have duration, use it for comparison
-            let durationMatch = true;
-            if (duration > 0 && meeting.timeEntry?.time) {
-                // Allow a 10-second margin for rounding errors
-                const timeInHours = parseFloat(meeting.timeEntry.time.toString());
-                const durationDiff = Math.abs(timeInHours * 3600 - duration);
-                durationMatch = durationDiff < 10;
+            if (reportMatch) {
+                console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✅ DUPLICATE DETECTED BY REPORT ID               │
+│ 📊 Report ID: ${reportId}                       │
+│ 👤 User ID: ${userId}                           │
+│ 📝 Matched meeting: ${reportMatch.meetingId}    │
+└─────────────────────────────────────────────────┘`);
+                
+                console.log(`✓ MATCH FOUND (by Report ID) - Meeting already posted on ${reportMatch.timeEntry?.date || 'unknown date'} with duration ${reportMatch.timeEntry?.time || 'unknown'} hours`);
+                if (reportMatch.taskName) {
+                    console.log(`📋 Task: ${reportMatch.taskName}`);
+                }
+                return true;
+            } else {
+                console.log(`
+┌─────────────────────────────────────────────────┐
+│ ℹ️ REPORT ID CHECK RESULT                       │
+│ 📊 Report ID: ${reportId}                       │
+│ 🔍 Status: No matching report ID found          │
+│ ✅ Conclusion: New meeting                      │
+└─────────────────────────────────────────────────┘`);
             }
-            
-            // If we have a date, use it for comparison with posted meeting date
-            let dateMatch = true;
-            if (meetingDate && meeting.timeEntry?.date) {
-                dateMatch = meeting.timeEntry.date === meetingDate;
-            }
-            
-            const isMatch = idMatch && durationMatch && dateMatch;
-            
-            if (isMatch) {
-                console.log(`✓ MATCH FOUND - Meeting already posted on ${meeting.timeEntry?.date} with duration ${meeting.timeEntry?.time} hours`);
-                if (meeting.taskName) {
-                    console.log(`📋 Task: ${meeting.taskName}`);
+        } else {
+            console.log(`
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘`);
         }
-            }
-            
-            return isMatch;
-        });
         
-        if (!result) {
-            console.log(`✅ Meeting not yet posted - can proceed with creating time entry`);
-        }
-        
-        return result;
+        // No report ID match - consider it a new meeting
+        // We no longer fall back to the old method
+        console.log(`✅ Meeting not yet posted - can proceed with creating time entry`);
+        return false;
     }
 } 

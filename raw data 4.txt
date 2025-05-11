@@ -1,3 +1,4 @@
+Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
 Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 
 ╔════════════════════════════════════════════════════════╗
@@ -5,7 +6,6 @@ Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 ║ 👤 User: pradeepg@m365x9...
 ╚════════════════════════════════════════════════════════╝
 🔑 Getting Graph API access token...
- POST /api/pm2/agent-status 200 in 6ms
 ✅ Access token acquired successfully
 
 ┌─────────────────────────────────────────────────┐
@@ -16,236 +16,19 @@ Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 │             2025-05-12T18:29:59.999Z              │
 └─────────────────────────────────────────────────┘
 📡 Fetching meetings from Graph API...
-✅ Received 10 meetings from API
-🔄 Found 9 recurring meeting instances:
-   1. "WD Production Pipeline Optimization " (2025-05-12T16:30:00.0000000)
-   2. "UMG Development Roadmap Planning" (2025-05-12T15:00:00.0000000)
-   3. "JCET Technical Specifications Workshop" (2025-05-12T12:00:00.0000000)
-   4. "WD Production Pipeline Optimization " (2025-05-11T16:30:00.0000000)
-   5. "UMG Development Roadmap Planning" (2025-05-11T15:00:00.0000000)
-   6. "JCET Technical Specifications Workshop" (2025-05-11T12:00:00.0000000)
-   7. "Internal QA Test Case Prioritization" (2025-05-11T10:00:00.0000000)
-   8. "WD Production Pipeline Optimization " (2025-05-10T16:30:00.0000000)
-   9. "UMG Development Roadmap Planning" (2025-05-10T15:00:00.0000000)
-📄 Found more meetings, fetching next page...
-📡 Fetching meetings from Graph API...
-✅ Received 10 meetings from API
-🔄 Found 2 recurring meeting instances:
-   1. "JCET Technical Specifications Workshop" (2025-05-10T12:00:00.0000000)
-   2. "Internal QA Test Case Prioritization" (2025-05-10T10:00:00.0000000)
+ POST /api/pm2/agent-status 200 in 11ms
+✅ Received 2 meetings from API
+🔄 Found 1 recurring meeting instances:
+   1. "Internal QA Test Case Prioritization" (2025-05-11T10:00:00.0000000)
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │
-│ 📊 Total meetings before filtering: 20            │
+│ 📊 Total meetings before filtering: 2            │
 └─────────────────────────────────────────────────┘
 
 [RAW MEETING 1]
 {
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNMA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==",
-  "categories": [],
-  "subject": "WD Production Pipeline Optimization ",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 228 986 332 442 1\r\nPasscode: vQ95qU3Q\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9CAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-12T16:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-12T17:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "208621686",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 2]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNKg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==",
-  "categories": [],
-  "subject": "UMG Development Roadmap Planning",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 273 469 296 731 0\r\nPasscode: up2Xc2qA\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9BAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-12T15:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-12T15:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "765647623",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 3]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNKA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==",
-  "categories": [],
-  "subject": "JCET Technical Specifications Workshop",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 249 859 801 171 1\r\nPasscode: xw6e5Uk2\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9AAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-12T12:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-12T12:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "391392795",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 4]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNMA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==",
-  "categories": [],
-  "subject": "WD Production Pipeline Optimization ",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 228 986 332 442 1\r\nPasscode: vQ95qU3Q\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9CAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-11T16:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-11T17:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "208621686",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 5]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNKg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==",
-  "categories": [],
-  "subject": "UMG Development Roadmap Planning",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 273 469 296 731 0\r\nPasscode: up2Xc2qA\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9BAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-11T15:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-11T15:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "765647623",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 6]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNKA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==",
-  "categories": [],
-  "subject": "JCET Technical Specifications Workshop",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 249 859 801 171 1\r\nPasscode: xw6e5Uk2\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9AAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-11T12:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-11T12:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "391392795",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 7]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNJg==\"",
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFtbAWA==\"",
   "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==",
   "categories": [],
   "subject": "Internal QA Test Case Prioritization",
@@ -277,415 +60,7 @@ Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
   }
 }
 
-[RAW MEETING 8]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwOZg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwVAAA=",
-  "categories": [],
-  "subject": "HR Recruitment Planning",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 214 145 864 685 9\r\nPasscode: qj7iX6Jy\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T18:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T18:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OTExNWNkOTEtZjI5MC00MzhmLThhY2ItNDcyODRjYzA3OWY4%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "612002981",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 9]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNMA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y9Vm3sAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==",
-  "categories": [],
-  "subject": "WD Production Pipeline Optimization ",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 228 986 332 442 1\r\nPasscode: vQ95qU3Q\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9CAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-10T16:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T17:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "208621686",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 10]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNKg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y9Vm3sAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==",
-  "categories": [],
-  "subject": "UMG Development Roadmap Planning",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 273 469 296 731 0\r\nPasscode: up2Xc2qA\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9BAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-10T15:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T15:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "765647623",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 11]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNKA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y9Vm3sAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==",
-  "categories": [],
-  "subject": "JCET Technical Specifications Workshop",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 249 859 801 171 1\r\nPasscode: xw6e5Uk2\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9AAAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-10T12:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T12:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "391392795",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 12]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNJg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3Y9Vm3sAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==",
-  "categories": [],
-  "subject": "Internal QA Test Case Prioritization",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 299 313 976 545 9\r\nPasscode: Bg9UF6JY\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S8-AAA=",
-  "type": "occurrence",
-  "start": {
-    "dateTime": "2025-05-10T10:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T10:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "275944787",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 13]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwOYA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwUAAA=",
-  "categories": [],
-  "subject": "UMG Client Feedback Session",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 254 720 277 093\r\nPasscode: uG6iy2A3\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T08:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T08:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzhmZmQ3NDctNTBkZS00Y2ZmLTljYTQtOGM2ZGJhMDIzY2Yy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "725122771",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 14]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwuKg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwYAAA=",
-  "categories": [],
-  "subject": "Mainframe App Integration",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 237 189 419 524\r\nPasscode: 3EM25i97\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T06:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T06:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OTk4ZGI1NjMtODNmMS00YThjLTlhMzItNTRkNWI0M2NiMTYy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "738476022",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 15]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwuLw==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwZAAA=",
-  "categories": [],
-  "subject": "Balaji Task",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 250 243 534 455\r\nPasscode: bD3tj3nz\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T05:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T06:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Mjk3YThhZDYtZDk1ZS00ZGJjLWE2NWYtMDA3ZjJjZjcxMDgz%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "469639904",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 16]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwuFw==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwXAAA=",
-  "categories": [],
-  "subject": "Daily Status Sync",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 294 850 532 558 1\r\nPasscode: cY7Ro748\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T05:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T05:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OWE4MDE2MDktNDEzMi00YjdiLWIwODAtNWY0MTNjZTBmNzc4%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "700060054",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 17]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwuFA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwWAAA=",
-  "categories": [],
-  "subject": "HR Onboarding Session",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 289 302 012 464 2\r\nPasscode: 2wD2vi7z\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T02:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T02:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDNhNmZhNGEtZTk1Mi00N2FlLWI0Y2YtNWFjNDAzMjZmMjQx%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "481233482",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 18]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfxmmg==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwaAAA=",
-  "categories": [],
-  "subject": "TEST",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 268 361 379 365 9\r\nPasscode: oh7Nt34A\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T00:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T01:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MGM4MTBlODQtNDYyYy00NGVlLWE4ZmQtZjZhZTJhOWFlNmNi%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "343406909",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 19]
-{
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFfwMaA==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAWCYwTAAA=",
-  "categories": [],
-  "subject": "WD Quality Control Review",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 233 180 319 578\r\nPasscode: AK67ga7o\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
-  "importance": "normal",
-  "isAllDay": false,
-  "isCancelled": false,
-  "seriesMasterId": null,
-  "type": "singleInstance",
-  "start": {
-    "dateTime": "2025-05-10T00:00:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "end": {
-    "dateTime": "2025-05-10T00:30:00.0000000",
-    "timeZone": "India Standard Time"
-  },
-  "attendees": [],
-  "organizer": {
-    "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-    }
-  },
-  "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjUxNzg5N2MtODBkYS00MDE1LTkzZmItNTRjM2M1ZDZiNjJm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "899140987",
-    "tollNumber": "+1 323-618-1840"
-  }
-}
-
-[RAW MEETING 20]
+[RAW MEETING 2]
 {
   "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAFdwNJA==\"",
   "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAV6S9FAAA=",
@@ -721,226 +96,16 @@ Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ MEETINGS FILTERED                            │
-│ 📊 Total meetings after filtering: 7           │
+│ 📊 Total meetings after filtering: 1           │
 └─────────────────────────────────────────────────┘
 📋 Today's meetings:
-   1. "WD Production Pipeline Optimization " (04:30 PM - 05:00 PM)
-   2. "UMG Development Roadmap Planning" (03:00 PM - 03:30 PM)
-   3. "JCET Technical Specifications Workshop" (12:00 PM - 12:30 PM)
-   4. "WD Production Pipeline Optimization " (04:30 PM - 05:00 PM)
-   5. "UMG Development Roadmap Planning" (03:00 PM - 03:30 PM)
-   6. "JCET Technical Specifications Workshop" (12:00 PM - 12:30 PM)
-   7. "Internal QA Test Case Prioritization" (10:00 AM - 10:30 AM)
+   1. "Internal QA Test Case Prioritization" (10:00 AM - 10:30 AM)
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 FETCHING ATTENDANCE RECORDS                  │
 └─────────────────────────────────────────────────┘
-📝 Processing online meeting: "WD Production Pipeline Optimiz..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
-Extracted Meeting ID: 19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZMlF6WkdFNU1tVXRPV1JoTVMwME4ySmlMV0kzT1dFdFlqWTRPRGRrWTJFeE1qUXpAdGhyZWFkLnYy
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZMlF6WkdFNU1tVXRPV1JoTVMwME4ySmlMV0kzT1dFdFlqWTRPRGRrWTJFeE1qUXpAdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "ed9a8346-3cc0-4e0c-ab5d-2f22176ac854",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-09T11:54:33.629Z",
-      "meetingEndDateTime": "2025-05-09T11:57:19.601Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-09T11:54:33.629Z',
-  reportDateStr: '2025-05-09',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: false
-}
-No attendance reports found within the IST day window
-📝 Processing online meeting: "UMG Development Roadmap Planni..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
-Extracted Meeting ID: 19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakE0WlRsaU1EVXRaRFl6TlMwME5UUXdMV0ZrWXpRdE5UTTBOVGMzTURRNE1tRTVAdGhyZWFkLnYy
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakE0WlRsaU1EVXRaRFl6TlMwME5UUXdMV0ZrWXpRdE5UTTBOVGMzTURRNE1tRTVAdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "0660fb97-8a08-4be8-ba28-3d702034ee43",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-09T09:35:38.95Z",
-      "meetingEndDateTime": "2025-05-09T09:40:19.547Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-09T09:35:38.95Z',
-  reportDateStr: '2025-05-09',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: false
-}
-No attendance reports found within the IST day window
-📝 Processing online meeting: "JCET Technical Specifications ..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
-Extracted Meeting ID: 19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRFl5TkdRNFpHUXROakEwTVMwME9XWm1MV0k0TURVdFpqUmlabVE1TnpRd1pqTTNAdGhyZWFkLnYy
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRFl5TkdRNFpHUXROakEwTVMwME9XWm1MV0k0TURVdFpqUmlabVE1TnpRd1pqTTNAdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "5f8f18a9-d241-424e-9545-54d682084647",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-09T08:40:29.32Z",
-      "meetingEndDateTime": "2025-05-09T08:45:24.378Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-09T08:40:29.32Z',
-  reportDateStr: '2025-05-09',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: false
-}
-No attendance reports found within the IST day window
-📝 Processing online meeting: "WD Production Pipeline Optimiz..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
-Extracted Meeting ID: 19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZMlF6WkdFNU1tVXRPV1JoTVMwME4ySmlMV0kzT1dFdFlqWTRPRGRrWTJFeE1qUXpAdGhyZWFkLnYy
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZMlF6WkdFNU1tVXRPV1JoTVMwME4ySmlMV0kzT1dFdFlqWTRPRGRrWTJFeE1qUXpAdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "ed9a8346-3cc0-4e0c-ab5d-2f22176ac854",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-09T11:54:33.629Z",
-      "meetingEndDateTime": "2025-05-09T11:57:19.601Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-09T11:54:33.629Z',
-  reportDateStr: '2025-05-09',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: false
-}
-No attendance reports found within the IST day window
-📝 Processing online meeting: "UMG Development Roadmap Planni..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
-Extracted Meeting ID: 19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakE0WlRsaU1EVXRaRFl6TlMwME5UUXdMV0ZrWXpRdE5UTTBOVGMzTURRNE1tRTVAdGhyZWFkLnYy
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakE0WlRsaU1EVXRaRFl6TlMwME5UUXdMV0ZrWXpRdE5UTTBOVGMzTURRNE1tRTVAdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "0660fb97-8a08-4be8-ba28-3d702034ee43",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-09T09:35:38.95Z",
-      "meetingEndDateTime": "2025-05-09T09:40:19.547Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-09T09:35:38.95Z',
-  reportDateStr: '2025-05-09',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: false
-}
-No attendance reports found within the IST day window
-📝 Processing online meeting: "JCET Technical Specifications ..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
-Extracted Meeting ID: 19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRFl5TkdRNFpHUXROakEwTVMwME9XWm1MV0k0TURVdFpqUmlabVE1TnpRd1pqTTNAdGhyZWFkLnYy
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRFl5TkdRNFpHUXROakEwTVMwME9XWm1MV0k0TURVdFpqUmlabVE1TnpRd1pqTTNAdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "5f8f18a9-d241-424e-9545-54d682084647",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-09T08:40:29.32Z",
-      "meetingEndDateTime": "2025-05-09T08:45:24.378Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-09T08:40:29.32Z',
-  reportDateStr: '2025-05-09',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: false
-}
-No attendance reports found within the IST day window
 📝 Processing online meeting: "Internal QA Test Case Prioriti..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
 Extracted Meeting ID: 19:meeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -949,6 +114,13 @@ Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6b
 Reports data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NemxtWkdWbE1HUXROamcxT0MwME5EWmpMV0ZtWTJVdE5ETXlZV1JpWm1aaU1XRTFAdGhyZWFkLnYy')/attendanceReports",
   "value": [
+    {
+      "id": "dca0993b-d485-46df-8543-dc82daae82c0",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-11T04:17:57.13Z",
+      "meetingEndDateTime": "2025-05-11T04:30:34.706Z",
+      "externalEventInformation": []
+    },
     {
       "id": "6a220241-1bb3-4b20-b325-daffb8bb8e96",
       "totalParticipantCount": 1,
@@ -982,11 +154,17 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
-│     2025-05-10T18:29:59.999Z                │
-│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
-│     5/11/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
+│     2025-05-11T18:29:59.999Z                │
+│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
+│     5/12/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-05-11T04:17:57.13Z',
+  reportDateStr: '2025-05-11',
+  istTargetDateStr: '2025-05-11',
+  isRelevant: true
+}
 Report time check: {
   reportTime: '2025-05-10T19:46:31.449Z',
   reportDateStr: '2025-05-11',
@@ -1011,14 +189,14 @@ Report time check: {
   istTargetDateStr: '2025-05-11',
   isRelevant: false
 }
-Found 1 relevant reports, using most recent: 6a220241-1bb3-4b20-b325-daffb8bb8e96
+Found 2 relevant reports, using most recent: dca0993b-d485-46df-8543-dc82daae82c0
 Records data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NemxtWkdWbE1HUXROamcxT0MwME5EWmpMV0ZtWTJVdE5ETXlZV1JpWm1aaU1XRTFAdGhyZWFkLnYy')/attendanceReports('6a220241-1bb3-4b20-b325-daffb8bb8e96')/attendanceRecords",
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NemxtWkdWbE1HUXROamcxT0MwME5EWmpMV0ZtWTJVdE5ETXlZV1JpWm1aaU1XRTFAdGhyZWFkLnYy')/attendanceReports('dca0993b-d485-46df-8543-dc82daae82c0')/attendanceRecords",
   "value": [
     {
       "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
       "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
-      "totalAttendanceInSeconds": 118,
+      "totalAttendanceInSeconds": 753,
       "role": "Organizer",
       "registrationId": null,
       "identity": {
@@ -1029,9 +207,9 @@ Records data: {
       },
       "attendanceIntervals": [
         {
-          "joinDateTime": "2025-05-10T19:46:35.5071374Z",
-          "leaveDateTime": "2025-05-10T19:48:34.3665766Z",
-          "durationInSeconds": 118
+          "joinDateTime": "2025-05-11T04:18:01.5131959Z",
+          "leaveDateTime": "2025-05-11T04:30:34.7065009Z",
+          "durationInSeconds": 753
         }
       ],
       "externalRegistrationInformation": {
@@ -1045,1022 +223,109 @@ Records data: {
 ┌─────────────────────────────────────────────────┐
 │ ✅ ATTENDANCE RECORDS FOUND                     │
 │ 📊 Total Records: 1             │
-│ 🕒 Meeting Start: 2025-05-10T19:46:31.449Z │
+│ 🕒 Meeting Start: 2025-05-11T04:17:57.13Z │
 └─────────────────────────────────────────────────┘
 ⚠️ Meeting already processed: "Internal QA Test Case Prioriti..."
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FETCH COMPLETED
-║ 📊 Total meetings: 7 | With attendance: 0
+║ 📊 Total meetings: 1 | With attendance: 0
 ║ 👥 Unique attendees: 0
 ╚════════════════════════════════════════════════════════╝
-Found 7 meetings for processing
+Found 1 meetings for processing
 
 ╔════════════════════════════════════════════════════════╗
-║ 🔄 STARTING BATCH PROCESSING [batch_1746907821659_gszwcuk3e]
-║ 📊 Total meetings: 7
-║ 🆔 Cycle ID: cycle_1746907821659
+║ 🔄 STARTING BATCH PROCESSING [batch_1746945171816_239ji0k5k]
+║ 📊 Total meetings: 1
+║ 🆔 Cycle ID: cycle_1746945171816
 ╚════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
-│ ▶️ Processing batch 1/2 (5 meetings) │
+│ ▶️ Processing batch 1/1 (1 meetings) │
 └─────────────────────────────────────────────────┘
 📶 Rate limiter status: 48/5 tokens available
 ✅ Rate limiter tokens acquired
-📑 Processing meeting: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-📥 QUEUE: Added meeting "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-📊 QUEUE STATUS: 1 item waiting
-⚙️ QUEUE: Starting queue processor...
-
-╔════════════════════════════════════════════════════════╗
-║ 🔄 QUEUE PROCESSOR STARTED                             ║
-║ 🆔 Cycle ID: cycle_1746907821663                   ║
-║ 📊 Queue Length: 1                  ║
-╚════════════════════════════════════════════════════════╝
-📑 Processing meeting: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-📥 QUEUE: Added meeting "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-📊 QUEUE STATUS: 2 items waiting
-📑 Processing meeting: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
-📥 QUEUE: Added meeting "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
-📊 QUEUE STATUS: 3 items waiting
-📑 Processing meeting: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-📥 QUEUE: Added meeting "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-📊 QUEUE STATUS: 4 items waiting
-📑 Processing meeting: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-📥 QUEUE: Added meeting "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-📊 QUEUE STATUS: 5 items waiting
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]       
-No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==] in 3.37s
-✅ Successfully processed: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]       
-No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==] in 2.26s
- GET /api/pm2/status 200 in 14ms
-✅ Successfully processed: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]       
-No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==] in 1.77s
-✅ Successfully processed: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]       
-No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==] in 2.30s
-✅ Successfully processed: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]       
-No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==] in 1.80s
-
-╔════════════════════════════════════════════════════════╗
-║ ✅ QUEUE PROCESSOR COMPLETED                           ║
-║ 🆔 Cycle ID: cycle_1746907821663                   ║
-║ ⏱️ Duration: 17.82s      ║
-╚════════════════════════════════════════════════════════╝
-✅ Successfully processed: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-⏱️ Waiting 1 second before next batch...
-
-┌─────────────────────────────────────────────────┐
-│ ✓ Batch 1/2 completed                      │
-│ ✓ Progress: 5/7 meetings (71%)    │
-│ ✓ Success: 5 | Failed: 0               │
-└─────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────┐
-│ ▶️ Processing batch 2/2 (2 meetings) │
-└─────────────────────────────────────────────────┘
-📶 Rate limiter status: 43.0608/5 tokens available
-✅ Rate limiter tokens acquired
-📑 Processing meeting: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
-📥 QUEUE: Added meeting "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
-📊 QUEUE STATUS: 1 item waiting
-⚙️ QUEUE: Starting queue processor...
-
-╔════════════════════════════════════════════════════════╗
-║ 🔄 QUEUE PROCESSOR STARTED                             ║
-║ 🆔 Cycle ID: cycle_1746907840491                   ║
-║ 📊 Queue Length: 1                  ║
-╚════════════════════════════════════════════════════════╝
 📑 Processing meeting: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
 📥 QUEUE: Added meeting "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
-📊 QUEUE STATUS: 2 items waiting
+📊 QUEUE STATUS: 1 item waiting
+⚙️ QUEUE: Starting queue processor...
+
+╔════════════════════════════════════════════════════════╗
+║ 🔄 QUEUE PROCESSOR STARTED                             ║
+║ 🆔 Cycle ID: cycle_1746945171819                   ║
+║ 📊 Queue Length: 1                  ║
+╚════════════════════════════════════════════════════════╝
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]       
- POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 30010ms
-No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==] in 1.91s
-✅ Successfully processed: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]       
-Selected report ID: 6a220241-1bb3-4b20-b325-daffb8bb8e96 Reason: This report is from the same day as the target meeting, has a valid (positive) duration, and is the closest in time to the scheduled meeting instance for a recurring meeting.
-✅ COMPLETED: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==] in 3.69s
+🔍 PROCESSING: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
+Selected report ID: dca0993b-d485-46df-8543-dc82daae82c0 Reason: Single valid report available
+✅ COMPLETED: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==] in 4.15s
 
 ╔════════════════════════════════════════════════════════╗
 ║ ✅ QUEUE PROCESSOR COMPLETED                           ║
-║ 🆔 Cycle ID: cycle_1746907840491                   ║
-║ ⏱️ Duration: 8.13s      ║
+║ 🆔 Cycle ID: cycle_1746945171819                   ║
+║ ⏱️ Duration: 5.40s      ║
 ╚════════════════════════════════════════════════════════╝
 ✅ Successfully processed: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
 
 ┌─────────────────────────────────────────────────┐
-│ ✓ Batch 2/2 completed                      │
-│ ✓ Progress: 7/7 meetings (100%)    │
-│ ✓ Success: 7 | Failed: 0               │
+│ ✓ Batch 1/1 completed                      │
+│ ✓ Progress: 1/1 meetings (100%)    │
+│ ✓ Success: 1 | Failed: 0               │
 └─────────────────────────────────────────────────┘
 
 ╔════════════════════════════════════════════════════════╗
-║ 🏁 BATCH PROCESSING COMPLETED [batch_1746907821659_gszwcuk3e]
-║ 📊 Total: 7 | Success: 7 | Failed: 0
+║ 🏁 BATCH PROCESSING COMPLETED [batch_1746945171816_239ji0k5k]
+║ 📊 Total: 1 | Success: 1 | Failed: 0
 ║ 📈 Success rate: 100%
 ╚════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════╗
 ║ ⏱️ CYCLE COMPLETED                                     ║
 ║ 🆔 Cycle ID: null                   ║
-║ ⌛ Duration: 26.96s      ║
+║ ⌛ Duration: 5.41s      ║
 ╚════════════════════════════════════════════════════════╝
-Started batch processing with ID: batch_1746907821659_gszwcuk3e
-Progress: 7/7 meetings processed
+Started batch processing with ID: batch_1746945171816_239ji0k5k
+Progress: 1/1 meetings processed
 All meetings processed
-Successfully processed 7 meetings
+Successfully processed 1 meetings
 Filtering out already processed meetings and meetings the user didn't attend...
 
 ╔══════════════════════════════════════════════════════════╗
 ║ 🔍 MEETING FILTER STARTING                                ║
-║ 📊 Total meetings to check: 7                           ║
+║ 📊 Total meetings to check: 1                           ║
 ║ 🔄 Batch size: 3 | Delay: 15s                        ║
 ╚══════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
-│ 📦 Processing batch 1/3 (3 meetings) ║
+│ 📦 Processing batch 1/1 (1 meetings) ║
 └─────────────────────────────────────────────────┘
-✅ Unique: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-✅ Unique: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-✅ Unique: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
 
 ┌─────────────────────────────────────────────────┐
-│ ✓ Batch 1/3 completed                      ║
-│ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkADZhZTY4Njl...           │
+│ 📅 Date: 2025-05-11                         │
+│ ⏱️ Duration: 12m 33s                    │
+│ 📊 Report ID: dca0993b-d485-46df-8543-dc82daae82c0              │
 └─────────────────────────────────────────────────┘
-⏱️ Waiting 15 seconds before next batch...
- GET /api/pm2/status 200 in 11ms
 
 ┌─────────────────────────────────────────────────┐
-│ 📦 Processing batch 2/3 (3 meetings) ║
+│ ✅ DUPLICATE DETECTED BY REPORT ID               │
+│ 📊 Report ID: dca0993b-d485-46df-8543-dc82daae82c0                       │
+│ 👤 User ID: pradeepg@m365x92504196.onmicrosoft.com                           │
+│ 📝 Matched meeting: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==    │
 └─────────────────────────────────────────────────┘
-✅ Unique: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
-✅ Unique: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
-✅ Unique: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
+✓ MATCH FOUND (by Report ID) - Meeting already posted on 2025-05-11 with duration 0.21 hours
+📋 Task: Internal QA
+⏭️ Duplicate: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAggI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
 
 ┌─────────────────────────────────────────────────┐
-│ ✓ Batch 2/3 completed                      ║
-│ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
-└─────────────────────────────────────────────────┘
-⏱️ Waiting 15 seconds before next batch...
- GET /api/pm2/status 200 in 12ms
-
-┌─────────────────────────────────────────────────┐
-│ 📦 Processing batch 3/3 (1 meetings) ║
-└─────────────────────────────────────────────────┘
-✅ Unique: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
-
-┌─────────────────────────────────────────────────┐
-│ ✓ Batch 3/3 completed                      ║
-│ 📊 Total: 1 | Unique: 1 | Duplicates: 0   ║
+│ ✓ Batch 1/1 completed                      ║
+│ 📊 Total: 1 | Unique: 0 | Duplicates: 1   ║
 └─────────────────────────────────────────────────┘
 
 ╔══════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FILTER COMPLETED                               ║
-║ 📊 Total: 7 | Duplicates: 0 | Unique: 7     ║
-║ 📈 Duplication rate: 0%                                   ║
+║ 📊 Total: 1 | Duplicates: 1 | Unique: 0     ║
+║ 📈 Duplication rate: 100%                                   ║
 ╚══════════════════════════════════════════════════════════╝
-No attendance records found for meeting "WD Production Pipeline Optimization ". Skipping.
-No attendance records found for meeting "UMG Development Roadmap Planning". Skipping.
-No attendance records found for meeting "JCET Technical Specifications Workshop". Skipping.
-No attendance records found for meeting "WD Production Pipeline Optimization ". Skipping.
-No attendance records found for meeting "UMG Development Roadmap Planning". Skipping.
-No attendance records found for meeting "JCET Technical Specifications Workshop". Skipping.
-User pradeepg@m365x92504196.onmicrosoft.com attended meeting "Internal QA Test Case Prioritization" for 118 seconds
-Found 7 unique meetings, 1 of which were attended by the user
-Matching tasks to attended meetings...
-Matching tasks for meeting: Internal QA Test Case Prioritization
-Found user's attendance record with duration: 118 seconds
-Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
-Fetching tasks using standard API implementation...
-Current user personid: 423842
-Raw tasks API response: Found 12 total tasks
-Total tasks from API: 12
-Found 12 open tasks assigned to user 423842
-Standard API returned 12 tasks
-Found 12 tasks in Intervals:
-- Daily Status Report (16660111)
-- WD Task (16660112)
-- UMG Task (16660113)
-- Sandisk Task (16660114)
-- Infra  Task (16660116)
-- Pradeep Task (16662754)
-- JCET Discussion (16663154)
-- Internal QA (16663158)
-- 3 AM Task Project (16663162)
-- Apple ios Development (16663166)
-- Balaji Mixture Closing State (16663168)
-- HR Monthly Report (16663171)
-Meeting analysis for matching: {
-  "subject": "Internal QA Test Case Prioritization",
-  "startTime": "2025-05-11T01:16:35.0000000",
-  "endTime": "2025-05-11T01:18:34.0000000",
-  "duration": 118,
-  "analysis": {
-    "keyPoints": [],
-    "suggestedCategories": [],
-    "confidence": 0.5,
-    "context": {
-      "patterns": []
-    }
-  },
-  "attendance": {
-    "records": [
-      {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 118,
-        "role": "Organizer",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-05-10T19:46:35.5071374Z",
-            "leaveDateTime": "2025-05-10T19:48:34.3665766Z",
-            "durationInSeconds": 118
-          }
-        ]
-      }
-    ],
-    "summary": {
-      "totalDuration": 118,
-      "averageDuration": 118,
-      "totalParticipants": 1
-    }
-  }
-}
-Tasks data for matching: [
-  {
-    "id": "16660111",
-    "title": "Daily Status Report",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16660112",
-    "title": "WD Task",
-    "projectid": "1428055",
-    "project": "WD Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391397",
-    "client": "WD",
-    "moduleid": "552132",
-    "module": "Production",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "WD Project"
-    }
-  },
-  {
-    "id": "16660113",
-    "title": "UMG Task",
-    "projectid": "1428054",
-    "project": "UMG Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391396",
-    "client": "UMG",
-    "moduleid": "552133",
-    "module": "Development",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "UMG Project"
-    }
-  },
-  {
-    "id": "16660114",
-    "title": "Sandisk Task",
-    "projectid": "1428053",
-    "project": "SanDisk Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391395",
-    "client": "SanDisk",
-    "moduleid": "552132",
-    "module": "Production",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "SanDisk Project"
-    }
-  },
-  {
-    "id": "16660116",
-    "title": "Infra  Task",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16662754",
-    "title": "Pradeep Task",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16663154",
-    "title": "JCET Discussion",
-    "projectid": "1428199",
-    "project": "JCET Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391429",
-    "client": "JCET",
-    "moduleid": "552133",
-    "module": "Development",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "JCET Project"
-    }
-  },
-  {
-    "id": "16663158",
-    "title": "Internal QA",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552134",
-    "module": "Quality Assurance",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16663162",
-    "title": "3 AM Task Project",
-    "projectid": "1428201",
-    "project": "3 AM Blue-Print",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391430",
-    "client": "3 AM",
-    "moduleid": "552130",
-    "module": "Design",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "3 AM Blue-Print"
-    }
-  },
-  {
-    "id": "16663166",
-    "title": "Apple ios Development",
-    "projectid": "1428202",
-    "project": "Apple ios Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391431",
-    "client": "Apple",
-    "moduleid": "552129",
-    "module": "Discovery",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Apple ios Project"
-    }
-  },
-  {
-    "id": "16663168",
-    "title": "Balaji Mixture Closing State",
-    "projectid": "1428203",
-    "project": "Balaji Mixture Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391432",
-    "client": "Balaji Mixture",
-    "moduleid": "552132",
-    "module": "Production",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Balaji Mixture Project"
-    }
-  },
-  {
-    "id": "16663171",
-    "title": "HR Monthly Report",
-    "projectid": "1428206",
-    "project": "HR Monthly Discussion",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "HR Monthly Discussion"
-    }
-  }
-]
-Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
-
-Meeting Details:
-{
-  "subject": "Internal QA Test Case Prioritization",
-  "startTime": "2025-05-11T01:16:35.0000000",
-  "endTime": "2025-05-11T01:18:34.0000000",
-  "duration": 118,
-  "analysis": {
-    "keyPoints": [],
-    "suggestedCategories": [],
-    "confidence": 0.5,
-    "context": {
-      "patterns": []
-    }
-  },
-  "attendance": {
-    "records": [
-      {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 118,
-        "role": "Organizer",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-05-10T19:46:35.5071374Z",
-            "leaveDateTime": "2025-05-10T19:48:34.3665766Z",
-            "durationInSeconds": 118
-          }
-        ]
-      }
-    ],
-    "summary": {
-      "totalDuration": 118,
-      "averageDuration": 118,
-      "totalParticipants": 1
-    }
-  }
-}
-
-Available Tasks:
-[
-  {
-    "id": "16660111",
-    "title": "Daily Status Report",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16660112",
-    "title": "WD Task",
-    "projectid": "1428055",
-    "project": "WD Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391397",
-    "client": "WD",
-    "moduleid": "552132",
-    "module": "Production",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "WD Project"
-    }
-  },
-  {
-    "id": "16660113",
-    "title": "UMG Task",
-    "projectid": "1428054",
-    "project": "UMG Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391396",
-    "client": "UMG",
-    "moduleid": "552133",
-    "module": "Development",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "UMG Project"
-    }
-  },
-  {
-    "id": "16660114",
-    "title": "Sandisk Task",
-    "projectid": "1428053",
-    "project": "SanDisk Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391395",
-    "client": "SanDisk",
-    "moduleid": "552132",
-    "module": "Production",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "SanDisk Project"
-    }
-  },
-  {
-    "id": "16660116",
-    "title": "Infra  Task",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16662754",
-    "title": "Pradeep Task",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16663154",
-    "title": "JCET Discussion",
-    "projectid": "1428199",
-    "project": "JCET Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391429",
-    "client": "JCET",
-    "moduleid": "552133",
-    "module": "Development",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "JCET Project"
-    }
-  },
-  {
-    "id": "16663158",
-    "title": "Internal QA",
-    "projectid": "1428052",
-    "project": "Nathcorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552134",
-    "module": "Quality Assurance",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Nathcorp"
-    }
-  },
-  {
-    "id": "16663162",
-    "title": "3 AM Task Project",
-    "projectid": "1428201",
-    "project": "3 AM Blue-Print",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391430",
-    "client": "3 AM",
-    "moduleid": "552130",
-    "module": "Design",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "3 AM Blue-Print"
-    }
-  },
-  {
-    "id": "16663166",
-    "title": "Apple ios Development",
-    "projectid": "1428202",
-    "project": "Apple ios Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391431",
-    "client": "Apple",
-    "moduleid": "552129",
-    "module": "Discovery",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Apple ios Project"
-    }
-  },
-  {
-    "id": "16663168",
-    "title": "Balaji Mixture Closing State",
-    "projectid": "1428203",
-    "project": "Balaji Mixture Project",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391432",
-    "client": "Balaji Mixture",
-    "moduleid": "552132",
-    "module": "Production",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "Balaji Mixture Project"
-    }
-  },
-  {
-    "id": "16663171",
-    "title": "HR Monthly Report",
-    "projectid": "1428206",
-    "project": "HR Monthly Discussion",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391394",
-    "client": "Internal",
-    "moduleid": "552131",
-    "module": "Out of Scope",
-    "assigneeid": "423852,423842",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "HR Monthly Discussion"
-    }
-  }
-]
-
-IT COMPANY CONTEXT:
-- We are an IT company with specialized departments handling various technical responsibilities
-- Meetings are typically focused on specific departmental tasks and projects
-- Each department has its own typical projects, tools, and terminology
-
-IT DEPARTMENT SPECIALIZATIONS:
-1. Software Development:
-   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development
-   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
-
-2. DevOps & CI/CD:
-   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
-   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
-
-3. Infrastructure & Cloud:
-   - Topics: server management, cloud architecture, network configuration, capacity planning
-   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
-
-4. QA & Testing:
-   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing        
-   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
-
-5. IT Support & Helpdesk:
-   - Topics: incident management, user support, troubleshooting, ticket resolution
-   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
-
-6. Security & Compliance:
-   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
-   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
-
-7. Data & Analytics:
-   - Topics: data modeling, analytics implementation, reporting, database management
-   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
-
-8. System Administration:
-   - Topics: system maintenance, updates, monitoring, user management
-   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
-
-MATCHING RULES:
-1. Prioritize tasks with direct keyword matches to the meeting subject or description
-2. Match meetings to the most specific department based on technical keywords in the subject/description
-3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
-4. If still unclear, default to the department where the user has the most assigned tasks
-5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
-6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
-7. NEVER match with tasks that have a "Closed" status
-8. If the client is "Nathcorp", note that these are internal non-billable tasks
-9. If no assigned tasks match well, return an empty matchedTasks array
-10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
-
-CONFIDENCE SCORE GUIDELINES:
-- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
-- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
-- High (0.7-0.9): Strong evidence with clear technical keyword matches
-- Perfect (1.0): Exact match between meeting subject and technical task
-- Score of 0: Task is not assigned to the user or task is closed
-
-EXAMPLES:
-✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
-✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
-✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
-✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
-✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
-✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
-✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
-✗ BAD: Any match with a task that has status "Closed" (should be excluded)
-
-Analyze the meeting and tasks, then provide your response in the following JSON format:
-
-{
-    "matchedTasks": [
-        {
-            "taskId": "string",
-            "taskTitle": "string",
-            "meetingDetails": {
-                "subject": "string",
-                "startTime": "string",
-                "endTime": "string",
-                "actualDuration": number  // Use the duration from attendance records in seconds
-            },
-            "confidence": number,
-            "reason": "string"
-        }
-    ]
-}
-
-Notes:
-1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
-2. Confidence should be a number between 0 and 1
-3. Provide clear reasons for each match based on specific evidence
-4. Return valid JSON that can be parsed directly
-5. Include all required fields for each task
-6. The actualDuration should be taken from the attendance records and is in seconds
-7. Tasks with status "Closed" should NEVER be included in matchedTasks
-8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
-OpenAI response: {
-    "matchedTasks": [
-        {
-            "taskId": "16663158",
-            "taskTitle": "Internal QA",
-            "meetingDetails": {
-                "subject": "Internal QA Test Case Prioritization",
-                "startTime": "2025-05-11T01:16:35.0000000",
-                "endTime": "2025-05-11T01:18:34.0000000",
-                "actualDuration": 118
-            },
-            "confidence": 1.0,
-            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
-        }
-    ]
-}
-Raw OpenAI response: {
-    "matchedTasks": [
-        {
-            "taskId": "16663158",
-            "taskTitle": "Internal QA",
-            "meetingDetails": {
-                "subject": "Internal QA Test Case Prioritization",
-                "startTime": "2025-05-11T01:16:35.0000000",
-                "endTime": "2025-05-11T01:18:34.0000000",
-                "actualDuration": 118
-            },
-            "confidence": 1.0,
-            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
-        }
-    ]
-}
-Extracted JSON: {
-    "matchedTasks": [
-        {
-            "taskId": "16663158",
-            "taskTitle": "Internal QA",
-            "meetingDetails": {
-                "subject": "Internal QA Test Case Prioritization",
-                "startTime": "2025-05-11T01:16:35.0000000",
-                "endTime": "2025-05-11T01:18:34.0000000",
-                "actualDuration": 118
-            },
-            "confidence": 1.0,
-            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
-        }
-    ]
-}
-Parsed tasks: [
-  {
-    "taskId": "16663158",
-    "taskTitle": "Internal QA",
-    "meetingDetails": {
-      "subject": "Internal QA Test Case Prioritization",
-      "startTime": "2025-05-11T01:16:35.0000000",
-      "endTime": "2025-05-11T01:18:34.0000000",
-      "actualDuration": 118
-    },
-    "confidence": 1,
-    "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
-  }
-]
-Parsed matching result: {
-  "meetingSubject": "Internal QA Test Case Prioritization",
-  "matchedTasks": [
-    {
-      "taskId": "16663158",
-      "taskTitle": "Internal QA",
-      "meetingDetails": {
-        "subject": "Internal QA Test Case Prioritization",
-        "startTime": "2025-05-11T01:16:35.0000000",
-        "endTime": "2025-05-11T01:18:34.0000000",
-        "actualDuration": 118
-      },
-      "confidence": 1,
-      "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
-    }
-  ]
-}
-Using best match for meeting "Internal QA Test Case Prioritization": Task 16663158 (Internal QA) with confidence 1
-Found 1 matches for meeting: Internal QA Test Case Prioritization
-Creating time entries...
-Creating time entry for meeting: Internal QA Test Case Prioritization
-
-╔════════════════════════════════════════════════════════╗
-║ 🚀 TIME ENTRY CREATION STARTED
-║ 📝 Meeting: Internal QA Test Case Prioriti...
-║ 🔄 Task: Internal QA
-╚════════════════════════════════════════════════════════╝
-⏳ Fetching person & task information...
- ✓ Compiled /api/intervals-proxy in 435ms (1630 modules)
-Making request to intervals API: https://api.myintervals.com/me/
-Making request to intervals API: https://api.myintervals.com/task/16663158?limit=500
-Intervals API response: Status 200, content-type: application/json
-Response data: {"personid":423842,"status":"OK","code":200,"listcount":1,"me":[{"id":"423842","localid":"2","clientid":null,"title":"","firstname":"pradeepg","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeepg","groupid":"4","group":"Resource","client":nu...
- POST /api/intervals-proxy 200 in 1568ms
-Intervals API response: Status 200, content-type: application/json
-Response data: {"personid":423842,"status":"OK","code":200,"task":{"id":"16663158","localid":"8","assignee":[{"personid":"423852","assignee":"irvins","assigneeactive":"t","personlocalid":"3"},{"personid":"423842","assignee":"pradeepg","assigneeactive":"t","personlocalid":"2"}],"assigneeid":"423852,423842","followe...
- POST /api/intervals-proxy 200 in 1658ms
-Retrieved task details: {
-  id: '16663158',
-  title: 'Internal QA',
-  status: 'Open',
-  client: 'Internal',
-  assigneeid: '423852,423842'
-}
-
-┌─────────────────────────────────────────────────┐
-│ ✓ USER & TASK INFO RETRIEVED                    │
-│ 👤 User:                          │
-│ 📋 Task: #16663158 - Internal QA │
-│ 🏢 Client: Internal | Project: Nathcorp │
-└─────────────────────────────────────────────────┘
-⏳ Fetching work types for project 1428052...
-Making request to intervals API: https://api.myintervals.com/projectworktype/
-Intervals API response: Status 200, content-type: application/json
-Response data: {"personid":423842,"status":"OK","code":200,"listcount":110,"projectworktype":[{"id":"31439430","projectid":"1428052","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439441","projectid":"1428053","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439452","projectid":"142...
- POST /api/intervals-proxy 200 in 492ms
-Found 1 work types for project 1428052: [
-  {
-    id: '804776',
-    name: 'Admin',
-    projectId: '1428052',
-    workTypeId: '804776',
-    projectWorkTypeId: '31439430'
-  }
-]
-ℹ️ Using worktype ID 804786 for India-Meeting
-🔍 Checking attendance records for user pradeepg@m365x92504196.onmicrosoft.com...
-✅ Found user's attendance record with duration: 1m 58s
-💰 Billable status: NO ✗ (Client: Internal)
-
-┌─────────────────────────────────────────────────┐
-│ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: 2025-05-10 (from UTC 2025-05-11)  │
-│ ⏱️ Duration: 0.03 hours (1m 58s)  │
-│ 💰 Billable: No                              │
-└─────────────────────────────────────────────────┘
-📡 Sending time entry request to Intervals API...
-Making request to intervals API: https://api.myintervals.com/time
-Intervals API response: Status 200, content-type: application/json
-Response data: {"personid":423842,"status":"Created","code":201,"time":{"id":"107959619","projectid":"1428052","moduleid":"552134","taskid":"16663158","worktypeid":"804786","personid":"423842","date":"2025-05-10","datemodified":"2025-05-10 20:11:29","time":"0.03","description":"Internal QA Test Case Prioritization...
- POST /api/intervals-proxy 200 in 836ms
-✅ Time entry creation successful!
-📝 Time entry created with ID: 107959619
-💾 Saving meeting details to storage...
-Saving posted meeting with time entry...
-Posted timestamp: { utc: '2025-05-10T20:11:28.191Z', ist: '2025-05-11T01:41:28.191 IST' }
-[2025-05-10T20:11:28.194Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==
-[2025-05-10T20:11:28.194Z] Meeting time value: 0.03 hours
-[2025-05-10T20:11:28.194Z] Meeting worktypeid: 804786
-[2025-05-10T20:11:28.194Z] Generated unique storage ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==_0.03_2025-05-10T20:11:28.194Z
-[2025-05-10T20:11:28.194Z] Meeting duration: 108s (0.03 hours)
-[2025-05-10T20:11:28.194Z] Adding new meeting instance with unique ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==_0.03_2025-05-10T20:11:28.194Z
-Successfully saved posted meeting with time entry
-✅ Meeting details saved successfully
-
-╔════════════════════════════════════════════════════════╗
-║ 🏁 TIME ENTRY CREATION COMPLETED
-║ ✅ Time Entry ID: 107959619
-║ ⏱️ Duration: 0.03 hours
-╚════════════════════════════════════════════════════════╝
-Successfully created time entry for: Internal QA Test Case Prioritization
+Found 0 unique meetings, 0 of which were attended by the user

@@ -112,6 +112,7 @@ export interface ProcessedMeeting extends Meeting {
             averageDuration: number;
             totalParticipants: number;
         };
+        reportId?: string;
     };
     seriesMasterId?: string;
     lastProcessed: string;

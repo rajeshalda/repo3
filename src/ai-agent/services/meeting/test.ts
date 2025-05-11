@@ -3,6 +3,7 @@ import { openAIClient } from '../../core/azure-openai/client';
 import { DateTime } from 'luxon';
 import { readJsonFile, writeJsonFile } from '../../utils/file';
 import path from 'path';
+import { AIAgentPostedMeetingsStorage } from '../storage/posted-meetings';
 
 const STORAGE_FILE_PATH = path.join(__dirname, '../../data/storage/json/ai-agent-meetings.json');
 
@@ -441,15 +442,49 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                     const attendanceRecords = await getAttendanceRecords(userId, meetingId, organizerId, accessToken, istStartDate, istEndDate);
                     
                     if (attendanceRecords.length > 0) {
-                        // Calculate duration and generate unique ID for deduplication
-                        const duration = calculateDuration(meeting);
-                        const uniqueStorageId = generateUniqueStorageId(meeting, duration);
+                        // Get report ID for this meeting instance
+                        let reportId: string | undefined;
                         
-                        // Check if this meeting has already been processed
-                        const existingEntry = await getMeetingEntry(uniqueStorageId);
-                        if (existingEntry) {
-                            console.log(`⚠️ Meeting already processed: ${truncatedSubject}`);
-                            continue;
+                        try {
+                            // Format the meeting ID for the API call
+                            const formattedString = `1*${organizerId}*0**${meetingId}`;
+                            const base64MeetingId = Buffer.from(formattedString).toString('base64');
+                            
+                            // Get the reports URL for this meeting
+                            const reportsUrl = `https://graph.microsoft.com/v1.0/users/${organizerId}/onlineMeetings/${base64MeetingId}/attendanceReports`;
+                            console.log(`Fetching attendance reports from: ${reportsUrl}`);
+                            
+                            // Fetch the reports
+                            const reportsResponse = await fetch(reportsUrl, {
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            
+                            if (reportsResponse.ok) {
+                                const reportsData = await reportsResponse.json();
+                                
+                                if (reportsData.value && reportsData.value.length > 0) {
+                                    // For now, use the first report ID
+                                    reportId = reportsData.value[0].id;
+                                    console.log(`Found report ID: ${reportId}`);
+                                    
+                                    // Check if a meeting with this report ID already exists in storage
+                                    const storage = new AIAgentPostedMeetingsStorage();
+                                    await storage.loadData();
+                                    
+                                    const isPosted = await storage.isPosted(userId, meeting.id, 0, '', reportId);
+                                    
+                                    if (isPosted) {
+                                        console.log(`⚠️ Meeting already processed: ${truncatedSubject}`);
+                                        continue;
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Error checking for report ID:', error);
+                            // Continue processing even if we can't check for report ID
                         }
 
                         attendanceReport.attendedMeetings++;
@@ -460,6 +495,10 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                         const avgDuration = attendanceRecords.length > 0 ? Math.round(totalDuration / attendanceRecords.length) : 0;
                         const maxDuration = Math.max(...attendanceRecords.map(r => r.totalAttendanceInSeconds));
                         
+                        // Calculate duration for legacy uniqueStorageId generation
+                        const duration = calculateDuration(meeting);
+                        const uniqueStorageId = generateUniqueStorageId(meeting, duration);
+                        
                         // After successful time entry creation
                         await storeMeetingEntry({
                             meetingId: meeting.id,
@@ -467,7 +506,8 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                             userId: meeting.organizer.email,
                             timeEntry: attendanceRecords[0],
                             rawResponse: attendanceRecords[0].attendanceIntervals ? { intervals: attendanceRecords[0].attendanceIntervals } : null,
-                            postedAt: DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSS \'IST\'')
+                            postedAt: DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSS \'IST\''),
+                            reportId: reportId // Add the report ID if available
                         });
                     }
                 }
@@ -675,6 +715,7 @@ async function storeMeetingEntry(entry: {
     timeEntry: any;
     rawResponse: any;
     postedAt: string;
+    reportId?: string;
 }): Promise<void> {
     const storage = await readJsonFile(STORAGE_FILE_PATH);
     storage.meetings.push(entry);
