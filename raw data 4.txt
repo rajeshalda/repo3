@@ -1,4 +1,3 @@
-Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
 Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 
 ╔════════════════════════════════════════════════════════╗
@@ -6,8 +5,7 @@ Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 ║ 👤 User: pradeepg@m365x9...
 ╚════════════════════════════════════════════════════════╝
 🔑 Getting Graph API access token...
- POST /api/pm2/agent-status 200 in 883ms
- GET /api/pm2/status 200 in 623ms
+ POST /api/pm2/agent-status 200 in 6ms
 ✅ Access token acquired successfully
 
 ┌─────────────────────────────────────────────────┐
@@ -738,7 +736,7 @@ Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 │ 🔍 FETCHING ATTENDANCE RECORDS                  │
 └─────────────────────────────────────────────────┘
 📝 Processing online meeting: "WD Production Pipeline Optimiz..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -759,10 +757,10 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
 Report time check: {
   reportTime: '2025-05-09T11:54:33.629Z',
@@ -772,7 +770,7 @@ Report time check: {
 }
 No attendance reports found within the IST day window
 📝 Processing online meeting: "UMG Development Roadmap Planni..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -793,10 +791,10 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
 Report time check: {
   reportTime: '2025-05-09T09:35:38.95Z',
@@ -806,7 +804,7 @@ Report time check: {
 }
 No attendance reports found within the IST day window
 📝 Processing online meeting: "JCET Technical Specifications ..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -827,10 +825,10 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
 Report time check: {
   reportTime: '2025-05-09T08:40:29.32Z',
@@ -840,7 +838,7 @@ Report time check: {
 }
 No attendance reports found within the IST day window
 📝 Processing online meeting: "WD Production Pipeline Optimiz..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_Y2QzZGE5MmUtOWRhMS00N2JiLWI3OWEtYjY4ODdkY2ExMjQz@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -861,10 +859,10 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
 Report time check: {
   reportTime: '2025-05-09T11:54:33.629Z',
@@ -874,7 +872,7 @@ Report time check: {
 }
 No attendance reports found within the IST day window
 📝 Processing online meeting: "UMG Development Roadmap Planni..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_ZjA4ZTliMDUtZDYzNS00NTQwLWFkYzQtNTM0NTc3MDQ4MmE5@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -895,10 +893,10 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
 Report time check: {
   reportTime: '2025-05-09T09:35:38.95Z',
@@ -908,7 +906,7 @@ Report time check: {
 }
 No attendance reports found within the IST day window
 📝 Processing online meeting: "JCET Technical Specifications ..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_ZDYyNGQ4ZGQtNjA0MS00OWZmLWI4MDUtZjRiZmQ5NzQwZjM3@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -929,10 +927,10 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
 Report time check: {
   reportTime: '2025-05-09T08:40:29.32Z',
@@ -942,7 +940,7 @@ Report time check: {
 }
 No attendance reports found within the IST day window
 📝 Processing online meeting: "Internal QA Test Case Prioriti..."
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}  
 Extracted Meeting ID: 19:meeting_MzlmZGVlMGQtNjg1OC00NDZjLWFmY2UtNDMyYWRiZmZiMWE1@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
@@ -951,13 +949,6 @@ Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6b
 Reports data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NemxtWkdWbE1HUXROamcxT0MwME5EWmpMV0ZtWTJVdE5ETXlZV1JpWm1aaU1XRTFAdGhyZWFkLnYy')/attendanceReports",
   "value": [
-    {
-      "id": "dca0993b-d485-46df-8543-dc82daae82c0",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-11T04:17:57.13Z",
-      "meetingEndDateTime": "2025-05-11T04:30:34.706Z",
-      "externalEventInformation": []
-    },
     {
       "id": "6a220241-1bb3-4b20-b325-daffb8bb8e96",
       "totalParticipantCount": 1,
@@ -991,17 +982,11 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-10T18:30:00.000Z to       │
-│     2025-05-11T18:29:59.999Z                │
-│ 🕒 IST: 5/11/2025, 5:30:00 AM to │
-│     5/12/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-09T18:30:00.000Z to       │
+│     2025-05-10T18:29:59.999Z                │
+│ 🕒 IST: 5/10/2025, 5:30:00 AM to │
+│     5/11/2025, 5:29:59 AM    │
 └─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-05-11T04:17:57.13Z',
-  reportDateStr: '2025-05-11',
-  istTargetDateStr: '2025-05-11',
-  isRelevant: true
-}
 Report time check: {
   reportTime: '2025-05-10T19:46:31.449Z',
   reportDateStr: '2025-05-11',
@@ -1026,14 +1011,14 @@ Report time check: {
   istTargetDateStr: '2025-05-11',
   isRelevant: false
 }
-Found 2 relevant reports, using most recent: dca0993b-d485-46df-8543-dc82daae82c0
+Found 1 relevant reports, using most recent: 6a220241-1bb3-4b20-b325-daffb8bb8e96
 Records data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NemxtWkdWbE1HUXROamcxT0MwME5EWmpMV0ZtWTJVdE5ETXlZV1JpWm1aaU1XRTFAdGhyZWFkLnYy')/attendanceReports('dca0993b-d485-46df-8543-dc82daae82c0')/attendanceRecords",
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NemxtWkdWbE1HUXROamcxT0MwME5EWmpMV0ZtWTJVdE5ETXlZV1JpWm1aaU1XRTFAdGhyZWFkLnYy')/attendanceReports('6a220241-1bb3-4b20-b325-daffb8bb8e96')/attendanceRecords",
   "value": [
     {
       "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
       "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
-      "totalAttendanceInSeconds": 753,
+      "totalAttendanceInSeconds": 118,
       "role": "Organizer",
       "registrationId": null,
       "identity": {
@@ -1044,9 +1029,9 @@ Records data: {
       },
       "attendanceIntervals": [
         {
-          "joinDateTime": "2025-05-11T04:18:01.5131959Z",
-          "leaveDateTime": "2025-05-11T04:30:34.7065009Z",
-          "durationInSeconds": 753
+          "joinDateTime": "2025-05-10T19:46:35.5071374Z",
+          "leaveDateTime": "2025-05-10T19:48:34.3665766Z",
+          "durationInSeconds": 118
         }
       ],
       "externalRegistrationInformation": {
@@ -1060,9 +1045,9 @@ Records data: {
 ┌─────────────────────────────────────────────────┐
 │ ✅ ATTENDANCE RECORDS FOUND                     │
 │ 📊 Total Records: 1             │
-│ 🕒 Meeting Start: 2025-05-11T04:17:57.13Z │
+│ 🕒 Meeting Start: 2025-05-10T19:46:31.449Z │
 └─────────────────────────────────────────────────┘
-⚠️ Failed to fetch report data for meeting: "Internal QA Test Case Prioriti..."
+⚠️ Meeting already processed: "Internal QA Test Case Prioriti..."
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FETCH COMPLETED
@@ -1072,9 +1057,9 @@ Records data: {
 Found 7 meetings for processing
 
 ╔════════════════════════════════════════════════════════╗
-║ 🔄 STARTING BATCH PROCESSING [batch_1746938749296_vahg0drcr]
+║ 🔄 STARTING BATCH PROCESSING [batch_1746907821659_gszwcuk3e]
 ║ 📊 Total meetings: 7
-║ 🆔 Cycle ID: cycle_1746938749296
+║ 🆔 Cycle ID: cycle_1746907821659
 ╚════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
@@ -1089,7 +1074,7 @@ Found 7 meetings for processing
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🔄 QUEUE PROCESSOR STARTED                             ║
-║ 🆔 Cycle ID: cycle_1746938749307                   ║
+║ 🆔 Cycle ID: cycle_1746907821663                   ║
 ║ 📊 Queue Length: 1                  ║
 ╚════════════════════════════════════════════════════════╝
 📑 Processing meeting: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
@@ -1105,34 +1090,35 @@ Found 7 meetings for processing
 📥 QUEUE: Added meeting "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
 📊 QUEUE STATUS: 5 items waiting
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
+🔍 PROCESSING: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]       
 No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==] in 2.60s
+✅ COMPLETED: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==] in 3.37s
 ✅ Successfully processed: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
+🔍 PROCESSING: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]       
 No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==] in 2.23s
+✅ COMPLETED: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==] in 2.26s
+ GET /api/pm2/status 200 in 14ms
 ✅ Successfully processed: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
+🔍 PROCESSING: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]       
 No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==] in 1.89s
+✅ COMPLETED: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==] in 1.77s
 ✅ Successfully processed: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZDn8E6AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
+🔍 PROCESSING: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]       
 No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==] in 2.36s
+✅ COMPLETED: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==] in 2.30s
 ✅ Successfully processed: "WD Production Pipeline Optimiz..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQgAAEA==]
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
+🔍 PROCESSING: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]       
 No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==] in 1.84s
+✅ COMPLETED: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==] in 1.80s
 
 ╔════════════════════════════════════════════════════════╗
 ║ ✅ QUEUE PROCESSOR COMPLETED                           ║
-║ 🆔 Cycle ID: cycle_1746938749307                   ║
-║ ⏱️ Duration: 17.22s      ║
+║ 🆔 Cycle ID: cycle_1746907821663                   ║
+║ ⏱️ Duration: 17.82s      ║
 ╚════════════════════════════════════════════════════════╝
 ✅ Successfully processed: "UMG Development Roadmap Planni..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQQAAEA==]
 ⏱️ Waiting 1 second before next batch...
@@ -1146,7 +1132,7 @@ No valid report selected: No valid reports found for the specified date
 ┌─────────────────────────────────────────────────┐
 │ ▶️ Processing batch 2/2 (2 meetings) │
 └─────────────────────────────────────────────────┘
-📶 Rate limiter status: 42.58960000000001/5 tokens available
+📶 Rate limiter status: 43.0608/5 tokens available
 ✅ Rate limiter tokens acquired
 📑 Processing meeting: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
 📥 QUEUE: Added meeting "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
@@ -1155,28 +1141,27 @@ No valid report selected: No valid reports found for the specified date
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🔄 QUEUE PROCESSOR STARTED                             ║
-║ 🆔 Cycle ID: cycle_1746938767543                   ║
+║ 🆔 Cycle ID: cycle_1746907840491                   ║
 ║ 📊 Queue Length: 1                  ║
 ╚════════════════════════════════════════════════════════╝
 📑 Processing meeting: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
 📥 QUEUE: Added meeting "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
 📊 QUEUE STATUS: 2 items waiting
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
- POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 30003ms
+🔍 PROCESSING: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]       
+ POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 30010ms
 No valid report selected: No valid reports found for the specified date
-✅ COMPLETED: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==] in 1.86s
- GET /api/pm2/status 200 in 11ms
+✅ COMPLETED: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==] in 1.91s
 ✅ Successfully processed: "JCET Technical Specifications ..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvQAAAEA==]
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
-Selected report ID: dca0993b-d485-46df-8543-dc82daae82c0 Reason: Single valid report available
-✅ COMPLETED: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==] in 2.05s
+🔍 PROCESSING: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]       
+Selected report ID: 6a220241-1bb3-4b20-b325-daffb8bb8e96 Reason: This report is from the same day as the target meeting, has a valid (positive) duration, and is the closest in time to the scheduled meeting instance for a recurring meeting.
+✅ COMPLETED: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==] in 3.69s
 
 ╔════════════════════════════════════════════════════════╗
 ║ ✅ QUEUE PROCESSOR COMPLETED                           ║
-║ 🆔 Cycle ID: cycle_1746938767543                   ║
-║ ⏱️ Duration: 6.44s      ║
+║ 🆔 Cycle ID: cycle_1746907840491                   ║
+║ ⏱️ Duration: 8.13s      ║
 ╚════════════════════════════════════════════════════════╝
 ✅ Successfully processed: "Internal QA Test Case Prioriti..." [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==]
 
@@ -1187,7 +1172,7 @@ Selected report ID: dca0993b-d485-46df-8543-dc82daae82c0 Reason: Single valid re
 └─────────────────────────────────────────────────┘
 
 ╔════════════════════════════════════════════════════════╗
-║ 🏁 BATCH PROCESSING COMPLETED [batch_1746938749296_vahg0drcr]
+║ 🏁 BATCH PROCESSING COMPLETED [batch_1746907821659_gszwcuk3e]
 ║ 📊 Total: 7 | Success: 7 | Failed: 0
 ║ 📈 Success rate: 100%
 ╚════════════════════════════════════════════════════════╝
@@ -1195,9 +1180,9 @@ Selected report ID: dca0993b-d485-46df-8543-dc82daae82c0 Reason: Single valid re
 ╔════════════════════════════════════════════════════════╗
 ║ ⏱️ CYCLE COMPLETED                                     ║
 ║ 🆔 Cycle ID: null                   ║
-║ ⌛ Duration: 24.69s      ║
+║ ⌛ Duration: 26.96s      ║
 ╚════════════════════════════════════════════════════════╝
-Started batch processing with ID: batch_1746938749296_vahg0drcr
+Started batch processing with ID: batch_1746907821659_gszwcuk3e
 Progress: 7/7 meetings processed
 All meetings processed
 Successfully processed 7 meetings
@@ -1221,6 +1206,7 @@ Filtering out already processed meetings and meetings the user didn't attend...
 │ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
 └─────────────────────────────────────────────────┘
 ⏱️ Waiting 15 seconds before next batch...
+ GET /api/pm2/status 200 in 11ms
 
 ┌─────────────────────────────────────────────────┐
 │ 📦 Processing batch 2/3 (3 meetings) ║
@@ -1234,7 +1220,7 @@ Filtering out already processed meetings and meetings the user didn't attend...
 │ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
 └─────────────────────────────────────────────────┘
 ⏱️ Waiting 15 seconds before next batch...
- GET /api/pm2/status 200 in 21ms
+ GET /api/pm2/status 200 in 12ms
 
 ┌─────────────────────────────────────────────────┐
 │ 📦 Processing batch 3/3 (1 meetings) ║
@@ -1257,11 +1243,11 @@ No attendance records found for meeting "JCET Technical Specifications Workshop"
 No attendance records found for meeting "WD Production Pipeline Optimization ". Skipping.
 No attendance records found for meeting "UMG Development Roadmap Planning". Skipping.
 No attendance records found for meeting "JCET Technical Specifications Workshop". Skipping.
-User pradeepg@m365x92504196.onmicrosoft.com attended meeting "Internal QA Test Case Prioritization" for 753 seconds
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "Internal QA Test Case Prioritization" for 118 seconds
 Found 7 unique meetings, 1 of which were attended by the user
 Matching tasks to attended meetings...
 Matching tasks for meeting: Internal QA Test Case Prioritization
-Found user's attendance record with duration: 753 seconds
+Found user's attendance record with duration: 118 seconds
 Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
 Fetching tasks using standard API implementation...
 Current user personid: 423842
@@ -1284,9 +1270,9 @@ Found 12 tasks in Intervals:
 - HR Monthly Report (16663171)
 Meeting analysis for matching: {
   "subject": "Internal QA Test Case Prioritization",
-  "startTime": "2025-05-11T09:48:01.0000000",
-  "endTime": "2025-05-11T10:00:34.0000000",
-  "duration": 753,
+  "startTime": "2025-05-11T01:16:35.0000000",
+  "endTime": "2025-05-11T01:18:34.0000000",
+  "duration": 118,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -1300,20 +1286,20 @@ Meeting analysis for matching: {
       {
         "name": "Pradeep Gupta",
         "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 753,
+        "duration": 118,
         "role": "Organizer",
         "attendanceIntervals": [
           {
-            "joinDateTime": "2025-05-11T04:18:01.5131959Z",
-            "leaveDateTime": "2025-05-11T04:30:34.7065009Z",
-            "durationInSeconds": 753
+            "joinDateTime": "2025-05-10T19:46:35.5071374Z",
+            "leaveDateTime": "2025-05-10T19:48:34.3665766Z",
+            "durationInSeconds": 118
           }
         ]
       }
     ],
     "summary": {
-      "totalDuration": 753,
-      "averageDuration": 753,
+      "totalDuration": 118,
+      "averageDuration": 118,
       "totalParticipants": 1
     }
   }
@@ -1553,9 +1539,9 @@ Generated prompt for OpenAI: You are an AI assistant for an IT company that matc
 Meeting Details:
 {
   "subject": "Internal QA Test Case Prioritization",
-  "startTime": "2025-05-11T09:48:01.0000000",
-  "endTime": "2025-05-11T10:00:34.0000000",
-  "duration": 753,
+  "startTime": "2025-05-11T01:16:35.0000000",
+  "endTime": "2025-05-11T01:18:34.0000000",
+  "duration": 118,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -1569,20 +1555,20 @@ Meeting Details:
       {
         "name": "Pradeep Gupta",
         "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 753,
+        "duration": 118,
         "role": "Organizer",
         "attendanceIntervals": [
           {
-            "joinDateTime": "2025-05-11T04:18:01.5131959Z",
-            "leaveDateTime": "2025-05-11T04:30:34.7065009Z",
-            "durationInSeconds": 753
+            "joinDateTime": "2025-05-10T19:46:35.5071374Z",
+            "leaveDateTime": "2025-05-10T19:48:34.3665766Z",
+            "durationInSeconds": 118
           }
         ]
       }
     ],
     "summary": {
-      "totalDuration": 753,
-      "averageDuration": 753,
+      "totalDuration": 118,
+      "averageDuration": 118,
       "totalParticipants": 1
     }
   }
@@ -1831,24 +1817,24 @@ IT DEPARTMENT SPECIALIZATIONS:
    - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
 
 2. DevOps & CI/CD:
-   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration  
-   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment 
+   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
+   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
 
 3. Infrastructure & Cloud:
    - Topics: server management, cloud architecture, network configuration, capacity planning
    - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
 
 4. QA & Testing:
-   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing
-   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress       
+   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing        
+   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
 
 5. IT Support & Helpdesk:
    - Topics: incident management, user support, troubleshooting, ticket resolution
-   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk       
+   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
 
 6. Security & Compliance:
    - Topics: vulnerability assessment, security audits, compliance monitoring, access management
-   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization    
+   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
 
 7. Data & Analytics:
    - Topics: data modeling, analytics implementation, reporting, database management
@@ -1856,11 +1842,11 @@ IT DEPARTMENT SPECIALIZATIONS:
 
 8. System Administration:
    - Topics: system maintenance, updates, monitoring, user management
-   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune       
+   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
 
 MATCHING RULES:
 1. Prioritize tasks with direct keyword matches to the meeting subject or description
-2. Match meetings to the most specific department based on technical keywords in the subject/description 
+2. Match meetings to the most specific department based on technical keywords in the subject/description
 3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
 4. If still unclear, default to the department where the user has the most assigned tasks
 5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
@@ -1881,7 +1867,7 @@ EXAMPLES:
 ✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
 ✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
 ✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
-✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3     
+✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
 ✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
 ✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
 ✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
@@ -1922,12 +1908,12 @@ OpenAI response: {
             "taskTitle": "Internal QA",
             "meetingDetails": {
                 "subject": "Internal QA Test Case Prioritization",
-                "startTime": "2025-05-11T09:48:01.0000000",
-                "endTime": "2025-05-11T10:00:34.0000000",
-                "actualDuration": 753
+                "startTime": "2025-05-11T01:16:35.0000000",
+                "endTime": "2025-05-11T01:18:34.0000000",
+                "actualDuration": 118
             },
             "confidence": 1.0,
-            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', which directly matches the task title 'Internal QA' and relates to QA & Testing. The task is assigned to the user and is open. This is a perfect match based on explicit keyword alignment."
+            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
         }
     ]
 }
@@ -1938,12 +1924,12 @@ Raw OpenAI response: {
             "taskTitle": "Internal QA",
             "meetingDetails": {
                 "subject": "Internal QA Test Case Prioritization",
-                "startTime": "2025-05-11T09:48:01.0000000",
-                "endTime": "2025-05-11T10:00:34.0000000",
-                "actualDuration": 753
+                "startTime": "2025-05-11T01:16:35.0000000",
+                "endTime": "2025-05-11T01:18:34.0000000",
+                "actualDuration": 118
             },
             "confidence": 1.0,
-            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', which directly matches the task title 'Internal QA' and relates to QA & Testing. The task is assigned to the user and is open. This is a perfect match based on explicit keyword alignment."
+            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
         }
     ]
 }
@@ -1954,12 +1940,12 @@ Extracted JSON: {
             "taskTitle": "Internal QA",
             "meetingDetails": {
                 "subject": "Internal QA Test Case Prioritization",
-                "startTime": "2025-05-11T09:48:01.0000000",
-                "endTime": "2025-05-11T10:00:34.0000000",
-                "actualDuration": 753
+                "startTime": "2025-05-11T01:16:35.0000000",
+                "endTime": "2025-05-11T01:18:34.0000000",
+                "actualDuration": 118
             },
             "confidence": 1.0,
-            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', which directly matches the task title 'Internal QA' and relates to QA & Testing. The task is assigned to the user and is open. This is a perfect match based on explicit keyword alignment."
+            "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
         }
     ]
 }
@@ -1969,12 +1955,12 @@ Parsed tasks: [
     "taskTitle": "Internal QA",
     "meetingDetails": {
       "subject": "Internal QA Test Case Prioritization",
-      "startTime": "2025-05-11T09:48:01.0000000",
-      "endTime": "2025-05-11T10:00:34.0000000",
-      "actualDuration": 753
+      "startTime": "2025-05-11T01:16:35.0000000",
+      "endTime": "2025-05-11T01:18:34.0000000",
+      "actualDuration": 118
     },
     "confidence": 1,
-    "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', which directly matches the task title 'Internal QA' and relates to QA & Testing. The task is assigned to the user and is open. This is a perfect match based on explicit keyword alignment."
+    "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
   }
 ]
 Parsed matching result: {
@@ -1985,12 +1971,12 @@ Parsed matching result: {
       "taskTitle": "Internal QA",
       "meetingDetails": {
         "subject": "Internal QA Test Case Prioritization",
-        "startTime": "2025-05-11T09:48:01.0000000",
-        "endTime": "2025-05-11T10:00:34.0000000",
-        "actualDuration": 753
+        "startTime": "2025-05-11T01:16:35.0000000",
+        "endTime": "2025-05-11T01:18:34.0000000",
+        "actualDuration": 118
       },
       "confidence": 1,
-      "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', which directly matches the task title 'Internal QA' and relates to QA & Testing. The task is assigned to the user and is open. This is a perfect match based on explicit keyword alignment."
+      "reason": "The meeting subject contains 'Internal QA Test Case Prioritization', directly matching the task title 'Internal QA' and the module 'Quality Assurance'. Both 'QA' and 'test case' are strong QA & Testing department keywords, and the task is assigned to the meeting organizer. This is a perfect match."
     }
   ]
 }
@@ -2005,16 +1991,15 @@ Creating time entry for meeting: Internal QA Test Case Prioritization
 ║ 🔄 Task: Internal QA
 ╚════════════════════════════════════════════════════════╝
 ⏳ Fetching person & task information...
- ○ Compiling /api/intervals-proxy ...
- ✓ Compiled /api/intervals-proxy in 639ms (1635 modules)
-Making request to intervals API: https://api.myintervals.com/task/16663158?limit=500
+ ✓ Compiled /api/intervals-proxy in 435ms (1630 modules)
 Making request to intervals API: https://api.myintervals.com/me/
+Making request to intervals API: https://api.myintervals.com/task/16663158?limit=500
 Intervals API response: Status 200, content-type: application/json
 Response data: {"personid":423842,"status":"OK","code":200,"listcount":1,"me":[{"id":"423842","localid":"2","clientid":null,"title":"","firstname":"pradeepg","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeepg","groupid":"4","group":"Resource","client":nu...
- POST /api/intervals-proxy 200 in 1766ms
+ POST /api/intervals-proxy 200 in 1568ms
 Intervals API response: Status 200, content-type: application/json
 Response data: {"personid":423842,"status":"OK","code":200,"task":{"id":"16663158","localid":"8","assignee":[{"personid":"423852","assignee":"irvins","assigneeactive":"t","personlocalid":"3"},{"personid":"423842","assignee":"pradeepg","assigneeactive":"t","personlocalid":"2"}],"assigneeid":"423852,423842","followe...
- POST /api/intervals-proxy 200 in 1864ms
+ POST /api/intervals-proxy 200 in 1658ms
 Retrieved task details: {
   id: '16663158',
   title: 'Internal QA',
@@ -2033,7 +2018,7 @@ Retrieved task details: {
 Making request to intervals API: https://api.myintervals.com/projectworktype/
 Intervals API response: Status 200, content-type: application/json
 Response data: {"personid":423842,"status":"OK","code":200,"listcount":110,"projectworktype":[{"id":"31439430","projectid":"1428052","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439441","projectid":"1428053","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439452","projectid":"142...
- POST /api/intervals-proxy 200 in 486ms
+ POST /api/intervals-proxy 200 in 492ms
 Found 1 work types for project 1428052: [
   {
     id: '804776',
@@ -2045,37 +2030,37 @@ Found 1 work types for project 1428052: [
 ]
 ℹ️ Using worktype ID 804786 for India-Meeting
 🔍 Checking attendance records for user pradeepg@m365x92504196.onmicrosoft.com...
-✅ Found user's attendance record with duration: 12m 33s
+✅ Found user's attendance record with duration: 1m 58s
 💰 Billable status: NO ✗ (Client: Internal)
 
 ┌─────────────────────────────────────────────────┐
 │ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: 2025-05-11 (from UTC 2025-05-11)  │
-│ ⏱️ Duration: 0.21 hours (12m 33s)  │
+│ 📆 Date: 2025-05-10 (from UTC 2025-05-11)  │
+│ ⏱️ Duration: 0.03 hours (1m 58s)  │
 │ 💰 Billable: No                              │
 └─────────────────────────────────────────────────┘
 📡 Sending time entry request to Intervals API...
 Making request to intervals API: https://api.myintervals.com/time
 Intervals API response: Status 200, content-type: application/json
-Response data: {"personid":423842,"status":"Created","code":201,"time":{"id":"107960125","projectid":"1428052","moduleid":"552134","taskid":"16663158","worktypeid":"804786","personid":"423842","date":"2025-05-11","datemodified":"2025-05-11 04:46:54","time":"0.21","description":"Internal QA Test Case Prioritization...
- POST /api/intervals-proxy 200 in 809ms
+Response data: {"personid":423842,"status":"Created","code":201,"time":{"id":"107959619","projectid":"1428052","moduleid":"552134","taskid":"16663158","worktypeid":"804786","personid":"423842","date":"2025-05-10","datemodified":"2025-05-10 20:11:29","time":"0.03","description":"Internal QA Test Case Prioritization...
+ POST /api/intervals-proxy 200 in 836ms
 ✅ Time entry creation successful!
-📝 Time entry created with ID: 107960125
+📝 Time entry created with ID: 107959619
 💾 Saving meeting details to storage...
 Saving posted meeting with time entry...
-Posted timestamp: { utc: '2025-05-11T04:46:53.234Z', ist: '2025-05-11T10:16:53.234 IST' }
-[2025-05-11T04:46:53.238Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==
-[2025-05-11T04:46:53.238Z] Meeting time value: 0.21 hours
-[2025-05-11T04:46:53.238Z] Meeting worktypeid: 804786
-[2025-05-11T04:46:53.238Z] Generated unique storage ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==_0.21_2025-05-11T04:46:53.238Z
-[2025-05-11T04:46:53.238Z] Meeting duration: 756s (0.21 hours)
-[2025-05-11T04:46:53.238Z] Adding new meeting instance with unique ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==_0.21_2025-05-11T04:46:53.238Z
+Posted timestamp: { utc: '2025-05-10T20:11:28.191Z', ist: '2025-05-11T01:41:28.191 IST' }
+[2025-05-10T20:11:28.194Z] AIAgentPostedMeetingsStorage: Adding meeting with ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==
+[2025-05-10T20:11:28.194Z] Meeting time value: 0.03 hours
+[2025-05-10T20:11:28.194Z] Meeting worktypeid: 804786
+[2025-05-10T20:11:28.194Z] Generated unique storage ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==_0.03_2025-05-10T20:11:28.194Z
+[2025-05-10T20:11:28.194Z] Meeting duration: 108s (0.03 hours)
+[2025-05-10T20:11:28.194Z] Adding new meeting instance with unique ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3ZAexeTAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAFekvPwAAEA==_0.03_2025-05-10T20:11:28.194Z
 Successfully saved posted meeting with time entry
 ✅ Meeting details saved successfully
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 TIME ENTRY CREATION COMPLETED
-║ ✅ Time Entry ID: 107960125
-║ ⏱️ Duration: 0.21 hours
+║ ✅ Time Entry ID: 107959619
+║ ⏱️ Duration: 0.03 hours
 ╚════════════════════════════════════════════════════════╝
 Successfully created time entry for: Internal QA Test Case Prioritization

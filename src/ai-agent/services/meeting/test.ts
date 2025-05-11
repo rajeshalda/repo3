@@ -1,5 +1,10 @@
 import { Meeting } from '../../../interfaces/meetings';
 import { openAIClient } from '../../core/azure-openai/client';
+import { DateTime } from 'luxon';
+import { readJsonFile, writeJsonFile } from '../../utils/file';
+import path from 'path';
+
+const STORAGE_FILE_PATH = path.join(__dirname, '../../data/storage/json/ai-agent-meetings.json');
 
 async function getGraphToken(): Promise<string> {
     try {
@@ -109,7 +114,7 @@ function extractMeetingInfo(joinUrl: string): { meetingId: string | undefined; o
     return result;
 }
 
-async function getAttendanceRecords(userId: string, meetingId: string, organizerId: string, accessToken: string): Promise<AttendanceRecord[]> {
+async function getAttendanceRecords(userId: string, meetingId: string, organizerId: string, accessToken: string, istStartDate: Date, istEndDate: Date): Promise<AttendanceRecord[]> {
     try {
         // Format string exactly as in graph-meetings.ts
         const formattedString = `1*${organizerId}*0**${meetingId}`;
@@ -195,16 +200,16 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
         // Find reports within our UTC window that covers the IST day
         const relevantReports = reportsData.value.filter((report: any) => {
-            const reportStartTime = new Date(report.meetingStartDateTime);
-            const isRelevant = reportStartTime >= startOfWindow && reportStartTime <= endOfWindow;
-            
+            const reportDateIST = DateTime.fromISO(report.meetingStartDateTime, { zone: 'Asia/Kolkata' });
+            const reportDateStr = reportDateIST.toISODate();
+            const istTargetDateStr = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' }).toISODate();
+            const isRelevant = (reportDateStr === istTargetDateStr);
             console.log('Report time check:', {
                 reportTime: report.meetingStartDateTime,
-                reportTimeUTC: reportStartTime.toISOString(),
-                reportTimeIST: new Date(reportStartTime.getTime() + 5.5 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
-                isWithinWindow: isRelevant
+                reportDateStr,
+                istTargetDateStr,
+                isRelevant
             });
-            
             return isRelevant;
         });
 
@@ -235,15 +240,24 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
         const recordsData = await recordsResponse.json();
         console.log('Records data:', JSON.stringify(recordsData, null, 2));
         
-        // Process and return the attendance records
-        const records = recordsData.value || [];
+        // Process and filter attendance records by IST day
+        const records = (recordsData.value || []).map((record: any) => {
+            if (!record.attendanceIntervals) return record;
+            // Filter intervals to only those within the IST day
+            const filteredIntervals = record.attendanceIntervals.filter((interval: any) => {
+                const joinIST = new Date(new Date(interval.joinDateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+                return joinIST >= istStartDate && joinIST <= istEndDate;
+            });
+            const totalDuration = filteredIntervals.reduce((sum: number, interval: any) => sum + interval.durationInSeconds, 0);
+            return {
+                ...record,
+                attendanceIntervals: filteredIntervals,
+                totalAttendanceInSeconds: totalDuration
+            };
+        }).filter((record: any) => record.attendanceIntervals && record.attendanceIntervals.length > 0);
+        
         if (records.length > 0) {
-            console.log(`
-┌─────────────────────────────────────────────────┐
-│ ✅ ATTENDANCE RECORDS FOUND                     │
-│ 📊 Total Records: ${records.length}             │
-│ 🕒 Meeting Start: ${relevantReports[0].meetingStartDateTime} │
-└─────────────────────────────────────────────────┘`);
+            console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✅ ATTENDANCE RECORDS FOUND                     │\n│ 📊 Total Records: ${records.length}             │\n│ 🕒 Meeting Start: ${relevantReports[0].meetingStartDateTime} │\n└─────────────────────────────────────────────────┘`);
         }
         
         return records;
@@ -255,11 +269,7 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
 export async function fetchUserMeetings(userId: string): Promise<{ meetings: Meeting[], attendanceReport: AttendanceReport }> {
     try {
-        console.log(`
-╔════════════════════════════════════════════════════════╗
-║ 🚀 MEETING FETCH STARTED                                
-║ 👤 User: ${userId.substring(0, 15)}...                            
-╚════════════════════════════════════════════════════════╝`);
+        console.log(`\n╔════════════════════════════════════════════════════════╗\n║ 🚀 MEETING FETCH STARTED                                \n║ 👤 User: ${userId.substring(0, 15)}...                            \n╚════════════════════════════════════════════════════════╝`);
         
         console.log(`🔑 Getting Graph API access token...`);
         const accessToken = await getGraphToken();
@@ -268,37 +278,39 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         // Get current time in IST
         const istNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
         
-        // Start of day in IST (00:00:00)
+        // Start of current day in IST (00:00:00)
         const istStartDate = new Date(istNow);
         istStartDate.setHours(0, 0, 0, 0);
         
-        // End of day in IST (23:59:59.999)
+        // End of next day in IST (23:59:59.999)
         const istEndDate = new Date(istNow);
+        istEndDate.setDate(istEndDate.getDate() + 1); // Add one day
         istEndDate.setHours(23, 59, 59, 999);
+
+        // Calculate UTC window that covers the extended IST period
+        const utcStart = new Date(Date.UTC(
+            istStartDate.getUTCFullYear(),
+            istStartDate.getUTCMonth(),
+            istStartDate.getUTCDate() - 1, // Previous UTC day
+            18, 30, 0, 0
+        ));
         
-        // Convert IST dates to UTC for API call
-        const startDate = new Date(istStartDate.toLocaleString('en-US', { timeZone: 'UTC' }));
-        const endDate = new Date(istEndDate.toLocaleString('en-US', { timeZone: 'UTC' }));
-        
-        const startDateString = startDate.toISOString();
-        const endDateString = endDate.toISOString();
-        
-        console.log(`
-┌─────────────────────────────────────────────────┐
-│ 📅 FETCHING MEETINGS FOR IST DAY                │
-│ 📆 IST range: ${istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to              │
-│             ${istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}              │
-│ 🌐 UTC range: ${startDateString} to              │
-│             ${endDateString}              │
-└─────────────────────────────────────────────────┘`);
-        
+        const utcEnd = new Date(Date.UTC(
+            istEndDate.getUTCFullYear(),
+            istEndDate.getUTCMonth(),
+            istEndDate.getUTCDate(),
+            18, 29, 59, 999
+        ));
+
+        const startDateString = utcStart.toISOString();
+        const endDateString = utcEnd.toISOString();
+
+        console.log(`\n┌─────────────────────────────────────────────────┐\n│ 📅 FETCHING MEETINGS FOR EXTENDED WINDOW         │\n│ 📆 IST range: ${istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to              │\n│             ${istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}              │\n│ 🌐 UTC range: ${startDateString} to              │\n│             ${endDateString}              │\n└─────────────────────────────────────────────────┘`);
         // Using calendarView endpoint for better handling of recurring meetings
         const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/calendarView?startDateTime=${startDateString}&endDateTime=${endDateString}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId&$orderby=start/dateTime desc`;
-        
         // Function to fetch all meetings using pagination
         async function fetchAllMeetings(url: string): Promise<Meeting[]> {
             console.log(`📡 Fetching meetings from Graph API...`);
-            
             const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -306,17 +318,14 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                     'Prefer': 'outlook.timezone="India Standard Time"'
                 }
             });
-
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error(`❌ GRAPH API ERROR: Status ${response.status} ${response.statusText}`);
                 console.error(`❌ Error details: ${errorText}`);
                 throw new Error(`Failed to fetch meetings: ${response.status} ${response.statusText}\n${errorText}`);
             }
-
             const data = await response.json();
             console.log(`✅ Received ${data.value?.length || 0} meetings from API`);
-            
             // Add debug logging for recurring meetings
             const recurringMeetings = data.value?.filter((m: any) => m.seriesMasterId) || [];
             if (recurringMeetings.length > 0) {
@@ -325,9 +334,7 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                     console.log(`   ${index + 1}. "${meeting.subject}" (${meeting.start.dateTime})`);
                 });
             }
-            
             const meetings = data.value;
-            
             // Check if there's a next page of results
             if (data['@odata.nextLink']) {
                 console.log(`📄 Found more meetings, fetching next page...`);
@@ -335,87 +342,95 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                 const nextPageMeetings = await fetchAllMeetings(data['@odata.nextLink']);
                 return [...meetings, ...nextPageMeetings];
             }
-            
             return meetings;
         }
-        
         // Fetch all meetings using pagination
         const allMeetings = await fetchAllMeetings(baseUrl);
-        
-        // Filter meetings based on IST day
-        console.log(`
-┌─────────────────────────────────────────────────┐
-│ 🔍 FILTERING MEETINGS FOR IST DAY               │
-│ 📊 Total meetings before filtering: ${allMeetings.length}            │
-└─────────────────────────────────────────────────┘`);
-        
-        const filteredMeetings = allMeetings.filter((meeting: Meeting) => {
-            // Convert meeting time to IST for comparison
-            const meetingTimeIST = new Date(meeting.start.dateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
-            const meetingDateIST = new Date(meetingTimeIST);
-            
-            // Debug log
-            console.log('Meeting filter debug:', {
-                subject: meeting.subject,
-                originalTime: meeting.start.dateTime,
-                meetingTimeIST: meetingTimeIST,
-                istStartDate: istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
-                istEndDate: istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
-                isIncluded: meetingDateIST >= istStartDate && meetingDateIST <= istEndDate
-            });
-            
-            // Check if meeting is within the IST day
-            const isIncluded = meetingDateIST >= istStartDate && meetingDateIST <= istEndDate;
-            if (!isIncluded) {
-                console.log(`⏩ Skipping meeting: "${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''}" (outside IST day)`);
-            }
-
-            return isIncluded;
+        // Post-filter meetings based on IST day
+        console.log(`\n┌─────────────────────────────────────────────────┐\n│ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │\n│ 📊 Total meetings before filtering: ${allMeetings.length}            │\n└─────────────────────────────────────────────────┘`);
+        allMeetings.forEach((meeting: Meeting, idx: number) => {
+            console.log(`\n[RAW MEETING ${idx + 1}]`);
+            console.log(JSON.stringify(meeting, null, 2));
         });
-        
-        console.log(`
-┌─────────────────────────────────────────────────┐
-│ ✓ MEETINGS FILTERED                            │
-│ 📊 Total meetings after filtering: ${filteredMeetings.length}           │
-└─────────────────────────────────────────────────┘`);
-        
-        if (filteredMeetings.length > 0) {
+
+        // Define UTC window boundaries based on IST window
+        const istStartDateTime = DateTime.fromJSDate(istStartDate);
+        const istEndDateTime = DateTime.fromJSDate(istEndDate);
+        const utcStartWindow = istStartDateTime.minus({ hours: 5, minutes: 30 });
+        const utcEndWindow = istEndDateTime.minus({ hours: 5, minutes: 30 });
+
+        const filteredMeetings = allMeetings.filter((meeting: Meeting) => {
+            // Parse start and end times in both UTC and IST
+            const meetingStartUTC = DateTime.fromISO(meeting.start.dateTime);
+            const meetingEndUTC = DateTime.fromISO(meeting.end.dateTime);
+            const meetingStartIST = meetingStartUTC.setZone('Asia/Kolkata');
+            
+            // For recurring meetings, only include if:
+            // 1. Meeting starts within the UTC window AND
+            // 2. Meeting is not a future instance beyond current UTC window
+            if (meeting.seriesMasterId) {
+                const isInWindow = meetingStartUTC.toMillis() >= utcStartWindow.toMillis() && 
+                                  meetingStartUTC.toMillis() <= utcEndWindow.toMillis();
+                
+                if (isInWindow) {
+                    // For recurring meetings, we'll set the timeEntryDate later when we have the attendance report
+                    meeting.timeEntryDate = undefined;
+                }
+                
+                return isInWindow;
+            }
+            
+            // For non-recurring meetings, use the original logic
+            const isInDay = meetingStartIST.hasSame(istStartDateTime, 'day');
+            if (isInDay) {
+                // For non-recurring meetings, use the actual meeting date
+                meeting.timeEntryDate = meetingStartUTC.toFormat('yyyy-MM-dd');
+            }
+            return isInDay;
+        });
+
+        // Deduplicate meetings by id and IST date
+        const uniqueMeetingsMap = new Map();
+        filteredMeetings.forEach(meeting => {
+            const meetingTimeIST = new Date(meeting.start.dateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+            const meetingDateIST = new Date(meetingTimeIST).toISOString().split('T')[0];
+            const key = `${meeting.id}_${meetingDateIST}`;
+            if (!uniqueMeetingsMap.has(key)) {
+                uniqueMeetingsMap.set(key, meeting);
+            }
+        });
+        const uniqueMeetings = Array.from(uniqueMeetingsMap.values());
+        console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✓ MEETINGS FILTERED                            │\n│ 📊 Total meetings after filtering: ${uniqueMeetings.length}           │\n└─────────────────────────────────────────────────┘`);
+        if (uniqueMeetings.length > 0) {
             console.log(`📋 Today's meetings:`);
-            filteredMeetings.forEach((meeting, index) => {
+            uniqueMeetings.forEach((meeting, index) => {
                 const startTime = new Date(meeting.start.dateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                 const endTime = new Date(meeting.end.dateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                 const truncatedSubject = meeting.subject 
                     ? `"${meeting.subject.substring(0, 40)}${meeting.subject.length > 40 ? '...' : ''}"`
                     : 'Untitled meeting';
-                    
                 console.log(`   ${index + 1}. ${truncatedSubject} (${startTime} - ${endTime})`);
             });
         } else {
             console.log(`ℹ️ No meetings found for today in IST timezone`);
         }
-
         const attendanceReport: AttendanceReport = {
-            totalMeetings: filteredMeetings.length,
+            totalMeetings: uniqueMeetings.length,
             attendedMeetings: 0,
             organizedMeetings: 0,
             attendanceByPerson: {},
             organizerStats: {},
             detailedAttendance: {}
         };
-
-        console.log(`
-┌─────────────────────────────────────────────────┐
-│ 🔍 FETCHING ATTENDANCE RECORDS                  │
-└─────────────────────────────────────────────────┘`);
-
-        for (const meeting of filteredMeetings) {
+        console.log(`\n┌─────────────────────────────────────────────────┐\n│ 🔍 FETCHING ATTENDANCE RECORDS                  │\n└─────────────────────────────────────────────────┘`);
+        for (const meeting of uniqueMeetings) {
             const organizerEmail = (meeting.organizer?.email || '').toLowerCase();
             attendanceReport.organizerStats[organizerEmail] = (attendanceReport.organizerStats[organizerEmail] || 0) + 1;
-
+            
             const truncatedSubject = meeting.subject 
                 ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
                 : 'Untitled meeting';
-
+            
             if (meeting.onlineMeeting?.joinUrl) {
                 console.log(`📝 Processing online meeting: ${truncatedSubject}`);
                 const decodedJoinUrl = decodeURIComponent(meeting.onlineMeeting.joinUrl);
@@ -423,59 +438,46 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                 
                 if (meetingId && organizerId) {
                     console.log(`🔍 Fetching attendance for meeting ID: ${meetingId.substring(0, 8)}...`);
-                    const records = await getAttendanceRecords(userId, meetingId, organizerId, accessToken);
+                    const attendanceRecords = await getAttendanceRecords(userId, meetingId, organizerId, accessToken, istStartDate, istEndDate);
                     
-                    if (records.length > 0) {
-                        attendanceReport.attendedMeetings++;
-                        console.log(`✅ Found ${records.length} attendance records for ${truncatedSubject}`);
+                    if (attendanceRecords.length > 0) {
+                        // Calculate duration and generate unique ID for deduplication
+                        const duration = calculateDuration(meeting);
+                        const uniqueStorageId = generateUniqueStorageId(meeting, duration);
                         
-                        // Calculate total meeting duration from records
-                        const totalDuration = records.reduce((sum, record) => sum + record.totalAttendanceInSeconds, 0);
-                        const avgDuration = records.length > 0 ? Math.round(totalDuration / records.length) : 0;
-                        const maxDuration = Math.max(...records.map(r => r.totalAttendanceInSeconds));
-                        
-                        console.log(`⏱️ Meeting stats: Avg duration ${Math.floor(avgDuration/60)}m ${avgDuration%60}s, Max duration ${Math.floor(maxDuration/60)}m ${maxDuration%60}s`);
-                        
-                        attendanceReport.detailedAttendance[meeting.id] = {
-                            subject: meeting.subject,
-                            startTime: meeting.start.dateTime,
-                            endTime: meeting.end.dateTime,
-                            records: records.map(record => ({
-                                name: record.identity?.displayName || 'Unknown',
-                                email: record.emailAddress || '',
-                                duration: record.totalAttendanceInSeconds,
-                                role: record.role,
-                                attendanceIntervals: record.attendanceIntervals
-                            }))
-                        };
+                        // Check if this meeting has already been processed
+                        const existingEntry = await getMeetingEntry(uniqueStorageId);
+                        if (existingEntry) {
+                            console.log(`⚠️ Meeting already processed: ${truncatedSubject}`);
+                            continue;
+                        }
 
-                        records.forEach(record => {
-                            if (record.emailAddress) {
-                                const email = record.emailAddress.toLowerCase();
-                                attendanceReport.attendanceByPerson[email] = 
-                                    (attendanceReport.attendanceByPerson[email] || 0) + 1;
-                            }
+                        attendanceReport.attendedMeetings++;
+                        console.log(`✅ Found ${attendanceRecords.length} attendance records for ${truncatedSubject}`);
+                        
+                        // Rest of the existing attendance processing code...
+                        const totalDuration = attendanceRecords.reduce((sum, record) => sum + record.totalAttendanceInSeconds, 0);
+                        const avgDuration = attendanceRecords.length > 0 ? Math.round(totalDuration / attendanceRecords.length) : 0;
+                        const maxDuration = Math.max(...attendanceRecords.map(r => r.totalAttendanceInSeconds));
+                        
+                        // After successful time entry creation
+                        await storeMeetingEntry({
+                            meetingId: meeting.id,
+                            uniqueStorageId,
+                            userId: meeting.organizer.email,
+                            timeEntry: attendanceRecords[0],
+                            rawResponse: attendanceRecords[0].attendanceIntervals ? { intervals: attendanceRecords[0].attendanceIntervals } : null,
+                            postedAt: DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSS \'IST\'')
                         });
-                    } else {
-                        console.log(`ℹ️ No attendance records found for ${truncatedSubject}`);
                     }
-                } else {
-                    console.log(`⚠️ Could not extract meeting info from Teams URL for ${truncatedSubject}`);
                 }
             } else {
                 console.log(`ℹ️ Not an online meeting: ${truncatedSubject}`);
             }
         }
-
-        console.log(`
-╔════════════════════════════════════════════════════════╗
-║ 🏁 MEETING FETCH COMPLETED                             
-║ 📊 Total meetings: ${filteredMeetings.length} | With attendance: ${attendanceReport.attendedMeetings}
-║ 👥 Unique attendees: ${Object.keys(attendanceReport.attendanceByPerson).length}
-╚════════════════════════════════════════════════════════╝`);
-
+        console.log(`\n╔════════════════════════════════════════════════════════╗\n║ 🏁 MEETING FETCH COMPLETED                             \n║ 📊 Total meetings: ${uniqueMeetings.length} | With attendance: ${attendanceReport.attendedMeetings}\n║ 👥 Unique attendees: ${Object.keys(attendanceReport.attendanceByPerson).length}\n╚════════════════════════════════════════════════════════╝`);
         return {
-            meetings: filteredMeetings,
+            meetings: uniqueMeetings,
             attendanceReport
         };
     } catch (error: unknown) {
@@ -650,4 +652,43 @@ function extractPatterns(contextSection: string = ''): string[] {
         .split('\n')
         .map(pattern => pattern.replace(/^-\s*/, '').trim())
         .filter(pattern => pattern.length > 0);
-} 
+}
+
+// Calculate meeting duration in hours
+function calculateDuration(meeting: Meeting): number {
+    const start = DateTime.fromISO(meeting.start.dateTime);
+    const end = DateTime.fromISO(meeting.end.dateTime);
+    return end.diff(start, 'hours').hours;
+}
+
+// Get existing meeting entry from storage
+async function getMeetingEntry(uniqueStorageId: string): Promise<any> {
+    const storage = await readJsonFile(STORAGE_FILE_PATH);
+    return storage.meetings.find((entry: any) => entry.uniqueStorageId === uniqueStorageId);
+}
+
+// Store meeting entry with unique ID
+async function storeMeetingEntry(entry: {
+    meetingId: string;
+    uniqueStorageId: string;
+    userId: string;
+    timeEntry: any;
+    rawResponse: any;
+    postedAt: string;
+}): Promise<void> {
+    const storage = await readJsonFile(STORAGE_FILE_PATH);
+    storage.meetings.push(entry);
+    await writeJsonFile(STORAGE_FILE_PATH, storage);
+}
+
+// Generate unique storage ID for the meeting
+const generateUniqueStorageId = (meeting: Meeting, duration: number): string => {
+    const meetingId = meeting.id;
+    const startTime = meeting.timeEntryDate || // Use actual attendance date if available
+        DateTime.fromISO(meeting.start.dateTime)
+            .toUTC()
+            .toFormat('yyyy-MM-dd'); // Otherwise use scheduled date
+    return `${meetingId}_${duration}_${startTime}`;
+};
+
+// ... existing code ... 

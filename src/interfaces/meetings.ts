@@ -27,6 +27,8 @@ export interface Meeting {
         joinUrl: string;
         conferenceId?: string;
     };
+    seriesMasterId?: string;
+    timeEntryDate?: string;
 }
 
 export interface MeetingIdentity {
@@ -85,14 +87,25 @@ export interface MeetingAnalysis {
 }
 
 export interface ProcessedMeeting extends Meeting {
-    analysis?: MeetingAnalysis;
+    analysis?: {
+        keyPoints: string[];
+        suggestedCategories: string[];
+        confidence: number;
+        context: {
+            patterns: string[];
+        };
+    };
     attendance?: {
         records: {
             name: string;
             email: string;
             duration: number;
-            role?: string;
-            attendanceIntervals?: AttendanceInterval[];
+            role: string;
+            attendanceIntervals: {
+                joinDateTime: string;
+                leaveDateTime: string;
+                durationInSeconds: number;
+            }[];
         }[];
         summary: {
             totalDuration: number;
@@ -100,6 +113,7 @@ export interface ProcessedMeeting extends Meeting {
             totalParticipants: number;
         };
     };
+    seriesMasterId?: string;
     lastProcessed: string;
     userId: string;
 } 

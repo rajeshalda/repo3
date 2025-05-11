@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { AIAgentPostedMeetingsStorage } from '../storage/posted-meetings';
 import { TimeEntryResponse as NewTimeEntryResponse } from '@/interfaces/time-entries';
+import { DateTime } from 'luxon';
 
 interface UserData {
     userId: string;
@@ -365,7 +366,9 @@ export class IntervalsTimeEntryService {
                 taskid: taskDetails.id,
                 worktypeid: worktypeId,
                 personid: person.id,
-                date: this.formatDate(meeting.start.dateTime),
+                date: DateTime.fromISO(meeting.attendance?.records[0]?.attendanceIntervals[0]?.joinDateTime || '')
+                    .toUTC()
+                    .toFormat('yyyy-MM-dd'), // Use UTC date instead of IST
                 time: timeInHours,
                 description: meeting.subject,
                 billable: isBillable ? 't' : 'f'

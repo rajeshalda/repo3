@@ -7,6 +7,7 @@ import { reviewService } from '../review/review-service';
 import { ReviewMeeting } from '../review/types';
 import fs from 'fs/promises';
 import path from 'path';
+import { DateTime } from 'luxon';
 
 interface TaskMatch {
     taskId: string;
@@ -178,8 +179,16 @@ export class TaskService {
             // Format meeting analysis data with enhanced context
             const meetingAnalysis = {
                 subject: meeting.subject,
-                startTime: meeting.start.dateTime,
-                endTime: meeting.end.dateTime,
+                startTime: meeting.seriesMasterId && meeting.attendance?.records?.[0]?.attendanceIntervals?.[0]?.joinDateTime
+                    ? DateTime.fromISO(meeting.attendance.records[0].attendanceIntervals[0].joinDateTime)
+                        .setZone('Asia/Kolkata')
+                        .toFormat("yyyy-MM-dd'T'HH:mm:ss.0000000")
+                    : meeting.start.dateTime,
+                endTime: meeting.seriesMasterId && meeting.attendance?.records?.[0]?.attendanceIntervals?.[0]?.leaveDateTime
+                    ? DateTime.fromISO(meeting.attendance.records[0].attendanceIntervals[0].leaveDateTime)
+                        .setZone('Asia/Kolkata')
+                        .toFormat("yyyy-MM-dd'T'HH:mm:ss.0000000")
+                    : meeting.end.dateTime,
                 duration: userDuration, // Use the user's actual duration
                 analysis: {
                     keyPoints: meeting.analysis?.keyPoints || [],
