@@ -781,7 +781,7 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
                   <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground">Total meetings in period:</p>
+                    <p className="text-xs text-muted-foreground">Total meetings in the selected date range:</p>
                     <div className="text-2xl sm:text-3xl font-bold">
                       {meetingsLoading ? (
                         <Loader2 className="h-6 w-6 sm:h-7 sm:w-7 animate-spin" />
@@ -799,7 +799,7 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
                   <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground">Total time in all meetings:</p>
+                    <p className="text-xs text-muted-foreground">Total time in all meetings in the selected date range:</p>
                     <div className="text-2xl sm:text-3xl font-bold">
                       {meetingsLoading ? (
                         <Loader2 className="h-6 w-6 sm:h-7 sm:w-7 animate-spin" />
