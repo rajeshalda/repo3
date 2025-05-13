@@ -330,8 +330,38 @@ export async function POST(request: Request) {
                     }
                 }
                 
-                // Store the meeting in AI Agent storage format
+                // Storage the meeting in AI Agent storage format
                 const storageForManual = new AIAgentPostedMeetingsStorage();
+                
+                // Extract reportId from attendance records if available
+                let reportId = undefined;
+                
+                if (attendanceRecords && Array.isArray(attendanceRecords) && 
+                    attendanceRecords.length > 0 && attendanceRecords[0].rawRecord?.reportId) {
+                    // If the rawRecord contains the reportId, use it
+                    reportId = attendanceRecords[0].rawRecord.reportId;
+                    console.log(`Found reportId in attendance records: ${reportId}`);
+                } else if (payload.meetingInfo?.reportId) {
+                    // If the meetingInfo directly contains reportId, use it
+                    reportId = payload.meetingInfo.reportId;
+                    console.log(`Found reportId in meetingInfo: ${reportId}`);
+                }
+                
+                // Log whether we have a reportId or not for debugging
+                if (reportId) {
+                    console.log(`
+╔════════════════════════ REPORT ID FOUND ═══════════════════════╗
+║ 🧪 MANUAL POSTING: Found report ID for deduplication           ║ 
+║ 📊 Report ID: ${reportId}                                     ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+                } else {
+                    console.log(`
+╔════════════════════════ NO REPORT ID ═══════════════════════╗
+║ ⚠️ MANUAL POSTING: No report ID available                    ║ 
+║ ℹ️ Will use fallback deduplication with meetingId + userId   ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+                }
+                
                 await storageForManual.addPostedMeeting(
                     session.user.email,
                     {
@@ -342,7 +372,8 @@ export async function POST(request: Request) {
                             taskTitle: taskTitle || taskName  // Prefer passed taskTitle, then fall back to taskName
                         } : null,
                         rawResponse: result,
-                        postedAt: convertToIST(date) // Convert date to IST format
+                        postedAt: convertToIST(date), // Convert date to IST format
+                        reportId: reportId // Add reportId if available
                     }
                 );
                 

@@ -496,7 +496,8 @@ function MatchRow({
             meetingId: meetingInfo.meetingId,
             graphId: meetingInfo.graphId, // Include the Graph ID explicitly
             threadId: meetingInfo.threadId,
-            organizerId: meetingInfo.organizerId
+            organizerId: meetingInfo.organizerId,
+            reportId: (meetingInfo as any).reportId // Use type assertion for reportId
           } : undefined,
           subject: result.meeting.subject,
           startTime: result.meeting.startTime,
@@ -507,7 +508,8 @@ function MatchRow({
             email: session?.user?.email || '',
             name: session?.user?.name || '',
             duration: totalDurationInSeconds,
-            intervals: userAttendance.intervals
+            intervals: userAttendance.intervals,
+            rawRecord: (userAttendance as any).rawRecord // Use type assertion for rawRecord
           }]
         }),
       });

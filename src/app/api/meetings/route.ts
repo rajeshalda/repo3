@@ -56,6 +56,7 @@ interface RawAttendanceRecord {
     tenantId: string;
   };
   attendanceIntervals: AttendanceInterval[];
+  reportId?: string;
 }
 
 interface AttendanceRecord {
@@ -149,6 +150,9 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
       if (recordsData.value && recordsData.value.length > 0) {
         // Merge attendance records
         for (const record of recordsData.value) {
+          // Add reportId to each record for deduplication
+          record.reportId = report.id;
+          
           const existingRecord = allAttendanceRecords.find(r => r.emailAddress === record.emailAddress);
           
           if (existingRecord) {
@@ -159,6 +163,8 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
             ];
             // Update total duration
             existingRecord.totalAttendanceInSeconds += record.totalAttendanceInSeconds;
+            // Preserve the reportId
+            existingRecord.reportId = record.reportId;
           } else {
             // Add new record
             allAttendanceRecords.push(record);
@@ -279,6 +285,7 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
     threadId: string | null;
     organizerId: string | null;
     graphId?: string;
+    reportId?: string;
     rawJoinUrl: string;
     rawBodyPreview: string;
   } = { 
@@ -417,6 +424,12 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
               intervals: record.attendanceIntervals || [],
               rawRecord: record
             }));
+            
+            // Store the first report ID in the meetingInfo object for deduplication
+            if (attendanceRecords.length > 0 && attendanceRecords[0].reportId) {
+              console.log(`Adding reportId ${attendanceRecords[0].reportId} to meetingInfo for deduplication`);
+              meetingInfo.reportId = attendanceRecords[0].reportId;
+            }
           }
         } else {
           console.log('Skipping attendance fetch - missing threadId or organizerId:', meetingInfo);
