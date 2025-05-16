@@ -190,6 +190,10 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             999
         ));
 
+        // Check if target date is for early morning hours (for debugging)
+        const targetHourIST = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' }).hour;
+        const isEarlyMorningTarget = targetHourIST >= 0 && targetHourIST < 5.5;
+
         console.log(`
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
@@ -197,20 +201,46 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 │     ${endOfWindow.toISOString()}                │
 │ 🕒 IST: ${new Date(startOfWindow.getTime() + 5.5 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to │
 │     ${new Date(endOfWindow.getTime() + 5.5 * 60 * 60 * 1000).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}    │
+│ ⏰ Target Hour IST: ${targetHourIST}              │
+│ 🌅 Early Morning Target: ${isEarlyMorningTarget ? 'YES' : 'NO'}  │
 └─────────────────────────────────────────────────┘`);
 
         // Find reports within our UTC window that covers the IST day
         const relevantReports = reportsData.value.filter((report: any) => {
             const reportDateIST = DateTime.fromISO(report.meetingStartDateTime, { zone: 'Asia/Kolkata' });
-            const reportDateStr = reportDateIST.toISODate();
-            const istTargetDateStr = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' }).toISODate();
-            const isRelevant = (reportDateStr === istTargetDateStr);
+            const reportDateStr = reportDateIST.toISODate() || '';
+            const istTargetDateStr = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' }).toISODate() || '';
+            
+            // Check if dates match directly
+            let isRelevant = (reportDateStr === istTargetDateStr);
+            
+            // Special handling for early morning meetings (12:00 AM to 5:30 AM IST)
+            if (!isRelevant) {
+                const reportHourIST = reportDateIST.hour;
+                const isEarlyMorning = reportHourIST >= 0 && reportHourIST < 5.5;
+                
+                if (isEarlyMorning) {
+                    // For early morning meetings, check if the report date is within 1 day of target
+                    const targetDateIST = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' });
+                    const dayDifference = Math.abs(targetDateIST.diff(reportDateIST, 'days').days);
+                    
+                    // Allow meetings within 1 day difference for early morning meetings
+                    if (dayDifference <= 1) {
+                        console.log(`Early morning meeting detected (${reportHourIST}h IST). Including despite date mismatch.`);
+                        isRelevant = true;
+                    }
+                }
+            }
+            
             console.log('Report time check:', {
-                reportTime: report.meetingStartDateTime,
+                reportTime: report.meetingStartDateTime, 
+                reportIST: reportDateIST.toFormat('yyyy-MM-dd HH:mm:ss'),
                 reportDateStr,
                 istTargetDateStr,
+                reportHourIST: reportDateIST.hour,
                 isRelevant
             });
+            
             return isRelevant;
         });
 
@@ -219,8 +249,13 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             return [];
         }
 
+        // Sort reports by start time (most recent first) to get the latest report
+        const sortedReports = [...relevantReports].sort((a, b) => 
+            new Date(b.meetingStartDateTime).getTime() - new Date(a.meetingStartDateTime).getTime()
+        );
+
         // Use the most recent report
-        const reportId = relevantReports[0].id;
+        const reportId = sortedReports[0].id;
         console.log(`Found ${relevantReports.length} relevant reports, using most recent: ${reportId}`);
 
         // Get attendance records
@@ -247,7 +282,29 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             // Filter intervals to only those within the IST day
             const filteredIntervals = record.attendanceIntervals.filter((interval: any) => {
                 const joinIST = new Date(new Date(interval.joinDateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-                return joinIST >= istStartDate && joinIST <= istEndDate;
+                
+                // Special handling for early morning meetings
+                // For consistency, use the same logic as in report selection
+                const joinHourIST = joinIST.getHours();
+                const isEarlyMorningJoin = joinHourIST >= 0 && joinHourIST < 5.5;
+                
+                // Default check if the join time is within the target day
+                let isWithinWindow = joinIST >= istStartDate && joinIST <= istEndDate;
+                
+                // Additional check for early morning meetings
+                if (!isWithinWindow && isEarlyMorningJoin) {
+                    // For early morning joins, check if they're within a day of the target
+                    const joinDate = joinIST.toISOString().split('T')[0];
+                    const targetDate = istStartDate.toISOString().split('T')[0];
+                    const dayDifference = Math.abs(new Date(joinDate).getTime() - new Date(targetDate).getTime()) / (24 * 60 * 60 * 1000);
+                    
+                    if (dayDifference <= 1) {
+                        console.log(`Early morning interval detected (${joinHourIST}h IST). Including despite window mismatch.`);
+                        isWithinWindow = true;
+                    }
+                }
+                
+                return isWithinWindow;
             });
             const totalDuration = filteredIntervals.reduce((sum: number, interval: any) => sum + interval.durationInSeconds, 0);
             return {
@@ -258,7 +315,7 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
         }).filter((record: any) => record.attendanceIntervals && record.attendanceIntervals.length > 0);
         
         if (records.length > 0) {
-            console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✅ ATTENDANCE RECORDS FOUND                     │\n│ 📊 Total Records: ${records.length}             │\n│ 🕒 Meeting Start: ${relevantReports[0].meetingStartDateTime} │\n└─────────────────────────────────────────────────┘`);
+            console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✅ ATTENDANCE RECORDS FOUND                     │\n│ 📊 Total Records: ${records.length}             │\n│ 🕒 Meeting Start: ${sortedReports[0].meetingStartDateTime} │\n└─────────────────────────────────────────────────┘`);
         }
         
         return records;

@@ -1,5 +1,6 @@
 import { AttendanceReportInfo, EnhancedAttendanceReport, AttendanceReportSelection, ReportValidationResult } from './types/attendance';
 import { openAIClient } from '../../core/azure-openai/client';
+import { DateTime } from 'luxon';
 
 export class AttendanceReportManager {
     constructor() {}
@@ -66,9 +67,15 @@ export class AttendanceReportManager {
         report: AttendanceReportInfo,
         targetDate: string
     ): Promise<ReportValidationResult> {
-        // Extract date from report's start time
-        const reportDate = new Date(report.meetingStartDateTime).toISOString().split('T')[0];
-        const targetDateStr = new Date(targetDate).toISOString().split('T')[0];
+        // Convert report date to IST time zone
+        const reportDateIST = DateTime.fromISO(report.meetingStartDateTime).setZone('Asia/Kolkata');
+        const reportDate = reportDateIST.toISODate() || '';
+        
+        // Convert target date to IST time zone
+        const targetDateIST = DateTime.fromISO(targetDate).setZone('Asia/Kolkata');
+        const targetDateStr = targetDateIST.toISODate() || '';
+        
+        console.log(`Report validation [IST]: Report date: ${reportDate}, Target date: ${targetDateStr}`);
 
         // Calculate duration in seconds
         const startTime = new Date(report.meetingStartDateTime).getTime();
@@ -76,7 +83,30 @@ export class AttendanceReportManager {
         const duration = (endTime - startTime) / 1000;
 
         // Validate the report
+        // For early morning meetings (12:00 AM to 5:30 AM IST), the reportDate will be the same as targetDate
+        // in IST timezone, even though they might be different in UTC
         if (reportDate !== targetDateStr) {
+            // Additional check for early morning meetings crossing UTC day boundary
+            const reportHourIST = reportDateIST.hour;
+            const isEarlyMorning = reportHourIST >= 0 && reportHourIST < 5.5; // 12:00 AM to 5:30 AM
+            
+            // Special handling for the day boundary edge case
+            // If the meeting is early morning and the target date is the previous day,
+            // we'll check if they're only one day apart
+            if (isEarlyMorning) {
+                const dayDifference = Math.abs(targetDateIST.diff(reportDateIST, 'days').days);
+                if (dayDifference <= 1) {
+                    // Allow a 1-day difference for early morning meetings
+                    console.log(`Early morning meeting detected (${reportHourIST} IST). Allowing despite date mismatch.`);
+                    return {
+                        isValid: true,
+                        reason: 'Report is valid for early morning meeting (crossing day boundary)',
+                        reportDate,
+                        duration
+                    };
+                }
+            }
+            
             return {
                 isValid: false,
                 reason: 'Report date does not match target date',

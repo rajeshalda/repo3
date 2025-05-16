@@ -131,8 +131,19 @@ export class MeetingService {
             const reportManager = new AttendanceReportManager();
             
             // Process all reports using the manager
-            const meetingDate = new Date().toISOString(); // Use current date or get from meeting
-            const isRecurring = true; // This should be determined from the meeting data
+            // Use meeting's start date if available, otherwise current date
+            const currentDate = new Date().toISOString();
+            const meetingDate = currentDate; // Default to current date
+            const isRecurring = true;
+            
+            // Enhanced logging for debugging time-related issues
+            console.log(`
+┌─────────────────── ATTENDANCE REPORT REQUEST ─────────────────┐
+│ 📊 Processing attendance report with:                         │
+│ 📅 Meeting Date UTC: ${meetingDate}                           │
+│ 🕒 Meeting Date IST: ${new Date(meetingDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} │
+│ 🔄 Is Recurring: ${isRecurring}                               │
+└─────────────────────────────────────────────────────────────┘`);
             
             const reportSelection = await reportManager.processAttendanceReports(
                 reportsData.value,
@@ -263,6 +274,19 @@ export class MeetingService {
                                     // Process all reports using the manager
                                     const meetingDate = meeting.start.dateTime;
                                     const isRecurring = !!meeting.seriesMasterId;
+                                    
+                                    // Enhanced logging for time-related issues
+                                    const meetingStartIST = new Date(meeting.start.dateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+                                    const meetingStartHourIST = new Date(meetingStartIST).getHours();
+                                    const isEarlyMorning = meetingStartHourIST >= 0 && meetingStartHourIST < 5.5;
+                                    
+                                    console.log(`
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: ${meeting.start.dateTime}                 │
+│ 🕒 Meeting IST: ${meetingStartIST}                        │
+│ ⏰ Hour (IST): ${meetingStartHourIST}                     │
+│ 🌅 Early Morning: ${isEarlyMorning ? 'YES' : 'NO'}        │
+└─────────────────────────────────────────────────────────┘`);
                                     
                                     const reportSelection = await reportManager.processAttendanceReports(
                                         reportsData.value,
