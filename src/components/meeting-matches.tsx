@@ -848,21 +848,30 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
           // AI-agent view logic - only show in unmatched if not in any matched category
           isValidForCategory = !allMatchedMeetingKeys.has(meetingKey);
         } else {
-          // Manual view logic - show in unmatched if it has no matched task
-          isValidForCategory = !m.matchedTask;
+          // Manual view logic - modified to consider confidence score
+          // For manual unmatched, check for matchedTask AND ensure confidence is not high
+          isValidForCategory = !m.matchedTask || m.confidence < 0.5;
+          
           // Debug logging specifically for manual unmatched meetings
           if (category === 'unmatched') {
             console.log('Manual unmatched meeting check:', {
               subject: m.meeting.subject,
               hasMatchedTask: !!m.matchedTask,
+              confidence: m.confidence,
               isValidForCategory,
               inAllMatchedKeys: allMatchedMeetingKeys.has(meetingKey)
             });
           }
         }
-      } else {
-        // For matched categories (high/medium/low), ensure it has a matched task
-        isValidForCategory = m.matchedTask !== null;
+      } else if (category === 'high') {
+        // For high confidence category, ensure it has a matched task with high confidence
+        isValidForCategory = m.matchedTask !== null && m.confidence >= 0.8;
+      } else if (category === 'medium') {
+        // For medium confidence category, ensure it has a matched task with medium confidence
+        isValidForCategory = m.matchedTask !== null && m.confidence >= 0.5 && m.confidence < 0.8;
+      } else if (category === 'low') {
+        // For low confidence category, ensure it has a matched task with low confidence
+        isValidForCategory = m.matchedTask !== null && m.confidence > 0 && m.confidence < 0.5;
       }
       
       // Only include meetings that meet all criteria
