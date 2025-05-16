@@ -94,8 +94,35 @@ ${postedMeeting.reportId ? `║ 📊 Report ID: ${postedMeeting.reportId.substri
 ${postedMeeting.reportId ? `│ 📊 Attendance Report ID: ${postedMeeting.reportId}     │` : ''}
 └───────────────────────────────────────────────────────────────┘`);
         
-        // Check if a meeting with this report ID already exists
-        // Only apply this check if a reportId is available
+        // IMPROVED DUPLICATE DETECTION - First check for any entry with same meetingId+date
+        // This will prevent duplicates when a meeting has multiple attendance reports
+        const meetingDate = postedMeeting.timeEntry?.date;
+        const anyExistingMeeting = this.data.meetings.find(m => {
+            // Check if it's the same meeting and user
+            const sameMeeting = (m.meetingId === postedMeeting.meetingId && m.userId === userId);
+            if (!sameMeeting) return false;
+            
+            // If dates are available, compare them
+            if (m.timeEntry?.date && meetingDate) {
+                return m.timeEntry.date === meetingDate;
+            }
+            
+            // If we can't compare dates, consider it a match if meetingId and userId are the same
+            return true;
+        });
+        
+        if (anyExistingMeeting) {
+            console.log(`
+┌─────────────────────── DUPLICATE DETECTED ───────────────────────┐
+│ ⚠️ Meeting already posted on ${anyExistingMeeting.timeEntry?.date || 'unknown date'}     │
+│ 🆔 Meeting ID: ${postedMeeting.meetingId.substring(0, 15)}...    │
+│ 📅 Date: ${meetingDate || 'unknown'}                            │
+│ 👤 User: ${userId}                                              │
+└───────────────────────────────────────────────────────────────────┘`);
+            return;
+        }
+        
+        // Keep the existing reportId check for backward compatibility
         if (postedMeeting.reportId) {
             const existingMeeting = this.data.meetings.find(m => 
                 m.reportId === postedMeeting.reportId && 
@@ -104,30 +131,6 @@ ${postedMeeting.reportId ? `│ 📊 Attendance Report ID: ${postedMeeting.repor
             
             if (existingMeeting) {
                 console.log(`[${now}] Duplicate found based on report ID: ${postedMeeting.reportId}, skipping storage`);
-                return;
-            }
-        } else {
-            // If no reportId, fall back to checking meetingId, userId, and date
-            const existingMeeting = this.data.meetings.find(m => {
-                const sameBasicInfo = (
-                    m.meetingId === postedMeeting.meetingId && 
-                    m.userId === userId
-                );
-                
-                // If basic info doesn't match, it's not a duplicate
-                if (!sameBasicInfo) return false;
-                
-                // Check if the dates match (if date is available)
-                if (m.timeEntry?.date && postedMeeting.timeEntry?.date) {
-                    return m.timeEntry.date === postedMeeting.timeEntry.date;
-                }
-                
-                // If we can't compare dates, consider it a duplicate if all other info matches
-                return true;
-            });
-            
-            if (existingMeeting) {
-                console.log(`[${now}] Duplicate found based on meeting ID and date, skipping storage`);
                 return;
             }
         }
@@ -210,16 +213,6 @@ ${postedMeeting.reportId ? `│ 📑 Report ID saved: ${postedMeeting.reportId} 
         // Format the date from the meeting date string in YYY-MM-DD format
         const meetingDate = dateTime ? dateTime.split('T')[0] : '';
         
-        // DEVELOPER CHECK - Log a more prominent marker when using report ID
-        if (reportId) {
-            console.log(`
-╔════════════════════════ REPORT ID DEDUPLICATION ═══════════════════════╗
-║ 🧪 DEVELOPER CHECK: Using ONLY report ID for duplication detection     ║ 
-║ 📊 Report ID: ${reportId}                                            ║
-║ 👤 User ID: ${userId.substring(0, 15)}...                            ║
-╚═══════════════════════════════════════════════════════════════════════╝`);
-        }
-        
         console.log(`
 ┌─────────────────────────────────────────────────┐
 │ 🔍 CHECKING IF MEETING IS POSTED                │
@@ -228,9 +221,38 @@ ${postedMeeting.reportId ? `│ 📑 Report ID saved: ${postedMeeting.reportId} 
 │ ⏱️ Duration: ${Math.floor(duration/60)}m ${duration%60}s                    │
 ${reportId ? `│ 📊 Report ID: ${reportId}              │` : ''}
 └─────────────────────────────────────────────────┘`);
+
+        // IMPROVED DUPLICATE DETECTION - First check for any entry with same meetingId+date
+        if (meetingDate) {
+            const anyExistingMeeting = this.data.meetings.find(m => 
+                m.meetingId === meetingId && 
+                m.userId === userId &&
+                m.timeEntry?.date === meetingDate
+            );
+            
+            if (anyExistingMeeting) {
+                console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✅ DUPLICATE DETECTED BY MEETING ID AND DATE     │
+│ 🆔 Meeting ID: ${meetingId.substring(0, 15)}... │
+│ 📅 Date: ${meetingDate}                         │
+│ 👤 User ID: ${userId}                           │
+└─────────────────────────────────────────────────┘`);
+                
+                console.log(`✓ MATCH FOUND (by Meeting ID and Date) - Meeting already posted on ${anyExistingMeeting.timeEntry?.date || 'unknown date'} with duration ${anyExistingMeeting.timeEntry?.time || 'unknown'} hours`);
+                return true;
+            }
+        }
         
-        // Only check using report ID - never fall back to old method
+        // Then check using report ID if available
         if (reportId) {
+            console.log(`
+╔════════════════════════ REPORT ID DEDUPLICATION ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Using ONLY report ID for duplication detection     ║ 
+║ 📊 Report ID: ${reportId}                                            ║
+║ 👤 User ID: ${userId.substring(0, 15)}...                            ║
+╚═══════════════════════════════════════════════════════════════════════╝`);
+            
             const reportMatch = this.data.meetings.find(meeting => 
                 meeting.reportId === reportId && meeting.userId === userId
             );
@@ -249,27 +271,32 @@ ${reportId ? `│ 📊 Report ID: ${reportId}              │` : ''}
                     console.log(`📋 Task: ${reportMatch.taskName}`);
                 }
                 return true;
-            } else {
-                console.log(`
-┌─────────────────────────────────────────────────┐
-│ ℹ️ REPORT ID CHECK RESULT                       │
-│ 📊 Report ID: ${reportId}                       │
-│ 🔍 Status: No matching report ID found          │
-│ ✅ Conclusion: New meeting                      │
-└─────────────────────────────────────────────────┘`);
             }
-        } else {
-            console.log(`
-┌─────────────────────────────────────────────────┐
-│ ⚠️ NO REPORT ID PROVIDED                        │
-│ 🔍 Status: Cannot check for duplicates by report ID │
-│ ✅ Conclusion: Treating as new meeting          │
-└─────────────────────────────────────────────────┘`);
+            
+            console.log('❌ No match found for report ID: ' + reportId);
+            return false;
         }
         
-        // No report ID match - consider it a new meeting
-        // We no longer fall back to the old method
-        console.log(`✅ Meeting not yet posted - can proceed with creating time entry`);
+        // Legacy fallback check - check if any meeting with this ID exists for the user (any date)
+        // This is the most permissive check and should only be used as a last resort
+        const anyMatch = this.data.meetings.find(meeting => 
+            meeting.meetingId === meetingId && 
+            meeting.userId === userId
+        );
+        
+        if (anyMatch) {
+            console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✅ DUPLICATE DETECTED BY MEETING ID (ANY DATE)   │
+│ 🆔 Meeting ID: ${meetingId.substring(0, 15)}... │
+│ 👤 User ID: ${userId}                           │
+└─────────────────────────────────────────────────┘`);
+            
+            console.log(`✓ MATCH FOUND (by Meeting ID) - Meeting already posted on ${anyMatch.timeEntry?.date || 'unknown date'} with duration ${anyMatch.timeEntry?.time || 'unknown'} hours`);
+            return true;
+        }
+        
+        console.log('❌ No match found for this meeting');
         return false;
     }
 } 

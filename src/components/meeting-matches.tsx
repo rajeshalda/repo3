@@ -723,6 +723,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   
   // Add a matchesRef to detect actual changes in matches data
   const matchesRef = useRef(matches);
+  // Add a sourceRef to detect source changes
+  const sourceRef = useRef(source);
 
   // Clear all states when matches change
   const clearAllStates = useCallback(() => {
@@ -741,14 +743,27 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const haveMeetingsChanged = useCallback((newMatches: typeof matches, oldMatches: typeof matches) => {
     const getMeetingIds = (matchList: MatchResult[]) => 
       new Set(matchList.map(m => m.meeting.meetingInfo?.meetingId || m.meeting.subject));
-
-    return (
-      JSON.stringify(getMeetingIds(newMatches.high)) !== JSON.stringify(getMeetingIds(oldMatches.high)) ||
-      JSON.stringify(getMeetingIds(newMatches.medium)) !== JSON.stringify(getMeetingIds(oldMatches.medium)) ||
-      JSON.stringify(getMeetingIds(newMatches.low)) !== JSON.stringify(getMeetingIds(oldMatches.low)) ||
-      JSON.stringify(getMeetingIds(newMatches.unmatched)) !== JSON.stringify(getMeetingIds(oldMatches.unmatched))
-    );
-  }, []);
+      
+    // For manual source, unmatched meetings should be considered independently from AI matches
+    if (source !== 'ai-agent') {
+      // For manual view, focus on checking if any meeting has gained or lost a matched task
+      const unmatchedChanges = JSON.stringify(getMeetingIds(newMatches.unmatched)) !== JSON.stringify(getMeetingIds(oldMatches.unmatched));
+      const matchedChanges = 
+        JSON.stringify(getMeetingIds(newMatches.high)) !== JSON.stringify(getMeetingIds(oldMatches.high)) ||
+        JSON.stringify(getMeetingIds(newMatches.medium)) !== JSON.stringify(getMeetingIds(oldMatches.medium)) ||
+        JSON.stringify(getMeetingIds(newMatches.low)) !== JSON.stringify(getMeetingIds(oldMatches.low));
+      
+      return unmatchedChanges || matchedChanges;
+    } else {
+      // For AI agent, use the original comparison logic
+      return (
+        JSON.stringify(getMeetingIds(newMatches.high)) !== JSON.stringify(getMeetingIds(oldMatches.high)) ||
+        JSON.stringify(getMeetingIds(newMatches.medium)) !== JSON.stringify(getMeetingIds(oldMatches.medium)) ||
+        JSON.stringify(getMeetingIds(newMatches.low)) !== JSON.stringify(getMeetingIds(oldMatches.low)) ||
+        JSON.stringify(getMeetingIds(newMatches.unmatched)) !== JSON.stringify(getMeetingIds(oldMatches.unmatched))
+      );
+    }
+  }, [source]);
 
   // Update meetings when matches prop changes
   useEffect(() => {
@@ -767,14 +782,15 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     }
   }, [matches, clearAllStates, haveMeetingsChanged]);
 
-  const filterMeetings = (matchResults: MatchResult[], category: MatchCategory) => {
+  const filterMeetings = useCallback((matchResults: MatchResult[], category: MatchCategory) => {
     // Convert postedMeetingIds to a Set if it isn't already one
     const postedIds = postedMeetingIds instanceof Set ? postedMeetingIds : new Set(postedMeetingIds);
     
     console.log('Filtering meetings:', {
       category,
       totalMeetings: matchResults.length,
-      postedIds: Array.from(postedIds)
+      postedIds: Array.from(postedIds),
+      source
     });
 
     // Get all matched meeting keys (from high, medium, low confidence)
@@ -794,7 +810,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         meetingKey,
         meetingId,
         confidence: m.confidence,
-        matchedTask: m.matchedTask?.title
+        matchedTask: m.matchedTask?.title,
+        source
       });
       
       // Check if meeting is already posted
@@ -825,9 +842,24 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
       // Critical: Check category-specific conditions
       let isValidForCategory = true;
+      
       if (category === 'unmatched') {
-        // For unmatched category, ensure the meeting is not in any matched categories
-        isValidForCategory = !allMatchedMeetingKeys.has(meetingKey);
+        if (source === 'ai-agent') {
+          // AI-agent view logic - only show in unmatched if not in any matched category
+          isValidForCategory = !allMatchedMeetingKeys.has(meetingKey);
+        } else {
+          // Manual view logic - show in unmatched if it has no matched task
+          isValidForCategory = !m.matchedTask;
+          // Debug logging specifically for manual unmatched meetings
+          if (category === 'unmatched') {
+            console.log('Manual unmatched meeting check:', {
+              subject: m.meeting.subject,
+              hasMatchedTask: !!m.matchedTask,
+              isValidForCategory,
+              inAllMatchedKeys: allMatchedMeetingKeys.has(meetingKey)
+            });
+          }
+        }
       } else {
         // For matched categories (high/medium/low), ensure it has a matched task
         isValidForCategory = m.matchedTask !== null;
@@ -843,12 +875,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         hasDuration,
         hasAttendance,
         isValidForCategory,
-        isIncluded
+        isIncluded,
+        source
       });
       
       return isIncluded;
     });
-  };
+  }, [matches, postedMeetingIds, userId, source, session]);
 
   const [meetings, setMeetings] = useState<MatchGroups>(() => ({
     high: filterMeetings(matches.high, 'high'),
@@ -857,15 +890,42 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     unmatched: filterMeetings(matches.unmatched, 'unmatched')
   }));
 
+  // Add a specific effect for source changes to ensure proper filtering
+  useEffect(() => {
+    if (source !== sourceRef.current) {
+      console.log('Source changed from', sourceRef.current, 'to', source);
+      sourceRef.current = source;
+      
+      // Refilter meetings when source changes
+      setMeetings({
+        high: filterMeetings(matches.high, 'high'),
+        medium: filterMeetings(matches.medium, 'medium'),
+        low: filterMeetings(matches.low, 'low'),
+        unmatched: filterMeetings(matches.unmatched, 'unmatched')
+      });
+    }
+  }, [source, matches, setMeetings, filterMeetings]);
+
   // Update meetings when props change
   useEffect(() => {
+    console.log('Updating meetings due to prop changes:', {
+      matchesReceived: {
+        high: matches.high.length,
+        medium: matches.medium.length,
+        low: matches.low.length,
+        unmatched: matches.unmatched.length
+      },
+      source,
+      postedIdsCount: Array.isArray(postedMeetingIds) ? postedMeetingIds.length : postedMeetingIds.size
+    });
+
     setMeetings({
       high: filterMeetings(matches.high, 'high'),
       medium: filterMeetings(matches.medium, 'medium'),
       low: filterMeetings(matches.low, 'low'),
       unmatched: filterMeetings(matches.unmatched, 'unmatched')
     });
-  }, [matches, postedMeetingIds, userId]);
+  }, [matches, postedMeetingIds, userId, source]);
 
   // Add useEffect to remove meetings from UI when they are posted
   useEffect(() => {

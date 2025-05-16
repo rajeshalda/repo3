@@ -188,6 +188,14 @@ export async function POST(request: Request) {
             
             // For manual posts, check for duplicates BEFORE creating the time entry
             if (isManualPost) {
+                console.log(`
+╔════════════════════════ MANUAL POST DUPLICATE CHECK ════════════════════════╗
+║ 🔍 Performing comprehensive duplicate detection for manual post             ║
+║ 🆔 Meeting ID: ${primaryMeetingId ? primaryMeetingId.substring(0, 15) + '...' : 'N/A'} ║
+║ 📅 Date: ${date || 'N/A'}                                                  ║
+║ 📝 Description: ${description ? description.substring(0, 20) + '...' : 'N/A'}    ║
+╚═══════════════════════════════════════════════════════════════════════════════╝`);
+                
                 // Before adding a new meeting, check if it's already in the AI Agent storage
                 // to avoid duplicate entries
                 const aiAgentStorage = new AIAgentPostedMeetingsStorage();
@@ -195,28 +203,71 @@ export async function POST(request: Request) {
                 
                 // Create meeting ID in both possible formats to check
                 const standardMeetingId = primaryMeetingId;
-                const manualMeetingId = `${session.user.email.toLowerCase()}_${subject}_${startTime}`;
                 
-                console.log('Checking for duplicates with meetingIds:', {
-                    standardMeetingId,
-                    manualMeetingId
-                });
+                console.log('Checking for duplicates with meetingId:', standardMeetingId);
                 
                 // Convert time in hours to seconds for duration-based duplicate check
                 const durationSeconds = Math.round(timeInHours * 3600);
                 console.log(`Manual post meeting duration: ${durationSeconds}s (${timeInHours} hours)`);
                 
-                // Check if either ID exists in storage, including duration check
-                const meetingExists = 
-                    await aiAgentStorage.isPosted(session.user.email, standardMeetingId, durationSeconds) || 
-                    await aiAgentStorage.isPosted(session.user.email, manualMeetingId, durationSeconds);
+                // Get all posted meetings for this user
+                const postedMeetings = await aiAgentStorage.getPostedMeetings(session.user.email);
+
+                // Check if this meeting ID exists for the same date (this catches rejoined meetings)
+                const meetingExists = postedMeetings.some(m => {
+                    const sameId = m.meetingId === standardMeetingId;
+                    let sameDate = true;
+                    
+                    // If date info is available, check if it's the same date
+                    if (m.timeEntry?.date && date) {
+                        sameDate = m.timeEntry.date === date;
+                    }
+                    
+                    // If meeting ID matches and date matches, consider it a duplicate
+                    const isDuplicate = sameId && sameDate;
+                    
+                    if (isDuplicate) {
+                        console.log(`
+┌─────────────────────── DUPLICATE DETECTED (MANUAL) ───────────────────────┐
+│ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                  │
+│ 📅 Date: ${date}                                                        │
+│ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                │
+└───────────────────────────────────────────────────────────────────────────┘`);
+                    }
+                    
+                    return isDuplicate;
+                });
                 
-                // Additional check: For manual posts, also check directly by meeting subject/description
-                // This handles cases where the meeting name is the same but IDs differ
+                // Additional check: For manual posts, also check if we have a reportId match
+                // This handles cases where the meeting ID is different but reportId is the same
+                let reportIdExists = false;
+                let reportId = undefined;
+                
+                // Extract reportId from the request data
+                if (attendanceRecords && Array.isArray(attendanceRecords) && 
+                    attendanceRecords.length > 0 && attendanceRecords[0].rawRecord?.reportId) {
+                    reportId = attendanceRecords[0].rawRecord.reportId;
+                } else if (payload.meetingInfo?.reportId) {
+                    reportId = payload.meetingInfo.reportId;
+                }
+                
+                if (reportId) {
+                    // Check if any posted meeting has this reportId
+                    reportIdExists = postedMeetings.some(m => m.reportId === reportId);
+                    
+                    if (reportIdExists) {
+                        console.log(`
+┌─────────────────────── DUPLICATE BY REPORT ID (MANUAL) ───────────────────────┐
+│ 📊 Report ID: ${reportId}                                                   │
+│ 👤 User: ${session.user.email}                                              │
+└───────────────────────────────────────────────────────────────────────────────┘`);
+                    }
+                }
+                
+                // Additional check: For manual posts, also check by description for same date
                 let descriptionExists = false;
                 if (description) {
-                    // Get all posted meetings and check for matching descriptions on the same date
-                    const postedMeetings = await aiAgentStorage.getPostedMeetings(session.user.email);
+                    // Check for matching descriptions on the same date
                     descriptionExists = postedMeetings.some(meeting => {
                         // Same description
                         const sameDescription = 
@@ -237,16 +288,30 @@ export async function POST(request: Request) {
                             similarDuration = durationDiff < 60; // Within 1 minute
                         }
                         
-                        return sameDescription && sameDate && similarDuration;
+                        const isDuplicate = sameDescription && sameDate && similarDuration;
+                        
+                        if (isDuplicate) {
+                            console.log(`
+┌─────────────────────── DUPLICATE BY DESCRIPTION (MANUAL) ───────────────────────┐
+│ 📝 Description: ${description.substring(0, 25)}...                            │
+│ 📅 Date: ${date}                                                             │
+└───────────────────────────────────────────────────────────────────────────────┘`);
+                        }
+                        
+                        return isDuplicate;
                     });
-                    
-                    if (descriptionExists) {
-                        console.log(`Meeting with description "${description}" already exists on date ${date} with similar duration`);
-                    }
                 }
                 
-                if (meetingExists || descriptionExists) {
-                    console.log('Meeting already exists in AI Agent storage, skipping duplicate entry');
+                if (meetingExists || reportIdExists || descriptionExists) {
+                    console.log(`
+╔════════════════════════ DUPLICATE MEETING ════════════════════════╗
+║ ⚠️ Meeting already exists in storage                             ║
+║ 👤 User: ${session.user.email}                                   ║
+║ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...          ║
+${reportId ? `║ 📊 Report ID: ${reportId}                                     ║` : ''}
+║ 🔎 Detected by: ${meetingExists ? 'Meeting ID + Date' : reportIdExists ? 'Report ID' : 'Description + Date'} ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+                    
                     return NextResponse.json({ 
                         success: true, 
                         message: 'Meeting already posted. Skipping duplicate entry.'
