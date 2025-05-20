@@ -1049,11 +1049,7 @@ export function AIAgentView() {
               </p>
               <div className="text-sm text-muted-foreground mt-2 space-y-2">
                 <p>Fetches meetings for full IST day (Indian Standard Time):</p>
-                <div className="bg-slate-50 p-3 rounded-md font-mono text-xs">
-                  <p>IST (Current Day)     | UTC (Previous & Current Day)</p>
-                  <p>00:00 - 05:29 IST     | Previous Day 18:30 - 23:59 UTC</p>
-                  <p>05:30 - 23:59 IST     | Current Day 00:00 - 18:29 UTC</p>
-                </div>
+        
                 <p className="text-xs">All times are processed in UTC and converted to IST for display.</p>
               </div>
               <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border-2 border-yellow-500 rounded-md relative overflow-hidden">
