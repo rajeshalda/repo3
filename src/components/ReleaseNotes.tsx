@@ -70,22 +70,8 @@ export function ReleaseNotes() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          What's New
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh]">
-        <DialogHeader>
-          <DialogTitle>Release Notes</DialogTitle>
-        </DialogHeader>
-        <ScrollArea className="h-[60vh] w-full pr-4">
-          <div className="prose dark:prose-invert">
-            <ReactMarkdown>{releaseNotes}</ReactMarkdown>
-          </div>
-        </ScrollArea>
-      </DialogContent>
-    </Dialog>
+    <Button variant="outline" size="sm" disabled={true}>
+      What's New
+    </Button>
   );
 } 
