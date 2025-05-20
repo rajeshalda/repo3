@@ -518,19 +518,35 @@ function MatchRow({
 
       const postResult = await response.json();
       if (postResult.success) {
-        const decimalHours = Number((totalDurationInSeconds / 3600).toFixed(2));
-        toast.success(`Successfully posted ${decimalHours} hours to Intervals`, {
-          position: "top-center",
-          duration: 3000,
-          style: {
-            backgroundColor: "#22c55e",
-            color: "white",
-            fontSize: "16px",
-            borderRadius: "8px",
-            padding: "12px 24px"
-          }
-        });
-        onMeetingPosted?.(meetingKey);
+        // If there's a message about already posted, show that instead of success
+        if (postResult.message && postResult.message.includes('Already Posted by AI-Agent')) {
+          toast.warning(postResult.message, {
+            position: "top-center",
+            duration: 3000,
+            style: {
+              backgroundColor: "#f97316", // Orange for warning
+              color: "white",
+              fontSize: "16px",
+              borderRadius: "8px",
+              padding: "12px 24px"
+            }
+          });
+          onMeetingPosted?.(meetingKey);
+        } else {
+          const decimalHours = Number((totalDurationInSeconds / 3600).toFixed(2));
+          toast.success(`Successfully posted ${decimalHours} hours to Intervals`, {
+            position: "top-center",
+            duration: 3000,
+            style: {
+              backgroundColor: "#22c55e",
+              color: "white",
+              fontSize: "16px",
+              borderRadius: "8px",
+              padding: "12px 24px"
+            }
+          });
+          onMeetingPosted?.(meetingKey);
+        }
       } else if (postResult.needsReview) {
         toast.error("This meeting requires manual review before posting", {
           position: "top-center",
