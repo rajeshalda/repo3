@@ -315,6 +315,7 @@ export class TaskService {
             // If task not found with regular API, try direct fetcher
             if (!task) {
                 console.log(`Task with ID ${taskId} not found in regular API, trying direct fetcher...`);
+                // The direct fetcher now properly filters tasks by assignee
                 const directTasks = await fetchTasksDirectly(apiKey);
                 task = directTasks.find(t => t.id === taskId);
             }
