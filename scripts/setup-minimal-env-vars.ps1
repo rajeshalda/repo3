@@ -1,13 +1,13 @@
 # Script to set up minimal essential environment variables in Azure Web App
 $RESOURCE_GROUP = "intervaltime"
-$APP_NAME = "basic-v22"
+$APP_NAME = "chronopulse"
 
 # Essential settings only
 $settings = @{
     "PORT" = "8080"
     "NODE_ENV" = "production"
     "WEBSITES_PORT" = "8080"
-    "NEXTAUTH_URL" = "https://basic-v22.azurewebsites.net"
+    "NEXTAUTH_URL" = "https://chronopulse.azurewebsites.net"
     
     # Authentication settings
     "AZURE_AD_CLIENT_ID" = "18f59bee-55a1-4b61-94a4-bc22eaee83e7"

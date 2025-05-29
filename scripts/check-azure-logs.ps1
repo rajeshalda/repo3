@@ -1,6 +1,6 @@
 # Script to check logs from Azure Web App
 $RESOURCE_GROUP = "intervaltime"
-$APP_NAME = "basic-v22"
+$APP_NAME = "chronopulse"
 
 Write-Host "Checking container logs from Azure Web App..." -ForegroundColor Yellow
 
