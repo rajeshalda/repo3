@@ -215,12 +215,20 @@ export class StorageManager {
         return reviews.filter(review => review.userId === userId);
     }
 
-    public async getMeetingForReview(meetingId: string, userId: string): Promise<ReviewMeeting | null> {
+    public async getMeetingForReview(meetingId: string, userId?: string): Promise<ReviewMeeting | null> {
         const reviews = await this.readReviews();
-        return reviews.find(review => 
-            review.id === meetingId && 
-            review.userId === userId
-        ) || null;
+        
+        // If userId is provided, find the meeting for that specific user
+        if (userId) {
+            return reviews.find(review => 
+                review.id === meetingId && 
+                review.userId === userId
+            ) || null;
+        }
+        
+        // If userId is not provided, just find the meeting by ID
+        // This is useful for getting the reportId from any user's meeting
+        return reviews.find(review => review.id === meetingId) || null;
     }
 
     public async updateReviewStatus(decision: ReviewDecision): Promise<void> {

@@ -139,8 +139,14 @@ export class TaskService {
             suggestedTasks: [], // Will be populated with low confidence matches if any
             status: 'pending',
             confidence: confidence,
-            reason: reason
+            reason: reason,
+            reportId: meeting.attendance?.reportId // Include the report ID for attendance tracking
         };
+
+        // Log when we're queuing a meeting with a reportId
+        if (meeting.attendance?.reportId) {
+            console.log(`Meeting queued for review with reportId: ${meeting.attendance.reportId}`);
+        }
 
         await reviewService.queueForReview(reviewMeeting);
     }

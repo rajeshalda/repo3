@@ -299,4 +299,35 @@ ${reportId ? `│ 📊 Report ID: ${reportId}              │` : ''}
         console.log('❌ No match found for this meeting');
         return false;
     }
+
+    // Method to update the reportId of an existing posted meeting
+    async updatePostedMeetingReportId(userId: string, meetingId: string, reportId: string): Promise<boolean> {
+        await this.loadData();
+        
+        // Find the meeting with the matching userId and meetingId
+        const meetingIndex = this.data.meetings.findIndex(m => 
+            m.userId === userId && m.meetingId === meetingId
+        );
+        
+        if (meetingIndex === -1) {
+            console.log(`[${new Date().toISOString()}] No meeting found with ID ${meetingId} for user ${userId}`);
+            return false;
+        }
+        
+        // Update the reportId
+        this.data.meetings[meetingIndex].reportId = reportId;
+        
+        // Save the updated data
+        await this.saveData();
+        
+        console.log(`
+╔════════════════════════ REPORT ID UPDATED ═══════════════════════╗
+║ ✅ Successfully updated meeting with report ID                    ║ 
+║ 📊 Report ID: ${reportId}                                       ║
+║ 🆔 Meeting ID: ${meetingId.substring(0, 20)}...                 ║
+║ 👤 User ID: ${userId}                                           ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+        
+        return true;
+    }
 } 

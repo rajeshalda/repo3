@@ -171,8 +171,19 @@ class StorageManager {
     async getAllReviews(userId) {
         return this.readReviews();
     }
-    async getMeetingForReview(meetingId) {
+    async getMeetingForReview(meetingId, userId) {
         const reviews = await this.readReviews();
+        
+        // If userId is provided, find the meeting for that specific user
+        if (userId) {
+            return reviews.find(review => 
+                review.id === meetingId && 
+                review.userId === userId
+            ) || null;
+        }
+        
+        // If userId is not provided, just find the meeting by ID
+        // This is useful for getting the reportId from any user's meeting
         return reviews.find(review => review.id === meetingId) || null;
     }
     async updateReviewStatus(decision) {

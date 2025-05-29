@@ -482,12 +482,33 @@ ${reportId ? `║ 📊 Report ID: ${reportId}                                   
                     }
                 }
                 
+                // Get the meeting from review to retrieve any reportId BEFORE creating the time entry
+                let reportId = undefined;
+                try {
+                    const storageManager = StorageManager.getInstance();
+                    const reviewMeeting = await storageManager.getMeetingForReview(primaryMeetingId || '', session.user.email);
+                    
+                    if (reviewMeeting && reviewMeeting.reportId) {
+                        reportId = reviewMeeting.reportId;
+                        console.log(`
+╔════════════════════════ REPORT ID FROM REVIEW ═══════════════════════╗
+║ 🧪 Found report ID in review meeting (PRE-CREATION)                  ║ 
+║ 📊 Report ID: ${reportId}                                          ║
+║ 🆔 Meeting ID: ${primaryMeetingId?.substring(0, 20)}...            ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+                    }
+                } catch (error) {
+                    console.error('Error retrieving reportId from review meeting:', error);
+                    // Continue even if this fails - we'll update it later
+                }
+                
                 console.log(`
 ╔══════════════════════ TIME ENTRY OPERATION ══════════════════════╗
 ║ 📝 CREATING TIME ENTRY                                           ║
 ║ 🎯 Meeting ID: ${primaryMeetingId?.substring(0, 15) || 'N/A'}   ║
 ║ 👤 User: ${session.user.email}                                   ║
 ║ 📊 Task: ${taskTitle || taskDetails?.title || `Task ${taskId}`}  ║
+${reportId ? `║ 📊 Report ID: ${reportId}                                          ║` : ''}
 ╚═════════════════════════════════════════════════════════════════╝`);
 
                 await storageForAgent.addPostedMeeting(
@@ -500,18 +521,45 @@ ${reportId ? `║ 📊 Report ID: ${reportId}                                   
                             taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}`
                         } : null,
                         rawResponse: result,
-                        postedAt: convertToIST(date)
+                        postedAt: convertToIST(date),
+                        reportId: reportId // Include reportId if we found it in the review
                     }
                 );
 
                 console.log(`
 ┌─────────────────── STORAGE STATUS ───────────────────┐
 │ ✅ Meeting stored in AI Agent storage                │
+${reportId ? `│ 📊 Report ID: ${reportId}                                │` : ''}
 └─────────────────────────────────────────────────────┘`);
 
                 // Update review status logging
                 try {
                     const storageManager = StorageManager.getInstance();
+                    
+                    // Even if we got the reportId earlier, check again in case it was updated
+                    if (!reportId) {
+                        // Get the meeting from review to retrieve any reportId
+                        const reviewMeeting = await storageManager.getMeetingForReview(primaryMeetingId || '', session.user.email);
+                        
+                        // Update the stored meeting with reportId if available from review
+                        if (reviewMeeting && reviewMeeting.reportId) {
+                            reportId = reviewMeeting.reportId;
+                            console.log(`
+╔════════════════════════ REPORT ID FROM REVIEW ═══════════════════════╗
+║ 🧪 Found report ID in review meeting (POST-CREATION)                 ║ 
+║ 📊 Report ID: ${reportId}                                          ║
+║ 🆔 Meeting ID: ${primaryMeetingId?.substring(0, 20)}...            ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+                            
+                            // Update the posted meeting with reportId
+                            await storageForAgent.updatePostedMeetingReportId(
+                                session.user.email,
+                                primaryMeetingId || '',
+                                reportId
+                            );
+                        }
+                    }
+                    
                     await storageManager.updateReviewStatus({
                         meetingId: primaryMeetingId || '',
                         status: 'approved',

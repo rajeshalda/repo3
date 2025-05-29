@@ -12,6 +12,7 @@ export interface ReviewMeeting {
   status: ReviewStatus;
   confidence: number;
   reason?: string;
+  reportId?: string;
 }
 
 export interface SuggestedTask {
