@@ -63,6 +63,7 @@ interface AttendanceRecord {
     totalAttendanceInSeconds: number;
     attendanceIntervals: unknown[];
     role?: string;
+    reportId?: string;
   };
   role?: string;
 }
@@ -104,7 +105,7 @@ interface MeetingMatchesProps {
     low: MatchResult[];
     unmatched: MatchResult[];
   };
-  onMeetingPosted: (meetingId: string) => void;
+  onMeetingPosted: (meetingKey: string) => void;
   postedMeetingIds: Set<string> | string[];
   source?: 'ai-agent' | 'manual';
 }
@@ -145,23 +146,42 @@ function generateMeetingKey(meeting: Meeting, userId: string): string {
   
   // Calculate total duration for this meeting
   let totalDuration = 0;
+  let reportId = '';
   const userAttendance = meeting.attendanceRecords?.find(
     record => record?.email === userId
   );
   if (userAttendance) {
     totalDuration = userAttendance.duration || 0;
+    // Include reportId if available to differentiate between different attendance sessions
+    if ((userAttendance as any).rawRecord && (userAttendance as any).rawRecord.reportId) {
+      reportId = (userAttendance as any).rawRecord.reportId;
+    }
   }
   
-  // Include duration in the key to differentiate recurring meetings with different durations
-  const key = `${(userId || '').trim()}_${meetingName}_${meetingId}_${meetingTime}_${totalDuration}`;
-  console.log('Generated key:', {
+  // If no reportId found from user attendance, try to get it from any attendance record
+  if (!reportId && meeting.attendanceRecords && meeting.attendanceRecords.length > 0) {
+    for (const record of meeting.attendanceRecords) {
+      if ((record as any).rawRecord?.reportId) {
+        reportId = (record as any).rawRecord.reportId;
+        break;
+      }
+    }
+  }
+  
+  // Create a highly unique identifier that includes report ID as the primary differentiator
+  // Format: userId_reportId_meetingName_meetingId_time_duration
+  const key = `${(userId || '').trim()}_${reportId || 'no-report'}_${meetingName}_${meetingId}_${meetingTime}_${totalDuration}`;
+  
+  console.log('Generated meeting key:', {
     userId,
     meetingName,
     meetingId,
     meetingTime,
     totalDuration,
+    reportId,
     finalKey: key
   });
+  
   return key;
 }
 
@@ -189,13 +209,14 @@ export function MatchDetailsBar({ match }: MatchDetailsBarProps) {
 
 interface MatchRowProps {
   result: MatchResult;
-  onMeetingPosted?: (meetingId: string) => void;
+  onMeetingPosted?: (meetingKey: string) => void;
   postedMeetingIds?: string[];
   selectedTasks: Map<string, Task>;
   onTaskSelect: (task: Task | null) => void;
   isSelected: boolean;
   onSelectChange: (selected: boolean) => void;
   source?: 'ai-agent' | 'manual';
+  index?: number;
 }
 
 // Helper function to convert seconds to decimal hours with proper rounding
@@ -267,7 +288,8 @@ function MatchRow({
   onTaskSelect,
   isSelected,
   onSelectChange,
-  source
+  source,
+  index = 0
 }: MatchRowProps) {
   const { data: session } = useSession();
   const { toast } = useToast();
@@ -585,6 +607,13 @@ function MatchRow({
         <div className="flex flex-col space-y-1">
           <div className="font-medium truncate max-w-[200px] sm:max-w-[300px] text-foreground">
             {result.meeting.subject}
+            {/* Add session indicator for meetings with reportId */}
+            {result.meeting.attendanceRecords?.[0] && 
+              ((result.meeting.attendanceRecords[0] as any).rawRecord?.reportId) && (
+              <span className="text-xs font-normal text-gray-500 ml-1">
+                (Session {index + 1})
+              </span>
+            )}
           </div>
         </div>
       </TableCell>
@@ -965,16 +994,21 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   }, [postedMeetingIds]);
 
   // Update handleMeetingPosted to efficiently remove the meeting from UI
-  const handleMeetingPosted = (meetingId: string): void => {
-    console.log('Meeting posted with ID:', meetingId);
+  const handleMeetingPosted = (meetingKey: string): void => {
+    console.log('Meeting posted with key:', meetingKey);
     
-    // Immediately remove the meeting from all categories
+    // Only remove the specific meeting session that was posted
     setMeetings(prev => {
-      // Create a filter function to check both key and ID
+      // Create a filter function that only removes the exact meeting key that was posted
       const filterMeeting = (m: MatchResult) => {
         const key = generateMeetingKey(m.meeting, userId);
-        const id = m.meeting.meetingInfo?.meetingId;
-        return key !== meetingId && id !== meetingId;
+        const shouldRemove = key === meetingKey;
+        
+        if (shouldRemove) {
+          console.log('Removing meeting with key:', key, 'Subject:', m.meeting.subject);
+        }
+        
+        return !shouldRemove; // Keep meetings that don't match the posted key
       };
       
       const updated = {
@@ -984,25 +1018,31 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         unmatched: prev.unmatched.filter(filterMeeting)
       };
       
-      console.log('Updated meetings after posting:', updated);
+      console.log('Updated meetings after posting:', {
+        high: updated.high.length,
+        medium: updated.medium.length,
+        low: updated.low.length,
+        unmatched: updated.unmatched.length
+      });
+      
       return updated;
     });
     
-    // Clear the selected task for this meeting
+    // Clear the selected task for this specific meeting key
     const updatedTasks = new Map(selectedTasks);
-    updatedTasks.delete(meetingId);
+    updatedTasks.delete(meetingKey);
     setSelectedTasks(updatedTasks);
     
     // Remove from selected meetings
     setSelectedMeetingKeys(prev => {
       const next = new Set(prev);
-      next.delete(meetingId);
+      next.delete(meetingKey);
       return next;
     });
     
     // Call the parent component's onMeetingPosted callback
     if (onMeetingPosted) {
-      onMeetingPosted(meetingId);
+      onMeetingPosted(meetingKey);
     }
   };
 
@@ -1116,12 +1156,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         {/* Show high confidence matches first */}
                         {meetings.high.map((result, index) => (
                           <MatchRow
-                            key={`high-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
+                            key={`high-${generateMeetingKey(result.meeting, userId)}-${index}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
                             selectedTasks={selectedTasks}
                             source={source}
+                            index={index}
                             onTaskSelect={(task) => {
                               const meetingKey = generateMeetingKey(result.meeting, userId);
                               const updatedTasks = new Map(selectedTasks);
@@ -1156,12 +1197,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         {/* Show medium confidence matches */}
                         {meetings.medium.map((result, index) => (
                           <MatchRow
-                            key={`medium-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
+                            key={`medium-${generateMeetingKey(result.meeting, userId)}-${index}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
                             selectedTasks={selectedTasks}
                             source={source}
+                            index={index}
                             onTaskSelect={(task) => {
                               const meetingKey = generateMeetingKey(result.meeting, userId);
                               const updatedTasks = new Map(selectedTasks);
@@ -1196,12 +1238,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         {/* Show low confidence matches */}
                         {meetings.low.map((result, index) => (
                           <MatchRow
-                            key={`low-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
+                            key={`low-${generateMeetingKey(result.meeting, userId)}-${index}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
                             selectedTasks={selectedTasks}
                             source={source}
+                            index={index}
                             onTaskSelect={(task) => {
                               const meetingKey = generateMeetingKey(result.meeting, userId);
                               const updatedTasks = new Map(selectedTasks);
@@ -1276,12 +1319,13 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                     <TableBody>
                       {meetings.unmatched.map((result, index) => (
                         <MatchRow
-                          key={`unmatched-${result.meeting.meetingInfo?.meetingId || result.meeting.subject}-${result.meeting.startTime}`}
+                          key={`unmatched-${generateMeetingKey(result.meeting, userId)}-${index}`}
                           result={result}
                           onMeetingPosted={handleMeetingPosted}
                           postedMeetingIds={Array.from(postedMeetingIds)}
                           selectedTasks={selectedTasks}
                           source={source}
+                          index={index}
                           onTaskSelect={(task) => {
                             const meetingKey = generateMeetingKey(result.meeting, userId);
                             const updatedTasks = new Map(selectedTasks);

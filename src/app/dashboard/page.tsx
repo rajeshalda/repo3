@@ -58,6 +58,7 @@ interface RawAttendanceRecord {
     durationInSeconds: number;
   }>;
   role?: string;
+  reportId?: string;
 }
 
 interface RawMeetingData {
@@ -913,24 +914,53 @@ export default function DashboardPage() {
                               </TableCell>
                             </TableRow>
                           ) : meetingsData && meetingsData.meetings ? (
-                            meetingsData.meetings.map((meeting) => {
+                            // Flatten meetings to create a separate row for each attendance record
+                            meetingsData.meetings.flatMap((meeting) => {
                               const scheduledDuration = (new Date(meeting.endTime).getTime() - new Date(meeting.startTime).getTime()) / 1000;
-                              const startDate = new Date(meeting.startTime);
-                              const endDate = new Date(meeting.endTime);
+                              const userRecords = meeting.attendanceRecords.filter(record => record.name === session?.user?.name);
+                              
+                              // If no user records, return just the base meeting
+                              if (userRecords.length === 0) {
+                                return [{
+                                  meeting,
+                                  record: null as AttendanceRecord | null,
+                                  index: 0,
+                                  scheduledDuration
+                                }];
+                              }
+                              
+                              // Otherwise, return one entry per attendance record
+                              return userRecords.map((record, index) => ({
+                                meeting,
+                                record,
+                                index,
+                                scheduledDuration
+                              }));
+                            }).map((item: { 
+                              meeting: Meeting; 
+                              record: AttendanceRecord | null; 
+                              index: number; 
+                              scheduledDuration: number 
+                            }) => {
                               return (
-                                <TableRow key={`${meeting.meetingInfo?.meetingId || meeting.subject}_${meeting.startTime}`}>
+                                <TableRow key={`${item.meeting.meetingInfo?.meetingId || item.meeting.subject}_${item.meeting.startTime}_${item.record?.rawRecord?.reportId || 'no-record'}_${item.index}`}>
                                   <TableCell className="px-4 py-3">
                                     <div className="flex flex-col">
                                       <div className="font-medium truncate max-w-[200px] sm:max-w-[300px]">
-                                        {meeting.subject}
+                                        {item.meeting.subject}
+                                        {item.record?.rawRecord?.reportId && (
+                                          <span className="text-xs font-normal text-gray-500 ml-1">
+                                            (Session {item.index + 1})
+                                          </span>
+                                        )}
                                       </div>
-                                      {meeting.isTeamsMeeting && (
+                                      {item.meeting.isTeamsMeeting && (
                                         <Badge variant="secondary" className="w-fit mt-1">
                                           Teams
                                         </Badge>
                                       )}
                                       <div className="text-xs text-muted-foreground mt-1 md:hidden">
-                                        {new Date(meeting.startTime).toLocaleTimeString([], { 
+                                        {new Date(item.meeting.startTime).toLocaleTimeString([], { 
                                           hour: 'numeric',
                                           minute: '2-digit',
                                           hour12: true
@@ -940,52 +970,55 @@ export default function DashboardPage() {
                                   </TableCell>
                                   <TableCell className="px-4 py-3 hidden md:table-cell">
                                     <div className="text-sm space-y-1">
-                                      <div>{new Date(meeting.startTime).toLocaleDateString([], { 
+                                      <div>{new Date(item.meeting.startTime).toLocaleDateString([], { 
                                         month: 'short',
                                         day: 'numeric'
                                       })}</div>
                                       <div className="text-muted-foreground">
-                                        {new Date(meeting.startTime).toLocaleTimeString([], { 
-                                          hour: 'numeric',
-                                          minute: '2-digit',
-                                          hour12: true
-                                        })} - {new Date(meeting.endTime).toLocaleTimeString([], { 
-                                          hour: 'numeric',
-                                          minute: '2-digit',
-                                          hour12: true
-                                        })}
+                                        {item.record && item.record.intervals && item.record.intervals.length > 0 ? (
+                                          // If there's a record with intervals, show the first interval's time
+                                          <>
+                                            {new Date(item.record.intervals[0].joinDateTime).toLocaleTimeString([], { 
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                              hour12: true
+                                            })} - {new Date(item.record.intervals[0].leaveDateTime).toLocaleTimeString([], { 
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                              hour12: true
+                                            })}
+                                          </>
+                                        ) : (
+                                          // Otherwise show the scheduled meeting time
+                                          <>
+                                            {new Date(item.meeting.startTime).toLocaleTimeString([], { 
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                              hour12: true
+                                            })} - {new Date(item.meeting.endTime).toLocaleTimeString([], { 
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                              hour12: true
+                                            })}
+                                          </>
+                                        )}
                                       </div>
                                     </div>
                                   </TableCell>
                                   <TableCell className="hidden sm:table-cell px-4 py-3 text-sm text-muted-foreground">
-                                    {formatDuration(scheduledDuration)}
+                                    {formatDuration(item.scheduledDuration)}
                                   </TableCell>
                                   <TableCell className="px-4 py-3">
-                                    {meeting.attendanceRecords.length > 0 ? (
-                                      <div className="space-y-1">
-                                        {meeting.attendanceRecords
-                                          .filter(record => record.name === session?.user?.name)
-                                          .map((record, index) => (
-                                            <div key={index} className="text-sm">
-                                              {record && record.duration > 0 ? (
-                                                <span className="text-muted-foreground">
-                                                  {formatDuration(record.duration)}
-                                                </span>
-                                              ) : (
-                                                <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Not Attended</span>
-                                              )}
-                                            </div>
-                                          ))}
-                                        {meeting.attendanceRecords.filter(record => record.name === session?.user?.name).length === 0 && (
-                                          <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Not Attended</span>
-                                        )}
+                                    {item.record && item.record.duration > 0 ? (
+                                      <div className="text-sm text-muted-foreground">
+                                        {formatDuration(item.record.duration)}
                                       </div>
                                     ) : (
-                                      <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">Meeting did not start</span>
+                                      <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Not Attended</span>
                                     )}
                                   </TableCell>
                                   <TableCell className="px-4 py-3 text-right pr-8">
-                                    {meeting.attendanceRecords.some(record => record.name === session?.user?.name) ? (
+                                    {item.record && item.record.duration > 0 ? (
                                       <Badge variant="success" className="bg-green-100 text-green-800 border border-green-200 hover:bg-green-200">
                                         <svg 
                                           xmlns="http://www.w3.org/2000/svg" 

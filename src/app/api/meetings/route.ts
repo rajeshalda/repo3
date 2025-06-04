@@ -148,27 +148,14 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
       const recordsData = await recordsResponse.json();
       
       if (recordsData.value && recordsData.value.length > 0) {
-        // Merge attendance records
+        // Add each record with its reportId without merging
         for (const record of recordsData.value) {
           // Add reportId to each record for deduplication
           record.reportId = report.id;
           
-          const existingRecord = allAttendanceRecords.find(r => r.emailAddress === record.emailAddress);
-          
-          if (existingRecord) {
-            // Merge intervals into existing record
-            existingRecord.attendanceIntervals = [
-              ...existingRecord.attendanceIntervals,
-              ...record.attendanceIntervals
-            ];
-            // Update total duration
-            existingRecord.totalAttendanceInSeconds += record.totalAttendanceInSeconds;
-            // Preserve the reportId
-            existingRecord.reportId = record.reportId;
-          } else {
-            // Add new record
-            allAttendanceRecords.push(record);
-          }
+          // Don't merge - treat each reportId as a separate record
+          // Add as a new record
+          allAttendanceRecords.push(record);
         }
       }
     }
@@ -365,7 +352,7 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
         isRecurring: !!meeting.seriesMasterId
       });
 
-      const meetingData: MeetingData = {
+      const baseMeetingData: MeetingData = {
         subject: meeting.subject,
         startTime: meeting.start.dateTime,
         endTime: meeting.end.dateTime,
@@ -378,7 +365,7 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
       };
 
       if (meeting.onlineMeeting) {
-        meetingData.isTeamsMeeting = true;
+        baseMeetingData.isTeamsMeeting = true;
         const meetingInfo = extractMeetingInfo(
           meeting.onlineMeeting.joinUrl,
           meeting.bodyPreview
@@ -388,7 +375,7 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
         meetingInfo.graphId = meeting.id;
         console.log('Added Graph API ID to meetingInfo:', meeting.id);
         
-        meetingData.meetingInfo = meetingInfo;
+        baseMeetingData.meetingInfo = meetingInfo;
 
         if (meetingInfo.threadId && meetingInfo.organizerId) {
           // Build the formatted string exactly like the AI agent does
@@ -401,12 +388,12 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
             graphId: meetingInfo.graphId,
             formattedString,
             base64MeetingId,
-            isRecurring: meetingData.isRecurring,
-            instanceDate: meetingData.isRecurring ? new Date(meeting.start.dateTime).toISOString().split('T')[0] : undefined
+            isRecurring: baseMeetingData.isRecurring,
+            instanceDate: baseMeetingData.isRecurring ? new Date(meeting.start.dateTime).toISOString().split('T')[0] : undefined
           });
 
           // For recurring meetings, pass the specific instance date
-          const instanceDate = meetingData.isRecurring ? 
+          const instanceDate = baseMeetingData.isRecurring ? 
             new Date(meeting.start.dateTime).toISOString().split('T')[0] : 
             undefined;
 
@@ -416,37 +403,61 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
             instanceDate
           );
           
-          if (attendanceRecords) {
-            meetingData.attendanceRecords = attendanceRecords.map((record: RawAttendanceRecord) => ({
-              name: record.identity?.displayName || 'Unknown',
-              email: record.emailAddress || '',
-              duration: record.totalAttendanceInSeconds,
-              intervals: record.attendanceIntervals || [],
-              rawRecord: record
-            }));
+          if (attendanceRecords && attendanceRecords.length > 0) {
+            // Group attendance records by reportId
+            const recordsByReportId = new Map<string, RawAttendanceRecord[]>();
             
-            // Store the first report ID in the meetingInfo object for deduplication
-            if (attendanceRecords.length > 0 && attendanceRecords[0].reportId) {
-              console.log(`Adding reportId ${attendanceRecords[0].reportId} to meetingInfo for deduplication`);
-              meetingInfo.reportId = attendanceRecords[0].reportId;
+            attendanceRecords.forEach((record: RawAttendanceRecord) => {
+              const reportId = record.reportId || 'no-report';
+              if (!recordsByReportId.has(reportId)) {
+                recordsByReportId.set(reportId, []);
+              }
+              recordsByReportId.get(reportId)!.push(record);
+            });
+            
+            // Create separate meeting instances for each report ID
+            const meetingInstances: MeetingData[] = [];
+            
+            for (const [reportId, records] of recordsByReportId.entries()) {
+              const meetingInstance = {
+                ...baseMeetingData,
+                meetingInfo: {
+                  ...meetingInfo,
+                  reportId: reportId
+                },
+                attendanceRecords: records.map((record: RawAttendanceRecord) => ({
+                  name: record.identity?.displayName || 'Unknown',
+                  email: record.emailAddress || '',
+                  duration: record.totalAttendanceInSeconds,
+                  intervals: record.attendanceIntervals || [],
+                  rawRecord: record
+                }))
+              };
+              
+              meetingInstances.push(meetingInstance);
             }
+            
+            return meetingInstances;
           }
         } else {
           console.log('Skipping attendance fetch - missing threadId or organizerId:', meetingInfo);
         }
       }
 
-      return meetingData;
+      return [baseMeetingData];
     })
   );
 
+  // Flatten the array since we now return arrays of meeting instances
+  const flattenedMeetings = meetingsWithAttendance.flat();
+
   return {
-    totalMeetings: meetingsWithAttendance.length,
+    totalMeetings: flattenedMeetings.length,
     timeRange: {
       start: startDate.toISOString(),
       end: endDate.toISOString()
     },
-    meetings: meetingsWithAttendance
+    meetings: flattenedMeetings
   };
 }
 

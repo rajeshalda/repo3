@@ -24,6 +24,9 @@ interface Meeting {
       leaveDateTime: string;
       durationInSeconds: number;
     }[];
+    rawRecord?: {
+      reportId: string;
+    };
   }[];
 }
 
@@ -251,8 +254,14 @@ async function processMeetingBatch(
 function deduplicateMeetings(meetings: Meeting[]): Meeting[] {
   const seen = new Set();
   return meetings.filter(meeting => {
-    // Create a unique key using meeting subject and start time
-    const key = `${meeting.subject}_${meeting.startTime}`;
+    // Create a unique key using meeting subject, start time, and report ID if available
+    // This ensures that meetings with different report IDs are treated as separate instances
+    const reportIds = meeting.attendanceRecords
+      ?.map(record => record.rawRecord?.reportId)
+      .filter(Boolean)
+      .join(',') || 'no-report';
+    
+    const key = `${meeting.subject}_${meeting.startTime}_${reportIds}`;
     if (seen.has(key)) {
       return false;
     }

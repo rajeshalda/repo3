@@ -1,94 +1,513 @@
-Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
-Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
+Processing meetings for user debrab@m365x92504196.onmicrosoft.com from source: pm2
+Fetching meetings for user: debrab@m365x92504196.onmicrosoft.com
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🚀 MEETING FETCH STARTED
-║ 👤 User: pradeepg@m365x9...
+║ 👤 User: debrab@m365x925...
 ╚════════════════════════════════════════════════════════╝
 🔑 Getting Graph API access token...
 ✅ Access token acquired successfully
 
 ┌─────────────────────────────────────────────────┐
 │ 📅 FETCHING MEETINGS FOR EXTENDED WINDOW         │
-│ 📆 IST range: 5/29/2025, 12:00:00 AM to              │
-│             5/30/2025, 11:59:59 PM              │
-│ 🌐 UTC range: 2025-05-27T18:30:00.000Z to              │
-│             2025-05-30T18:29:59.999Z              │
+│ 📆 IST range: 5/30/2025, 12:00:00 AM to              │
+│             5/31/2025, 11:59:59 PM              │
+│ 🌐 UTC range: 2025-05-28T18:30:00.000Z to              │
+│             2025-05-31T18:29:59.999Z              │
 └─────────────────────────────────────────────────┘
 📡 Fetching meetings from Graph API...
-✅ Received 1 meetings from API
+ POST /api/pm2/agent-status 200 in 9ms
+✅ Received 10 meetings from API
+🔄 Found 5 recurring meeting instances:
+   1. "Test Time Recurring 2" (2025-05-31T09:00:00.0000000)
+   2. "Test Time Recurring " (2025-05-31T01:30:00.0000000)
+   3. "Test Time Recurring 2" (2025-05-30T09:00:00.0000000)
+   4. "Test Time Recurring " (2025-05-30T00:30:00.0000000)
+   5. "Test Time Recurring 2" (2025-05-29T09:00:00.0000000)
+📄 Found more meetings, fetching next page...
+📡 Fetching meetings from Graph API...
+✅ Received 3 meetings from API
+🔄 Found 1 recurring meeting instances:
+   1. "Test Time Recurring " (2025-05-29T00:30:00.0000000)
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │
-│ 📊 Total meetings before filtering: 1            │
+│ 📊 Total meetings before filtering: 13            │
 └─────────────────────────────────────────────────┘
 
 [RAW MEETING 1]
 {
-  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAIxtC9A==\"",
-  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=",
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EHNg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==",
   "categories": [],
-  "subject": "TEST MEET",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 238 009 758 852 6\r\nPasscode: Dp92eQ9v\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "subject": "Test Time Recurring 2",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 271 355 806 885\r\nPasscode: BB7DP2vQ\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvwAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-05-31T09:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-31T09:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "336138340",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 2]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EHKg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==",
+  "categories": [],
+  "subject": "Test Time Recurring ",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 254 271 095 663 4\r\nPasscode: GF3Vd6DT\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvvAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-05-31T01:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-31T02:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "923269943",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 3]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDPA==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=",
+  "categories": [],
+  "subject": "Test Time 5",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 255 330 618 706\r\nPasscode: tE9LD9Gj\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
   "importance": "normal",
   "isAllDay": false,
   "isCancelled": false,
   "seriesMasterId": null,
   "type": "singleInstance",
   "start": {
-    "dateTime": "2025-05-29T16:00:00.0000000",
+    "dateTime": "2025-05-30T23:30:00.0000000",
     "timeZone": "India Standard Time"
   },
   "end": {
-    "dateTime": "2025-05-29T16:30:00.0000000",
+    "dateTime": "2025-05-31T00:00:00.0000000",
     "timeZone": "India Standard Time"
   },
   "attendees": [],
   "organizer": {
     "emailAddress": {
-      "name": "Pradeep Gupta",
-      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
     }
   },
   "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDMzNDYyNTktNTU2OC00YjAwLTg2YzktNjFlYzA2YWI3NjQx%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-    "conferenceId": "438980058",
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjQxZDUyNzYtMTQxNy00MDNhLWI0ODEtZjNjMDU3OGRlMDA0%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "925822390",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 4]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EHNg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==",
+  "categories": [],
+  "subject": "Test Time Recurring 2",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 271 355 806 885\r\nPasscode: BB7DP2vQ\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvwAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-05-30T09:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-30T09:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "336138340",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 5]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDcg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=",
+  "categories": [],
+  "subject": "Test Time 4.5",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 226 603 896 611 4\r\nPasscode: AA7tu9vs\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-05-30T05:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-30T06:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDllOTRiNWUtYWYxYy00YjhkLWE2OWUtZGRiZTM2NTE2Y2Vj%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "978559275",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 6]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EHKg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==",
+  "categories": [],
+  "subject": "Test Time Recurring ",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 254 271 095 663 4\r\nPasscode: GF3Vd6DT\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvvAAA=",
+  "type": "exception",
+  "start": {
+    "dateTime": "2025-05-30T00:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-30T01:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "923269943",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 7]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDMg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=",
+  "categories": [],
+  "subject": "Test Time 4",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 241 879 857 874 9\r\nPasscode: mi9sG3MG\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-05-30T00:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-30T00:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZGI0YThlMmQtNGE5OC00OTVhLWJhOTUtOGM5YWNkM2E3YmMw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "140215681",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 8]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDLw==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvoAAA=",
+  "categories": [],
+  "subject": "Test Time 3",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 279 076 087 309 3\r\nPasscode: Ld2sK9nR\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-05-29T23:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-30T00:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MTRjOGJhODktNDNmNi00MDY3LTg0ZGYtY2QyNTMyODdlOTkw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "365378215",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 9]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EHNg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z5DwVRAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==",
+  "categories": [],
+  "subject": "Test Time Recurring 2",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 271 355 806 885\r\nPasscode: BB7DP2vQ\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvwAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-05-29T09:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-29T09:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "336138340",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 10]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDQw==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvsAAA=",
+  "categories": [],
+  "subject": "Test Time 2.5",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 255 421 429 011 6\r\nPasscode: xW77uT6f\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-05-29T05:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-29T06:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MTRlYzUxZDMtM2Y1OS00OGZhLWI1MTMtNmU0ZmNiYWFhN2Nm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "349347315",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 11]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EHKg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z5DwVRAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==",
+  "categories": [],
+  "subject": "Test Time Recurring ",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 254 271 095 663 4\r\nPasscode: GF3Vd6DT\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvvAAA=",
+  "type": "exception",
+  "start": {
+    "dateTime": "2025-05-29T00:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-29T01:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "923269943",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 12]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDKA==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvnAAA=",
+  "categories": [],
+  "subject": "Test Time 2",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 293 644 537 410\r\nPasscode: 5iD6uR6D\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-05-29T00:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-29T00:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ODhmMmUwNTctNTQ3Yy00NDMxLTk2OGUtY2E3OGZhODRiYzk4%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "906558286",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 13]
+{
+  "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAAI1EDFg==\"",
+  "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvmAAA=",
+  "categories": [],
+  "subject": "Test Time 1",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 257 952 023 6\r\nPasscode: 6Ps7aC9T\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-05-28T23:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-05-29T00:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Debra Berger",
+      "address": "DebraB@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDNlMmE0YTAtY2ZmZS00YWNiLWI0ZGUtNmI2OWRhNTk0ODcy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+    "conferenceId": "387607101",
     "tollNumber": "+1 323-618-1840"
   }
 }
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ MEETINGS FILTERED                            │
-│ 📊 Total meetings after filtering: 1           │
+│ 📊 Total meetings after filtering: 7           │
 └─────────────────────────────────────────────────┘
 📋 Today's meetings:
-   1. "TEST MEET" (04:00 PM - 04:30 PM)
+   1. "Test Time Recurring 2" (09:00 AM - 09:30 AM)
+   2. "Test Time Recurring " (01:30 AM - 02:00 AM)
+   3. "Test Time 5" (11:30 PM - 12:00 AM)
+   4. "Test Time Recurring 2" (09:00 AM - 09:30 AM)
+   5. "Test Time 4.5" (05:30 AM - 06:00 AM)
+   6. "Test Time Recurring " (12:30 AM - 01:00 AM)
+   7. "Test Time 4" (12:00 AM - 12:30 AM)
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 FETCHING ATTENDANCE RECORDS                  │
 └─────────────────────────────────────────────────┘
-📝 Processing online meeting: "TEST MEET"
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZDMzNDYyNTktNTU2OC00YjAwLTg2YzktNjFlYzA2YWI3NjQx@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
-Extracted Meeting ID: 19:meeting_ZDMzNDYyNTktNTU2OC00YjAwLTg2YzktNjFlYzA2YWI3NjQx@thread.v2
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+📝 Processing online meeting: "Test Time Recurring 2"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}    
+Extracted Meeting ID: 19:meeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
 🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZDMzNDYyNTktNTU2OC00YjAwLTg2YzktNjFlYzA2YWI3NjQx@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRE16TkRZeU5Ua3ROVFUyT0MwMFlqQXdMVGcyWXprdE5qRmxZekEyWVdJM05qUXhAdGhyZWFkLnYy
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZemMwTlRsbE5USXROalkxWVMwME9ETXlMV0prWTJNdE16WTBObVZrTVdJMU56ZGlAdGhyZWFkLnYy
 Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRE16TkRZeU5Ua3ROVFUyT0MwMFlqQXdMVGcyWXprdE5qRmxZekEyWVdJM05qUXhAdGhyZWFkLnYy')/attendanceReports",
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZemMwTlRsbE5USXROalkxWVMwME9ETXlMV0prWTJNdE16WTBObVZrTVdJMU56ZGlAdGhyZWFkLnYy')/attendanceReports",
   "value": [
     {
-      "id": "3184fd0a-2b8c-4ae5-9d70-e669d1365b90",
+      "id": "8f703a8a-43ba-49c4-969d-69d3f347f4dc",
       "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-29T06:35:15.205Z",
-      "meetingEndDateTime": "2025-05-29T06:41:07.921Z",
-      "externalEventInformation": []
-    },
-    {
-      "id": "22346f2d-b28b-46dc-9b7d-7be596c8c0e2",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-05-26T10:55:06.308Z",
-      "meetingEndDateTime": "2025-05-26T10:58:27.09Z",
+      "meetingStartDateTime": "2025-05-29T10:15:38.895Z",
+      "meetingEndDateTime": "2025-05-29T10:17:50.149Z",
       "externalEventInformation": []
     }
   ]
@@ -96,50 +515,216 @@ Reports data: {
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-05-28T18:30:00.000Z to       │
-│     2025-05-29T18:29:59.999Z                │
-│ 🕒 IST: 5/29/2025, 5:30:00 AM to │
-│     5/30/2025, 5:29:59 AM    │
+│ 📅 UTC: 2025-05-29T18:30:00.000Z to       │
+│     2025-05-30T18:29:59.999Z                │
+│ 🕒 IST: 5/30/2025, 5:30:00 AM to │
+│     5/31/2025, 5:29:59 AM    │
 │ ⏰ Target Hour IST: 0              │
 │ 🌅 Early Morning Target: YES  │
 └─────────────────────────────────────────────────┘
 Report time check: {
-  reportTime: '2025-05-29T06:35:15.205Z',
-  reportIST: '2025-05-29 12:05:15',
+  reportTime: '2025-05-29T10:15:38.895Z',
+  reportIST: '2025-05-29 15:45:38',
   reportDateStr: '2025-05-29',
-  istTargetDateStr: '2025-05-29',
-  reportHourIST: 12,
-  isRelevant: true
-}
-Report time check: {
-  reportTime: '2025-05-26T10:55:06.308Z',
-  reportIST: '2025-05-26 16:25:06',
-  reportDateStr: '2025-05-26',
-  istTargetDateStr: '2025-05-29',
-  reportHourIST: 16,
+  istTargetDateStr: '2025-05-30',
+  reportHourIST: 15,
   isRelevant: false
 }
-Found 1 relevant reports, using most recent: 3184fd0a-2b8c-4ae5-9d70-e669d1365b90
-Records data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRE16TkRZeU5Ua3ROVFUyT0MwMFlqQXdMVGcyWXprdE5qRmxZekEyWVdJM05qUXhAdGhyZWFkLnYy')/attendanceReports('3184fd0a-2b8c-4ae5-9d70-e669d1365b90')/attendanceRecords",      
+No attendance reports found within the IST day window
+📝 Processing online meeting: "Test Time Recurring "
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Meeting ID: 19:meeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OakppTURVNFlUa3RaakEwT1MwMFpHUmxMV0V4WlRZdE16Wm1aR1V4WVdOak1EQTNAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OakppTURVNFlUa3RaakEwT1MwMFpHUmxMV0V4WlRZdE16Wm1aR1V4WVdOak1EQTNAdGhyZWFkLnYy')/attendanceReports",
   "value": [
     {
-      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
-      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
-      "totalAttendanceInSeconds": 347,
+      "id": "6f56d6a5-3a82-4b9e-b726-503099e14c7d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-29T10:15:25.804Z",
+      "meetingEndDateTime": "2025-05-29T10:17:51.343Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-05-29T18:30:00.000Z to       │
+│     2025-05-30T18:29:59.999Z                │
+│ 🕒 IST: 5/30/2025, 5:30:00 AM to │
+│     5/31/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-05-29T10:15:25.804Z',
+  reportIST: '2025-05-29 15:45:25',
+  reportDateStr: '2025-05-29',
+  istTargetDateStr: '2025-05-30',
+  reportHourIST: 15,
+  isRelevant: false
+}
+No attendance reports found within the IST day window
+📝 Processing online meeting: "Test Time 5"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NjQxZDUyNzYtMTQxNy00MDNhLWI0ODEtZjNjMDU3OGRlMDA0@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}    
+Extracted Meeting ID: 19:meeting_NjQxZDUyNzYtMTQxNy00MDNhLWI0ODEtZjNjMDU3OGRlMDA0@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NjQxZDUyNzYtMTQxNy00MDNhLWI0ODEtZjNjMDU3OGRlMDA0@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OalF4WkRVeU56WXRNVFF4TnkwME1ETmhMV0kwT0RFdFpqTmpNRFUzT0dSbE1EQTBAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OalF4WkRVeU56WXRNVFF4TnkwME1ETmhMV0kwT0RFdFpqTmpNRFUzT0dSbE1EQTBAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+📝 Processing online meeting: "Test Time Recurring 2"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}    
+Extracted Meeting ID: 19:meeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_Yzc0NTllNTItNjY1YS00ODMyLWJkY2MtMzY0NmVkMWI1Nzdi@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZemMwTlRsbE5USXROalkxWVMwME9ETXlMV0prWTJNdE16WTBObVZrTVdJMU56ZGlAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ZemMwTlRsbE5USXROalkxWVMwME9ETXlMV0prWTJNdE16WTBObVZrTVdJMU56ZGlAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "8f703a8a-43ba-49c4-969d-69d3f347f4dc",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-29T10:15:38.895Z",
+      "meetingEndDateTime": "2025-05-29T10:17:50.149Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-05-29T18:30:00.000Z to       │
+│     2025-05-30T18:29:59.999Z                │
+│ 🕒 IST: 5/30/2025, 5:30:00 AM to │
+│     5/31/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-05-29T10:15:38.895Z',
+  reportIST: '2025-05-29 15:45:38',
+  reportDateStr: '2025-05-29',
+  istTargetDateStr: '2025-05-30',
+  reportHourIST: 15,
+  isRelevant: false
+}
+No attendance reports found within the IST day window
+📝 Processing online meeting: "Test Time 4.5"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NDllOTRiNWUtYWYxYy00YjhkLWE2OWUtZGRiZTM2NTE2Y2Vj@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}    
+Extracted Meeting ID: 19:meeting_NDllOTRiNWUtYWYxYy00YjhkLWE2OWUtZGRiZTM2NTE2Y2Vj@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NDllOTRiNWUtYWYxYy00YjhkLWE2OWUtZGRiZTM2NTE2Y2Vj@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ORGxsT1RSaU5XVXRZV1l4WXkwMFlqaGtMV0UyT1dVdFpHUmlaVE0yTlRFMlkyVmpAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19ORGxsT1RSaU5XVXRZV1l4WXkwMFlqaGtMV0UyT1dVdFpHUmlaVE0yTlRFMlkyVmpAdGhyZWFkLnYy')/attendanceReports",
+  "value": []
+}
+📝 Processing online meeting: "Test Time Recurring "
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}    
+Extracted Meeting ID: 19:meeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_NjJiMDU4YTktZjA0OS00ZGRlLWExZTYtMzZmZGUxYWNjMDA3@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OakppTURVNFlUa3RaakEwT1MwMFpHUmxMV0V4WlRZdE16Wm1aR1V4WVdOak1EQTNAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OakppTURVNFlUa3RaakEwT1MwMFpHUmxMV0V4WlRZdE16Wm1aR1V4WVdOak1EQTNAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "6f56d6a5-3a82-4b9e-b726-503099e14c7d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-29T10:15:25.804Z",
+      "meetingEndDateTime": "2025-05-29T10:17:51.343Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-05-29T18:30:00.000Z to       │
+│     2025-05-30T18:29:59.999Z                │
+│ 🕒 IST: 5/30/2025, 5:30:00 AM to │
+│     5/31/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-05-29T10:15:25.804Z',
+  reportIST: '2025-05-29 15:45:25',
+  reportDateStr: '2025-05-29',
+  istTargetDateStr: '2025-05-30',
+  reportHourIST: 15,
+  isRelevant: false
+}
+No attendance reports found within the IST day window
+📝 Processing online meeting: "Test Time 4"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZGI0YThlMmQtNGE5OC00OTVhLWJhOTUtOGM5YWNkM2E3YmMw@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}    
+Extracted Meeting ID: 19:meeting_ZGI0YThlMmQtNGE5OC00OTVhLWJhOTUtOGM5YWNkM2E3YmMw@thread.v2
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_ZGI0YThlMmQtNGE5OC00OTVhLWJhOTUtOGM5YWNkM2E3YmMw@thread.v2
+Base64 Meeting ID: MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19aR0kwWVRobE1tUXROR0U1T0MwME9UVmhMV0poT1RVdE9HTTVZV05rTTJFM1ltTXdAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19aR0kwWVRobE1tUXROR0U1T0MwME9UVmhMV0poT1RVdE9HTTVZV05rTTJFM1ltTXdAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "da34ec0c-6bd1-404b-afb6-4be2e720e7fd",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-05-30T05:23:13.25Z",
+      "meetingEndDateTime": "2025-05-30T05:25:00.579Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-05-29T18:30:00.000Z to       │
+│     2025-05-30T18:29:59.999Z                │
+│ 🕒 IST: 5/30/2025, 5:30:00 AM to │
+│     5/31/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-05-30T05:23:13.25Z',
+  reportIST: '2025-05-30 10:53:13',
+  reportDateStr: '2025-05-30',
+  istTargetDateStr: '2025-05-30',
+  reportHourIST: 10,
+  isRelevant: true
+}
+Found 1 relevant reports, using most recent: da34ec0c-6bd1-404b-afb6-4be2e720e7fd
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19aR0kwWVRobE1tUXROR0U1T0MwME9UVmhMV0poT1RVdE9HTTVZV05rTTJFM1ltTXdAdGhyZWFkLnYy')/attendanceReports('da34ec0c-6bd1-404b-afb6-4be2e720e7fd')/attendanceRecords",
+  "value": [
+    {
+      "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+      "emailAddress": "DebraB@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 104,
       "role": "Organizer",
       "registrationId": null,
       "identity": {
         "@odata.type": "#microsoft.graph.communicationsUserIdentity",
-        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
-        "displayName": "Pradeep Gupta",
+        "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+        "displayName": "Debra Berger",
         "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
       },
       "attendanceIntervals": [
         {
-          "joinDateTime": "2025-05-29T06:35:20.2117178Z",
-          "leaveDateTime": "2025-05-29T06:41:07.9211957Z",
-          "durationInSeconds": 347
+          "joinDateTime": "2025-05-30T05:23:16.0797404Z",
+          "leaveDateTime": "2025-05-30T05:25:00.5792174Z",
+          "durationInSeconds": 104
         }
       ],
       "externalRegistrationInformation": {
@@ -153,131 +738,394 @@ Records data: {
 ┌─────────────────────────────────────────────────┐
 │ ✅ ATTENDANCE RECORDS FOUND                     │
 │ 📊 Total Records: 1             │
-│ 🕒 Meeting Start: 2025-05-29T06:35:15.205Z │
+│ 🕒 Meeting Start: 2025-05-30T05:23:13.25Z │
 └─────────────────────────────────────────────────┘
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aRE16TkRZeU5Ua3ROVFUyT0MwMFlqQXdMVGcyWXprdE5qRmxZekEyWVdJM05qUXhAdGhyZWFkLnYy/attendanceReports
-Found report ID: 3184fd0a-2b8c-4ae5-9d70-e669d1365b90
-✅ Found 1 attendance records for "TEST MEET"
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19aR0kwWVRobE1tUXROR0U1T0MwME9UVmhMV0poT1RVdE9HTTVZV05rTTJFM1ltTXdAdGhyZWFkLnYy/attendanceReports
+Found report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd
+
+╔════════════════════════ REPORT ID DEDUPLICATION ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Using ONLY report ID for duplication detection     ║
+║ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd                                            ║
+║ 👤 User ID: debrab@m365x925...                            ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: N/A                         │
+│ ⏱️ Duration: 0m 0s                    │
+│ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd              │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ℹ️ REPORT ID CHECK RESULT                       │
+│ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd                       │
+│ 🔍 Status: No matching report ID found          │
+│ ✅ Conclusion: New meeting                      │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Found 1 attendance records for "Test Time 4"
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FETCH COMPLETED
-║ 📊 Total meetings: 1 | With attendance: 1
+║ 📊 Total meetings: 7 | With attendance: 1
 ║ 👥 Unique attendees: 0
 ╚════════════════════════════════════════════════════════╝
-Found 1 meetings for processing
+Found 7 meetings for processing
 
 ╔════════════════════════════════════════════════════════╗
-║ 🔄 STARTING BATCH PROCESSING [batch_1748502805103_ayuyufhue]
-║ 📊 Total meetings: 1
-║ 🆔 Cycle ID: cycle_1748502805103
+║ 🔄 STARTING BATCH PROCESSING [batch_1748582793922_nt0rsd7j1]
+║ 📊 Total meetings: 7
+║ 🆔 Cycle ID: cycle_1748582793922
 ╚════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
-│ ▶️ Processing batch 1/1 (1 meetings) │
+│ ▶️ Processing batch 1/2 (5 meetings) │
 └─────────────────────────────────────────────────┘
 📶 Rate limiter status: 48/5 tokens available
 ✅ Rate limiter tokens acquired
-📑 Processing meeting: "TEST MEET" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=]
-📥 QUEUE: Added meeting "TEST MEET" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=]
+📑 Processing meeting: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+📥 QUEUE: Added meeting "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
 📊 QUEUE STATUS: 1 item waiting
 ⚙️ QUEUE: Starting queue processor...
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🔄 QUEUE PROCESSOR STARTED                             ║
-║ 🆔 Cycle ID: cycle_1748502805106                   ║
+║ 🆔 Cycle ID: cycle_1748582793927                   ║
 ║ 📊 Queue Length: 1                  ║
 ╚════════════════════════════════════════════════════════╝
+📑 Processing meeting: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+📥 QUEUE: Added meeting "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+📊 QUEUE STATUS: 2 items waiting
+📑 Processing meeting: "Test Time 5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=]
+📥 QUEUE: Added meeting "Test Time 5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=]
+📊 QUEUE STATUS: 3 items waiting
+📑 Processing meeting: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+📥 QUEUE: Added meeting "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+📊 QUEUE STATUS: 4 items waiting
+📑 Processing meeting: "Test Time 4.5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=]
+📥 QUEUE: Added meeting "Test Time 4.5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=]
+📊 QUEUE STATUS: 5 items waiting
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "TEST MEET" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=]
+🔍 PROCESSING: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
 
 ┌─────────────────── MEETING TIME INFO ─────────────────────┐
-│ 📅 Meeting UTC: 2025-05-29T16:00:00.0000000                 │
-│ 🕒 Meeting IST: 5/29/2025, 4:00:00 PM                        │
-│ ⏰ Hour (IST): 16                     │
+│ 📅 Meeting UTC: 2025-05-31T09:00:00.0000000                 │
+│ 🕒 Meeting IST: 5/31/2025, 9:00:00 AM                        │
+│ ⏰ Hour (IST): 9                     │
 │ 🌅 Early Morning: NO        │
 └─────────────────────────────────────────────────────────┘
-Report validation [IST]: Report date: 2025-05-29, Target date: 2025-05-29
-Report validation [IST]: Report date: 2025-05-26, Target date: 2025-05-29
-Selected report ID: 3184fd0a-2b8c-4ae5-9d70-e669d1365b90 Reason: Single valid report available
-✅ COMPLETED: "TEST MEET" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=] in 4.18s
+Report validation [IST]: Report date: 2025-05-29, Target date: 2025-05-31
+✅ COMPLETED: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==] in 4.01s
+ GET /api/pm2/status 200 in 19ms
+✅ Successfully processed: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-05-31T01:30:00.0000000                 │
+│ 🕒 Meeting IST: 5/31/2025, 1:30:00 AM                        │
+│ ⏰ Hour (IST): 1                     │
+│ 🌅 Early Morning: YES        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-05-29, Target date: 2025-05-31
+✅ COMPLETED: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==] in 4.73s
+✅ Successfully processed: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Test Time 5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=]
+ POST /api/process-meetings?userId=debrab%40m365x92504196.onmicrosoft.com&source=pm2 200 in 29998ms
+✅ COMPLETED: "Test Time 5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=] in 5.88s
+✅ Successfully processed: "Test Time 5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-05-30T09:00:00.0000000                 │
+│ 🕒 Meeting IST: 5/30/2025, 9:00:00 AM                        │
+│ ⏰ Hour (IST): 9                     │
+│ 🌅 Early Morning: NO        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-05-29, Target date: 2025-05-30
+✅ COMPLETED: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==] in 2.14s
+✅ Successfully processed: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Test Time 4.5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=]
+✅ COMPLETED: "Test Time 4.5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=] in 2.87s
 
 ╔════════════════════════════════════════════════════════╗
 ║ ✅ QUEUE PROCESSOR COMPLETED                           ║
-║ 🆔 Cycle ID: cycle_1748502805106                   ║
-║ ⏱️ Duration: 5.44s      ║
+║ 🆔 Cycle ID: cycle_1748582793927                   ║
+║ ⏱️ Duration: 25.96s      ║
 ╚════════════════════════════════════════════════════════╝
-✅ Successfully processed: "TEST MEET" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=]
+✅ Successfully processed: "Test Time 4.5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=]
+⏱️ Waiting 1 second before next batch...
 
 ┌─────────────────────────────────────────────────┐
-│ ✓ Batch 1/1 completed                      │
-│ ✓ Progress: 1/1 meetings (100%)    │
-│ ✓ Success: 1 | Failed: 0               │
+│ ✓ Batch 1/2 completed                      │
+│ ✓ Progress: 5/7 meetings (71%)    │
+│ ✓ Success: 5 | Failed: 0               │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ▶️ Processing batch 2/2 (2 meetings) │
+└─────────────────────────────────────────────────┘
+📶 Rate limiter status: 48/5 tokens available
+✅ Rate limiter tokens acquired
+📑 Processing meeting: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+📥 QUEUE: Added meeting "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+📊 QUEUE STATUS: 1 item waiting
+⚙️ QUEUE: Starting queue processor...
+
+╔════════════════════════════════════════════════════════╗
+║ 🔄 QUEUE PROCESSOR STARTED                             ║
+║ 🆔 Cycle ID: cycle_1748582820898                   ║
+║ 📊 Queue Length: 1                  ║
+╚════════════════════════════════════════════════════════╝
+📑 Processing meeting: "Test Time 4" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=]
+📥 QUEUE: Added meeting "Test Time 4" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=]
+📊 QUEUE STATUS: 2 items waiting
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-05-30T00:30:00.0000000                 │
+│ 🕒 Meeting IST: 5/30/2025, 12:30:00 AM                        │
+│ ⏰ Hour (IST): 0                     │
+│ 🌅 Early Morning: YES        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-05-29, Target date: 2025-05-30
+✅ COMPLETED: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==] in 3.72s
+✅ Successfully processed: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Test Time 4" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=]
+
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-05-30T00:00:00.0000000                 │
+│ 🕒 Meeting IST: 5/30/2025, 12:00:00 AM                        │
+│ ⏰ Hour (IST): 0                     │
+│ 🌅 Early Morning: YES        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-05-30, Target date: 2025-05-30
+Selected report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd Reason: Single valid report available
+✅ COMPLETED: "Test Time 4" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=] in 2.73s
+ GET /api/pm2/status 200 in 9ms
+
+╔════════════════════════════════════════════════════════╗
+║ ✅ QUEUE PROCESSOR COMPLETED                           ║
+║ 🆔 Cycle ID: cycle_1748582820898                   ║
+║ ⏱️ Duration: 8.98s      ║
+╚════════════════════════════════════════════════════════╝
+✅ Successfully processed: "Test Time 4" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 2/2 completed                      │
+│ ✓ Progress: 7/7 meetings (100%)    │
+│ ✓ Success: 7 | Failed: 0               │
 └─────────────────────────────────────────────────┘
 
 ╔════════════════════════════════════════════════════════╗
-║ 🏁 BATCH PROCESSING COMPLETED [batch_1748502805103_ayuyufhue]
-║ 📊 Total: 1 | Success: 1 | Failed: 0
+║ 🏁 BATCH PROCESSING COMPLETED [batch_1748582793922_nt0rsd7j1]
+║ 📊 Total: 7 | Success: 7 | Failed: 0
 ║ 📈 Success rate: 100%
 ╚════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════╗
 ║ ⏱️ CYCLE COMPLETED                                     ║
 ║ 🆔 Cycle ID: null                   ║
-║ ⌛ Duration: 5.45s      ║
+║ ⌛ Duration: 35.97s      ║
 ╚════════════════════════════════════════════════════════╝
-Started batch processing with ID: batch_1748502805103_ayuyufhue
-Progress: 1/1 meetings processed
+Started batch processing with ID: batch_1748582793922_nt0rsd7j1
+Progress: 7/7 meetings processed
 All meetings processed
-Successfully processed 1 meetings
+Successfully processed 7 meetings
 Filtering out already processed meetings and meetings the user didn't attend...
 
 ╔══════════════════════════════════════════════════════════╗
 ║ 🔍 MEETING FILTER STARTING                                ║
-║ 📊 Total meetings to check: 1                           ║
+║ 📊 Total meetings to check: 7                           ║
 ║ 🔄 Batch size: 3 | Delay: 15s                        ║
 ╚══════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
-│ 📦 Processing batch 1/1 (1 meetings) ║
+│ 📦 Processing batch 1/3 (3 meetings) ║
 └─────────────────────────────────────────────────┘
-✅ Unique: "TEST MEET" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=]   
 
 ┌─────────────────────────────────────────────────┐
-│ ✓ Batch 1/1 completed                      ║
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-31                         │
+│ ⏱️ Duration: 0m 0s                    │
+
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-31                         │
+│ ⏱️ Duration: 0m 0s                    │
+
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z-WFifAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-30                         │
+│ ⏱️ Duration: 0m 0s                    │
+
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time 5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvrAAA=]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 1/3 completed                      ║
+│ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
+└─────────────────────────────────────────────────┘
+⏱️ Waiting 15 seconds before next batch...
+ GET /api/pm2/status 200 in 19ms
+
+┌─────────────────────────────────────────────────┐
+│ 📦 Processing batch 2/3 (3 meetings) ║
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-30                         │
+│ ⏱️ Duration: 0m 0s                    │
+
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time Recurring 2" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL8AAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-30                         │
+│ ⏱️ Duration: 0m 0s                    │
+
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time 4.5" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvuAAA=]
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-30                         │
+│ ⏱️ Duration: 0m 0s                    │
+
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ⚠️ NO REPORT ID PROVIDED                        │
+│ 🔍 Status: Cannot check for duplicates by report ID │
+│ ✅ Conclusion: Treating as new meeting          │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time Recurring " [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3Z8M674AAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAAI1kL7wAAEA==]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 2/3 completed                      ║
+│ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
+└─────────────────────────────────────────────────┘
+⏱️ Waiting 15 seconds before next batch...
+ GET /api/pm2/status 200 in 21ms
+
+┌─────────────────────────────────────────────────┐
+│ 📦 Processing batch 3/3 (1 meetings) ║
+└─────────────────────────────────────────────────┘
+
+╔════════════════════════ REPORT ID DEDUPLICATION ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Using ONLY report ID for duplication detection     ║
+║ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd                                            ║
+║ 👤 User ID: debrab@m365x925...                            ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 CHECKING IF MEETING IS POSTED                │
+│ 🆔 Meeting ID: AAMkAGU4ZTUwM2U...           │
+│ 📅 Date: 2025-05-30                         │
+│ ⏱️ Duration: 1m 44s                    │
+│ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd              │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│ ℹ️ REPORT ID CHECK RESULT                       │
+│ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd                       │
+│ 🔍 Status: No matching report ID found          │
+│ ✅ Conclusion: New meeting                      │
+└─────────────────────────────────────────────────┘
+✅ Meeting not yet posted - can proceed with creating time entry
+✅ Unique: "Test Time 4" [AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAjWQvpAAA=]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 3/3 completed                      ║
 │ 📊 Total: 1 | Unique: 1 | Duplicates: 0   ║
 └─────────────────────────────────────────────────┘
 
 ╔══════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FILTER COMPLETED                               ║
-║ 📊 Total: 1 | Duplicates: 0 | Unique: 1     ║
+║ 📊 Total: 7 | Duplicates: 0 | Unique: 7     ║
 ║ 📈 Duplication rate: 0%                                   ║
 ╚══════════════════════════════════════════════════════════╝
-User pradeepg@m365x92504196.onmicrosoft.com attended meeting "TEST MEET" for 347 seconds
-Found 1 unique meetings, 1 of which were attended by the user
+No attendance records found for meeting "Test Time Recurring 2". Skipping.
+No attendance records found for meeting "Test Time Recurring ". Skipping.
+No attendance records found for meeting "Test Time 5". Skipping.
+No attendance records found for meeting "Test Time Recurring 2". Skipping.
+No attendance records found for meeting "Test Time 4.5". Skipping.
+No attendance records found for meeting "Test Time Recurring ". Skipping.
+User debrab@m365x92504196.onmicrosoft.com attended meeting "Test Time 4" for 104 seconds
+Found 7 unique meetings, 1 of which were attended by the user
 Matching tasks to attended meetings...
-Matching tasks for meeting: TEST MEET
-Found user's attendance record with duration: 347 seconds
-Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
+Matching tasks for meeting: Test Time 4
+Found user's attendance record with duration: 104 seconds
+Fetching tasks from Intervals for user: debrab@m365x92504196.onmicrosoft.com
 Fetching tasks using standard API implementation...
-Current user personid: 423842
+Current user personid: 424387
 Raw tasks API response: Found 1 total tasks
 Total tasks from API: 1
-Task 16708664 (Pradeep Task) skipped: Task is closed
-Found 0 open tasks assigned to user 423842
-No tasks found with standard API, trying direct fetcher...
-Directly fetching tasks with axios...
-Direct fetcher: Current user personid: 423842
-API direct response status: 200
-Direct fetcher retrieved 1 total tasks from Intervals API
-Direct fetcher: Task 16708664 (Pradeep Task) skipped: Task is closed
-Direct fetcher: Found 0 open tasks assigned to user 423842 (out of 1 total tasks)
-Direct fetcher returned 0 tasks
-Found 0 tasks in Intervals:
+Found 1 open tasks assigned to user 424387
+Standard API returned 1 tasks
+Found 1 tasks in Intervals:
+- Debra (16708868)
 Meeting analysis for matching: {
-  "subject": "TEST MEET",
-  "startTime": "2025-05-29T16:00:00.0000000",
-  "endTime": "2025-05-29T16:30:00.0000000",
-  "duration": 347,
+  "subject": "Test Time 4",
+  "startTime": "2025-05-30T00:00:00.0000000",
+  "endTime": "2025-05-30T00:30:00.0000000",
+  "duration": 104,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -289,36 +1137,56 @@ Meeting analysis for matching: {
   "attendance": {
     "records": [
       {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 347,
+        "name": "Debra Berger",
+        "email": "DebraB@M365x92504196.OnMicrosoft.com",
+        "duration": 104,
         "role": "Organizer",
         "attendanceIntervals": [
           {
-            "joinDateTime": "2025-05-29T06:35:20.2117178Z",
-            "leaveDateTime": "2025-05-29T06:41:07.9211957Z",
-            "durationInSeconds": 347
+            "joinDateTime": "2025-05-30T05:23:16.0797404Z",
+            "leaveDateTime": "2025-05-30T05:25:00.5792174Z",
+            "durationInSeconds": 104
           }
         ]
       }
     ],
     "summary": {
-      "totalDuration": 347,
-      "averageDuration": 347,
+      "totalDuration": 104,
+      "averageDuration": 104,
       "totalParticipants": 1
     },
-    "reportId": "3184fd0a-2b8c-4ae5-9d70-e669d1365b90"
+    "reportId": "da34ec0c-6bd1-404b-afb6-4be2e720e7fd"
   }
 }
-Tasks data for matching: []
+Tasks data for matching: [
+  {
+    "id": "16708868",
+    "title": "Debra",
+    "projectid": "1429670",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391665",
+    "client": "Nathcorp",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "424387",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  }
+]
 Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
 
 Meeting Details:
 {
-  "subject": "TEST MEET",
-  "startTime": "2025-05-29T16:00:00.0000000",
-  "endTime": "2025-05-29T16:30:00.0000000",
-  "duration": 347,
+  "subject": "Test Time 4",
+  "startTime": "2025-05-30T00:00:00.0000000",
+  "endTime": "2025-05-30T00:30:00.0000000",
+  "duration": 104,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -330,30 +1198,50 @@ Meeting Details:
   "attendance": {
     "records": [
       {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 347,
+        "name": "Debra Berger",
+        "email": "DebraB@M365x92504196.OnMicrosoft.com",
+        "duration": 104,
         "role": "Organizer",
         "attendanceIntervals": [
           {
-            "joinDateTime": "2025-05-29T06:35:20.2117178Z",
-            "leaveDateTime": "2025-05-29T06:41:07.9211957Z",
-            "durationInSeconds": 347
+            "joinDateTime": "2025-05-30T05:23:16.0797404Z",
+            "leaveDateTime": "2025-05-30T05:25:00.5792174Z",
+            "durationInSeconds": 104
           }
         ]
       }
     ],
     "summary": {
-      "totalDuration": 347,
-      "averageDuration": 347,
+      "totalDuration": 104,
+      "averageDuration": 104,
       "totalParticipants": 1
     },
-    "reportId": "3184fd0a-2b8c-4ae5-9d70-e669d1365b90"
+    "reportId": "da34ec0c-6bd1-404b-afb6-4be2e720e7fd"
   }
 }
 
 Available Tasks:
-[]
+[
+  {
+    "id": "16708868",
+    "title": "Debra",
+    "projectid": "1429670",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391665",
+    "client": "Nathcorp",
+    "moduleid": "552131",
+    "module": "Out of Scope",
+    "assigneeid": "424387",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  }
+]
 
 IT COMPANY CONTEXT:
 - We are an IT company with specialized departments handling various technical responsibilities
@@ -451,578 +1339,183 @@ Notes:
 7. Tasks with status "Closed" should NEVER be included in matchedTasks
 8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
 OpenAI response: {
-    "matchedTasks": []
+    "matchedTasks": [
+        {
+            "taskId": "16708868",
+            "taskTitle": "Debra",
+            "meetingDetails": {
+                "subject": "Test Time 4",
+                "startTime": "2025-05-30T00:00:00.0000000",
+                "endTime": "2025-05-30T00:30:00.0000000",
+                "actualDuration": 104
+            },
+            "confidence": 0.2,
+            "reason": "The meeting subject 'Test Time 4' is vague and does not contain technical keywords. The only participant and organizer is Debra Berger, and the only available open task assigned to her is titled 'Debra' in the Internal project for client 'Nathcorp'. There is minimal evidence connecting the meeting to the task beyond the participant's name, so this is a low confidence match based on available information and matching rules."
+        }
+    ]
 }
 Raw OpenAI response: {
-    "matchedTasks": []
+    "matchedTasks": [
+        {
+            "taskId": "16708868",
+            "taskTitle": "Debra",
+            "meetingDetails": {
+                "subject": "Test Time 4",
+                "startTime": "2025-05-30T00:00:00.0000000",
+                "endTime": "2025-05-30T00:30:00.0000000",
+                "actualDuration": 104
+            },
+            "confidence": 0.2,
+            "reason": "The meeting subject 'Test Time 4' is vague and does not contain technical keywords. The only participant and organizer is Debra Berger, and the only available open task assigned to her is titled 'Debra' in the Internal project for client 'Nathcorp'. There is minimal evidence connecting the meeting to the task beyond the participant's name, so this is a low confidence match based on available information and matching rules."
+        }
+    ]
 }
 Extracted JSON: {
-    "matchedTasks": []
+    "matchedTasks": [
+        {
+            "taskId": "16708868",
+            "taskTitle": "Debra",
+            "meetingDetails": {
+                "subject": "Test Time 4",
+                "startTime": "2025-05-30T00:00:00.0000000",
+                "endTime": "2025-05-30T00:30:00.0000000",
+                "actualDuration": 104
+            },
+            "confidence": 0.2,
+            "reason": "The meeting subject 'Test Time 4' is vague and does not contain technical keywords. The only participant and organizer is Debra Berger, and the only available open task assigned to her is titled 'Debra' in the Internal project for client 'Nathcorp'. There is minimal evidence connecting the meeting to the task beyond the participant's name, so this is a low confidence match based on available information and matching rules."
+        }
+    ]
 }
-Parsed tasks: []
-Parsed matching result: {
-  "meetingSubject": "TEST MEET",
-  "matchedTasks": []
-}
-No matches found for meeting: TEST MEET, queueing for review
-Found user's attendance record with duration: 347 seconds
-Meeting with ID AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA= already exists in reviews, updating instead of adding duplicate
-Meeting queued for review: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA= - TEST MEET
-Meeting queued for review: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA= - TEST MEET
-Creating time entries...
-Skipping time entry creation for meeting: TEST MEET - Needs review
- POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 17139ms
-
- Getting API key for user: pradeepg@m365x92504196.onmicrosoft.com
-Getting API key for user: pradeepg@m365x92504196.onmicrosoft.com
-Current users in storage: [
+Parsed tasks: [
   {
-    userId: 'vijay@m365x65088219.onmicrosoft.com',
-    email: 'vijay@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '1lk81z2y709',
-    lastSync: '2025-03-07T14:42:27.411Z'
-  },
-  {
-    userId: 'rajesh.alda@nathcorp.com',
-    email: 'rajesh.alda@nathcorp.com',
-    intervalsApiKey: '9bf2smemqha',
-    lastSync: '2025-01-20T19:09:47.297Z'
-  },
-  {
-    userId: 'vishalkumar@m365x65088219.onmicrosoft.com',
-    email: 'vishalkumar@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '5jurj7c9cf1',
-    lastSync: '2025-04-04T04:09:58.249Z'
-  },
-  {
-    userId: 'ramesh@m365x65088219.onmicrosoft.com',
-    email: 'ramesh@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '1o8wmcmz99b',
-    lastSync: '2025-03-17T11:14:26.238Z'
-  },
-  {
-    userId: 'neha@m365x65088219.onmicrosoft.com',
-    email: 'neha@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '19juh5d4jh6',
-    lastSync: '2025-04-04T18:55:22.829Z'
-  },
-  {
-    userId: 'casio@m365x65088219.onmicrosoft.com',
-    email: 'casio@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '05tynt2z0ps',
-    lastSync: '2025-04-01T06:55:36.964Z'
-  },
-  {
-    userId: 'pushkar@m365x65088219.onmicrosoft.com',
-    email: 'pushkar@m365x65088219.onmicrosoft.com',
-    intervalsApiKey: '0nmbnk23m1p',
-    lastSync: '2025-04-07T06:40:09.328Z'
-  },
-  {
-    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
-    email: 'pradeepg@m365x92504196.onmicrosoft.com',
-    intervalsApiKey: '6m0kwsc5b18',
-    lastSync: '2025-05-06T03:59:26.114Z'
-  },
-  {
-    userId: 'debrab@m365x92504196.onmicrosoft.com',
-    email: 'debrab@m365x92504196.onmicrosoft.com',
-    intervalsApiKey: '13kmcums5x7',
-    lastSync: '2025-04-16T04:42:29.593Z'
-  },
-  {
-    userId: 'meganb@m365x92504196.onmicrosoft.com',
-    email: 'meganb@m365x92504196.onmicrosoft.com',
-    intervalsApiKey: '7otyrqdwaiw',
-    lastSync: '2025-04-16T12:34:14.488Z'
-  },
-  {
-    userId: 'irvins@m365x92504196.onmicrosoft.com',
-    email: 'irvins@m365x92504196.onmicrosoft.com',
-    intervalsApiKey: '92zdls851ej',
-    lastSync: '2025-05-26T11:27:45.772Z'
+    "taskId": "16708868",
+    "taskTitle": "Debra",
+    "meetingDetails": {
+      "subject": "Test Time 4",
+      "startTime": "2025-05-30T00:00:00.0000000",
+      "endTime": "2025-05-30T00:30:00.0000000",
+      "actualDuration": 104
+    },
+    "confidence": 0.2,
+    "reason": "The meeting subject 'Test Time 4' is vague and does not contain technical keywords. The only participant and organizer is Debra Berger, and the only available open task assigned to her is titled 'Debra' in the Internal project for client 'Nathcorp'. There is minimal evidence connecting the meeting to the task beyond the participant's name, so this is a low confidence match based on available information and matching rules."
   }
 ]
-Found user: Yes
-API key found: Yes
-Received time entry request: {
-  taskId: '16708664',
-  date: '2025-05-29',
-  time: '347 seconds (0.10 hours)',
-  description: 'TEST MEET',
-  workType: undefined,
-  billable: undefined,
-  meetingId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=',
-  subject: 'TEST MEET',
-  confidence: 0,
-  isManualPost: false,
-  taskTitle: 'Pradeep Task',
-  attendanceRecords: 'provided'
-}
-Actual meetingId received: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA= 
-Is meetingId in Microsoft Graph format: true
-Checking user attendance in provided records
-Found user's attendance record with duration: 347 seconds
-Time conversion: {
-  timeToUseSeconds: 347,
-  calculatedHours: 0.1,
-  rawCalculation: 0.09638888888888889
-}
-Fetching fresh tasks data from Intervals API
-Fetching task directly by ID for billable determination: 16708664
-Fetching specific task by ID: 16708664
-Successfully fetched task by ID: 16708664
-Billable status determination: {
-  client: 'Nathcorp',
-  project: 'Internal',
-  isInternal: true,
-  billableStatus: 'f',
-  rule: 'Internal/Nathcorp = Non-billable, Everything else = Billable'
-}
-Creating time entry with payload: {
-  taskId: '16708664',
-  date: '2025-05-29',
-  time: 0.1,
-  description: 'TEST MEET',
-  workType: 'Meeting',
-  billable: 'f'
-}
-Current user: {
-  personid: 423842,
-  status: 'OK',
-  code: 200,
-  listcount: 8,
-  person: [
+Parsed matching result: {
+  "meetingSubject": "Test Time 4",
+  "matchedTasks": [
     {
-      id: '423841',
-      localid: '1',
-      clientid: null,
-      title: null,
-      firstname: 'Admin',
-      lastname: null,
-      active: 't',
-      tips: 't',
-      groupid: '2',
-      group: 'Administrator',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: null,
-      editordisabled: null
-    },
-    {
-      id: '424193',
-      localid: '6',
-      clientid: null,
-      title: '',
-      firstname: 'alexw',
-      lastname: null,
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '0',
-      editordisabled: '0'
-    },
-    {
-      id: '424269',
-      localid: '8',
-      clientid: null,
-      title: '',
-      firstname: 'coffee',
-      lastname: null,
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '0',
-      editordisabled: '0'
-    },
-    {
-      id: '423852',
-      localid: '3',
-      clientid: null,
-      title: '',
-      firstname: 'irvins',
-      lastname: null,
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '0',
-      editordisabled: '0'
-    },
-    {
-      id: '423842',
-      localid: '2',
-      clientid: null,
-      title: '',
-      firstname: 'pradeepg',
-      lastname: null,
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '0',
-      editordisabled: '0'
-    },
-    {
-      id: '424192',
-      localid: '5',
-      clientid: null,
-      title: '',
-      firstname: 'Pushkar',
-      lastname: null,
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '0',
-      editordisabled: '0'
-    },
-    {
-      id: '424166',
-      localid: '4',
-      clientid: null,
-      title: '',
-      firstname: 'Richa',
-      lastname: 'Kumari',
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '0',
-      editordisabled: '0'
-    },
-    {
-      id: '424265',
-      localid: '7',
-      clientid: null,
-      title: '',
-      firstname: 'vish',
-      lastname: 'test',
-      active: 't',
-      tips: 'f',
-      groupid: '4',
-      group: 'Resource',
-      client: null,
-      clientlocalid: null,
-      calendarorientation: '1',
-      editordisabled: '0'
+      "taskId": "16708868",
+      "taskTitle": "Debra",
+      "meetingDetails": {
+        "subject": "Test Time 4",
+        "startTime": "2025-05-30T00:00:00.0000000",
+        "endTime": "2025-05-30T00:30:00.0000000",
+        "actualDuration": 104
+      },
+      "confidence": 0.2,
+      "reason": "The meeting subject 'Test Time 4' is vague and does not contain technical keywords. The only participant and organizer is Debra Berger, and the only available open task assigned to her is titled 'Debra' in the Internal project for client 'Nathcorp'. There is minimal evidence connecting the meeting to the task beyond the participant's name, so this is a low confidence match based on available information and matching rules."
     }
   ]
 }
-Fetching task directly by ID: 16708664
-Fetching specific task by ID: 16708664
-Successfully fetched task by ID: 16708664
-Task details: {
-  id: '16708664',
-  localid: '30',
-  assignee: [
-    {
-      personid: '423842',
-      assignee: 'pradeepg',
-      assigneeactive: 't',
-      personlocalid: '2'
-    }
-  ],
-  assigneeid: '423842',
-  follower: [],
-  followerid: '',
-  owner: [
-    {
-      personid: '423842',
-      owner: 'pradeepg',
-      owneractive: 't',
-      personlocalid: '2'
-    }
-  ],
-  ownerid: '423842',
-  statusid: '331949',
-  projectid: '1429670',
-  moduleid: '552131',
-  title: 'Pradeep Task',
-  summary: '',
-  dateopen: '2025-05-29',
-  datedue: '2025-06-05',
-  dateclosed: null,
-  estimate: '0',
-  priorityid: '202835',
-  milestoneid: null,
-  milestonelocalid: null,
-  clientid: '391665',
-  client: 'Nathcorp',
-  project: 'Internal',
-  module: 'Out of Scope',
-  milestone: null,
+Using best match for meeting "Test Time 4": Task 16708868 (Debra) with confidence 0.2
+Found 1 matches for meeting: Test Time 4
+Creating time entries...
+Creating time entry for meeting: Test Time 4
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 TIME ENTRY CREATION STARTED
+║ 📝 Meeting: Test Time 4
+║ 🔄 Task: Debra
+╚════════════════════════════════════════════════════════╝
+⏳ Fetching person & task information...
+ ○ Compiling /api/intervals-proxy ...
+ ✓ Compiled /api/intervals-proxy in 1032ms (2959 modules)
+Making request to intervals API: https://api.myintervals.com/me/
+Making request to intervals API: https://api.myintervals.com/task/16708868?limit=500
+ GET /dashboard 200 in 181ms
+ GET /dashboard 200 in 15ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424387,"status":"OK","code":200,"listcount":1,"me":[{"id":"424387","localid":"9","clientid":null,"title":"","firstname":"Debra","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"debra","groupid":"4","group":"Resource","client":null,"nu...
+ POST /api/intervals-proxy 200 in 2337ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424387,"status":"OK","code":200,"task":{"id":"16708868","localid":"31","assignee":[{"personid":"424387","assignee":"Debra","assigneeactive":"t","personlocalid":"9"}],"assigneeid":"424387","follower":[],"followerid":"","owner":[{"personid":"423841","owner":"Admin","owneractive":"t","perso...
+ POST /api/intervals-proxy 200 in 2475ms
+Retrieved task details: {
+  id: '16708868',
+  title: 'Debra',
   status: 'Open',
-  priority: 'Medium',
-  color: 'FFDD00',
-  datecreated: '2025-05-29'
-}
-Using hardcoded worktype ID 804786 for India-Meeting
-Posting time entry with request body: {
-  personid: 423842,
-  taskid: '16708664',
-  projectid: '1429670',
-  moduleid: '552131',
-  date: '2025-05-29',
-  time: '0.10',
-  description: 'TEST MEET',
-  worktypeid: '804786',
-  billable: 'f'
-}
-Successfully created time entry: {
-  personid: 423842,
-  status: 'Created',
-  code: 201,
-  time: {
-    id: '108307041',
-    projectid: '1429670',
-    moduleid: '552131',
-    taskid: '16708664',
-    worktypeid: '804786',
-    personid: '423842',
-    date: '2025-05-29',
-    datemodified: '2025-05-29 07:15:55',
-    time: '0.1',
-    description: 'TEST MEET',
-    billable: 'f',
-    worktype: 'India-Meeting',
-    milestoneid: null,
-    ogmilestoneid: null,
-    module: 'Out of Scope'
-  }
-}
-Fetching task directly by ID: 16708664
-Fetching specific task by ID: 16708664
-Successfully fetched task by ID: 16708664
-Fetching specific task by ID: 16708664
-Successfully fetched task by ID: 16708664
-Task details: {
-  id: '16708664',
-  localid: '30',
-  assignee: [
-    {
-      personid: '423842',
-      assignee: 'pradeepg',
-      assigneeactive: 't',
-      personlocalid: '2'
-    }
-  ],
-  assigneeid: '423842',
-  follower: [],
-  followerid: '',
-  owner: [
-    {
-      personid: '423842',
-      owner: 'pradeepg',
-      owneractive: 't',
-      personlocalid: '2'
-    }
-  ],
-  ownerid: '423842',
-  statusid: '331949',
-  projectid: '1429670',
-  moduleid: '552131',
-  title: 'Pradeep Task',
-  summary: '',
-  dateopen: '2025-05-29',
-  datedue: '2025-06-05',
-  dateclosed: null,
-  estimate: '0',
-  priorityid: '202835',
-  milestoneid: null,
-  milestonelocalid: null,
-  clientid: '391665',
   client: 'Nathcorp',
-  project: 'Internal',
-  module: 'Out of Scope',
-  milestone: null,
-  status: 'Open',
-  priority: 'Medium',
-  color: 'FFDD00',
-  datecreated: '2025-05-29'
-}
-Task details for AI agent posting: {
-  taskId: '16708664',
-  taskName: 'Pradeep Task',
-  client: 'Nathcorp',
-  project: 'Internal',
-  module: 'Out of Scope'
+  assigneeid: '424387'
 }
 
-╔══════════════════════ TIME ENTRY OPERATION ══════════════════════╗
-║ 📝 CREATING TIME ENTRY                                           ║
-║ 🎯 Meeting ID: AAMkADZhZTY4Njl   ║
-║ 👤 User: pradeepg@m365x92504196.onmicrosoft.com                                   ║
-║ 📊 Task: Pradeep Task  ║
-╚═════════════════════════════════════════════════════════════════╝
+┌─────────────────────────────────────────────────┐
+│ ✓ USER & TASK INFO RETRIEVED                    │
+│ 👤 User:                          │
+│ 📋 Task: #16708868 - Debra │
+│ 🏢 Client: Nathcorp | Project: Internal │
+└─────────────────────────────────────────────────┘
+⏳ Fetching work types for project 1429670...
+Making request to intervals API: https://api.myintervals.com/projectworktype/
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424387,"status":"OK","code":200,"listcount":121,"projectworktype":[{"id":"31439430","projectid":"1428052","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439441","projectid":"1428053","worktypeid":"804776","worktype":"Admin","active":"t"},{"id":"31439452","projectid":"142...
+ POST /api/intervals-proxy 200 in 485ms
+Found 0 work types for project 1429670: []
+ℹ️ Using worktype ID 804786 for India-Meeting
+🔍 Checking attendance records for user debrab@m365x92504196.onmicrosoft.com...
+✅ Found user's attendance record with duration: 1m 44s
+💰 Billable status: NO ✗ (Client: Nathcorp)
+
+┌─────────────────────────────────────────────────┐
+│ 📊 TIME ENTRY DETAILS                           │
+│ 📆 Date: 2025-05-30 (from UTC 2025-05-30)  │
+│ ⏱️ Duration: 0.03 hours (1m 44s)  │
+│ 💰 Billable: No                              │
+└─────────────────────────────────────────────────┘
+📡 Sending time entry request to Intervals API...
+Making request to intervals API: https://api.myintervals.com/time
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424387,"status":"Created","code":201,"time":{"id":"108335572","projectid":"1429670","moduleid":"552131","taskid":"16708868","worktypeid":"804786","personid":"424387","date":"2025-05-30","datemodified":"2025-05-30 05:27:50","time":"0.03","description":"Test Time 4","billable":"f","worktyp...
+ POST /api/intervals-proxy 200 in 887ms
+✅ Time entry creation successful!
+📝 Time entry created with ID: 108335572
+💾 Saving meeting details to storage...
+Saving posted meeting with time entry...
+Posted timestamp: { utc: '2025-05-30T05:27:50.402Z', ist: '2025-05-30T10:57:50.402 IST' }
+[2025-05-30T05:27:50.402Z] Found report ID in meeting data: da34ec0c-6bd1-404b-afb6-4be2e720e7fd
 
 ╔════════════════════════ STORAGE OPERATION ════════════════════════╗
 ║ 💾 STORING POSTED MEETING                                         ║
-║ 👤 User: pradeepg@m365x92504196.onmicrosoft.com                                               ║
-║ 🔑 Meeting ID: AAMkADZhZTY4Njl...    ║
-║ ⏱️ Duration: 0.1 hours         ║
+║ 👤 User: debrab@m365x92504196.onmicrosoft.com                                               ║
+║ 🔑 Meeting ID: AAMkAGU4ZTUwM2U...    ║
+║ ⏱️ Duration: 0.03 hours         ║
 ║ 🏷️ Work Type: 804786   ║
-
+║ 📊 Report ID: da34ec0c-6bd1-4...   ║
 ╚═══════════════════════════════════════════════════════════════════╝
 
 ┌─────────────────────── STORAGE DETAILS ───────────────────────┐
-│ ⏱️ Duration: 360s (0.1 hours)     │
-
+│ ⏱️ Duration: 108s (0.03 hours)     │
+│ 📊 Attendance Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd     │
 └───────────────────────────────────────────────────────────────┘
-[2025-05-29T07:15:56.055Z] Adding new meeting with meeting ID: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=
+[2025-05-30T05:27:50.408Z] Adding new meeting with report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd
+
+╔════════════════════════ REPORT ID STORAGE ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Successfully stored meeting with report ID   ║
+║ 📊 Report ID: da34ec0c-6bd1-404b-afb6-4be2e720e7fd                        ║
+║ 🆔 Meeting ID: AAMkAGU4ZTUwM2UxLWE2...  ║
+╚═══════════════════════════════════════════════════════════════════╝
 
 ┌─────────────────────── STORAGE STATUS ───────────────────────┐
 │ ✅ Meeting added to storage                                  │
-│ 📊 Total meetings for user: 1     │
-
+│ 📊 Total meetings for user: 6     │
+│ 📑 Report ID saved: da34ec0c-6bd1-404b-afb6-4be2e720e7fd              │
 │ 💾 Storage data saved successfully                           │
 └───────────────────────────────────────────────────────────────┘
+Successfully saved posted meeting with time entry
+✅ Meeting details saved successfully
 
-┌─────────────────── STORAGE STATUS ───────────────────┐
-│ ✅ Meeting stored in AI Agent storage                │
-└─────────────────────────────────────────────────────┘
-
-┌─────────────────── REVIEW STATUS ───────────────────┐
-│ ✅ Meeting marked as approved                       │
-│ 🔑 ID: AAMkADZhZTY4Njl... │
-└─────────────────────────────────────────────────────┘
-
-╔══════════════════════ OPERATION COMPLETE ══════════════════════╗
-║ ✅ Time entry created successfully                             ║
-║ ⏱️ Duration: 0.1 hours                  ║
-║ 📅 Date: 2025-05-29                        ║
-╚═════════════════════════════════════════════════════════════════╝
-Successfully created time entry: {
-  personid: 423842,
-  status: 'Created',
-  code: 201,
-  time: {
-    id: '108307041',
-    projectid: '1429670',
-    moduleid: '552131',
-    taskid: '16708664',
-    worktypeid: '804786',
-    personid: '423842',
-    date: '2025-05-29',
-    datemodified: '2025-05-29 07:15:55',
-    time: '0.1',
-    description: 'TEST MEET',
-    billable: 'f',
-    worktype: 'India-Meeting',
-    milestoneid: null,
-    ogmilestoneid: null,
-    module: 'Out of Scope',
-    client: 'Nathcorp',
-    project: 'Internal',
-    taskTitle: 'Pradeep Task'
-  }
-}
- POST /api/intervals/time-entries 200 in 5918ms
-API: /api/posted-meetings called
-API: Getting session...
- GET /api/auth/session 200 in 38ms
-API: Session: {
-  user: {
-    name: 'Pradeep Gupta',
-    email: 'pradeepg@m365x92504196.onmicrosoft.com',
-    image: 'data:image/jpeg;base64, /9j/4AAQSkZJRgABAQEAkACQAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7+1LXY/Dujahqd1PItlY27XM3lqWIRE3Ngd+AeK+Cfiz/AMFZ7GKwv7PwDpFwLgM6R6pqTqwCBfvrGpILb+Byy4GfavUf+Cj/AMTbr4f/ALNl3a2brDL4hv4NLe4ZiPKi2tM+B/FuEQQg8EMeDX5e/Db4HeIv2gb2+1OK9s9Oso5RG8gh2K3H8CKAP0ArwI4PC0489SKSPQhKtXlyU9WehR/8FCfjWl2LyLxxqcW6f7S/m3O8E5PyhCNgXnG0LjgV9lfsff8ABRDXfip43/sTx5e2Isb9fKsbu2tvIeK5GMRSYYj5xkgkYzwD2r500j/gndorad5t34nvby4IDbIbfaF9R1NeE/Fb4O3nwJ8UJFBPcz2d3CXiZI8nCnBVx39QRyDWsXgq8uSEVf0NamFxNCHtJrT1P38juzIAUnZge6tkVPFJI5IaRiNpyCx9K+N/+CZfxYvPiB8Edb029vZdSbw7qv2W2kmfdILaSJZEUnvhvMx+XavsKCXc3A7HPPTiuqOFor7C+44XUfc+aP2xPgS/7RfwG1zwzZlV161ZNT0kn5t1zErYi9vMVnTPYsp7V+aH7Pfxzl+B+hR6fN4Tu9RuVkkS5aRxE0biQq0YjbksDwffiv2Shl3McfLjH48V8hfFD4X+Erb43eJpdQs4hc3si6mjAY/1oDP065dWPpmuPEygqVqkbq56WXRnKtalKzt/kc34n+KPj3VvhlY+JPAui2tguoSNE41JSXtypwQUHUg56nHFZfw9+CfjX9pLRbjS/iPLMNOly1tqr20EV5ZTY+VozHnKAgZViQQex5ruPA/xhs/Dtjqfg+Dw7fXN39pKwTOUhgjDc7w7ZDY/u4yeenWvTvCXxXNrqEmnMsVw64jea0GMEjjK/wANeTTqezS0tre/U+iq0/aX1u1pbp9xzv8AwTn8AXXwn8KeLvD2qQ2w1m41aWe6lticjyj5KKyngDb84x13tX2FASX4yOD29q8t+FOgta32tasxRvNuZYo3BJcqWDYPbAyMfU16dbzFm59D/Kvo8PKcoc0+7+4+TxcaUanLS2SX321OFhmIJOfT+VeM/tTfDq98SeFYvE+g2pm1zR1bz0hH7ye0IO4Adyh+YDrgtirEy/E7xWxWKPT9KtI35ljMhJBHHQ5PHpVbxNFqfiPWP7DuL25OmaYiLLzsWeZhnLn+6Mg4J+tThaccfBtL3e7X5Hn4jFvLpp/a7X/M+L/C39oalMJReNfwSuGc31yY409tilR+ea9d0640bSJ4X0R7e31SYqkwsxwxyPmb1A9TXzH4R+H+r3OhKzzXlvLBI9tdIhbhkcqSR9RXq3gbQ7vwra3EthDLczORhnQ/PJ0Qc89TXh1OVXitWtD7emqk4xcnaO5+i3wdnt7jwRE1sWfF3cxyysQTLIkpRn4/3QPwxXe2zHf07H+VecfD/wAEW/h/4J+C7bTL5dTmsoPPXWLGUSLNNKWedldchlaRm49h6VYltfGHiSTdo3iBtMmgys1tLaoyyDH3lYjKnHUHjuMV9VKjOjRU0m7bpbnwixMKmIdNu13o2f/Z'
-  },
-  expires: '2025-06-28T07:15:56.156Z',
-  accessToken: 'eyJ0eXAiOiJKV1QiLCJub25jZSI6InBtWkJRN0pWOWhqaW0tZGFIVURHbmlIQlpsOFktVVBCbnVfU01GSjI4NWMiLCJhbGciOiJSUzI1NiIsIng1dCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSIsImtpZCI6IkNOdjBPSTNSd3FsSEZFVm5hb01Bc2hDSDJYRSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9kNmI0OGFmYi1hZTkzLTQxODAtYmQwZi1hYTQ3YzVjNWI1N2IvIiwiaWF0IjoxNzQ4NTAwMDMzLCJuYmYiOjE3NDg1MDAwMzMsImV4cCI6MTc0ODUwNTExNSwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVpRQWEvOFpBQUFBR0g3NWdwcHhmbDA4RXRFbHNVZDlwOFl2L2dOdStwbDNiQkFGUXBrWkl4QkdSTExZZ3RlTTJXVkFsUTlyNHVBM3dlcHlSQlE5a2pRZk44aFltZGRvQnpxOExBL0FVMUNWaTk0NnpKTndjb0FPdDc4MFYwYkdreVhwenNndTMvTnJpcnFqSGU1UzZ6OHo1ekUxcjBvZ1lTa29kU2J5WTdEWG1zaUw2djJIbERNNDRoVDYyYkoxL3RwY3BCOSswMmlFIiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBfZGlzcGxheW5hbWUiOiJDYWxlbmRhckFwcCIsImFwcGlkIjoiMThmNTliZWUtNTVhMS00YjYxLTk0YTQtYmMyMmVhZWU4M2U3IiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJHdXB0YSIsImdpdmVuX25hbWUiOiJQcmFkZWVwIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMS43LjI1LjI1MSIsIm5hbWUiOiJQcmFkZWVwIEd1cHRhIiwib2lkIjoiOTBlMmYzZTctZWU4Ni00YmM2LTkzZmYtY2NmNTVhNjBjNTI4IiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDA0NzkwMjFEMzUiLCJyaCI6IjEuQVdNQi00cTAxcE91Z0VHOUQ2cEh4Y1cxZXdNQUFBQUFBQUFBd0FBQUFBQUFBQURJQVd0akFRLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIEdyb3VwLlJlYWQuQWxsIE9ubGluZU1lZXRpbmdzLlJlYWQgUmVwb3J0cy5SZWFkLkFsbCBVc2VyLlJlYWQgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWQiOiIwMDQwMWUyOS1kN2EwLWQ1NDktYWQ2MS1iOGZlMGIyMGVhY2MiLCJzaWduaW5fc3RhdGUiOlsia21zaSJdLCJzdWIiOiJGalVfb05FSUloWF9faXFSU2F0VTItUnpaQ1JEVnVQU28ydXhPVzJGZk1BIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZDZiNDhhZmItYWU5My00MTgwLWJkMGYtYWE0N2M1YzViNTdiIiwidW5pcXVlX25hbWUiOiJQcmFkZWVwR0BNMzY1eDkyNTA0MTk2Lk9uTWljcm9zb2Z0LmNvbSIsInVwbiI6IlByYWRlZXBHQE0zNjV4OTI1MDQxOTYuT25NaWNyb3NvZnQuY29tIiwidXRpIjoiNDA4dlNXWFhPRS1QeDNya3BKQjhBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19mdGQiOiJZOGdQZTB3Y2ZfeDlGWVdya041alV6ZEp5Q2syQkVfbTZQQ2JadzNNcXZnQmRYTnViM0owYUMxa2MyMXoiLCJ4bXNfaWRyZWwiOiIxIDI2IiwieG1zX3N0Ijp7InN1YiI6IkxldXo5YlV2aTNGVUJFNVBHNnZnZ1Z3cVY4NVcwNXVhNms5ZjVjNUpoSUUifSwieG1zX3RjZHQiOjE3NDM2MDE1NDB9.PftiaRFgEMWpn1R_uThSOK_WmF_n2WSviRVXmdVa7RygFFrhjvQUrYEt4HnZRr7gGmjWZe9AuyN1OZLztHuHlZyT1b35msYCRsoO7pXrh1pmCqIagp8Gn9eBYKfff4LRHhJPZ3XFtMvDGvgw0zG_hpx5_dXSvhYR5FMHOedz1iziuCO_Q-w1DjZeJ9pjivYWTxbpdKkVJl0oIYHiA-Nu6btyBBRo6EGNmp2IgFARTQE_bepTYIRcWf7cSKAE3T3ayRrpy2ajaDm7HseY7dM4rq1JLGjB2cmksVEmYRYIFnfY8u1SgRwfzkSayE1BJ5PrL2W7W68Q5Kc_TEpci7SdQA'
-}
-API: User ID: pradeepg@m365x92504196.onmicrosoft.com
-API: Creating storage instance...
-API: Loading data...
-API: Getting posted meetings for user: pradeepg@m365x92504196.onmicrosoft.com
-API: Found posted meetings: [
-  {
-    meetingId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=',
-    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
-    timeEntry: {
-      id: '108307041',
-      projectid: '1429670',
-      moduleid: '552131',
-      taskid: '16708664',
-      worktypeid: '804786',
-      personid: '423842',
-      date: '2025-05-29',
-      datemodified: '2025-05-29 07:15:55',
-      time: '0.1',
-      description: 'TEST MEET',
-      billable: 'f',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Out of Scope',
-      client: 'Nathcorp',
-      project: 'Internal',
-      taskTitle: 'Pradeep Task'
-    },
-    rawResponse: { personid: 423842, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-05-29T12:45:56.059 IST',
-    taskName: undefined,
-    reportId: undefined
-  }
-]
-API: Sorted meetings: [
-  {
-    meetingId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=',
-    userId: 'pradeepg@m365x92504196.onmicrosoft.com',
-    timeEntry: {
-      id: '108307041',
-      projectid: '1429670',
-      moduleid: '552131',
-      taskid: '16708664',
-      worktypeid: '804786',
-      personid: '423842',
-      date: '2025-05-29',
-      datemodified: '2025-05-29 07:15:55',
-      time: '0.1',
-      description: 'TEST MEET',
-      billable: 'f',
-      worktype: 'India-Meeting',
-      milestoneid: null,
-      ogmilestoneid: null,
-      module: 'Out of Scope',
-      client: 'Nathcorp',
-      project: 'Internal',
-      taskTitle: 'Pradeep Task'
-    },
-    rawResponse: { personid: 423842, status: 'Created', code: 201, time: [Object] },
-    postedAt: '2025-05-29T12:45:56.059 IST',
-    taskName: undefined,
-    reportId: undefined
-  }
-]
-API: Getting pending reviews (unmatched meetings) for user: pradeepg@m365x92504196.onmicrosoft.com
-API: Found unmatched meetings: []
-API: Sending response: {
-  success: true,
-  meetings: [
-    {
-      meetingId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAg-LQQAAA=',        
-      userId: 'pradeepg@m365x92504196.onmicrosoft.com',
-      timeEntry: [Object],
-      rawResponse: [Object],
-      postedAt: '2025-05-29T12:45:56.059 IST',
-      taskName: undefined,
-      reportId: undefined
-    }
-  ],
-  unmatchedMeetings: [],
-  summary: { total: 1, unmatched: 0 }
-}
+╔════════════════════════════════════════════════════════╗
+║ 🏁 TIME ENTRY CREATION COMPLETED
+║ ✅ Time Entry ID: 108335572
+║ ⏱️ Duration: 0.03 hours
+╚════════════════════════════════════════════════════════╝
+Successfully created time entry for: Test Time 4

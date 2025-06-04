@@ -213,6 +213,15 @@ export async function POST(request: Request) {
                 // Get all posted meetings for this user
                 const postedMeetings = await aiAgentStorage.getPostedMeetings(session.user.email);
 
+                // Extract reportId from the request data
+                let requestReportId = undefined;
+                if (attendanceRecords && Array.isArray(attendanceRecords) && 
+                    attendanceRecords.length > 0 && attendanceRecords[0].rawRecord?.reportId) {
+                    requestReportId = attendanceRecords[0].rawRecord.reportId;
+                } else if (payload.meetingInfo?.reportId) {
+                    requestReportId = payload.meetingInfo.reportId;
+                }
+
                 // Check if this meeting ID exists for the same date (this catches rejoined meetings)
                 const meetingExists = postedMeetings.some(m => {
                     const sameId = m.meetingId === standardMeetingId;
@@ -223,8 +232,20 @@ export async function POST(request: Request) {
                         sameDate = m.timeEntry.date === date;
                     }
                     
+                    // Check if reportIds match - if both have reportIds, they must match to be duplicates
+                    // If either doesn't have a reportId, fall back to standard ID + date check
+                    let sameReportId = true;
+                    if (requestReportId && m.reportId) {
+                        sameReportId = requestReportId === m.reportId;
+                        // If both have reportIds and they don't match, this is NOT a duplicate
+                        if (!sameReportId) {
+                            return false;
+                        }
+                    }
+                    
                     // If meeting ID matches and date matches, consider it a duplicate
-                    const isDuplicate = sameId && sameDate;
+                    // unless we have different report IDs
+                    const isDuplicate = sameId && sameDate && sameReportId;
                     
                     if (isDuplicate) {
                         console.log(`
@@ -232,37 +253,13 @@ export async function POST(request: Request) {
 │ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                  │
 │ 📅 Date: ${date}                                                        │
 │ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                │
+${requestReportId ? `│ 📊 Report ID: ${requestReportId}                                       │` : ''}
+${m.reportId ? `│ 📊 Stored Report ID: ${m.reportId}                                  │` : ''}
 └───────────────────────────────────────────────────────────────────────────┘`);
                     }
                     
                     return isDuplicate;
                 });
-                
-                // Additional check: For manual posts, also check if we have a reportId match
-                // This handles cases where the meeting ID is different but reportId is the same
-                let reportIdExists = false;
-                let reportId = undefined;
-                
-                // Extract reportId from the request data
-                if (attendanceRecords && Array.isArray(attendanceRecords) && 
-                    attendanceRecords.length > 0 && attendanceRecords[0].rawRecord?.reportId) {
-                    reportId = attendanceRecords[0].rawRecord.reportId;
-                } else if (payload.meetingInfo?.reportId) {
-                    reportId = payload.meetingInfo.reportId;
-                }
-                
-                if (reportId) {
-                    // Check if any posted meeting has this reportId
-                    reportIdExists = postedMeetings.some(m => m.reportId === reportId);
-                    
-                    if (reportIdExists) {
-                        console.log(`
-┌─────────────────────── DUPLICATE BY REPORT ID (MANUAL) ───────────────────────┐
-│ 📊 Report ID: ${reportId}                                                   │
-│ 👤 User: ${session.user.email}                                              │
-└───────────────────────────────────────────────────────────────────────────────┘`);
-                    }
-                }
                 
                 // Additional check: For manual posts, also check by description for same date
                 let descriptionExists = false;
@@ -302,14 +299,14 @@ export async function POST(request: Request) {
                     });
                 }
                 
-                if (meetingExists || reportIdExists || descriptionExists) {
+                if (meetingExists || descriptionExists) {
                     console.log(`
 ╔════════════════════════ DUPLICATE MEETING ════════════════════════╗
 ║ ⚠️ Meeting already exists in storage                             ║
 ║ 👤 User: ${session.user.email}                                   ║
 ║ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...          ║
-${reportId ? `║ 📊 Report ID: ${reportId}                                     ║` : ''}
-║ 🔎 Detected by: ${meetingExists ? 'Meeting ID + Date' : reportIdExists ? 'Report ID' : 'Description + Date'} ║
+${requestReportId ? `║ 📊 Report ID: ${requestReportId}                                     ║` : ''}
+║ 🔎 Detected by: ${meetingExists ? 'Meeting ID + Date' : 'Description + Date'} ║
 ╚═══════════════════════════════════════════════════════════════════╝`);
                     
                     return NextResponse.json({ 
