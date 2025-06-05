@@ -607,13 +607,6 @@ function MatchRow({
         <div className="flex flex-col space-y-1">
           <div className="font-medium truncate max-w-[200px] sm:max-w-[300px] text-foreground">
             {result.meeting.subject}
-            {/* Add session indicator for meetings with reportId */}
-            {result.meeting.attendanceRecords?.[0] && 
-              ((result.meeting.attendanceRecords[0] as any).rawRecord?.reportId) && (
-              <span className="text-xs font-normal text-gray-500 ml-1">
-                (Session {index + 1})
-              </span>
-            )}
           </div>
         </div>
       </TableCell>

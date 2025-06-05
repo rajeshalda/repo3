@@ -948,11 +948,6 @@ export default function DashboardPage() {
                                     <div className="flex flex-col">
                                       <div className="font-medium truncate max-w-[200px] sm:max-w-[300px]">
                                         {item.meeting.subject}
-                                        {item.record?.rawRecord?.reportId && (
-                                          <span className="text-xs font-normal text-gray-500 ml-1">
-                                            (Session {item.index + 1})
-                                          </span>
-                                        )}
                                       </div>
                                       {item.meeting.isTeamsMeeting && (
                                         <Badge variant="secondary" className="w-fit mt-1">
@@ -1282,7 +1277,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
-            <span className="opacity-70">v2.2.1  Powered by GPT-4.1  © 2025 NathCorp Inc.</span>
+            <span className="opacity-70">v2.2.2  Powered by GPT-4.1  © 2025 NathCorp Inc.</span>
           </footer>
         </main>
       </div>
