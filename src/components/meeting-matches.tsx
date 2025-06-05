@@ -541,7 +541,7 @@ function MatchRow({
       const postResult = await response.json();
       if (postResult.success) {
         // If there's a message about already posted, show that instead of success
-        if (postResult.message && postResult.message.includes('Already Posted by AI-Agent')) {
+        if (postResult.message && postResult.message.includes('Already posted')) {
           toast.warning(postResult.message, {
             position: "top-center",
             duration: 3000,

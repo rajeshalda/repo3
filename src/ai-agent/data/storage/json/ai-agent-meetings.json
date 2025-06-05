@@ -352,6 +352,57 @@
       },
       "postedAt": "2025-06-05T12:55:39.827 IST",
       "reportId": "20e65ddc-7614-4a13-acea-25aa24275a65"
+    },
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aL6v87AAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "108483521",
+        "projectid": "1430384",
+        "moduleid": "552787",
+        "taskid": "16721482",
+        "worktypeid": "805564",
+        "personid": "424516",
+        "date": "2025-06-04",
+        "datemodified": "2025-06-05 08:58:47",
+        "time": "0.02",
+        "description": "Sandisk Recurring",
+        "billable": "t",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Production",
+        "client": "SanDisk",
+        "project": "SanDisk Project",
+        "taskTitle": "Sandisk Task"
+      },
+      "rawResponse": {
+        "personid": 424516,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "108483521",
+          "projectid": "1430384",
+          "moduleid": "552787",
+          "taskid": "16721482",
+          "worktypeid": "805564",
+          "personid": "424516",
+          "date": "2025-06-04",
+          "datemodified": "2025-06-05 08:58:47",
+          "time": "0.02",
+          "description": "Sandisk Recurring",
+          "billable": "t",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Production",
+          "client": "SanDisk",
+          "project": "SanDisk Project",
+          "taskTitle": "Sandisk Task"
+        }
+      },
+      "postedAt": "2025-06-05T14:28:48.953 IST",
+      "reportId": "102f0b91-0ffb-4b27-90ca-a79175d3d21f"
     }
   ]
 }

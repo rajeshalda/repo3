@@ -311,7 +311,7 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
                     
                     return NextResponse.json({ 
                         success: true, 
-                        message: 'Already Posted by AI-Agent. Skipping entry.'
+                        message: 'Already posted. Skipping entry.'
                     });
                 }
             }
