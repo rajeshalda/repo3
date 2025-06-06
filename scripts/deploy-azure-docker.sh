@@ -3,7 +3,7 @@
 
 # Configuration
 RESOURCE_GROUP="intervaltime"
-APP_NAME="basic-v2"
+APP_NAME="chronopulse"
 DOCKER_IMAGE="rajeshalda/meeting-time-tracker:latest"
 DOCKER_REGISTRY="https://index.docker.io"
 

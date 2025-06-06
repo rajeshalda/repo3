@@ -7,7 +7,7 @@ on:
 
 env:
   DOCKER_HUB_REPO: rajeshalda/meeting-time-tracker
-  AZURE_WEBAPP_NAME: basic-v2
+  AZURE_WEBAPP_NAME: chronopulse
   RESOURCE_GROUP: intervaltime
 
 jobs:

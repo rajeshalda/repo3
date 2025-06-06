@@ -1,167 +1,292 @@
-=== DATE RANGE DEBUG ===
-Original from: 2025-06-05T18:30:00.000Z
-Original to: 2025-06-06T18:29:59.999Z
-Start date with time: 2025-06-05T18:30:00.000Z
-End date with time: 2025-06-06T18:29:59.999Z
-======================
+Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
+Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 
-Fetching meetings with date range: {
-  startDate: '2025-06-05T18:30:00.000Z',
-  endDate: '2025-06-07T18:29:59.999Z'
+╔════════════════════════════════════════════════════════╗
+║ 🚀 MEETING FETCH STARTED
+║ 👤 User: pradeepg@m365x9...
+╚════════════════════════════════════════════════════════╝
+🔑 Getting Graph API access token...
+✅ Access token acquired successfully
+
+┌─────────────────────────────────────────────────┐
+│ 📅 FETCHING MEETINGS FOR EXTENDED WINDOW         │
+│ 📆 IST range: 6/6/2025, 12:00:00 AM to              │
+│             6/7/2025, 11:59:59 PM              │
+│ 🌐 UTC range: 2025-06-04T18:30:00.000Z to              │
+│             2025-06-07T18:29:59.999Z              │
+└─────────────────────────────────────────────────┘
+📡 Fetching meetings from Graph API...
+✅ Received 5 meetings from API
+🔄 Found 4 recurring meeting instances:
+   1. "Sandisk Recurring" (2025-06-06T13:30:00.0000000)
+   2. "Recurring Meet" (2025-06-06T11:30:00.0000000)
+   3. "Sandisk Recurring" (2025-06-05T13:30:00.0000000)
+   4. "Recurring Meet" (2025-06-05T11:30:00.0000000)
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │
+│ 📊 Total meetings before filtering: 5            │
+└─────────────────────────────────────────────────┘
+
+[RAW MEETING 1]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAJfBrUw==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==",
+  "categories": [],
+  "subject": "Sandisk Recurring",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 273 921 698 275 7\r\nPasscode: zV2Eo622\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzeAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-06-06T13:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-06T14:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "98904864",
+    "tollNumber": "+1 323-618-1840"
+  }
 }
-Fetching from: https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=2025-06-05T18:30:00.000Z&endDateTime=2025-06-07T18:29:59.999Z&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer,type,seriesMasterId
-Fetched 3 meetings in this batch
-Found recurring meeting instance: {
-  subject: 'Sandisk Recurring',
-  start: '2025-06-06T13:30:00.0000000',
-  seriesMasterId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzeAAA=',
-  type: 'occurrence'
+
+[RAW MEETING 2]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAI1BO/w==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==",
+  "categories": [],
+  "subject": "Recurring Meet",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 210 877 849 015 5\r\nPasscode: Av2kJ6ys\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAjYCumAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-06-06T11:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-06T12:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "398545675",
+    "tollNumber": "+1 323-618-1840"
+  }
 }
-Found recurring meeting instance: {
-  subject: 'Recurring Meet',
-  start: '2025-06-06T11:30:00.0000000',
-  seriesMasterId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAjYCumAAA=',
-  type: 'occurrence'
+
+[RAW MEETING 3]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAJfEwdw==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=",
+  "categories": [],
+  "subject": "HR Meeting For Salary",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 276 555 650 558 2\r\nPasscode: Rs6uj7BP\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-06-06T00:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-06T00:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "592895313",
+    "tollNumber": "+1 323-618-1840"
+  }
 }
-Total meetings fetched: 3
-Processing meeting: {
-  subject: 'HR Meeting For Salary',
-  start: '2025-06-06T00:00:00.0000000',
-  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=',       
-  bodyPreview: '__________________________________________________...',
-  hasOnlineMeeting: true,
-  isRecurring: false
+
+[RAW MEETING 4]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAJfBrUw==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aPD6jiAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==",
+  "categories": [],
+  "subject": "Sandisk Recurring",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 273 921 698 275 7\r\nPasscode: zV2Eo622\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzeAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-06-05T13:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-05T14:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "98904864",
+    "tollNumber": "+1 323-618-1840"
+  }
 }
-Extracting from: {
-  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d',
-  bodyPreview: '________________________________________________________________________________\r\n' +
-    'Microsoft Teams Need help?\r\n' +
-    'Join the meeting now\r\n' +
-    'Meeting ID: 276 555 650 558 2\r\n' +
-    'Passcode: Rs6uj7BP\r\n' +
-    '________________________________\r\n' +
-    'Dial in by phone\r\n' +
-    '+1 323-618-184'
+
+[RAW MEETING 5]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAI1BO/w==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aPD6jiAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==",
+  "categories": [],
+  "subject": "Recurring Meet",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 210 877 849 015 5\r\nPasscode: Av2kJ6ys\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAjYCumAAA=",
+  "type": "occurrence",
+  "start": {
+    "dateTime": "2025-06-05T11:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-05T12:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "398545675",
+    "tollNumber": "+1 323-618-1840"
+  }
 }
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
-Extracted Thread ID: ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx
-Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-Extracted Meeting Info: {
-  "meetingId": "276555650558",
-  "threadId": "ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx",
-  "organizerId": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
-  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 276 555 650 558 2\r\nPasscode: Rs6uj7BP\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
-}
-Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=
-Attempting to fetch attendance with: {
-  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
-  threadId: 'ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx',
-  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=',  
-  formattedString: '1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx@thread.v2',
-  base64MeetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy',
-  isRecurring: false,
-  instanceDate: undefined
-}
-Fetching attendance for meeting: {
-  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
-  meetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy',    
-  instanceDate: undefined
-}
-Processing meeting: {
-  subject: 'Sandisk Recurring',
-  start: '2025-06-06T13:30:00.0000000',
-  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==',
-  bodyPreview: '__________________________________________________...',
-  hasOnlineMeeting: true,
-  isRecurring: true
-}
-Extracting from: {
-  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d',
-  bodyPreview: '________________________________________________________________________________\r\n' +
-    'Microsoft Teams Need help?\r\n' +
-    'Join the meeting now\r\n' +
-    'Meeting ID: 273 921 698 275 7\r\n' +
-    'Passcode: zV2Eo622\r\n' +
-    '________________________________\r\n' +
-    'Dial in by phone\r\n' +
-    '+1 323-618-184'
-}
+
+┌─────────────────────────────────────────────────┐
+│ ✓ MEETINGS FILTERED                            │
+│ 📊 Total meetings after filtering: 3           │
+└─────────────────────────────────────────────────┘
+📋 Today's meetings:
+   1. "Sandisk Recurring" (01:30 PM - 02:00 PM)
+   2. "Recurring Meet" (11:30 AM - 12:00 PM)
+   3. "HR Meeting For Salary" (12:00 AM - 12:30 AM)
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 FETCHING ATTENDANCE RECORDS                  │
+└─────────────────────────────────────────────────┘
+📝 Processing online meeting: "Sandisk Recurring"
 Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
-Extracted Thread ID: MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2
+Extracted Meeting ID: 19:meeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-Extracted Meeting Info: {
-  "meetingId": "273921698275",
-  "threadId": "MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2",
-  "organizerId": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
-  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 273 921 698 275 7\r\nPasscode: zV2Eo622\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "102f0b91-0ffb-4b27-90ca-a79175d3d21f",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-04T15:48:41.047Z",
+      "meetingEndDateTime": "2025-06-04T15:50:12.554Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "1e2792ab-4f4e-449e-b146-241600fcaff9",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-03T09:55:21.223Z",
+      "meetingEndDateTime": "2025-06-03T10:06:37.474Z",
+      "externalEventInformation": []
+    }
+  ]
 }
-Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==
-Attempting to fetch attendance with: {
-  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
-  threadId: 'MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2',
-  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==',
-  formattedString: '1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_MjhiOTZjNWMtY2ViNC00NDYwLTgzMGQtNjU1YzZjMTYwZTU2@thread.v2',
-  base64MeetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy',
-  isRecurring: true,
-  instanceDate: '2025-06-06'
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-06-05T18:30:00.000Z to       │
+│     2025-06-06T18:29:59.999Z                │
+│ 🕒 IST: 6/6/2025, 5:30:00 AM to │
+│     6/7/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-06-04T15:48:41.047Z',
+  reportIST: '2025-06-04 21:18:41',
+  reportDateStr: '2025-06-04',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 21,
+  isRelevant: false
 }
-Fetching attendance for meeting: {
-  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
-  meetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy',    
-  instanceDate: '2025-06-06'
+Report time check: {
+  reportTime: '2025-06-03T09:55:21.223Z',
+  reportIST: '2025-06-03 15:25:21',
+  reportDateStr: '2025-06-03',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 15,
+  isRelevant: false
 }
-Processing meeting: {
-  subject: 'Recurring Meet',
-  start: '2025-06-06T11:30:00.0000000',
-  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==',
-  bodyPreview: '__________________________________________________...',
-  hasOnlineMeeting: true,
-  isRecurring: true
-}
-Extracting from: {
-  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d',
-  bodyPreview: '________________________________________________________________________________\r\n' +
-    'Microsoft Teams Need help?\r\n' +
-    'Join the meeting now\r\n' +
-    'Meeting ID: 210 877 849 015 5\r\n' +
-    'Passcode: Av2kJ6ys\r\n' +
-    '________________________________\r\n' +
-    'Dial in by phone\r\n' +
-    '+1 323-618-184'
-}
+No attendance reports found within the IST day window
+📝 Processing online meeting: "Recurring Meet"
 Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
-Extracted Thread ID: OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh
+Extracted Meeting ID: 19:meeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
-Extracted Meeting Info: {
-  "meetingId": "210877849015",
-  "threadId": "OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh",
-  "organizerId": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
-  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
-  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 210 877 849 015 5\r\nPasscode: Av2kJ6ys\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
-}
-Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==
-Attempting to fetch attendance with: {
-  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
-  threadId: 'OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh',
-  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==',
-  formattedString: '1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh@thread.v2',
-  base64MeetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy',
-  isRecurring: true,
-  instanceDate: '2025-06-06'
-}
-Fetching attendance for meeting: {
-  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
-  meetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy',    
-  instanceDate: '2025-06-06'
-}
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy/attendanceReports
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy/attendanceReports
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy/attendanceReports
-Reports Data: {
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_OWQxZDg0MjMtN2JmYS00MmMyLWFkOGMtNjUzYmM5ZDU0Mjhh@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy
+Reports data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy')/attendanceReports",
   "value": [
+    {
+      "id": "0a704132-9f9a-43e8-850b-e7277fa54bfd",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-06T11:33:06.464Z",
+      "meetingEndDateTime": "2025-06-06T11:36:16.69Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "ba618c81-d0a5-4250-9841-8d406bee807c",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-06T11:27:53.238Z",
+      "meetingEndDateTime": "2025-06-06T11:32:28.119Z",
+      "externalEventInformation": []
+    },
     {
       "id": "74ed4005-5771-4063-b9fc-d823b5c39f7c",
       "totalParticipantCount": 1,
@@ -192,50 +317,111 @@ Reports Data: {
     }
   ]
 }
-Processing report: {
-  reportId: '74ed4005-5771-4063-b9fc-d823b5c39f7c',
-  meetingStart: '2025-06-03T06:06:05.044Z',
-  meetingEnd: '2025-06-03T06:08:14.549Z'
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-06-05T18:30:00.000Z to       │
+│     2025-06-06T18:29:59.999Z                │
+│ 🕒 IST: 6/6/2025, 5:30:00 AM to │
+│     6/7/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-06-06T11:33:06.464Z',
+  reportIST: '2025-06-06 17:03:06',
+  reportDateStr: '2025-06-06',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 17,
+  isRelevant: true
 }
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy/attendanceReports/74ed4005-5771-4063-b9fc-d823b5c39f7c/attendanceRecords
-Processing report: {
-  reportId: 'b8307080-ce32-4971-a9ac-f9464c022576',
-  meetingStart: '2025-06-03T05:50:44.289Z',
-  meetingEnd: '2025-06-03T05:59:17.915Z'
+Report time check: {
+  reportTime: '2025-06-06T11:27:53.238Z',
+  reportIST: '2025-06-06 16:57:53',
+  reportDateStr: '2025-06-06',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 16,
+  isRelevant: true
 }
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy/attendanceReports/b8307080-ce32-4971-a9ac-f9464c022576/attendanceRecords
-Processing report: {
-  reportId: 'b34fd6a5-c47b-403e-83c8-6a64ddd52b71',
-  meetingStart: '2025-06-02T06:20:25.604Z',
-  meetingEnd: '2025-06-02T06:24:29.163Z'
+Report time check: {
+  reportTime: '2025-06-03T06:06:05.044Z',
+  reportIST: '2025-06-03 11:36:05',
+  reportDateStr: '2025-06-03',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 11,
+  isRelevant: false
 }
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy/attendanceReports/b34fd6a5-c47b-403e-83c8-6a64ddd52b71/attendanceRecords
-Reports Data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy')/attendanceReports",
+Report time check: {
+  reportTime: '2025-06-03T05:50:44.289Z',
+  reportIST: '2025-06-03 11:20:44',
+  reportDateStr: '2025-06-03',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 11,
+  isRelevant: false
+}
+Report time check: {
+  reportTime: '2025-06-02T06:20:25.604Z',
+  reportIST: '2025-06-02 11:50:25',
+  reportDateStr: '2025-06-02',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 11,
+  isRelevant: false
+}
+Report time check: {
+  reportTime: '2025-06-02T06:17:57.824Z',
+  reportIST: '2025-06-02 11:47:57',
+  reportDateStr: '2025-06-02',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 11,
+  isRelevant: false
+}
+Found 2 relevant reports, using most recent: 0a704132-9f9a-43e8-850b-e7277fa54bfd
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy')/attendanceReports('0a704132-9f9a-43e8-850b-e7277fa54bfd')/attendanceRecords",
   "value": [
     {
-      "id": "102f0b91-0ffb-4b27-90ca-a79175d3d21f",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-06-04T15:48:41.047Z",
-      "meetingEndDateTime": "2025-06-04T15:50:12.554Z",
-      "externalEventInformation": []
-    },
-    {
-      "id": "1e2792ab-4f4e-449e-b146-241600fcaff9",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-06-03T09:55:21.223Z",
-      "meetingEndDateTime": "2025-06-03T10:06:37.474Z",
-      "externalEventInformation": []
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 187,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-06-06T11:33:09.3252634Z",
+          "leaveDateTime": "2025-06-06T11:36:16.6904972Z",
+          "durationInSeconds": 187
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
     }
   ]
 }
-Processing report: {
-  reportId: '102f0b91-0ffb-4b27-90ca-a79175d3d21f',
-  meetingStart: '2025-06-04T15:48:41.047Z',
-  meetingEnd: '2025-06-04T15:50:12.554Z'
-}
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy/attendanceReports/102f0b91-0ffb-4b27-90ca-a79175d3d21f/attendanceRecords
-Reports Data: {
+
+┌─────────────────────────────────────────────────┐
+│ ✅ ATTENDANCE RECORDS FOUND                     │
+│ 📊 Total Records: 1             │
+│ 🕒 Meeting Start: 2025-06-06T11:33:06.464Z │
+└─────────────────────────────────────────────────┘
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy/attendanceReports
+Found report ID: 0a704132-9f9a-43e8-850b-e7277fa54bfd
+✅ Found 1 attendance records for "Recurring Meet"
+📝 Processing online meeting: "HR Meeting For Salary"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZWMzZGNiNzAtMzE2ZS00N2E3LWFhMWQtMTcxZDUzMzE4OTYx@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy
+Reports data: {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy')/attendanceReports",
   "value": [
     {
@@ -247,285 +433,1110 @@ Reports Data: {
     }
   ]
 }
-Processing report: {
-  reportId: 'ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b',
-  meetingStart: '2025-06-05T18:32:41.387Z',
-  meetingEnd: '2025-06-05T18:34:32.019Z'
-}
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy/attendanceReports/ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b/attendanceRecords
-Processing report: {
-  reportId: '8c789a3f-7295-4965-8a81-da22debdc2ae',
-  meetingStart: '2025-06-02T06:17:57.824Z',
-  meetingEnd: '2025-06-02T06:19:16.959Z'
-}
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19PV1F4WkRnME1qTXROMkptWVMwME1tTXlMV0ZrT0dNdE5qVXpZbU01WkRVME1qaGhAdGhyZWFkLnYy/attendanceReports/8c789a3f-7295-4965-8a81-da22debdc2ae/attendanceRecords
-Processing report: {
-  reportId: '1e2792ab-4f4e-449e-b146-241600fcaff9',
-  meetingStart: '2025-06-03T09:55:21.223Z',
-  meetingEnd: '2025-06-03T10:06:37.474Z'
-}
-Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NamhpT1Raak5XTXRZMlZpTkMwME5EWXdMVGd6TUdRdE5qVTFZelpqTVRZd1pUVTJAdGhyZWFkLnYy/attendanceReports/1e2792ab-4f4e-449e-b146-241600fcaff9/attendanceRecords
-Combined all attendance records: { totalRecords: 4, totalReports: 4 }
-Filtering attendance records for date: 2025-06-06
-Interval comparison: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  intervalDate: '2025-06-03',
-  instanceDate: '2025-06-06',
-  matches: false,
-  joinTime: '2025-06-03T06:06:08.6347494Z',
-  leaveTime: '2025-06-03T06:08:14.5498514Z'
-}
-Filtered record: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  originalIntervals: 1,
-  filteredIntervals: 0,
-  originalDuration: 125,
-  newDuration: 0,
-  date: '2025-06-06'
-}
-Interval comparison: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  intervalDate: '2025-06-03',
-  instanceDate: '2025-06-06',
-  matches: false,
-  joinTime: '2025-06-03T05:50:47.473357Z',
-  leaveTime: '2025-06-03T05:59:17.9150389Z'
-}
-Filtered record: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  originalIntervals: 1,
-  filteredIntervals: 0,
-  originalDuration: 510,
-  newDuration: 0,
-  date: '2025-06-06'
-}
-Interval comparison: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  intervalDate: '2025-06-02',
-  instanceDate: '2025-06-06',
-  matches: false,
-  joinTime: '2025-06-02T06:20:29.6042271Z',
-  leaveTime: '2025-06-02T06:24:29.1636558Z'
-}
-Filtered record: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  originalIntervals: 1,
-  filteredIntervals: 0,
-  originalDuration: 239,
-  newDuration: 0,
-  date: '2025-06-06'
-}
-Interval comparison: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  intervalDate: '2025-06-02',
-  instanceDate: '2025-06-06',
-  matches: false,
-  joinTime: '2025-06-02T06:18:00.8121098Z',
-  leaveTime: '2025-06-02T06:19:16.9590361Z'
-}
-Filtered record: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  originalIntervals: 1,
-  filteredIntervals: 0,
-  originalDuration: 76,
-  newDuration: 0,
-  date: '2025-06-06'
-}
-Combined all attendance records: { totalRecords: 2, totalReports: 2 }
-Filtering attendance records for date: 2025-06-06
-Interval comparison: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  intervalDate: '2025-06-04',
-  instanceDate: '2025-06-06',
-  matches: false,
-  joinTime: '2025-06-04T15:48:44.5872273Z',
-  leaveTime: '2025-06-04T15:50:12.5542418Z'
-}
-Filtered record: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  originalIntervals: 1,
-  filteredIntervals: 0,
-  originalDuration: 87,
-  newDuration: 0,
-  date: '2025-06-06'
-}
-Interval comparison: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  intervalDate: '2025-06-03',
-  instanceDate: '2025-06-06',
-  matches: false,
-  joinTime: '2025-06-03T09:55:24.1269485Z',
-  leaveTime: '2025-06-03T10:06:37.4740832Z'
-}
-Filtered record: {
-  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
-  originalIntervals: 1,
-  filteredIntervals: 0,
-  originalDuration: 673,
-  newDuration: 0,
-  date: '2025-06-06'
-}
-Combined all attendance records: { totalRecords: 1, totalReports: 1 }
-
-Filtered 3 meetings to 3 within date range
-
-==== MEETINGS FILTERING DEBUG ====
-User Email: pradeepg@m365x92504196.onmicrosoft.com
-Total meetings fetched: 3
-Total posted meetings for user: 5
-
-Processing current meetings:
 
 ┌─────────────────────────────────────────────────┐
-│ 🔍 CHECKING IF MEETING IS POSTED                │
-│ 🆔 Meeting ID: 276555650558...           │
-│ 📅 Date: 2025-06-06                         │
-│ ⏱️ Duration: 1m 46s                    │
-
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-06-05T18:30:00.000Z to       │
+│     2025-06-06T18:29:59.999Z                │
+│ 🕒 IST: 6/6/2025, 5:30:00 AM to │
+│     6/7/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
 └─────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────┐
-│ ⚠️ NO REPORT ID PROVIDED                        │
-│ 🔍 Status: Cannot check for duplicates by report ID │
-│ ✅ Conclusion: Treating as new meeting          │
-└─────────────────────────────────────────────────┘
-✅ Meeting not yet posted - can proceed with creating time entry
-Meeting: HR Meeting For Salary ID: 276555650558 Duration: 106 Is Posted: false      
-Adding to filtered meetings list
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 CHECKING IF MEETING IS POSTED                │
-│ 🆔 Meeting ID: 273921698275...           │
-│ 📅 Date: 2025-06-06                         │
-│ ⏱️ Duration: 0m 0s                    │
-
-└─────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────┐
-│ ⚠️ NO REPORT ID PROVIDED                        │
-│ 🔍 Status: Cannot check for duplicates by report ID │
-│ ✅ Conclusion: Treating as new meeting          │
-└─────────────────────────────────────────────────┘
-✅ Meeting not yet posted - can proceed with creating time entry
-Meeting: Sandisk Recurring ID: 273921698275 Duration: 0 Is Posted: false
-Adding to filtered meetings list
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 CHECKING IF MEETING IS POSTED                │
-│ 🆔 Meeting ID: 210877849015...           │
-│ 📅 Date: 2025-06-06                         │
-│ ⏱️ Duration: 0m 0s                    │
-
-└─────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────┐
-│ ⚠️ NO REPORT ID PROVIDED                        │
-│ 🔍 Status: Cannot check for duplicates by report ID │
-│ ✅ Conclusion: Treating as new meeting          │
-└─────────────────────────────────────────────────┘
-✅ Meeting not yet posted - can proceed with creating time entry
-Meeting: Recurring Meet ID: 210877849015 Duration: 0 Is Posted: false
-Adding to filtered meetings list
-
-=== FINAL RESPONSE DEBUG ===
-
-=== UTC STRING CONVERSION DEBUG ===
-Input UTC string: 2025-06-05T18:30:00.000Z
-Parsed as Date: 2025-06-05T18:30:00.000Z
-
-=== TIME CONVERSION DEBUG ===
-Input UTC Date: 2025-06-05T18:30:00.000Z
-After adding 5:30 hours: 2025-06-06T00:00:00.000Z
-Formatted IST result: 06/06/2025, 05:30 am IST
-===========================
-
-Final IST result: 06/06/2025, 05:30 am IST
-================================
-
-
-=== UTC STRING CONVERSION DEBUG ===
-Input UTC string: 2025-06-06T18:29:59.999Z
-Parsed as Date: 2025-06-06T18:29:59.999Z
-
-=== TIME CONVERSION DEBUG ===
-Input UTC Date: 2025-06-06T18:29:59.999Z
-After adding 5:30 hours: 2025-06-06T23:59:59.999Z
-Formatted IST result: 07/06/2025, 05:29 am IST
-===========================
-
-Final IST result: 07/06/2025, 05:29 am IST
-================================
-
-Time range: {
-  fromIST: '06/06/2025, 05:30 am IST',
-  toIST: '07/06/2025, 05:29 am IST',
-  fromUTC: '2025-06-05T18:30:00.000Z',
-  toUTC: '2025-06-06T18:29:59.999Z'
+Report time check: {
+  reportTime: '2025-06-05T18:32:41.387Z',
+  reportIST: '2025-06-06 00:02:41',
+  reportDateStr: '2025-06-06',
+  istTargetDateStr: '2025-06-06',
+  reportHourIST: 0,
+  isRelevant: true
+}
+Found 1 relevant reports, using most recent: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy')/attendanceReports('ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b')/attendanceRecords",
+  "value": [
+    {
+      "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+      "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
+      "totalAttendanceInSeconds": 106,
+      "role": "Organizer",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+        "displayName": "Pradeep Gupta",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-06-05T18:32:45.2464232Z",
+          "leaveDateTime": "2025-06-05T18:34:32.019245Z",
+          "durationInSeconds": 106
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
 }
 
-=== UTC STRING CONVERSION DEBUG ===
-Input UTC string: 2025-06-06T00:00:00.0000000
-Parsed as Date: 2025-06-05T18:30:00.000Z
+┌─────────────────────────────────────────────────┐
+│ ✅ ATTENDANCE RECORDS FOUND                     │
+│ 📊 Total Records: 1             │
+│ 🕒 Meeting Start: 2025-06-05T18:32:41.387Z │
+└─────────────────────────────────────────────────┘
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aV016WkdOaU56QXRNekUyWlMwME4yRTNMV0ZoTVdRdE1UY3haRFV6TXpFNE9UWXhAdGhyZWFkLnYy/attendanceReports
+Found report ID: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b
+✅ Found 1 attendance records for "HR Meeting For Salary"
 
-=== TIME CONVERSION DEBUG ===
-Input UTC Date: 2025-06-05T18:30:00.000Z
-After adding 5:30 hours: 2025-06-06T00:00:00.000Z
-Formatted IST result: 06/06/2025, 05:30 am IST
-===========================
+╔════════════════════════════════════════════════════════╗
+║ 🏁 MEETING FETCH COMPLETED
+║ 📊 Total meetings: 3 | With attendance: 2
+║ 👥 Unique attendees: 0
+╚════════════════════════════════════════════════════════╝
+Found 3 meetings for processing
 
-Final IST result: 06/06/2025, 05:30 am IST
-================================
+╔════════════════════════════════════════════════════════╗
+║ 🔄 STARTING BATCH PROCESSING [batch_1749220541622_8hajkjxtc]
+║ 📊 Total meetings: 3
+║ 🆔 Cycle ID: cycle_1749220541622
+╚════════════════════════════════════════════════════════╝
 
+┌─────────────────────────────────────────────────┐
+│ ▶️ Processing batch 1/1 (3 meetings) │
+└─────────────────────────────────────────────────┘
+📶 Rate limiter status: 48/5 tokens available
+✅ Rate limiter tokens acquired
+📑 Processing meeting: "Sandisk Recurring" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==]
+📥 QUEUE: Added meeting "Sandisk Recurring" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==]
+📊 QUEUE STATUS: 1 item waiting
+⚙️ QUEUE: Starting queue processor...
 
-=== UTC STRING CONVERSION DEBUG ===
-Input UTC string: 2025-06-06T00:30:00.0000000
-Parsed as Date: 2025-06-05T19:00:00.000Z
+╔════════════════════════════════════════════════════════╗
+║ 🔄 QUEUE PROCESSOR STARTED                             ║
+║ 🆔 Cycle ID: cycle_1749220541626                   ║
+║ 📊 Queue Length: 1                  ║
+╚════════════════════════════════════════════════════════╝
+📑 Processing meeting: "Recurring Meet" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==]
+📥 QUEUE: Added meeting "Recurring Meet" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==]
+📊 QUEUE STATUS: 2 items waiting
+📑 Processing meeting: "HR Meeting For Salary" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=]
+📥 QUEUE: Added meeting "HR Meeting For Salary" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=]
+📊 QUEUE STATUS: 3 items waiting
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Sandisk Recurring" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==]
 
-=== TIME CONVERSION DEBUG ===
-Input UTC Date: 2025-06-05T19:00:00.000Z
-After adding 5:30 hours: 2025-06-06T00:30:00.000Z
-Formatted IST result: 06/06/2025, 06:00 am IST
-===========================
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-06-06T13:30:00.0000000                 │
+│ 🕒 Meeting IST: 6/6/2025, 1:30:00 PM                        │
+│ ⏰ Hour (IST): 13                     │
+│ 🌅 Early Morning: NO        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-06-04, Target date: 2025-06-06
+Report validation [IST]: Report date: 2025-06-03, Target date: 2025-06-06
+✅ COMPLETED: "Sandisk Recurring" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==] in 2.78s
+✅ Successfully processed: "Sandisk Recurring" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "Recurring Meet" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==]
 
-Final IST result: 06/06/2025, 06:00 am IST
-================================
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-06-06T11:30:00.0000000                 │
+│ 🕒 Meeting IST: 6/6/2025, 11:30:00 AM                        │
+│ ⏰ Hour (IST): 11                     │
+│ 🌅 Early Morning: NO        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-06-06, Target date: 2025-06-06
+Report validation [IST]: Report date: 2025-06-06, Target date: 2025-06-06
+Report validation [IST]: Report date: 2025-06-03, Target date: 2025-06-06
+Report validation [IST]: Report date: 2025-06-03, Target date: 2025-06-06
+Report validation [IST]: Report date: 2025-06-02, Target date: 2025-06-06
+Report validation [IST]: Report date: 2025-06-02, Target date: 2025-06-06
+Selected report ID: 0a704132-9f9a-43e8-850b-e7277fa54bfd Reason: This report starts shortly after the scheduled meeting time (11:33 vs 11:30), is on the correct date, has a valid duration, and matches the expected instance for the recurring meeting. The other report starts before the scheduled time and ends before the scheduled start, making it less likely to be the correct instance.
+✅ COMPLETED: "Recurring Meet" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==] in 4.15s
+✅ Successfully processed: "Recurring Meet" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==]
+✅ RATE LIMITER: Token acquired, processing next queue item
+🔍 PROCESSING: "HR Meeting For Salary" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=]
+ GET /api/auth/session 200 in 77ms
+ GET /api/pm2/agent-status?userId=pradeepg%40m365x92504196.onmicrosoft.com 200 in 8ms
 
-First meeting times (if any): {
-  subject: 'HR Meeting For Salary',
-  displayStartTime: '06/06/2025, 05:30 am IST',
-  displayEndTime: '06/06/2025, 06:00 am IST'
+┌─────────────────── MEETING TIME INFO ─────────────────────┐
+│ 📅 Meeting UTC: 2025-06-06T00:00:00.0000000                 │
+│ 🕒 Meeting IST: 6/6/2025, 12:00:00 AM                        │
+│ ⏰ Hour (IST): 0                     │
+│ 🌅 Early Morning: YES        │
+└─────────────────────────────────────────────────────────┘
+Report validation [IST]: Report date: 2025-06-06, Target date: 2025-06-06
+Selected report ID: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b Reason: Single valid report available
+✅ COMPLETED: "HR Meeting For Salary" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=] in 2.79s
+
+╔════════════════════════════════════════════════════════╗
+║ ✅ QUEUE PROCESSOR COMPLETED                           ║
+║ 🆔 Cycle ID: cycle_1749220541626                   ║
+║ ⏱️ Duration: 13.50s      ║
+╚════════════════════════════════════════════════════════╝
+✅ Successfully processed: "HR Meeting For Salary" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 1/1 completed                      │
+│ ✓ Progress: 3/3 meetings (100%)    │
+│ ✓ Success: 3 | Failed: 0               │
+└─────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 BATCH PROCESSING COMPLETED [batch_1749220541622_8hajkjxtc]
+║ 📊 Total: 3 | Success: 3 | Failed: 0
+║ 📈 Success rate: 100%
+╚════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════╗
+║ ⏱️ CYCLE COMPLETED                                     ║
+║ 🆔 Cycle ID: null                   ║
+║ ⌛ Duration: 13.51s      ║
+╚════════════════════════════════════════════════════════╝
+Started batch processing with ID: batch_1749220541622_8hajkjxtc
+Progress: 3/3 meetings processed
+All meetings processed
+Successfully processed 3 meetings
+Filtering out already processed meetings and meetings the user didn't attend...
+
+╔══════════════════════════════════════════════════════════╗
+║ 🔍 MEETING FILTER STARTING                                ║
+║ 📊 Total meetings to check: 3                           ║
+║ 🔄 Batch size: 3 | Delay: 15s                        ║
+╚══════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────┐
+│ 📦 Processing batch 1/1 (3 meetings) ║
+└─────────────────────────────────────────────────┘
+✅ Unique: "Sandisk Recurring" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAJgB83gAAEA==]
+✅ Unique: "Recurring Meet" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==]
+✅ Unique: "HR Meeting For Salary" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=]
+
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch 1/1 completed                      ║
+│ 📊 Total: 3 | Unique: 3 | Duplicates: 0   ║
+└─────────────────────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════╗
+║ 🏁 MEETING FILTER COMPLETED                               ║
+║ 📊 Total: 3 | Duplicates: 0 | Unique: 3     ║
+║ 📈 Duplication rate: 0%                                   ║
+╚══════════════════════════════════════════════════════════╝
+No attendance records found for meeting "Sandisk Recurring". Skipping.
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "Recurring Meet" for 187 seconds
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "HR Meeting For Salary" for 106 seconds
+Found 3 unique meetings, 2 of which were attended by the user
+Matching tasks to attended meetings...
+Matching tasks for meeting: Recurring Meet
+Found user's attendance record with duration: 187 seconds
+Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching tasks using standard API implementation...
+Current user personid: 424516
+Raw tasks API response: Found 4 total tasks
+Total tasks from API: 4
+Task 16721463 (Pradeep Task) skipped: Task is closed
+Task 16721482 (Sandisk Task) skipped: Task is closed
+Found 2 open tasks assigned to user 424516
+Standard API returned 2 tasks
+Found 2 tasks in Intervals:
+- HR Meetings (16715773)
+- Recurring Meet (16725134)
+Meeting analysis for matching: {
+  "subject": "Recurring Meet",
+  "startTime": "2025-06-06T17:03:09.0000000",
+  "endTime": "2025-06-06T17:06:16.0000000",
+  "duration": 187,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 187,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-06-06T11:33:09.3252634Z",
+            "leaveDateTime": "2025-06-06T11:36:16.6904972Z",
+            "durationInSeconds": 187
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 187,
+      "averageDuration": 187,
+      "totalParticipants": 1
+    },
+    "reportId": "0a704132-9f9a-43e8-850b-e7277fa54bfd"
+  }
 }
-===========================
+Tasks data for matching: [
+  {
+    "id": "16715773",
+    "title": "HR Meetings",
+    "projectid": "1430379",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391762",
+    "client": "Internal",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424455,424456,424527,424458,424526,424457,424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  },
+  {
+    "id": "16725134",
+    "title": "Recurring Meet",
+    "projectid": "1430382",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391764",
+    "client": "NathCorp",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  }
+]
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
 
+Meeting Details:
+{
+  "subject": "Recurring Meet",
+  "startTime": "2025-06-06T17:03:09.0000000",
+  "endTime": "2025-06-06T17:06:16.0000000",
+  "duration": 187,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 187,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-06-06T11:33:09.3252634Z",
+            "leaveDateTime": "2025-06-06T11:36:16.6904972Z",
+            "durationInSeconds": 187
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 187,
+      "averageDuration": 187,
+      "totalParticipants": 1
+    },
+    "reportId": "0a704132-9f9a-43e8-850b-e7277fa54bfd"
+  }
+}
 
-=== UTC STRING CONVERSION DEBUG ===
-Input UTC string: 2025-06-05T18:30:00.000Z
-Parsed as Date: 2025-06-05T18:30:00.000Z
+Available Tasks:
+[
+  {
+    "id": "16715773",
+    "title": "HR Meetings",
+    "projectid": "1430379",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391762",
+    "client": "Internal",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424455,424456,424527,424458,424526,424457,424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  },
+  {
+    "id": "16725134",
+    "title": "Recurring Meet",
+    "projectid": "1430382",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391764",
+    "client": "NathCorp",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  }
+]
 
-=== TIME CONVERSION DEBUG ===
-Input UTC Date: 2025-06-05T18:30:00.000Z
-After adding 5:30 hours: 2025-06-06T00:00:00.000Z
-Formatted IST result: 06/06/2025, 05:30 am IST
-===========================
+IT COMPANY CONTEXT:
+- We are an IT company with specialized departments handling various technical responsibilities
+- Meetings are typically focused on specific departmental tasks and projects
+- Each department has its own typical projects, tools, and terminology
 
-Final IST result: 06/06/2025, 05:30 am IST
-================================
+IT DEPARTMENT SPECIALIZATIONS:
+1. Software Development:
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development
+   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries        
 
+2. DevOps & CI/CD:
+   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
+   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
 
-=== UTC STRING CONVERSION DEBUG ===
-Input UTC string: 2025-06-06T18:29:59.999Z
-Parsed as Date: 2025-06-06T18:29:59.999Z
+3. Infrastructure & Cloud:
+   - Topics: server management, cloud architecture, network configuration, capacity planning
+   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
 
-=== TIME CONVERSION DEBUG ===
-Input UTC Date: 2025-06-06T18:29:59.999Z
-After adding 5:30 hours: 2025-06-06T23:59:59.999Z
-Formatted IST result: 07/06/2025, 05:29 am IST
-===========================
+4. QA & Testing:
+   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing       
+   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
 
-Final IST result: 07/06/2025, 05:29 am IST
-================================
+5. IT Support & Helpdesk:
+   - Topics: incident management, user support, troubleshooting, ticket resolution
+   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
 
- GET /api/meetings?from=2025-06-05T18%3A30%3A00.000Z&to=2025-06-06T18%3A29%3A59.999Z 200 in 5365ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1066ms (2168 modules)
- GET /api/auth/session 200 in 1236ms
+6. Security & Compliance:
+   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
+   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
+
+7. Data & Analytics:
+   - Topics: data modeling, analytics implementation, reporting, database management
+   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
+
+8. System Administration:
+   - Topics: system maintenance, updates, monitoring, user management
+   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
+
+MATCHING RULES:
+1. Prioritize tasks with direct keyword matches to the meeting subject or description
+2. Match meetings to the most specific department based on technical keywords in the subject/description
+3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
+4. If still unclear, default to the department where the user has the most assigned tasks
+5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
+6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
+7. NEVER match with tasks that have a "Closed" status
+8. If the client is "Nathcorp", note that these are internal non-billable tasks
+9. If no assigned tasks match well, return an empty matchedTasks array
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+
+CONFIDENCE SCORE GUIDELINES:
+- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
+- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
+- High (0.7-0.9): Strong evidence with clear technical keyword matches
+- Perfect (1.0): Exact match between meeting subject and technical task
+- Score of 0: Task is not assigned to the user or task is closed
+
+EXAMPLES:
+✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
+✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
+✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
+✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
+✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
+✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
+✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
+✗ BAD: Any match with a task that has status "Closed" (should be excluded)
+
+Analyze the meeting and tasks, then provide your response in the following JSON format:
+
+{
+    "matchedTasks": [
+        {
+            "taskId": "string",
+            "taskTitle": "string",
+            "meetingDetails": {
+                "subject": "string",
+                "startTime": "string",
+                "endTime": "string",
+                "actualDuration": number  // Use the duration from attendance records in seconds
+            },
+            "confidence": number,
+            "reason": "string"
+        }
+    ]
+}
+
+Notes:
+1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
+2. Confidence should be a number between 0 and 1
+3. Provide clear reasons for each match based on specific evidence
+4. Return valid JSON that can be parsed directly
+5. Include all required fields for each task
+6. The actualDuration should be taken from the attendance records and is in seconds
+7. Tasks with status "Closed" should NEVER be included in matchedTasks
+8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
+OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16725134",
+            "taskTitle": "Recurring Meet",
+            "meetingDetails": {
+                "subject": "Recurring Meet",
+                "startTime": "2025-06-06T17:03:09.0000000",
+                "endTime": "2025-06-06T17:06:16.0000000",
+                "actualDuration": 187
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'Recurring Meet' exactly matches the task title 'Recurring Meet'. The task is open, assigned to the user (assigneeid includes 424516), and no other tasks have a closer match. Although there are no technical keywords, the exact title match provides perfect evidence."
+        }
+    ]
+}
+Raw OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16725134",
+            "taskTitle": "Recurring Meet",
+            "meetingDetails": {
+                "subject": "Recurring Meet",
+                "startTime": "2025-06-06T17:03:09.0000000",
+                "endTime": "2025-06-06T17:06:16.0000000",
+                "actualDuration": 187
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'Recurring Meet' exactly matches the task title 'Recurring Meet'. The task is open, assigned to the user (assigneeid includes 424516), and no other tasks have a closer match. Although there are no technical keywords, the exact title match provides perfect evidence."
+        }
+    ]
+}
+Extracted JSON: {
+    "matchedTasks": [
+        {
+            "taskId": "16725134",
+            "taskTitle": "Recurring Meet",
+            "meetingDetails": {
+                "subject": "Recurring Meet",
+                "startTime": "2025-06-06T17:03:09.0000000",
+                "endTime": "2025-06-06T17:06:16.0000000",
+                "actualDuration": 187
+            },
+            "confidence": 1.0,
+            "reason": "The meeting subject 'Recurring Meet' exactly matches the task title 'Recurring Meet'. The task is open, assigned to the user (assigneeid includes 424516), and no other tasks have a closer match. Although there are no technical keywords, the exact title match provides perfect evidence."
+        }
+    ]
+}
+Parsed tasks: [
+  {
+    "taskId": "16725134",
+    "taskTitle": "Recurring Meet",
+    "meetingDetails": {
+      "subject": "Recurring Meet",
+      "startTime": "2025-06-06T17:03:09.0000000",
+      "endTime": "2025-06-06T17:06:16.0000000",
+      "actualDuration": 187
+    },
+    "confidence": 1,
+    "reason": "The meeting subject 'Recurring Meet' exactly matches the task title 'Recurring Meet'. The task is open, assigned to the user (assigneeid includes 424516), and no other tasks have a closer match. Although there are no technical keywords, the exact title match provides perfect evidence."
+  }
+]
+Parsed matching result: {
+  "meetingSubject": "Recurring Meet",
+  "matchedTasks": [
+    {
+      "taskId": "16725134",
+      "taskTitle": "Recurring Meet",
+      "meetingDetails": {
+        "subject": "Recurring Meet",
+        "startTime": "2025-06-06T17:03:09.0000000",
+        "endTime": "2025-06-06T17:06:16.0000000",
+        "actualDuration": 187
+      },
+      "confidence": 1,
+      "reason": "The meeting subject 'Recurring Meet' exactly matches the task title 'Recurring Meet'. The task is open, assigned to the user (assigneeid includes 424516), and no other tasks have a closer match. Although there are no technical keywords, the exact title match provides perfect evidence."
+    }
+  ]
+}
+Using best match for meeting "Recurring Meet": Task 16725134 (Recurring Meet) with confidence 1
+Found 1 matches for meeting: Recurring Meet
+ GET /api/pm2/status 200 in 28ms
+Matching tasks for meeting: HR Meeting For Salary
+Found user's attendance record with duration: 106 seconds
+Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching tasks using standard API implementation...
+Current user personid: 424516
+Raw tasks API response: Found 4 total tasks
+Total tasks from API: 4
+Task 16721463 (Pradeep Task) skipped: Task is closed
+Task 16721482 (Sandisk Task) skipped: Task is closed
+Found 2 open tasks assigned to user 424516
+Standard API returned 2 tasks
+Found 2 tasks in Intervals:
+- HR Meetings (16715773)
+- Recurring Meet (16725134)
+Meeting analysis for matching: {
+  "subject": "HR Meeting For Salary",
+  "startTime": "2025-06-06T00:00:00.0000000",
+  "endTime": "2025-06-06T00:30:00.0000000",
+  "duration": 106,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 106,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-06-05T18:32:45.2464232Z",
+            "leaveDateTime": "2025-06-05T18:34:32.019245Z",
+            "durationInSeconds": 106
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 106,
+      "averageDuration": 106,
+      "totalParticipants": 1
+    },
+    "reportId": "ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b"
+  }
+}
+Tasks data for matching: [
+  {
+    "id": "16715773",
+    "title": "HR Meetings",
+    "projectid": "1430379",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391762",
+    "client": "Internal",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424455,424456,424527,424458,424526,424457,424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  },
+  {
+    "id": "16725134",
+    "title": "Recurring Meet",
+    "projectid": "1430382",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391764",
+    "client": "NathCorp",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  }
+]
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
+
+Meeting Details:
+{
+  "subject": "HR Meeting For Salary",
+  "startTime": "2025-06-06T00:00:00.0000000",
+  "endTime": "2025-06-06T00:30:00.0000000",
+  "duration": 106,
+  "analysis": {
+    "keyPoints": [],
+    "suggestedCategories": [],
+    "confidence": 0.5,
+    "context": {
+      "patterns": []
+    }
+  },
+  "attendance": {
+    "records": [
+      {
+        "name": "Pradeep Gupta",
+        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+        "duration": 106,
+        "role": "Organizer",
+        "attendanceIntervals": [
+          {
+            "joinDateTime": "2025-06-05T18:32:45.2464232Z",
+            "leaveDateTime": "2025-06-05T18:34:32.019245Z",
+            "durationInSeconds": 106
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "totalDuration": 106,
+      "averageDuration": 106,
+      "totalParticipants": 1
+    },
+    "reportId": "ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b"
+  }
+}
+
+Available Tasks:
+[
+  {
+    "id": "16715773",
+    "title": "HR Meetings",
+    "projectid": "1430379",
+    "project": "HR Monthly Discussion",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391762",
+    "client": "Internal",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424455,424456,424527,424458,424526,424457,424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "HR Monthly Discussion"
+    }
+  },
+  {
+    "id": "16725134",
+    "title": "Recurring Meet",
+    "projectid": "1430382",
+    "project": "Internal",
+    "status": "Open",
+    "priority": "3",
+    "clientid": "391764",
+    "client": "NathCorp",
+    "moduleid": "552786",
+    "module": "Out of Scope",
+    "assigneeid": "424516",
+    "matchingContext": {
+      "isActive": false,
+      "hasPriority": true,
+      "hasDescription": false,
+      "projectContext": "Internal"
+    }
+  }
+]
+
+IT COMPANY CONTEXT:
+- We are an IT company with specialized departments handling various technical responsibilities
+- Meetings are typically focused on specific departmental tasks and projects
+- Each department has its own typical projects, tools, and terminology
+
+IT DEPARTMENT SPECIALIZATIONS:
+1. Software Development:
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development
+   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries        
+
+2. DevOps & CI/CD:
+   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
+   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
+
+3. Infrastructure & Cloud:
+   - Topics: server management, cloud architecture, network configuration, capacity planning
+   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
+
+4. QA & Testing:
+   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing       
+   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
+
+5. IT Support & Helpdesk:
+   - Topics: incident management, user support, troubleshooting, ticket resolution
+   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
+
+6. Security & Compliance:
+   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
+   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
+
+7. Data & Analytics:
+   - Topics: data modeling, analytics implementation, reporting, database management
+   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
+
+8. System Administration:
+   - Topics: system maintenance, updates, monitoring, user management
+   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
+
+MATCHING RULES:
+1. Prioritize tasks with direct keyword matches to the meeting subject or description
+2. Match meetings to the most specific department based on technical keywords in the subject/description
+3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
+4. If still unclear, default to the department where the user has the most assigned tasks
+5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
+6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
+7. NEVER match with tasks that have a "Closed" status
+8. If the client is "Nathcorp", note that these are internal non-billable tasks
+9. If no assigned tasks match well, return an empty matchedTasks array
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+
+CONFIDENCE SCORE GUIDELINES:
+- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
+- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
+- High (0.7-0.9): Strong evidence with clear technical keyword matches
+- Perfect (1.0): Exact match between meeting subject and technical task
+- Score of 0: Task is not assigned to the user or task is closed
+
+EXAMPLES:
+✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
+✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
+✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
+✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
+✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
+✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
+✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
+✗ BAD: Any match with a task that has status "Closed" (should be excluded)
+
+Analyze the meeting and tasks, then provide your response in the following JSON format:
+
+{
+    "matchedTasks": [
+        {
+            "taskId": "string",
+            "taskTitle": "string",
+            "meetingDetails": {
+                "subject": "string",
+                "startTime": "string",
+                "endTime": "string",
+                "actualDuration": number  // Use the duration from attendance records in seconds
+            },
+            "confidence": number,
+            "reason": "string"
+        }
+    ]
+}
+
+Notes:
+1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
+2. Confidence should be a number between 0 and 1
+3. Provide clear reasons for each match based on specific evidence
+4. Return valid JSON that can be parsed directly
+5. Include all required fields for each task
+6. The actualDuration should be taken from the attendance records and is in seconds
+7. Tasks with status "Closed" should NEVER be included in matchedTasks
+8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
+ POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 30006ms
+OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16715773",
+            "taskTitle": "HR Meetings",
+            "meetingDetails": {
+                "subject": "HR Meeting For Salary",
+                "startTime": "2025-06-06T00:00:00.0000000",
+                "endTime": "2025-06-06T00:30:00.0000000",
+                "actualDuration": 106
+            },
+            "confidence": 0.4,
+            "reason": "The meeting subject 'HR Meeting For Salary' directly references HR topics, and the available task 'HR Meetings' is the only open, relevant task with an HR context. There are no technical or departmental keywords, but the subject and task title both reference HR, providing some concrete evidence for a match."       
+        }
+    ]
+}
+Raw OpenAI response: {
+    "matchedTasks": [
+        {
+            "taskId": "16715773",
+            "taskTitle": "HR Meetings",
+            "meetingDetails": {
+                "subject": "HR Meeting For Salary",
+                "startTime": "2025-06-06T00:00:00.0000000",
+                "endTime": "2025-06-06T00:30:00.0000000",
+                "actualDuration": 106
+            },
+            "confidence": 0.4,
+            "reason": "The meeting subject 'HR Meeting For Salary' directly references HR topics, and the available task 'HR Meetings' is the only open, relevant task with an HR context. There are no technical or departmental keywords, but the subject and task title both reference HR, providing some concrete evidence for a match."       
+        }
+    ]
+}
+Extracted JSON: {
+    "matchedTasks": [
+        {
+            "taskId": "16715773",
+            "taskTitle": "HR Meetings",
+            "meetingDetails": {
+                "subject": "HR Meeting For Salary",
+                "startTime": "2025-06-06T00:00:00.0000000",
+                "endTime": "2025-06-06T00:30:00.0000000",
+                "actualDuration": 106
+            },
+            "confidence": 0.4,
+            "reason": "The meeting subject 'HR Meeting For Salary' directly references HR topics, and the available task 'HR Meetings' is the only open, relevant task with an HR context. There are no technical or departmental keywords, but the subject and task title both reference HR, providing some concrete evidence for a match."       
+        }
+    ]
+}
+Parsed tasks: [
+  {
+    "taskId": "16715773",
+    "taskTitle": "HR Meetings",
+    "meetingDetails": {
+      "subject": "HR Meeting For Salary",
+      "startTime": "2025-06-06T00:00:00.0000000",
+      "endTime": "2025-06-06T00:30:00.0000000",
+      "actualDuration": 106
+    },
+    "confidence": 0.4,
+    "reason": "The meeting subject 'HR Meeting For Salary' directly references HR topics, and the available task 'HR Meetings' is the only open, relevant task with an HR context. There are no technical or departmental keywords, but the subject and task title both reference HR, providing some concrete evidence for a match."
+  }
+]
+Parsed matching result: {
+  "meetingSubject": "HR Meeting For Salary",
+  "matchedTasks": [
+    {
+      "taskId": "16715773",
+      "taskTitle": "HR Meetings",
+      "meetingDetails": {
+        "subject": "HR Meeting For Salary",
+        "startTime": "2025-06-06T00:00:00.0000000",
+        "endTime": "2025-06-06T00:30:00.0000000",
+        "actualDuration": 106
+      },
+      "confidence": 0.4,
+      "reason": "The meeting subject 'HR Meeting For Salary' directly references HR topics, and the available task 'HR Meetings' is the only open, relevant task with an HR context. There are no technical or departmental keywords, but the subject and task title both reference HR, providing some concrete evidence for a match."
+    }
+  ]
+}
+Using best match for meeting "HR Meeting For Salary": Task 16715773 (HR Meetings) with confidence 0.4
+Found 1 matches for meeting: HR Meeting For Salary
+Creating time entries...
+Creating time entry for meeting: Recurring Meet
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 TIME ENTRY CREATION STARTED
+║ 📝 Meeting: Recurring Meet
+║ 🔄 Task: Recurring Meet
+╚════════════════════════════════════════════════════════╝
+⏳ Fetching person & task information...
+ ○ Compiling /api/intervals-proxy ...
+ ✓ Compiled /api/intervals-proxy in 814ms (3739 modules)
+Making request to intervals API: https://api.myintervals.com/task/16725134?limit=500
+Making request to intervals API: https://api.myintervals.com/me/
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":1,"me":[{"id":"424516","localid":"7","clientid":null,"title":"","firstname":"Pradeep","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeep","groupid":"4","group":"Resource","client":null...
+ POST /api/intervals-proxy 200 in 1861ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"task":{"id":"16725134","localid":"16","assignee":[{"personid":"424516","assignee":"Pradeep","assigneeactive":"t","personlocalid":"7"}],"assigneeid":"424516","follower":[],"followerid":"","owner":[{"personid":"424516","owner":"Pradeep","owneractive":"t","p...
+ POST /api/intervals-proxy 200 in 1971ms
+Retrieved task details: {
+  id: '16725134',
+  title: 'Recurring Meet',
+  status: 'Open',
+  client: 'NathCorp',
+  assigneeid: '424516'
+}
+
+┌─────────────────────────────────────────────────┐
+│ ✓ USER & TASK INFO RETRIEVED                    │
+│ 👤 User:                          │
+│ 📋 Task: #16725134 - Recurring Meet │
+│ 🏢 Client: NathCorp | Project: Internal │
+└─────────────────────────────────────────────────┘
+⏳ Fetching work types for project 1430382...
+Making request to intervals API: https://api.myintervals.com/projectworktype/
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
+ POST /api/intervals-proxy 200 in 462ms
+Found 1 work types for project 1430382: [
+  {
+    id: '805554',
+    name: 'Admin',
+    projectId: '1430382',
+    workTypeId: '805554',
+    projectWorkTypeId: '31511491'
+  }
+]
+ℹ️ Using worktype ID 805564 for India-Meeting
+🔍 Checking attendance records for user pradeepg@m365x92504196.onmicrosoft.com...
+✅ Found user's attendance record with duration: 3m 7s
+💰 Billable status: NO ✗ (Client: NathCorp)
+
+┌─────────────────────────────────────────────────┐
+│ 📊 TIME ENTRY DETAILS                           │
+│ 📆 Date: 2025-06-06 (from UTC 2025-06-06)  │
+│ ⏱️ Duration: 0.05 hours (3m 7s)  │
+│ 💰 Billable: No                              │
+└─────────────────────────────────────────────────┘
+📡 Sending time entry request to Intervals API...
+Making request to intervals API: https://api.myintervals.com/time
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"Created","code":201,"time":{"id":"108511757","projectid":"1430382","moduleid":"552786","taskid":"16725134","worktypeid":"805564","personid":"424516","date":"2025-06-06","datemodified":"2025-06-06 14:36:08","time":"0.05","description":"Recurring Meet","billable":"f","work...
+ POST /api/intervals-proxy 200 in 850ms
+✅ Time entry creation successful!
+📝 Time entry created with ID: 108511757
+💾 Saving meeting details to storage...
+Saving posted meeting with time entry...
+Posted timestamp: { utc: '2025-06-06T14:36:08.279Z', ist: '2025-06-06T20:06:08.279 IST' }
+[2025-06-06T14:36:08.279Z] Found report ID in meeting data: 0a704132-9f9a-43e8-850b-e7277fa54bfd
+
+╔════════════════════════ STORAGE OPERATION ════════════════════════╗
+║ 💾 STORING POSTED MEETING                                         ║
+║ 👤 User: pradeepg@m365x92504196.onmicrosoft.com                                               ║
+║ 🔑 Meeting ID: AAMkADZhZTY4Njl...    ║
+║ ⏱️ Duration: 0.05 hours         ║
+║ 🏷️ Work Type: 805564   ║
+║ 📊 Report ID: 0a704132-9f9a-4...   ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────── STORAGE DETAILS ───────────────────────┐
+│ ⏱️ Duration: 180s (0.05 hours)     │
+│ 📊 Attendance Report ID: 0a704132-9f9a-43e8-850b-e7277fa54bfd     │
+└───────────────────────────────────────────────────────────────┘
+[2025-06-06T14:36:08.282Z] Adding new meeting with report ID: 0a704132-9f9a-43e8-850b-e7277fa54bfd
+
+╔════════════════════════ REPORT ID STORAGE ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Successfully stored meeting with report ID   ║
+║ 📊 Report ID: 0a704132-9f9a-43e8-850b-e7277fa54bfd                        ║
+║ 🆔 Meeting ID: AAMkADZhZTY4NjljLTg2...  ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────── STORAGE STATUS ───────────────────────┐
+│ ✅ Meeting added to storage                                  │
+│ 📊 Total meetings for user: 1     │
+│ 📑 Report ID saved: 0a704132-9f9a-43e8-850b-e7277fa54bfd              │
+│ 💾 Storage data saved successfully                           │
+└───────────────────────────────────────────────────────────────┘
+Successfully saved posted meeting with time entry
+✅ Meeting details saved successfully
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 TIME ENTRY CREATION COMPLETED
+║ ✅ Time Entry ID: 108511757
+║ ⏱️ Duration: 0.05 hours
+╚════════════════════════════════════════════════════════╝
+Successfully created time entry for: Recurring Meet
+Creating time entry for meeting: HR Meeting For Salary
+
+╔════════════════════════════════════════════════════════╗
+║ 🚀 TIME ENTRY CREATION STARTED
+║ 📝 Meeting: HR Meeting For Salary
+║ 🔄 Task: HR Meetings
+╚════════════════════════════════════════════════════════╝
+⏳ Fetching person & task information...
+Making request to intervals API: https://api.myintervals.com/me/
+Making request to intervals API: https://api.myintervals.com/task/16715773?limit=500
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":1,"me":[{"id":"424516","localid":"7","clientid":null,"title":"","firstname":"Pradeep","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeep","groupid":"4","group":"Resource","client":null...
+ POST /api/intervals-proxy 200 in 497ms
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"task":{"id":"16715773","localid":"7","assignee":[{"personid":"424455","assignee":"Amit Dutta","assigneeactive":"t","personlocalid":"2"},{"personid":"424456","assignee":"Ayesha Siddiqui","assigneeactive":"t","personlocalid":"3"},{"personid":"424527","assig...
+ POST /api/intervals-proxy 200 in 596ms
+Retrieved task details: {
+  id: '16715773',
+  title: 'HR Meetings',
+  status: 'Open',
+  client: 'Internal',
+  assigneeid: '424455,424456,424527,424458,424526,424457,424516'
+}
+
+┌─────────────────────────────────────────────────┐
+│ ✓ USER & TASK INFO RETRIEVED                    │
+│ 👤 User:                          │
+│ 📋 Task: #16715773 - HR Meetings │
+│ 🏢 Client: Internal | Project: HR Monthly Discussion │
+└─────────────────────────────────────────────────┘
+⏳ Fetching work types for project 1430379...
+Making request to intervals API: https://api.myintervals.com/projectworktype/
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
+ POST /api/intervals-proxy 200 in 474ms
+Found 1 work types for project 1430379: [
+  {
+    id: '805554',
+    name: 'Admin',
+    projectId: '1430379',
+    workTypeId: '805554',
+    projectWorkTypeId: '31511458'
+  }
+]
+ℹ️ Using worktype ID 805564 for India-Meeting
+🔍 Checking attendance records for user pradeepg@m365x92504196.onmicrosoft.com...
+✅ Found user's attendance record with duration: 1m 46s
+💰 Billable status: NO ✗ (Client: Internal)
+
+┌─────────────────────────────────────────────────┐
+│ 📊 TIME ENTRY DETAILS                           │
+│ 📆 Date: 2025-06-05 (from UTC 2025-06-06)  │
+│ ⏱️ Duration: 0.03 hours (1m 46s)  │
+│ 💰 Billable: No                              │
+└─────────────────────────────────────────────────┘
+📡 Sending time entry request to Intervals API...
+Making request to intervals API: https://api.myintervals.com/time
+Intervals API response: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"Created","code":201,"time":{"id":"108511761","projectid":"1430379","moduleid":"552786","taskid":"16715773","worktypeid":"805564","personid":"424516","date":"2025-06-05","datemodified":"2025-06-06 14:36:12","time":"0.03","description":"HR Meeting For Salary","billable":"f...
+ POST /api/intervals-proxy 200 in 920ms
+✅ Time entry creation successful!
+📝 Time entry created with ID: 108511761
+💾 Saving meeting details to storage...
+Saving posted meeting with time entry...
+Posted timestamp: { utc: '2025-06-06T14:36:12.340Z', ist: '2025-06-06T20:06:12.340 IST' }
+[2025-06-06T14:36:12.340Z] Found report ID in meeting data: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b
+
+╔════════════════════════ STORAGE OPERATION ════════════════════════╗
+║ 💾 STORING POSTED MEETING                                         ║
+║ 👤 User: pradeepg@m365x92504196.onmicrosoft.com                                               ║
+║ 🔑 Meeting ID: AAMkADZhZTY4Njl...    ║
+║ ⏱️ Duration: 0.03 hours         ║
+║ 🏷️ Work Type: 805564   ║
+║ 📊 Report ID: ff4f72d9-eb8d-4...   ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────── STORAGE DETAILS ───────────────────────┐
+│ ⏱️ Duration: 108s (0.03 hours)     │
+│ 📊 Attendance Report ID: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b     │
+└───────────────────────────────────────────────────────────────┘
+[2025-06-06T14:36:12.354Z] Adding new meeting with report ID: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b
+
+╔════════════════════════ REPORT ID STORAGE ═══════════════════════╗
+║ 🧪 DEVELOPER CHECK: Successfully stored meeting with report ID   ║
+║ 📊 Report ID: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b                        ║
+║ 🆔 Meeting ID: AAMkADZhZTY4NjljLTg2...  ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────── STORAGE STATUS ───────────────────────┐
+│ ✅ Meeting added to storage                                  │
+│ 📊 Total meetings for user: 2     │
+│ 📑 Report ID saved: ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b              │
+│ 💾 Storage data saved successfully                           │
+└───────────────────────────────────────────────────────────────┘
+Successfully saved posted meeting with time entry
+✅ Meeting details saved successfully
+
+╔════════════════════════════════════════════════════════╗
+║ 🏁 TIME ENTRY CREATION COMPLETED
+║ ✅ Time Entry ID: 108511761
+║ ⏱️ Duration: 0.03 hours
+╚════════════════════════════════════════════════════════╝
+Successfully created time entry for: HR Meeting For Salary

@@ -1,3 +1,102 @@
 {
-  "meetings": []
+  "meetings": [
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3aSNFKJAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAI2ArpgAAEA==",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "108511757",
+        "projectid": "1430382",
+        "moduleid": "552786",
+        "taskid": "16725134",
+        "worktypeid": "805564",
+        "personid": "424516",
+        "date": "2025-06-06",
+        "datemodified": "2025-06-06 14:36:08",
+        "time": "0.05",
+        "description": "Recurring Meet",
+        "billable": "f",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Out of Scope",
+        "client": "NathCorp",
+        "project": "Internal",
+        "taskTitle": "Recurring Meet"
+      },
+      "rawResponse": {
+        "personid": 424516,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "108511757",
+          "projectid": "1430382",
+          "moduleid": "552786",
+          "taskid": "16725134",
+          "worktypeid": "805564",
+          "personid": "424516",
+          "date": "2025-06-06",
+          "datemodified": "2025-06-06 14:36:08",
+          "time": "0.05",
+          "description": "Recurring Meet",
+          "billable": "f",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Out of Scope"
+        }
+      },
+      "postedAt": "2025-06-06T20:06:08.283 IST",
+      "taskName": "Recurring Meet",
+      "reportId": "0a704132-9f9a-43e8-850b-e7277fa54bfd"
+    },
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "108511761",
+        "projectid": "1430379",
+        "moduleid": "552786",
+        "taskid": "16715773",
+        "worktypeid": "805564",
+        "personid": "424516",
+        "date": "2025-06-05",
+        "datemodified": "2025-06-06 14:36:12",
+        "time": "0.03",
+        "description": "HR Meeting For Salary",
+        "billable": "f",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Out of Scope",
+        "client": "Internal",
+        "project": "HR Monthly Discussion",
+        "taskTitle": "HR Meetings"
+      },
+      "rawResponse": {
+        "personid": 424516,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "108511761",
+          "projectid": "1430379",
+          "moduleid": "552786",
+          "taskid": "16715773",
+          "worktypeid": "805564",
+          "personid": "424516",
+          "date": "2025-06-05",
+          "datemodified": "2025-06-06 14:36:12",
+          "time": "0.03",
+          "description": "HR Meeting For Salary",
+          "billable": "f",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Out of Scope"
+        }
+      },
+      "postedAt": "2025-06-06T20:06:12.356 IST",
+      "taskName": "HR Meetings",
+      "reportId": "ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b"
+    }
+  ]
 }
