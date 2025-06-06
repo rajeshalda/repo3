@@ -403,6 +403,55 @@
       },
       "postedAt": "2025-06-05T14:28:48.953 IST",
       "reportId": "102f0b91-0ffb-4b27-90ca-a79175d3d21f"
+    },
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmAHzkAAA=",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "108494500",
+        "projectid": "1430379",
+        "moduleid": "552786",
+        "taskid": "16715773",
+        "worktypeid": "805564",
+        "personid": "424516",
+        "date": "2025-06-05",
+        "datemodified": "2025-06-05 19:53:11",
+        "time": "0.03",
+        "description": "HR Meeting For Salary",
+        "billable": "f",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Out of Scope",
+        "client": "Internal",
+        "project": "HR Monthly Discussion",
+        "taskTitle": "HR Meetings"
+      },
+      "rawResponse": {
+        "personid": 424516,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "108494500",
+          "projectid": "1430379",
+          "moduleid": "552786",
+          "taskid": "16715773",
+          "worktypeid": "805564",
+          "personid": "424516",
+          "date": "2025-06-05",
+          "datemodified": "2025-06-05 19:53:11",
+          "time": "0.03",
+          "description": "HR Meeting For Salary",
+          "billable": "f",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Out of Scope"
+        }
+      },
+      "postedAt": "2025-06-06T01:23:11.586 IST",
+      "taskName": "HR Meetings",
+      "reportId": "ff4f72d9-eb8d-4e5b-9f3f-6d34d924660b"
     }
   ]
 }
