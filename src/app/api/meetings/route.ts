@@ -515,13 +515,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Date range is required' }, { status: 400 });
     }
 
-    // Parse the dates and set proper time boundaries
+    // Parse the dates - they should already be properly formatted from frontend
     const startDate = new Date(from);
     const endDate = new Date(to);
     
-    // Set time to start of day and end of day
-    startDate.setHours(0, 0, 0, 0);
-    endDate.setHours(23, 59, 59, 999);
+    // Don't modify the dates - they should already have proper time boundaries from frontend
 
     console.log('\n=== DATE RANGE DEBUG ===');
     console.log('Original from:', from);

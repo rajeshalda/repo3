@@ -273,56 +273,13 @@ export default function DashboardPage() {
       
       const rawData = await response.json();
       
-      // Store raw data before filtering
+      // Store raw data - backend should already have filtered by date range correctly
       setRawMeetingsData(rawData);
       
-      // Additional frontend date filtering to ensure meetings are within selected range
-      const startDate = dateRange?.from ? new Date(dateRange.from) : null;
-      const endDate = dateRange?.to ? new Date(dateRange.to) : null;
-      
-      const dateFilteredMeetings = startDate && endDate 
-        ? rawData.meetings.filter((meeting: Meeting) => {
-            const meetingDate = new Date(meeting.startTime);
-            
-            // Create dates in IST
-            const meetingIST = new Date(meetingDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-            
-            // Get start of day for selected start date in IST
-            const startIST = new Date(startDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-            startIST.setHours(0, 0, 0, 0);
-            
-            // Get end of day for selected end date in IST
-            const endIST = new Date(endDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-            endIST.setHours(23, 59, 59, 999);
-            
-            // Convert all dates to timestamps for comparison
-            const meetingTime = meetingIST.getTime();
-            const startTime = startIST.getTime();
-            const endTime = endIST.getTime();
-            
-            console.log('Meeting time check:', {
-              meeting: meeting.subject,
-              meetingTime: new Date(meetingTime).toISOString(),
-              startTime: new Date(startTime).toISOString(),
-              endTime: new Date(endTime).toISOString(),
-              isWithinRange: meetingTime >= startTime && meetingTime <= endTime
-            });
-            
-            return meetingTime >= startTime && meetingTime <= endTime;
-          })
-        : rawData.meetings;
-      
-      // Update raw data with date-filtered meetings
-      const filteredRawData = {
-        ...rawData,
-        meetings: dateFilteredMeetings
-      };
-      setRawMeetingsData(filteredRawData);
-      
-      // Filter out posted meetings for display
+      // Filter out posted meetings for display (backend handles date filtering)
       const filteredMeetings = {
-        ...filteredRawData,
-        meetings: dateFilteredMeetings.filter((meeting: Meeting) => !meeting.isPosted)
+        ...rawData,
+        meetings: rawData.meetings.filter((meeting: Meeting) => !meeting.isPosted)
       };
       
       setMeetingsData(filteredMeetings);
