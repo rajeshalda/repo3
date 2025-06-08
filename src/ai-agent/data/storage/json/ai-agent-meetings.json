@@ -1,3 +1,106 @@
 {
-  "meetings": []
+  "meetings": [
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmEhq7AAA=",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "108528814",
+        "projectid": "1430388",
+        "moduleid": "552788",
+        "taskid": "16726667",
+        "worktypeid": "805564",
+        "personid": "424516",
+        "date": "2025-06-08",
+        "datemodified": "2025-06-08 23:11:29",
+        "time": "0.02",
+        "description": "TEST 1",
+        "billable": "t",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Development",
+        "client": "UMG",
+        "project": "UMG - O365 Tenant Split",
+        "taskTitle": "UMG Task"
+      },
+      "rawResponse": {
+        "personid": 424516,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "108528814",
+          "projectid": "1430388",
+          "moduleid": "552788",
+          "taskid": "16726667",
+          "worktypeid": "805564",
+          "personid": "424516",
+          "date": "2025-06-08",
+          "datemodified": "2025-06-08 23:11:29",
+          "time": "0.02",
+          "description": "TEST 1",
+          "billable": "t",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Development",
+          "client": "UMG",
+          "project": "UMG - O365 Tenant Split",
+          "taskTitle": "UMG Task"
+        }
+      },
+      "postedAt": "2025-06-09T04:41:28.726 IST",
+      "reportId": "1b45e72f-d463-4fde-a764-3875f024b567"
+    },
+    {
+      "meetingId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAmEhq7AAA=",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com",
+      "timeEntry": {
+        "id": "108528896",
+        "projectid": "1430388",
+        "moduleid": "552788",
+        "taskid": "16726667",
+        "worktypeid": "805564",
+        "personid": "424516",
+        "date": "2025-06-08",
+        "datemodified": "2025-06-08 23:18:08",
+        "time": "0.07",
+        "description": "TEST 1",
+        "billable": "t",
+        "worktype": "India-Meeting",
+        "milestoneid": null,
+        "ogmilestoneid": null,
+        "module": "Development",
+        "client": "UMG",
+        "project": "UMG - O365 Tenant Split",
+        "taskTitle": "UMG Task"
+      },
+      "rawResponse": {
+        "personid": 424516,
+        "status": "Created",
+        "code": 201,
+        "time": {
+          "id": "108528896",
+          "projectid": "1430388",
+          "moduleid": "552788",
+          "taskid": "16726667",
+          "worktypeid": "805564",
+          "personid": "424516",
+          "date": "2025-06-08",
+          "datemodified": "2025-06-08 23:18:08",
+          "time": "0.07",
+          "description": "TEST 1",
+          "billable": "t",
+          "worktype": "India-Meeting",
+          "milestoneid": null,
+          "ogmilestoneid": null,
+          "module": "Development",
+          "client": "UMG",
+          "project": "UMG - O365 Tenant Split",
+          "taskTitle": "UMG Task"
+        }
+      },
+      "postedAt": "2025-06-09T04:48:07.739 IST",
+      "reportId": "bdcc617e-3874-414e-805f-cc52a6753bcd"
+    }
+  ]
 }

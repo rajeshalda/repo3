@@ -289,26 +289,23 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
 }
 
 async function getMeetings(accessToken: string, startDate: Date, endDate: Date) {
-  // Add one day to endDate to include the full end date
-  const adjustedEndDate = new Date(endDate);
-  adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
-
+  // Don't add extra day - frontend already sends properly formatted end date (23:59:59.999)
   console.log('Fetching meetings with date range:', {
     startDate: startDate.toISOString(),
-    endDate: adjustedEndDate.toISOString()
+    endDate: endDate.toISOString()
   });
 
   let allMeetings: any[] = [];
   // Using calendarView endpoint instead of events to properly handle recurring meetings
-  let nextLink = `https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=${startDate.toISOString()}&endDateTime=${adjustedEndDate.toISOString()}&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer,type,seriesMasterId`;
+  let nextLink = `https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=${startDate.toISOString()}&endDateTime=${endDate.toISOString()}&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer,type,seriesMasterId`;
 
   while (nextLink) {
     console.log('Fetching from:', nextLink);
     const response = await fetch(nextLink, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'Prefer': `outlook.timezone="${IST_TIMEZONE}"`
+        'Content-Type': 'application/json'
+        // Remove timezone preference - let the API use UTC and we'll handle timezone conversion
       },
     });
 

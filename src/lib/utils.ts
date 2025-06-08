@@ -41,8 +41,11 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
   if (!dateRange?.from || !dateRange?.to) return null;
 
   try {
-    // Always work with calendar dates, not timezone-shifted dates
-    // When user selects June 6, 2025, we want June 6 in UTC, not timezone-adjusted
+    // Get user's timezone
+    const userTimezone = getUserTimezone();
+    
+    // Always convert calendar dates to the user's local timezone range
+    // This ensures that when a user selects a date, they get meetings from that local calendar day
     
     const startDate = new Date(dateRange.from);
     const endDate = new Date(dateRange.to);
@@ -56,13 +59,26 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
     const endMonth = endDate.getMonth();
     const endDay = endDate.getDate();
     
-    // Create new Date objects in UTC with the same calendar dates
-    // This ensures June 6, 2025 selected by user = June 6, 2025 00:00:00 UTC to June 6, 2025 23:59:59 UTC
-    const startUTC = new Date(Date.UTC(startYear, startMonth, startDay, 0, 0, 0, 0));
-    const endUTC = new Date(Date.UTC(endYear, endMonth, endDay, 23, 59, 59, 999));
+    // Create date strings for the start and end of the selected days
+    const startDateString = `${startYear}-${String(startMonth + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}T00:00:00`;
+    const endDateString = `${endYear}-${String(endMonth + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}T23:59:59.999`;
+    
+    // Create dates in the user's timezone, then convert to UTC
+    // This ensures we get the full local day in UTC terms
+    const startLocal = new Date(startDateString);
+    const endLocal = new Date(endDateString);
+    
+    // Get timezone offset in minutes and convert to milliseconds
+    const startOffset = startLocal.getTimezoneOffset() * 60 * 1000;
+    const endOffset = endLocal.getTimezoneOffset() * 60 * 1000;
+    
+    // Convert to UTC by adding the timezone offset
+    // getTimezoneOffset() returns positive values for timezones behind UTC
+    const startUTC = new Date(startLocal.getTime() + startOffset);
+    const endUTC = new Date(endLocal.getTime() + endOffset);
 
-    console.log('Date range conversion (FIXED):', {
-      userTimezone: getUserTimezone(),
+    console.log('Universal date range conversion:', {
+      userTimezone,
       inputDates: {
         from: dateRange.from.toISOString(),
         to: dateRange.to.toISOString(),
@@ -73,26 +89,31 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
         startCalendar: `${startYear}-${String(startMonth + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}`,
         endCalendar: `${endYear}-${String(endMonth + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}`
       },
+      localTimes: {
+        startLocal: startDateString,
+        endLocal: endDateString,
+        startOffset: startOffset / (60 * 1000), // in minutes
+        endOffset: endOffset / (60 * 1000) // in minutes
+      },
       utcRange: {
         start: startUTC.toISOString(),
         end: endUTC.toISOString()
       },
-      explanation: 'Calendar dates are preserved regardless of user timezone'
+      explanation: `Universal timezone handling: ${userTimezone} local day converted to UTC range`
     });
 
     return {
       start: startUTC.toISOString(),
       end: endUTC.toISOString(),
-      timezone: 'UTC'
+      timezone: userTimezone
     };
   } catch (error) {
     console.error('Error in date range conversion:', error);
     
-    // Fallback method
+    // Fallback method - use UTC dates
     const startDate = new Date(dateRange.from);
     const endDate = new Date(dateRange.to);
     
-    // Use UTC methods to avoid timezone issues
     const startUTC = new Date(Date.UTC(
       startDate.getFullYear(), 
       startDate.getMonth(), 
