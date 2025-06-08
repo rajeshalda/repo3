@@ -254,71 +254,162 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             new Date(b.meetingStartDateTime).getTime() - new Date(a.meetingStartDateTime).getTime()
         );
 
-        // Use the most recent report
-        const reportId = sortedReports[0].id;
-        console.log(`Found ${relevantReports.length} relevant reports, using most recent: ${reportId}`);
-
-        // Get attendance records
-        const recordsResponse = await fetch(
-            `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${reportId}/attendanceRecords`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-
-        if (!recordsResponse.ok) {
-            return [];
-        }
-
-        const recordsData = await recordsResponse.json();
-        console.log('Records data:', JSON.stringify(recordsData, null, 2));
+        // DEBUG: Enhanced version check
+        console.log(`🔧 DEBUG: Enhanced logic version running - relevantReports.length = ${relevantReports.length}`);
         
-        // Process and filter attendance records by IST day
-        const records = (recordsData.value || []).map((record: any) => {
-            if (!record.attendanceIntervals) return record;
-            // Filter intervals to only those within the IST day
-            const filteredIntervals = record.attendanceIntervals.filter((interval: any) => {
-                const joinIST = new Date(new Date(interval.joinDateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-                
-                // Special handling for early morning meetings
-                // For consistency, use the same logic as in report selection
-                const joinHourIST = joinIST.getHours();
-                const isEarlyMorningJoin = joinHourIST >= 0 && joinHourIST < 5.5;
-                
-                // Default check if the join time is within the target day
-                let isWithinWindow = joinIST >= istStartDate && joinIST <= istEndDate;
-                
-                // Additional check for early morning meetings
-                if (!isWithinWindow && isEarlyMorningJoin) {
-                    // For early morning joins, check if they're within a day of the target
-                    const joinDate = joinIST.toISOString().split('T')[0];
-                    const targetDate = istStartDate.toISOString().split('T')[0];
-                    const dayDifference = Math.abs(new Date(joinDate).getTime() - new Date(targetDate).getTime()) / (24 * 60 * 60 * 1000);
-                    
-                    if (dayDifference <= 1) {
-                        console.log(`Early morning interval detected (${joinHourIST}h IST). Including despite window mismatch.`);
-                        isWithinWindow = true;
+        // For meetings with multiple reports (recurring or user rejoining), we need to use the enhanced logic
+        if (relevantReports.length > 1) {
+            console.log(`🔄 Found ${relevantReports.length} valid reports for meeting (user rejoined multiple times) - processing all reports`);
+            
+            // Use the most recent report for the main attendance records (backward compatibility)
+            const reportId = sortedReports[0].id;
+            console.log(`Using latest report for attendance records: ${reportId}`);
+            
+            // Get attendance records for the main report
+            const recordsResponse = await fetch(
+                `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${reportId}/attendanceRecords`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
                     }
                 }
+            );
+
+            if (!recordsResponse.ok) {
+                return [];
+            }
+
+            const recordsData = await recordsResponse.json();
+            console.log('Records data:', JSON.stringify(recordsData, null, 2));
+            
+            // Process and filter attendance records by IST day
+            const records = (recordsData.value || []).map((record: any) => {
+                if (!record.attendanceIntervals) return record;
+                // Filter intervals to only those within the IST day
+                const filteredIntervals = record.attendanceIntervals.filter((interval: any) => {
+                    const joinIST = new Date(new Date(interval.joinDateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+                    
+                    // Special handling for early morning meetings
+                    // For consistency, use the same logic as in report selection
+                    const joinHourIST = joinIST.getHours();
+                    const isEarlyMorningJoin = joinHourIST >= 0 && joinHourIST < 5.5;
+                    
+                    // Default check if the join time is within the target day
+                    let isWithinWindow = joinIST >= istStartDate && joinIST <= istEndDate;
+                    
+                    // Additional check for early morning meetings
+                    if (!isWithinWindow && isEarlyMorningJoin) {
+                        // For early morning joins, check if they're within a day of the target
+                        const joinDate = joinIST.toISOString().split('T')[0];
+                        const targetDate = istStartDate.toISOString().split('T')[0];
+                        const dayDifference = Math.abs(new Date(joinDate).getTime() - new Date(targetDate).getTime()) / (24 * 60 * 60 * 1000);
+                        
+                        if (dayDifference <= 1) {
+                            console.log(`Early morning interval detected (${joinHourIST}h IST). Including despite window mismatch.`);
+                            isWithinWindow = true;
+                        }
+                    }
+                    
+                    return isWithinWindow;
+                });
+                const totalDuration = filteredIntervals.reduce((sum: number, interval: any) => sum + interval.durationInSeconds, 0);
+                return {
+                    ...record,
+                    attendanceIntervals: filteredIntervals,
+                    totalAttendanceInSeconds: totalDuration
+                };
+            }).filter((record: any) => record.attendanceIntervals && record.attendanceIntervals.length > 0);
+            
+            // Add metadata about all valid reports for processing later
+            if (records.length > 0) {
+                records[0].allValidReports = relevantReports.map((report: any) => ({
+                    selectedReportId: report.id,
+                    confidence: 0.9, // High confidence since these are all valid reports
+                    reason: `Valid report for meeting session on ${new Date(report.meetingStartDateTime).toISOString().split('T')[0]}`,
+                    metadata: {
+                        date: new Date(report.meetingStartDateTime).toISOString().split('T')[0],
+                        duration: Math.round((new Date(report.meetingEndDateTime).getTime() - new Date(report.meetingStartDateTime).getTime()) / 1000),
+                        isRecurring: false, // This could be a normal meeting with multiple sessions
+                        totalReports: relevantReports.length
+                    }
+                }));
                 
-                return isWithinWindow;
-            });
-            const totalDuration = filteredIntervals.reduce((sum: number, interval: any) => sum + interval.durationInSeconds, 0);
-            return {
-                ...record,
-                attendanceIntervals: filteredIntervals,
-                totalAttendanceInSeconds: totalDuration
-            };
-        }).filter((record: any) => record.attendanceIntervals && record.attendanceIntervals.length > 0);
-        
-        if (records.length > 0) {
-            console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✅ ATTENDANCE RECORDS FOUND                     │\n│ 📊 Total Records: ${records.length}             │\n│ 🕒 Meeting Start: ${sortedReports[0].meetingStartDateTime} │\n└─────────────────────────────────────────────────┘`);
+                console.log(`✅ Added metadata for ${relevantReports.length} reports to enable multi-instance processing`);
+            }
+            
+            if (records.length > 0) {
+                console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✅ ATTENDANCE RECORDS FOUND                     │\n│ 📊 Total Records: ${records.length}             │\n│ 🕒 Meeting Start: ${sortedReports[0].meetingStartDateTime} │\n│ 🔄 Total Reports: ${relevantReports.length} (metadata attached) │\n└─────────────────────────────────────────────────┘`);
+            }
+            
+            return records;
+        } else {
+            // Single report - use existing logic
+            const reportId = sortedReports[0].id;
+            console.log(`Found ${relevantReports.length} relevant reports, using most recent: ${reportId}`);
+
+            // Get attendance records
+            const recordsResponse = await fetch(
+                `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${reportId}/attendanceRecords`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!recordsResponse.ok) {
+                return [];
+            }
+
+            const recordsData = await recordsResponse.json();
+            console.log('Records data:', JSON.stringify(recordsData, null, 2));
+            
+            // Process and filter attendance records by IST day
+            const records = (recordsData.value || []).map((record: any) => {
+                if (!record.attendanceIntervals) return record;
+                // Filter intervals to only those within the IST day
+                const filteredIntervals = record.attendanceIntervals.filter((interval: any) => {
+                    const joinIST = new Date(new Date(interval.joinDateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+                    
+                    // Special handling for early morning meetings
+                    // For consistency, use the same logic as in report selection
+                    const joinHourIST = joinIST.getHours();
+                    const isEarlyMorningJoin = joinHourIST >= 0 && joinHourIST < 5.5;
+                    
+                    // Default check if the join time is within the target day
+                    let isWithinWindow = joinIST >= istStartDate && joinIST <= istEndDate;
+                    
+                    // Additional check for early morning meetings
+                    if (!isWithinWindow && isEarlyMorningJoin) {
+                        // For early morning joins, check if they're within a day of the target
+                        const joinDate = joinIST.toISOString().split('T')[0];
+                        const targetDate = istStartDate.toISOString().split('T')[0];
+                        const dayDifference = Math.abs(new Date(joinDate).getTime() - new Date(targetDate).getTime()) / (24 * 60 * 60 * 1000);
+                        
+                        if (dayDifference <= 1) {
+                            console.log(`Early morning interval detected (${joinHourIST}h IST). Including despite window mismatch.`);
+                            isWithinWindow = true;
+                        }
+                    }
+                    
+                    return isWithinWindow;
+                });
+                const totalDuration = filteredIntervals.reduce((sum: number, interval: any) => sum + interval.durationInSeconds, 0);
+                return {
+                    ...record,
+                    attendanceIntervals: filteredIntervals,
+                    totalAttendanceInSeconds: totalDuration
+                };
+            }).filter((record: any) => record.attendanceIntervals && record.attendanceIntervals.length > 0);
+            
+            if (records.length > 0) {
+                console.log(`\n┌─────────────────────────────────────────────────┐\n│ ✅ ATTENDANCE RECORDS FOUND                     │\n│ 📊 Total Records: ${records.length}             │\n│ 🕒 Meeting Start: ${sortedReports[0].meetingStartDateTime} │\n└─────────────────────────────────────────────────┘`);
+            }
+            
+            return records;
         }
-        
-        return records;
     } catch (error) {
         console.error('Error fetching attendance records:', error);
         return [];

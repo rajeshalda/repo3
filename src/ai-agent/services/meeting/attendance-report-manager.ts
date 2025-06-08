@@ -50,6 +50,60 @@ export class AttendanceReportManager {
         };
     }
 
+    // New method to process all valid reports for recurring meetings
+    public async processAllValidReports(
+        reports: AttendanceReportInfo[],
+        meetingDate: string,
+        isRecurring: boolean
+    ): Promise<AttendanceReportSelection[]> {
+        // Create enhanced report structure
+        const enhancedReport: EnhancedAttendanceReport = {
+            reports,
+            meetingDate,
+            isRecurring
+        };
+
+        // Filter reports by date for recurring meetings
+        const validReports = await this.validateReports(enhancedReport);
+        
+        if (validReports.length === 0) {
+            return [];
+        }
+
+        console.log(`
+┌─────────────────────── ALL VALID REPORTS ───────────────────────┐
+│ 📊 Found ${validReports.length} valid reports for processing              │
+│ 📅 Meeting Date: ${meetingDate}                                 │
+│ 🔄 Is Recurring: ${isRecurring}                                 │
+└─────────────────────────────────────────────────────────────────┘`);
+
+        // Process each valid report
+        const allSelections: AttendanceReportSelection[] = [];
+        
+        for (const report of validReports) {
+            const duration = (new Date(report.meetingEndDateTime).getTime() - 
+                            new Date(report.meetingStartDateTime).getTime()) / 1000;
+            
+            const selection: AttendanceReportSelection = {
+                selectedReportId: report.id,
+                confidence: 1, // All reports are valid, so confidence is high
+                reason: `Valid report instance from ${report.meetingStartDateTime}`,
+                metadata: {
+                    date: meetingDate,
+                    duration,
+                    isRecurring,
+                    totalReports: reports.length
+                }
+            };
+            
+            allSelections.push(selection);
+            
+            console.log(`✅ Report ${report.id}: ${Math.floor(duration/60)}m ${duration%60}s`);
+        }
+
+        return allSelections;
+    }
+
     private async validateReports(report: EnhancedAttendanceReport): Promise<AttendanceReportInfo[]> {
         const validReports: AttendanceReportInfo[] = [];
 

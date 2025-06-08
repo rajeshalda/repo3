@@ -133,25 +133,78 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       console.log(`Found ${uniqueMeetings.length} unique meetings, ${attendedMeetings.length} of which were attended by the user`);
 
-      if (attendedMeetings.length === 0) {
+      // IMPORTANT: Check review queue first to avoid double-processing meetings
+      console.log('Checking review queue for meetings that might now have matching tasks...');
+      const { storageManager } = await import('../../ai-agent/data/storage/manager');
+      const reviewMeetings = await storageManager.getPendingReviews(userId as string);
+      console.log(`Found ${reviewMeetings.length} meetings in review queue for user ${userId}`);
+      
+      // Get the reportIds of meetings that are in the review queue (more reliable than meeting IDs)
+      const reviewReportIds = new Set(
+        reviewMeetings
+          .filter(rm => rm.reportId) // Only include meetings with reportId
+          .map(rm => rm.reportId)
+      );
+      
+      console.log(`Review queue reportIds: [${Array.from(reviewReportIds).join(', ')}]`);
+      
+      // CRITICAL: Remove meetings from calendar processing if their reportId is already in review queue
+      // This prevents double-processing the same meeting attendance instance
+      const newMeetingsOnly = attendedMeetings.filter(meeting => {
+        const meetingReportId = meeting.attendance?.reportId;
+        if (meetingReportId && reviewReportIds.has(meetingReportId)) {
+          console.log(`Excluding meeting "${meeting.subject}" (reportId: ${meetingReportId}) from new processing - already in review queue`);
+          return false;
+        }
+        return true;
+      });
+      
+      console.log(`Filtered meetings: ${attendedMeetings.length} total → ${newMeetingsOnly.length} new (${attendedMeetings.length - newMeetingsOnly.length} already in review)`);
+      
+      // Convert review meetings back to ProcessedMeeting format for task matching
+      // Use the meetings we already fetched from calendar that match the review queue
+      const reviewMeetingsToReprocess = [];
+      for (const reviewMeeting of reviewMeetings) {
+        if (reviewMeeting.status === 'pending') {
+          // Find the corresponding meeting from our calendar fetch using reportId
+          const matchingMeeting = attendedMeetings.find(meeting => 
+            meeting.attendance?.reportId === reviewMeeting.reportId
+          );
+          
+          if (matchingMeeting) {
+            reviewMeetingsToReprocess.push(matchingMeeting);
+            console.log(`Added review meeting to reprocessing: ${reviewMeeting.subject} (reportId: ${reviewMeeting.reportId})`);
+          } else {
+            console.log(`Could not find matching calendar meeting for review meeting: ${reviewMeeting.subject} (reportId: ${reviewMeeting.reportId})`);
+          }
+        }
+      }
+      
+      // Combine NEW meetings with review meetings for task matching
+      const allMeetingsToProcess = [...newMeetingsOnly, ...reviewMeetingsToReprocess];
+      console.log(`Total meetings to process (new: ${newMeetingsOnly.length} + review: ${reviewMeetingsToReprocess.length}): ${allMeetingsToProcess.length}`);
+
+      if (allMeetingsToProcess.length === 0) {
         return res.status(200).json({
           success: true,
-          message: 'No meetings found that were attended by the user',
+          message: 'No meetings found that were attended by the user or in review queue',
           data: {
             totalMeetings: meetings.length,
             processedMeetings: processedMeetings.length,
             uniqueMeetings: uniqueMeetings.length,
-            attendedMeetings: 0,
+            attendedMeetings: attendedMeetings.length,
+            newMeetingsOnly: 0,
+            reviewMeetingsInQueue: reviewMeetings.length,
             matchResults: [],
             timeEntries: []
           }
         });
       }
 
-      // Get task matches for attended meetings
-      console.log('Matching tasks to attended meetings...');
+      // Get task matches for all meetings (new + review queue)
+      console.log('Matching tasks to all meetings (new + review queue)...');
       const matchResults = [];
-      for (const meeting of attendedMeetings) {
+      for (const meeting of allMeetingsToProcess) {
         try {
           console.log('Matching tasks for meeting:', meeting.subject);
           const matches = await taskService.matchTasksToMeeting(meeting, userId as string);
@@ -193,7 +246,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         if (result.matchedTasks && result.matchedTasks.length > 0) {
-          const meeting = attendedMeetings.find(m => m.id === result.meetingId);
+          const meeting = allMeetingsToProcess.find(m => m.id === result.meetingId);
           if (meeting) {
             try {
               console.log(`Creating time entry for meeting: ${meeting.subject}`);
@@ -211,6 +264,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 timeEntry
               });
               console.log(`Successfully created time entry for: ${meeting.subject}`);
+              
+              // IMPORTANT: Remove this meeting from the review queue since it was successfully processed
+              // Use reportId for more accurate matching
+              const meetingReportId = meeting.attendance?.reportId;
+              const wasInReviewQueue = reviewMeetingsToReprocess.some(rm => 
+                rm.attendance?.reportId === meetingReportId && meetingReportId
+              );
+              
+              if (wasInReviewQueue && meetingReportId) {
+                console.log(`Removing meeting ${meeting.subject} (reportId: ${meetingReportId}) from review queue - successfully processed`);
+                
+                // Find the review meeting by reportId to get the correct meetingId for the update
+                const reviewMeeting = reviewMeetings.find(rm => rm.reportId === meetingReportId);
+                if (reviewMeeting) {
+                  await storageManager.updateReviewStatus({
+                    meetingId: reviewMeeting.id,
+                    taskId: result.matchedTasks[0].taskId,
+                    status: 'approved',
+                    feedback: `Auto-processed: matched to task ${result.matchedTasks[0].taskTitle} (reportId: ${meetingReportId})`,
+                    decidedAt: new Date().toISOString(),
+                    decidedBy: `ai-agent-${userId}`
+                  });
+                } else {
+                  console.warn(`Could not find review meeting with reportId ${meetingReportId} for status update`);
+                }
+              }
+              
               await delay(2000); // Add delay between calls
             } catch (error) {
               console.error('Error creating time entry:', error);
@@ -226,12 +306,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       return res.status(200).json({ 
         success: true, 
-        message: `Successfully processed ${processedMeetings.length} meetings`, 
+        message: `Successfully processed ${newMeetingsOnly.length} new meetings and ${reviewMeetingsToReprocess.length} review meetings`, 
         data: {
           totalMeetings: meetings.length,
           processedMeetings: processedMeetings.length,
           uniqueMeetings: uniqueMeetings.length,
           attendedMeetings: attendedMeetings.length,
+          newMeetingsOnly: newMeetingsOnly.length,
+          reviewMeetingsInQueue: reviewMeetings.length,
+          reviewMeetingsReprocessed: reviewMeetingsToReprocess.length,
+          totalProcessed: allMeetingsToProcess.length,
           matchResults,
           timeEntries
         }

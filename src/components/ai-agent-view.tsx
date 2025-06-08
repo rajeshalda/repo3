@@ -320,6 +320,89 @@ export function AIAgentView() {
     
     console.log('Extracted meeting ID:', meetingId, 'Duration:', meetingDuration);
     
+    // Immediately update matchResults to remove the posted meeting - this is the key fix
+    setMatchResults(prev => {
+      const filterMeeting = (m: any) => {
+        // Generate the same meeting key that was used for posting - MUST match generateMeetingKey function exactly
+        const userId = session?.user?.email || '';
+        const meetingId = m.meeting.meetingInfo?.meetingId?.trim() || '';
+        const meetingName = m.meeting.subject?.trim() || 'Untitled Meeting';
+        const meetingTime = m.meeting.startTime?.trim() || new Date().toISOString();
+        
+        // Calculate total duration for this meeting
+        let totalDuration = 0;
+        let reportId = '';
+        const userAttendance = m.meeting.attendanceRecords?.find(
+          (record: any) => record?.email === userId
+        );
+        if (userAttendance) {
+          totalDuration = userAttendance.duration || 0;
+          // Include reportId if available to differentiate between different attendance sessions
+          if (userAttendance.rawRecord && userAttendance.rawRecord.reportId) {
+            reportId = userAttendance.rawRecord.reportId;
+          }
+        }
+        
+        // If no reportId found from user attendance, try to get it from any attendance record
+        if (!reportId && m.meeting.attendanceRecords && m.meeting.attendanceRecords.length > 0) {
+          for (const record of m.meeting.attendanceRecords) {
+            if (record.rawRecord?.reportId) {
+              reportId = record.rawRecord.reportId;
+              break;
+            }
+          }
+        }
+        
+        // Create the exact same key format as generateMeetingKey function
+        // Format: userId_reportId_meetingName_meetingId_time_duration
+        const currentMeetingKey = `${(userId || '').trim()}_${reportId || 'no-report'}_${meetingName}_${meetingId}_${meetingTime}_${totalDuration}`;
+        
+        console.log('Comparing keys:', {
+          postedKey: meetingKey,
+          currentKey: currentMeetingKey,
+          matches: currentMeetingKey === meetingKey
+        });
+        
+        // Remove the meeting that matches the posted key exactly
+        return currentMeetingKey !== meetingKey;
+      };
+      
+      const updated = {
+        high: prev.high.filter(filterMeeting),
+        medium: prev.medium.filter(filterMeeting),
+        low: prev.low.filter(filterMeeting),
+        unmatched: prev.unmatched.filter(filterMeeting)
+      };
+      
+      console.log('Updated match results after posting:', {
+        before: {
+          high: prev.high.length,
+          medium: prev.medium.length,
+          low: prev.low.length,
+          unmatched: prev.unmatched.length
+        },
+        after: {
+          high: updated.high.length,
+          medium: updated.medium.length,
+          low: updated.low.length,
+          unmatched: updated.unmatched.length
+        }
+      });
+      
+      // Update match summary immediately with the new counts
+      setTimeout(() => {
+        setMatchSummary({
+          highConfidence: updated.high.length,
+          mediumConfidence: updated.medium.length,
+          lowConfidence: updated.low.length,
+          unmatched: updated.unmatched.length,
+          total: updated.high.length + updated.medium.length + updated.low.length + updated.unmatched.length
+        });
+      }, 0);
+      
+      return updated;
+    });
+    
     // Remove from unmatched meetings, considering both ID and duration
     setUnmatchedMeetings(prev => {
       const filtered = prev.filter(m => {
@@ -337,32 +420,7 @@ export function AIAgentView() {
       return filtered;
     });
     
-    // Update matchResults to remove the posted meeting based on the meeting ID and duration
-    setMatchResults(prev => {
-      const updated = {
-        high: prev.high.filter(m => 
-          m.meeting.meetingInfo?.meetingId !== meetingId || 
-          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
-        ),
-        medium: prev.medium.filter(m => 
-          m.meeting.meetingInfo?.meetingId !== meetingId || 
-          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
-        ),
-        low: prev.low.filter(m => 
-          m.meeting.meetingInfo?.meetingId !== meetingId || 
-          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
-        ),
-        unmatched: prev.unmatched.filter(m => 
-          m.meeting.meetingInfo?.meetingId !== meetingId || 
-          !m.meeting.attendanceRecords.some(r => Math.abs(r.duration - meetingDuration) <= 10)
-        )
-      };
-      
-      console.log('Updated match results after posting:', updated);
-      return updated;
-    });
-    
-    // Add the meeting ID to the postedMeetings list without a full refresh
+    // Refresh posted meetings list asynchronously (this doesn't affect the UI immediately)
     fetch('/api/posted-meetings')
       .then(response => {
         if (!response.ok) {
@@ -373,16 +431,6 @@ export function AIAgentView() {
       .then(data => {
         console.log('Successfully fetched posted meetings after posting');
         setPostedMeetings(data.meetings || []);
-        
-        // Force a refresh of the match summary counts
-        setMatchSummary(prev => {
-          const unmatched = unmatchedMeetings.length - 1; // Subtract the one we just removed
-          return {
-            ...prev,
-            unmatched: unmatched >= 0 ? unmatched : 0,
-            total: prev.highConfidence + prev.mediumConfidence + prev.lowConfidence + (unmatched >= 0 ? unmatched : 0)
-          };
-        });
       })
       .catch(error => {
         console.error('Error refreshing posted meetings:', error);

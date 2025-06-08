@@ -9,69 +9,54 @@ const releaseNotes = `
 
 &nbsp;
 
-## 🌟 Version 2.2.0 (May 2025)
+## 🌟 Version 2.2.2 (June 2025)
 
 &nbsp;
 
-### 🔄 Core System Updates
-
-#### Time & Timezone Improvements
-- 🌏 Fixed Timezone handling for IST attendance reports
-- ⏰ Resolved Agent Time Issues - Implemented UTC for Deployment
-- 🕒 Enhanced Task Name Loading and Agent Stability improvements
-
-#### Infrastructure & Performance
-- 🐳 Successful Docker Implementation
-- 🛠️ Fixed runtime error and session handling issues
-- 🇮🇳 Updated India-Meeting configurations
+### 🔧 Timezone Bug Fixes
+- 🌏 Fixed timezone bug: ensure same meeting count across all timezones
+- 📅 Fixed convertDateRangeToUTC to preserve calendar dates
+- 🔄 Removed redundant date manipulation in API and frontend
+- ✅ Now all users see same meetings for same calendar date regardless of timezone
 
 &nbsp;
 
-### 🎯 Meeting Management
-
-#### Deduplication System Enhancements
-- 🔍 Enhanced Meeting Deduplication System
-- ⚡ Improved time proximity detection (5-minute threshold)
-- 🔄 Better handling of recurring meetings
-- 📊 Enhanced subject comparison logic
-- ⚖️ Reduced duration similarity threshold to 30 seconds
-- 📝 Added comprehensive logging for better tracking
+### 🎨 UI Improvements
+- 🖥️ Clarify timezone display and standardize font sizes in AI Agent view
 
 &nbsp;
 
-### 👥 User Experience
+### 📊 Recurring Meetings Fix
+- 🔁 Display multiple attendance sessions separately for recurring meetings
+- 🛠️ Fix backend to preserve separate records for different report IDs
+- 📋 Update frontend to show each attendance session as individual table row
+- 🎯 Fix API matching to process each session separately during task assignment
+- 🧹 Remove redundant frontend date filtering
+- 🔢 Improve display of multi-session meetings with session numbering
 
-#### Data Management
-- 🔒 Enhanced User-Specific Data Handling
-- 🛡️ Improved data isolation between users
-- 👀 User-specific meeting views and time entries
-- 🔐 Fixed shared data visibility issues
-
-#### AI Features
-- 🤖 Improved AI Agent Task Matching
-- 🎯 Enhanced matching algorithm
-- ⭐ Better confidence scoring
-- 🎨 More accurate task suggestions
-
-&nbsp;
-
----
-
-&nbsp;
-
-## 📜 Previous Updates (Version 2.1.0)
-- 📊 Performance optimizations
-- 🎨 UI/UX improvements
-- 🔧 Bug fixes and stability improvements
-- 📦 Updated dependencies
+Fixes issue where recurring meetings with multiple attendance sessions were being merged into single entries instead of showing separately.
 `;
 
 export function ReleaseNotes() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Button variant="outline" size="sm" disabled={true}>
-      What's New
-    </Button>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          What's New
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl max-h-[80vh]">
+        <DialogHeader>
+          <DialogTitle>Release Notes</DialogTitle>
+        </DialogHeader>
+        <ScrollArea className="h-[60vh] pr-4">
+          <div className="prose prose-sm max-w-none dark:prose-invert">
+            <ReactMarkdown>{releaseNotes}</ReactMarkdown>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   );
 } 

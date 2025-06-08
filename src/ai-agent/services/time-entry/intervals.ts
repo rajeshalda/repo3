@@ -197,6 +197,34 @@ export class IntervalsTimeEntryService {
         return Number((seconds / 3600).toFixed(2));
     }
 
+    private async getGraphToken(): Promise<string> {
+        try {
+            const tokenEndpoint = `https://login.microsoftonline.com/${process.env.AZURE_AD_APP_TENANT_ID}/oauth2/v2.0/token`;
+            const response = await fetch(tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    client_id: process.env.AZURE_AD_APP_CLIENT_ID!,
+                    client_secret: process.env.AZURE_AD_APP_CLIENT_SECRET!,
+                    grant_type: 'client_credentials',
+                    scope: 'https://graph.microsoft.com/.default'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to get access token');
+            }
+
+            const data = await response.json();
+            return data.access_token;
+        } catch (error) {
+            console.error('Error getting graph token:', error);
+            throw error;
+        }
+    }
+
     private formatDate(dateString: string): string {
         // Convert the date to IST timezone (UTC+05:30) before formatting
         const date = new Date(dateString);
@@ -274,24 +302,32 @@ export class IntervalsTimeEntryService {
         try {
             console.log(`
 ╔════════════════════════════════════════════════════════╗
-║ 🚀 TIME ENTRY CREATION STARTED                         
-║ 📝 Meeting: ${meeting.subject?.substring(0, 30)}${meeting.subject && meeting.subject.length > 30 ? '...' : ''} 
-║ 🔄 Task: ${task.taskTitle?.substring(0, 30)}${task.taskTitle && task.taskTitle.length > 30 ? '...' : ''}
+║ 🚀 TIME ENTRY CREATION STARTED                       
+║ 📝 Meeting: ${meeting.subject}                         
+║ 🔄 Task: ${task.taskTitle}                             
 ╚════════════════════════════════════════════════════════╝`);
 
-            // Get person info and task details
             console.log(`⏳ Fetching person & task information...`);
-            const [person, taskDetails] = await Promise.all([
-                this.getPersonInfo(userId),
-                this.getTaskDetails(task.taskId, userId)
-            ]);
+            
+            // Get person info
+            const person = await this.getPersonInfo(userId);
+            
+            // Get task details
+            const taskDetails = await this.getTaskDetails(task.taskId, userId);
+            console.log(`Retrieved task details: {
+  id: '${taskDetails.id}',
+  title: '${taskDetails.title}',
+  status: '${taskDetails.status}',
+  client: '${taskDetails.client}',
+  assigneeid: '${taskDetails.assigneeid}'
+}`);
 
             console.log(`
 ┌─────────────────────────────────────────────────┐
 │ ✓ USER & TASK INFO RETRIEVED                    │
-│ 👤 User: ${person.email}                         │
-│ 📋 Task: #${taskDetails.id} - ${taskDetails.title?.substring(0, 25)}${taskDetails.title && taskDetails.title.length > 25 ? '...' : ''} │
-│ 🏢 Client: ${taskDetails.client || 'N/A'} | Project: ${taskDetails.project || 'N/A'} │
+│ 👤 User:                          │
+│ 📋 Task: #${taskDetails.id} - ${taskDetails.title} │
+│ 🏢 Client: ${taskDetails.client} | Project: ${taskDetails.project} │
 └─────────────────────────────────────────────────┘`);
 
             // Verify all required fields are present
@@ -331,11 +367,102 @@ export class IntervalsTimeEntryService {
             console.log(`ℹ️ Using worktype ID 805564 for India-Meeting`);
             const worktypeId = '805564';
 
-            // Find the current user's attendance record
+            // Handle specific report ID fetching for recurring meetings
+            let attendanceRecords = meeting.attendance?.records || [];
             let userDuration = 0;
-            if (meeting.attendance?.records) {
+            const specificReportId = meeting.attendance?.reportId;
+            
+            // Debug: Log what report ID we're getting
+            console.log(`🔧 DEBUG: Meeting reportId = ${specificReportId}, Meeting ID = ${meeting.id.substring(0, 20)}...`);
+            
+            // If this meeting instance has a specific report ID and we need to fetch fresh data
+            if (specificReportId && meeting.onlineMeeting?.joinUrl) {
+                console.log(`🔍 Fetching attendance for specific report ID: ${specificReportId}`);
+                
+                try {
+                    // Get the access token (we'll need to create a simple version)
+                    const accessToken = await this.getGraphToken();
+                    const joinUrl = meeting.onlineMeeting.joinUrl;
+                    
+                    // Extract meeting ID and organizer ID from join URL
+                    const decodedUrl = decodeURIComponent(joinUrl);
+                    const meetingMatch = decodedUrl.match(/19:meeting_([^@]+)@thread\.v2/);
+                    const organizerMatch = decodedUrl.match(/"Oid":"([^"]+)"/);
+                    
+                    if (meetingMatch && organizerMatch) {
+                        const meetingId = `19:meeting_${meetingMatch[1]}@thread.v2`;
+                        const organizerId = organizerMatch[1];
+                        
+                        // Get user info
+                        const userResponse = await fetch(
+                            `https://graph.microsoft.com/v1.0/users/${userId}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${accessToken}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+                        
+                        if (userResponse.ok) {
+                            const userData = await userResponse.json();
+                            const targetUserId = userData.id;
+                            
+                            // Format the meeting ID for API call
+                            const formattedString = `1*${organizerId}*0**${meetingId}`;
+                            const base64MeetingId = Buffer.from(formattedString).toString('base64');
+                            
+                            // Fetch attendance records for this specific report
+                            const recordsResponse = await fetch(
+                                `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${specificReportId}/attendanceRecords`,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${accessToken}`,
+                                        'Content-Type': 'application/json'
+                                    }
+                                }
+                            );
+                            
+                            if (recordsResponse.ok) {
+                                const recordsData = await recordsResponse.json();
+                                const records = recordsData.value || [];
+                                
+                                console.log(`📊 Fetched ${records.length} attendance records for report ${specificReportId}`);
+                                
+                                // Find the current user's record
+                                const userRecord = records.find((record: any) => 
+                                    record.emailAddress?.toLowerCase() === userId.toLowerCase()
+                                );
+                                
+                                if (userRecord) {
+                                    userDuration = userRecord.totalAttendanceInSeconds;
+                                    console.log(`✅ Found specific attendance: ${Math.floor(userDuration/60)}m ${userDuration%60}s for report ${specificReportId}`);
+                                    
+                                    // Update attendance records with the specific report data
+                                    attendanceRecords = [{
+                                        name: userRecord.identity?.displayName || 'Unknown',
+                                        email: userRecord.emailAddress || '',
+                                        duration: userDuration,
+                                        role: userRecord.role,
+                                        attendanceIntervals: userRecord.attendanceIntervals || []
+                                    }];
+                                } else {
+                                    console.log(`❌ User ${userId} not found in report ${specificReportId}`);
+                                }
+                            } else {
+                                console.log(`⚠️ Failed to fetch records for report ${specificReportId}`);
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.log(`⚠️ Failed to fetch specific report data, using existing attendance: ${error}`);
+                }
+            }
+            
+            // If we didn't get duration from specific report, use existing logic
+            if (userDuration === 0 && attendanceRecords.length > 0) {
                 console.log(`🔍 Checking attendance records for user ${userId}...`);
-                const userRecord = meeting.attendance.records.find(record => 
+                const userRecord = attendanceRecords.find(record => 
                     record.email.toLowerCase() === userId.toLowerCase()
                 );
                 
@@ -350,8 +477,6 @@ export class IntervalsTimeEntryService {
                         meetingId: meeting.id
                     };
                 }
-            } else {
-                console.log(`⚠️ No attendance records found for meeting "${meeting.subject}"`);
             }
 
             // Calculate time in decimal hours from user's attendance record
@@ -380,7 +505,7 @@ export class IntervalsTimeEntryService {
                 taskid: taskDetails.id,
                 worktypeid: worktypeId,
                 personid: person.id,
-                date: DateTime.fromISO(meeting.attendance?.records[0]?.attendanceIntervals[0]?.joinDateTime || '')
+                date: DateTime.fromISO(attendanceRecords[0]?.attendanceIntervals[0]?.joinDateTime || meeting.start.dateTime)
                     .toUTC()
                     .toFormat('yyyy-MM-dd'), // Use UTC date instead of IST
                 time: timeInHours,

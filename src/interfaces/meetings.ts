@@ -113,6 +113,7 @@ export interface ProcessedMeeting extends Meeting {
             totalParticipants: number;
         };
         reportId?: string;
+        allValidReports?: any[];
     };
     seriesMasterId?: string;
     lastProcessed: string;

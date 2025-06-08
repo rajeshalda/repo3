@@ -23,8 +23,11 @@ export class MeetingComparisonService {
     private static instance: MeetingComparisonService;
     private readonly DELAY_MS = 15000; // Increased to 15 seconds
     private readonly BATCH_SIZE = 3;   // Reduced batch size to 3
+    private storage: AIAgentPostedMeetingsStorage;
 
-    private constructor() {}
+    private constructor() {
+        this.storage = new AIAgentPostedMeetingsStorage();
+    }
 
     public static getInstance(): MeetingComparisonService {
         if (!MeetingComparisonService.instance) {
@@ -151,8 +154,7 @@ export class MeetingComparisonService {
     private async batchCompare(newMeetings: ProcessedMeeting[], postedMeetings: ProcessedMeeting[]): Promise<BatchComparisonResult> {
         try {
             // Load posted meetings storage to check for time entries
-            const storage = new AIAgentPostedMeetingsStorage();
-            await storage.loadData();
+            await this.storage.loadData();
 
             console.log(`
 ╔══════════════════════════════════════════════════════════╗
@@ -188,7 +190,7 @@ export class MeetingComparisonService {
                         const reportId = newMeeting.attendance?.reportId;
                         
                         // Pass both duration, start time and report ID to isPosted
-                        const hasTimeEntry = await storage.isPosted(
+                        const hasTimeEntry = await this.storage.isPosted(
                             postedMeeting.userId, 
                             postedMeeting.id, 
                             userDuration,
@@ -310,98 +312,150 @@ export class MeetingComparisonService {
     }
 
     public async filterNewMeetings(meetings: ProcessedMeeting[]): Promise<ProcessedMeeting[]> {
-        try {
-            console.log(`
+        await this.storage.loadData();
+        
+        console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║ 🔍 MEETING FILTER STARTING                                ║
 ║ 📊 Total meetings to check: ${meetings.length}                           ║
-║ 🔄 Batch size: ${this.BATCH_SIZE} | Delay: ${this.DELAY_MS/1000}s                        ║
+║ 🔄 Batch size: 3 | Delay: 15s                        ║
 ╚══════════════════════════════════════════════════════════╝`);
-            
-            // Get posted meetings from the new storage
-            const storage = new AIAgentPostedMeetingsStorage();
-            await storage.loadData();
-            
-            // Process meetings in smaller batches with longer delays
-            const uniqueMeetings: ProcessedMeeting[] = [];
-            
-            for (let i = 0; i < meetings.length; i += this.BATCH_SIZE) {
-                const batch = meetings.slice(i, i + this.BATCH_SIZE);
-                const batchNumber = Math.floor(i/this.BATCH_SIZE) + 1;
-                const totalBatches = Math.ceil(meetings.length/this.BATCH_SIZE);
-                
-                console.log(`
+
+        const uniqueMeetings: ProcessedMeeting[] = [];
+        const batchSize = 3;
+        let duplicatesCount = 0;
+
+        // Process meetings in batches
+        for (let i = 0; i < meetings.length; i += batchSize) {
+            const batch = meetings.slice(i, i + batchSize);
+            const batchNumber = Math.floor(i / batchSize) + 1;
+            const totalBatches = Math.ceil(meetings.length / batchSize);
+
+            console.log(`
 ┌─────────────────────────────────────────────────┐
 │ 📦 Processing batch ${batchNumber}/${totalBatches} (${batch.length} meetings) ║
 └─────────────────────────────────────────────────┘`);
-                
-                let batchDuplicates = 0;
-                
-                // Check each meeting in the batch
-                for (const meeting of batch) {
-                    const truncatedSubject = meeting.subject 
-                        ? `"${meeting.subject.substring(0, 30)}${meeting.subject.length > 30 ? '...' : ''}"`
-                        : 'Untitled meeting';
+
+            const batchResults = await Promise.all(
+                batch.map(async (meeting) => {
+                    try {
+                        // For meetings with multiple reports (recurring or user rejoining), create separate instances
+                        const allValidReports = meeting.attendance?.allValidReports || [];
                         
-                    // Get user's duration for this meeting
-                    let userDuration = 0;
-                    if (meeting.attendance?.records && meeting.userId) {
-                        const userRecord = meeting.attendance.records.find(record => 
-                            record.email.toLowerCase() === meeting.userId.toLowerCase()
-                        );
-                        
-                        if (userRecord) {
-                            userDuration = userRecord.duration;
+                        if (allValidReports.length > 1) {
+                            console.log(`🔄 Meeting "${meeting.subject}" has ${allValidReports.length} report instances (user rejoined multiple times)`);
+                            
+                            const newInstances: ProcessedMeeting[] = [];
+                            
+                            for (const reportSelection of allValidReports) {
+                                const isPosted = await this.storage.isPosted(
+                                    meeting.userId,
+                                    meeting.id,
+                                    0, // duration not needed for report ID check
+                                    '', // dateTime not needed for report ID check
+                                    reportSelection.selectedReportId
+                                );
+                                
+                                if (!isPosted) {
+                                    // Create attendance records specific to this report
+                                    const specificAttendanceRecords = meeting.attendance?.records?.map(record => ({
+                                        ...record,
+                                        duration: reportSelection.metadata?.duration || record.duration,
+                                        // Keep original attendance intervals since we don't have specific ones
+                                        attendanceIntervals: record.attendanceIntervals
+                                    })) || [];
+                                    
+                                    // Create a new meeting instance for this specific report with deep cloning
+                                    const reportInstance: ProcessedMeeting = {
+                                        ...meeting,
+                                        // Create a unique ID for this instance by appending report ID
+                                        id: `${meeting.id}-${reportSelection.selectedReportId.substring(0, 8)}`,
+                                        attendance: {
+                                            records: specificAttendanceRecords,
+                                            summary: {
+                                                totalDuration: reportSelection.metadata?.duration || 0,
+                                                averageDuration: reportSelection.metadata?.duration || 0,
+                                                totalParticipants: meeting.attendance?.summary?.totalParticipants || 1
+                                            },
+                                            reportId: reportSelection.selectedReportId,
+                                            // Clear allValidReports to avoid infinite recursion
+                                            allValidReports: undefined
+                                        }
+                                    };
+                                    
+                                    newInstances.push(reportInstance);
+                                    console.log(`✅ Report ${reportSelection.selectedReportId} not posted - creating instance`);
+                                    console.log(`🔧 DEBUG: Created instance with reportId = ${reportInstance.attendance?.reportId}, instanceId = ${reportInstance.id}`);
+                                } else {
+                                    console.log(`⏭️ Report ${reportSelection.selectedReportId} already posted - skipping`);
+                                }
+                            }
+                            
+                            if (newInstances.length > 0) {
+                                console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🔄 MEETING SPLIT INTO ${newInstances.length} INSTANCES (MULTIPLE SESSIONS) ║
+║ 📝 Meeting: "${meeting.subject}"                       ║
+║ 🆔 Original ID: ${meeting.id.substring(0, 20)}...     ║
+╚════════════════════════════════════════════════════════╝`);
+                            }
+                            
+                            return newInstances;
+                        } else {
+                            // Single report or no reports - use existing logic
+                            const reportId = meeting.attendance?.reportId;
+                            
+                            const isPosted = await this.storage.isPosted(
+                                meeting.userId,
+                                meeting.id,
+                                0,
+                                '',
+                                reportId
+                            );
+                            
+                            if (!isPosted) {
+                                console.log(`✅ Unique: "${meeting.subject}" [${meeting.id.substring(0, 15)}...]`);
+                                return [meeting];
+                            } else {
+                                console.log(`⏭️ Duplicate: "${meeting.subject}" already posted`);
+                                return [];
+                            }
                         }
+                    } catch (error) {
+                        console.error(`Error checking meeting ${meeting.id}:`, error);
+                        // In case of error, include the meeting to avoid losing it
+                        return [meeting];
                     }
-                    
-                    // Get report ID if available
-                    const reportId = meeting.attendance?.reportId;
-                    
-                    // Pass duration and reportId to isPosted to handle recurring meetings correctly
-                    const isPosted = await storage.isPosted(
-                        meeting.userId, 
-                        meeting.id, 
-                        userDuration,
-                        meeting.start?.dateTime, // Pass the start time
-                        reportId // Pass the report ID if available
-                    );
-                    
-                    if (!isPosted) {
-                        uniqueMeetings.push(meeting);
-                        console.log(`✅ Unique: ${truncatedSubject} [${meeting.id}]`);
-                    } else {
-                        batchDuplicates++;
-                        console.log(`⏭️ Duplicate: ${truncatedSubject} [${meeting.id}]`);
-                    }
-                }
+                })
+            );
 
-                // Log results for this batch
-                console.log(`
-┌─────────────────────────────────────────────────┐
-│ ✓ Batch ${batchNumber}/${totalBatches} completed                      ║
-│ 📊 Total: ${batch.length} | Unique: ${batch.length - batchDuplicates} | Duplicates: ${batchDuplicates}   ║
-└─────────────────────────────────────────────────┘`);
-
-                // Add longer delay between batches
-                if (i + this.BATCH_SIZE < meetings.length) {
-                    console.log(`⏱️ Waiting ${this.DELAY_MS/1000} seconds before next batch...`);
-                    await this.delay(this.DELAY_MS);
-                }
-            }
+            // Flatten the results and add to unique meetings
+            const batchUnique = batchResults.flat();
+            const batchDuplicates = batch.length - batchUnique.length;
+            duplicatesCount += batchDuplicates;
+            
+            uniqueMeetings.push(...batchUnique);
 
             console.log(`
+┌─────────────────────────────────────────────────┐
+│ ✓ Batch ${batchNumber}/${totalBatches} completed                      ║
+│ 📊 Total: ${batch.length} | Unique: ${batchUnique.length} | Duplicates: ${batchDuplicates}   ║
+└─────────────────────────────────────────────────┘`);
+
+            // Add delay between batches if not the last batch
+            if (i + batchSize < meetings.length) {
+                await this.delay(this.DELAY_MS);
+            }
+        }
+
+        console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FILTER COMPLETED                               ║
-║ 📊 Total: ${meetings.length} | Duplicates: ${meetings.length - uniqueMeetings.length} | Unique: ${uniqueMeetings.length}     ║
-║ 📈 Duplication rate: ${Math.round(((meetings.length - uniqueMeetings.length)/meetings.length)*100)}%                                   ║
+║ 📊 Total: ${meetings.length} | Duplicates: ${duplicatesCount} | Unique: ${uniqueMeetings.length}     ║
+║ 📈 Duplication rate: ${Math.round((duplicatesCount / meetings.length) * 100)}%                                   ║
 ╚══════════════════════════════════════════════════════════╝`);
 
-            return uniqueMeetings;
-        } catch (error) {
-            console.error('❌ ERROR filtering new meetings:', error);
-            throw error;
-        }
+        return uniqueMeetings;
     }
 }
 

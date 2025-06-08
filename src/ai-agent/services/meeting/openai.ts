@@ -227,6 +227,7 @@ export class MeetingService {
             // Get attendance records if it's an online meeting
             let attendance;
             let selectedReportId: string | undefined;
+            let allValidReports: any[] = [];
             
             if (meeting.onlineMeeting?.joinUrl) {
                 try {
@@ -275,6 +276,9 @@ export class MeetingService {
                                     const meetingDate = meeting.start.dateTime;
                                     const isRecurring = !!meeting.seriesMasterId;
                                     
+                                    // Check if there are multiple reports (user rejoined multiple times)
+                                    const hasMultipleReports = reportsData.value.length > 1;
+                                    
                                     // Enhanced logging for time-related issues
                                     const meetingStartIST = new Date(meeting.start.dateTime).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
                                     const meetingStartHourIST = new Date(meetingStartIST).getHours();
@@ -288,17 +292,45 @@ export class MeetingService {
 │ 🌅 Early Morning: ${isEarlyMorning ? 'YES' : 'NO'}        │
 └─────────────────────────────────────────────────────────┘`);
                                     
-                                    const reportSelection = await reportManager.processAttendanceReports(
-                                        reportsData.value,
-                                        meetingDate,
-                                        isRecurring
-                                    );
-                                    
-                                    if (reportSelection.selectedReportId) {
-                                        selectedReportId = reportSelection.selectedReportId;
-                                        console.log('Selected report ID:', selectedReportId, 'Reason:', reportSelection.reason);
+                                    // For meetings with multiple reports (recurring OR user rejoined multiple times), get ALL valid reports
+                                    if (hasMultipleReports) {
+                                        const allReportSelections = await reportManager.processAllValidReports(
+                                            reportsData.value,
+                                            meetingDate,
+                                            isRecurring
+                                        );
                                         
-                                        // Get attendance records for the selected report
+                                        if (allReportSelections.length > 0) {
+                                            console.log(`🔄 Found ${allReportSelections.length} valid reports for meeting (${isRecurring ? 'recurring' : 'user rejoined multiple times'})`);
+                                            
+                                            // Store all valid reports for later processing
+                                            allValidReports = allReportSelections;
+                                            
+                                            // For the main meeting object, use the most recent report
+                                            const latestReport = allReportSelections.sort((a, b) => 
+                                                new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime()
+                                            )[0];
+                                            
+                                            selectedReportId = latestReport.selectedReportId;
+                                            console.log('Using latest report for main meeting object:', selectedReportId);
+                                        }
+                                    } else {
+                                        // For single report meetings, use the existing single report selection
+                                        const reportSelection = await reportManager.processAttendanceReports(
+                                            reportsData.value,
+                                            meetingDate,
+                                            isRecurring
+                                        );
+                                        
+                                        if (reportSelection.selectedReportId) {
+                                            selectedReportId = reportSelection.selectedReportId;
+                                            allValidReports = [reportSelection];
+                                            console.log('Selected single report ID:', selectedReportId, 'Reason:', reportSelection.reason);
+                                        }
+                                    }
+                                    
+                                    // Get attendance records for the selected report (for the main meeting object)
+                                    if (selectedReportId) {
                                         const recordsResponse = await fetch(
                                             `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${selectedReportId}/attendanceRecords`,
                                             {
@@ -331,7 +363,8 @@ export class MeetingService {
                                                         averageDuration: totalDuration / attendanceRecords.length,
                                                         totalParticipants: attendanceRecords.length
                                                     },
-                                                    reportId: selectedReportId // Store the selected report ID
+                                                    reportId: selectedReportId, // Store the selected report ID
+                                                    allValidReports: allValidReports // Store all valid reports for later processing
                                                 };
                                             }
                                         }

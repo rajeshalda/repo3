@@ -966,7 +966,7 @@ export default function DashboardPage() {
                                         {formatDuration(item.record.duration)}
                                       </div>
                                     ) : (
-                                      <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Not Attended</span>
+                                      <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Meeting did not start</span>
                                     )}
                                   </TableCell>
                                   <TableCell className="px-4 py-3 text-right pr-8">

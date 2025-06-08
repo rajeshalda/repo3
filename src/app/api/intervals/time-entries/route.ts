@@ -439,6 +439,63 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
                     }
                 );
                 
+                // IMPORTANT: Remove meeting from review queue for manual posts using reportId only
+                // This was missing and causing the issue where manually posted meetings stayed in review
+                try {
+                    const storageManager = StorageManager.getInstance();
+                    
+                    if (reportId) {
+                        // Find the review meeting by reportId (most reliable and unique)
+                        const reviewMeetings = await storageManager.getPendingReviews(session.user.email);
+                        const reviewMeeting = reviewMeetings.find(rm => rm.reportId === reportId);
+                        
+                        if (reviewMeeting) {
+                            console.log(`
+╔════════════════════════ MANUAL POST REVIEW REMOVAL ═══════════════════════╗
+║ 🎯 REMOVING FROM REVIEW QUEUE (by reportId)                              ║
+║ 📊 Report ID: ${reportId}                                               ║
+║ 🆔 Meeting ID: ${reviewMeeting.id}                                       ║
+║ 📝 Subject: ${reviewMeeting.subject}                                     ║
+╚═══════════════════════════════════════════════════════════════════════════╝`);
+                            
+                            await storageManager.updateReviewStatus({
+                                meetingId: reviewMeeting.id,
+                                status: 'approved',
+                                decidedAt: new Date().toISOString(),
+                                decidedBy: session.user.email,
+                                feedback: `Manual post: matched to task ${taskTitle || taskName}`
+                            });
+                            
+                            console.log(`
+┌─────────────────── MANUAL POST REVIEW STATUS ───────────────────┐
+│ ✅ Meeting removed from review queue                            │
+│ 🎯 Method: Report ID                                            │
+│ 📊 Report ID: ${reportId}                                       │
+│ 👤 User: ${session.user.email}                                 │
+└─────────────────────────────────────────────────────────────────┘`);
+                        } else {
+                            console.log(`
+┌─────────────────── MANUAL POST REVIEW STATUS ───────────────────┐
+│ ⚠️ No review meeting found with reportId: ${reportId}           │
+│ 🔍 This meeting may not be in the review queue                  │
+└─────────────────────────────────────────────────────────────────┘`);
+                        }
+                    } else {
+                        console.log(`
+┌─────────────────── MANUAL POST REVIEW STATUS ───────────────────┐
+│ ⚠️ No reportId provided - cannot remove from review queue       │
+│ 🔍 Manual posts require reportId for review queue removal       │
+└─────────────────────────────────────────────────────────────────┘`);
+                    }
+                } catch (error) {
+                    console.error(`
+┌─────────────────── MANUAL POST ERROR ───────────────────┐
+│ ❌ Failed to remove meeting from review queue           │
+│ 🔍 Error: ${error instanceof Error ? error.message : 'Unknown error'} │
+└─────────────────────────────────────────────────────────┘`);
+                    // Don't fail the request if this fails
+                }
+                
                 // We'll no longer store in the legacy storage to avoid duplication
                 // The AIAgentPostedMeetingsStorage is the primary storage now
                 console.log('Meeting stored in AI Agent storage format only to prevent duplication');

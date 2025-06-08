@@ -758,6 +758,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
   const [selectedTasks, setSelectedTasks] = useState<Map<string, Task>>(new Map());
   const [selectedMeetingKeys, setSelectedMeetingKeys] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState('matched');
+  const [recentlyPostedKeys, setRecentlyPostedKeys] = useState<Set<string>>(new Set());
   
   // Add a matchesRef to detect actual changes in matches data
   const matchesRef = useRef(matches);
@@ -828,6 +829,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       category,
       totalMeetings: matchResults.length,
       postedIds: Array.from(postedIds),
+      recentlyPostedKeys: Array.from(recentlyPostedKeys),
       source
     });
 
@@ -851,6 +853,12 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
         matchedTask: m.matchedTask?.title,
         source
       });
+      
+      // Check if this meeting was recently posted - if so, exclude it
+      if (recentlyPostedKeys.has(meetingKey)) {
+        console.log('Excluding recently posted meeting:', meetingKey);
+        return false;
+      }
       
       // Check if meeting is already posted
       let isPosted = postedIds.has(meetingKey);
@@ -928,7 +936,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       
       return isIncluded;
     });
-  }, [matches, postedMeetingIds, userId, source, session]);
+  }, [matches, postedMeetingIds, userId, source, session, recentlyPostedKeys]);
 
   const [meetings, setMeetings] = useState<MatchGroups>(() => ({
     high: filterMeetings(matches.high, 'high'),
@@ -953,8 +961,14 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
     }
   }, [source, matches, setMeetings, filterMeetings]);
 
-  // Update meetings when props change
+  // Update meetings when props change - but only when matches actually change, not on every render
   useEffect(() => {
+    // Don't update if we have recently posted meetings - let the local state handle it
+    if (recentlyPostedKeys.size > 0) {
+      console.log('Skipping matches update due to recently posted meetings:', Array.from(recentlyPostedKeys));
+      return;
+    }
+    
     console.log('Updating meetings due to prop changes:', {
       matchesReceived: {
         high: matches.high.length,
@@ -972,25 +986,31 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       low: filterMeetings(matches.low, 'low'),
       unmatched: filterMeetings(matches.unmatched, 'unmatched')
     });
-  }, [matches, postedMeetingIds, userId, source]);
-
-  // Add useEffect to remove meetings from UI when they are posted
-  useEffect(() => {
-    if (postedMeetingIds) {
-      setMeetings(prev => ({
-        high: filterMeetings(prev.high, 'high'),
-        medium: filterMeetings(prev.medium, 'medium'),
-        low: filterMeetings(prev.low, 'low'),
-        unmatched: filterMeetings(prev.unmatched, 'unmatched')
-      }));
-    }
-  }, [postedMeetingIds]);
+  }, [matches, source, recentlyPostedKeys, filterMeetings]); // Added recentlyPostedKeys to dependencies
 
   // Update handleMeetingPosted to efficiently remove the meeting from UI
   const handleMeetingPosted = (meetingKey: string): void => {
     console.log('Meeting posted with key:', meetingKey);
     
-    // Only remove the specific meeting session that was posted
+    // Track this key as recently posted to prevent useEffect from overriding our local state
+    setRecentlyPostedKeys(prev => new Set([...prev, meetingKey]));
+    
+    // Clear the recently posted key after a short delay
+    setTimeout(() => {
+      setRecentlyPostedKeys(prev => {
+        const next = new Set(prev);
+        next.delete(meetingKey);
+        return next;
+      });
+    }, 1000); // 1 second should be enough for state updates to settle
+    
+    // Immediately call the parent component's onMeetingPosted callback first
+    // This ensures the parent state is updated before we update local state
+    if (onMeetingPosted) {
+      onMeetingPosted(meetingKey);
+    }
+    
+    // Then update local state to remove the meeting immediately
     setMeetings(prev => {
       // Create a filter function that only removes the exact meeting key that was posted
       const filterMeeting = (m: MatchResult) => {
@@ -1032,11 +1052,6 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
       next.delete(meetingKey);
       return next;
     });
-    
-    // Call the parent component's onMeetingPosted callback
-    if (onMeetingPosted) {
-      onMeetingPosted(meetingKey);
-    }
   };
 
   // Helper functions for unmatched meetings
