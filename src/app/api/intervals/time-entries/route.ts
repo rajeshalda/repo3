@@ -123,8 +123,15 @@ export async function POST(request: Request) {
                         const joinDateTime = userRecord.intervals[0].joinDateTime;
                         if (joinDateTime) {
                             // Convert to YYYY-MM-DD format for the date field
+                            const originalDate = date;
                             actualMeetingDate = new Date(joinDateTime).toISOString().split('T')[0];
-                            console.log(`📅 Using actual attendance date: ${actualMeetingDate} (from joinDateTime: ${joinDateTime})`);
+                            console.log(`
+╔══════════════════════ DATE CORRECTION FOR MANUAL POST ══════════════════════╗
+║ 📅 Original scheduled date: ${originalDate}                                ║
+║ 🕐 User's actual joinDateTime: ${joinDateTime}                              ║
+║ 📅 Corrected actual meeting date: ${actualMeetingDate}                     ║
+║ 🌍 This ensures timezone-accurate date for time entry                       ║
+╚═════════════════════════════════════════════════════════════════════════════╝`);
                         }
                     } else if (isManualPost && userRecord.rawRecord?.reportId) {
                         // Fallback: check if we have report metadata with meeting start time
@@ -339,6 +346,14 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
             }
             
             // Create time entry with hours
+            console.log(`
+╔═══════════════════════ CREATING TIME ENTRY ═══════════════════════╗
+║ 📅 Final date being used: ${actualMeetingDate}                   ║
+║ ⏱️ Duration: ${timeInHours} hours                                ║
+║ 💰 Billable: ${billableStr}                                      ║
+║ 📝 Description: ${(description || 'No description provided').substring(0, 30)}... ║
+╚═══════════════════════════════════════════════════════════════════╝`);
+            
             const result = await intervalsApi.createTimeEntry({
                 taskId,
                 date: actualMeetingDate, // Use the actual meeting date (corrected for manual posts)
