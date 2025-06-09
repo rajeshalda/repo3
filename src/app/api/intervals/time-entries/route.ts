@@ -224,6 +224,27 @@ export async function POST(request: Request) {
 
                 // Check if this meeting ID exists for the same date (this catches rejoined meetings)
                 const meetingExists = postedMeetings.some(m => {
+                    // PRIORITY 1: If both meetings have reportIds, use that for duplicate detection
+                    if (requestReportId && m.reportId) {
+                        const sameReportId = requestReportId === m.reportId;
+                        if (sameReportId) {
+                            console.log(`
+┌─────────────────────── DUPLICATE DETECTED BY REPORT ID (MANUAL) ───────────────────────┐
+│ 📊 Report ID: ${requestReportId}                                                      │
+│ 📊 Stored Report ID: ${m.reportId}                                                    │
+│ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                              │
+│ 📅 Request Date: ${date}                                                             │
+│ 📅 Stored Date: ${m.timeEntry?.date}                                                 │
+│ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                            │
+│ ✅ Match Method: Report ID (most reliable)                                           │
+└─────────────────────────────────────────────────────────────────────────────────────┘`);
+                            return true;
+                        }
+                        // If reportIds don't match, it's definitely NOT a duplicate
+                        return false;
+                    }
+                    
+                    // PRIORITY 2: Fallback to meeting ID + date matching if no reportIds
                     const sameId = m.meetingId === standardMeetingId;
                     let sameDate = true;
                     
@@ -232,30 +253,16 @@ export async function POST(request: Request) {
                         sameDate = m.timeEntry.date === date;
                     }
                     
-                    // Check if reportIds match - if both have reportIds, they must match to be duplicates
-                    // If either doesn't have a reportId, fall back to standard ID + date check
-                    let sameReportId = true;
-                    if (requestReportId && m.reportId) {
-                        sameReportId = requestReportId === m.reportId;
-                        // If both have reportIds and they don't match, this is NOT a duplicate
-                        if (!sameReportId) {
-                            return false;
-                        }
-                    }
-                    
-                    // If meeting ID matches and date matches, consider it a duplicate
-                    // unless we have different report IDs
-                    const isDuplicate = sameId && sameDate && sameReportId;
+                    const isDuplicate = sameId && sameDate;
                     
                     if (isDuplicate) {
                         console.log(`
-┌─────────────────────── DUPLICATE DETECTED (MANUAL) ───────────────────────┐
-│ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                  │
-│ 📅 Date: ${date}                                                        │
-│ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                │
-${requestReportId ? `│ 📊 Report ID: ${requestReportId}                                       │` : ''}
-${m.reportId ? `│ 📊 Stored Report ID: ${m.reportId}                                  │` : ''}
-└───────────────────────────────────────────────────────────────────────────┘`);
+┌─────────────────────── DUPLICATE DETECTED BY MEETING ID (MANUAL) ───────────────────────┐
+│ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                              │
+│ 📅 Date: ${date}                                                                     │
+│ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                            │
+│ ✅ Match Method: Meeting ID + Date (fallback)                                        │
+└─────────────────────────────────────────────────────────────────────────────────────┘`);
                     }
                     
                     return isDuplicate;

@@ -612,7 +612,24 @@ export async function GET(request: Request) {
         // Convert to Date objects for comparison (just the date part)
         const meetingDateOnly = new Date(meetingDateStr + 'T00:00:00.000Z');
         const startDateOnly = new Date(startDateStr + 'T00:00:00.000Z');
-        const endDateOnly = new Date(endDateStr + 'T23:59:59.999Z');
+        const endDateOnly = new Date(endDateStr + 'T00:00:00.000Z');
+        
+        // Check if this is a single day request in IST time
+        // Convert the start and end UTC times to IST to check if they're on the same day
+        const startIST = new Date(startDate.getTime() + (5.5 * 60 * 60 * 1000));
+        const endIST = new Date(endDate.getTime() + (5.5 * 60 * 60 * 1000));
+        const startISTDateStr = startIST.toISOString().split('T')[0];
+        const endISTDateStr = endIST.toISOString().split('T')[0];
+        const isSingleDayRequest = startISTDateStr === endISTDateStr;
+        
+        // For single day requests, strictly check if the meeting starts on that day in IST
+        // For multi-day ranges, use the previous inclusive range logic
+        let isInRange;
+        if (isSingleDayRequest) {
+            isInRange = meetingDateStr === startISTDateStr;
+        } else {
+            isInRange = meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
+        }
         
         console.log('Meeting date filter check:', {
             meetingSubject: meeting.subject,
@@ -621,10 +638,13 @@ export async function GET(request: Request) {
             meetingDateOnly: meetingDateStr,
             startDateOnly: startDateStr,
             endDateOnly: endDateStr,
-            isInRange: meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly
+            startISTDate: startISTDateStr,
+            endISTDate: endISTDateStr,
+            isSingleDayRequest: isSingleDayRequest,
+            isInRange: isInRange
         });
         
-        return meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
+        return isInRange;
     });
 
     console.log(`\nFiltered ${meetingsData.meetings.length} meetings to ${dateFilteredMeetings.length} within date range`);

@@ -61,21 +61,7 @@ Fixes issue where recurring meetings with multiple attendance sessions were bein
 
 Fixes issues where meetings would remain in review queue after posting, requiring manual page refresh. Both AI agent and manual posting now consistently remove meetings from review queue immediately.
 
-&nbsp;
 
----
-
-&nbsp;
-
-## ⚠️ Important Note from Dev Team
-
-**AI Agent Time Window Behavior:**
-- 🕐 Agent skips meetings between 12:00 AM - 5:30 AM UTC (intended behavior)
-- ✅ Agent resumes processing after 5:30 AM UTC 
-- 🖱️ Manual posting works normally for early morning meetings
-- 🎯 This prevents duplicate entries - not a malfunction
-
-*If you need to post meetings during 12:00 AM - 5:30 AM UTC, use manual posting.*
 `;
 
 export function ReleaseNotes() {
