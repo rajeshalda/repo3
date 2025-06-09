@@ -924,7 +924,8 @@ export default function DashboardPage() {
                                     <div className="text-sm space-y-1">
                                       <div>{new Date(item.meeting.startTime).toLocaleDateString([], { 
                                         month: 'short',
-                                        day: 'numeric'
+                                        day: 'numeric',
+                                        timeZone: 'Asia/Kolkata'
                                       })}</div>
                                       <div className="text-muted-foreground">
                                         {item.record && item.record.intervals && item.record.intervals.length > 0 ? (
@@ -933,11 +934,13 @@ export default function DashboardPage() {
                                             {new Date(item.record.intervals[0].joinDateTime).toLocaleTimeString([], { 
                                               hour: 'numeric',
                                               minute: '2-digit',
-                                              hour12: true
+                                              hour12: true,
+                                              timeZone: 'Asia/Kolkata'
                                             })} - {new Date(item.record.intervals[0].leaveDateTime).toLocaleTimeString([], { 
                                               hour: 'numeric',
                                               minute: '2-digit',
-                                              hour12: true
+                                              hour12: true,
+                                              timeZone: 'Asia/Kolkata'
                                             })}
                                           </>
                                         ) : (
@@ -946,11 +949,13 @@ export default function DashboardPage() {
                                             {new Date(item.meeting.startTime).toLocaleTimeString([], { 
                                               hour: 'numeric',
                                               minute: '2-digit',
-                                              hour12: true
+                                              hour12: true,
+                                              timeZone: 'Asia/Kolkata'
                                             })} - {new Date(item.meeting.endTime).toLocaleTimeString([], { 
                                               hour: 'numeric',
                                               minute: '2-digit',
-                                              hour12: true
+                                              hour12: true,
+                                              timeZone: 'Asia/Kolkata'
                                             })}
                                           </>
                                         )}

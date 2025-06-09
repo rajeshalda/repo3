@@ -349,10 +349,19 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
         isRecurring: !!meeting.seriesMasterId
       });
 
+      // Convert Microsoft Graph date format to standard ISO format
+      const cleanStartTime = meeting.start.dateTime.includes('.0000000') 
+        ? meeting.start.dateTime.replace('.0000000', '.000Z')
+        : meeting.start.dateTime.endsWith('Z') ? meeting.start.dateTime : meeting.start.dateTime + 'Z';
+      
+      const cleanEndTime = meeting.end.dateTime.includes('.0000000')
+        ? meeting.end.dateTime.replace('.0000000', '.000Z') 
+        : meeting.end.dateTime.endsWith('Z') ? meeting.end.dateTime : meeting.end.dateTime + 'Z';
+
       const baseMeetingData: MeetingData = {
         subject: meeting.subject,
-        startTime: meeting.start.dateTime,
-        endTime: meeting.end.dateTime,
+        startTime: cleanStartTime,
+        endTime: cleanEndTime,
         isTeamsMeeting: false,
         meetingInfo: null,
         attendanceRecords: [],
@@ -426,7 +435,11 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
                   name: record.identity?.displayName || 'Unknown',
                   email: record.emailAddress || '',
                   duration: record.totalAttendanceInSeconds,
-                  intervals: record.attendanceIntervals || [],
+                  intervals: (record.attendanceIntervals || []).map(interval => ({
+                    joinDateTime: interval.joinDateTime,
+                    leaveDateTime: interval.leaveDateTime,
+                    durationInSeconds: interval.durationInSeconds
+                  })),
                   rawRecord: record
                 }))
               };
@@ -463,31 +476,81 @@ function formatToIST(date: Date): string {
     console.log('\n=== TIME CONVERSION DEBUG ===');
     console.log('Input UTC Date:', date.toISOString());
     
-    // Add 5 hours and 30 minutes to convert to IST
-    const istDate = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
-    console.log('After adding 5:30 hours:', istDate.toISOString());
-    
+    // Use Intl.DateTimeFormat with IST timezone instead of manual offset calculation
+    // This is more reliable and handles DST automatically
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
+        hour12: true,
+        timeZone: 'Asia/Kolkata'
     };
 
-    const formattedDate = new Intl.DateTimeFormat('en-IN', options).format(istDate);
+    const formattedDate = new Intl.DateTimeFormat('en-IN', options).format(date);
     const finalResult = formattedDate + ' IST';
     console.log('Formatted IST result:', finalResult);
     console.log('===========================\n');
     return finalResult;
 }
 
+// Helper function to convert UTC to IST but keep as UTC ISO string for frontend
+function convertToISTISOString(utcTimeString: string): string {
+    console.log('\n=== UTC TO IST ISO CONVERSION DEBUG ===');
+    console.log('Input UTC string:', utcTimeString);
+    
+    // Handle Microsoft Graph date format (2025-06-08T18:30:00.0000000)
+    // Remove extra zeros and ensure proper ISO format
+    let cleanedDateString = utcTimeString;
+    if (utcTimeString.includes('.0000000')) {
+        cleanedDateString = utcTimeString.replace('.0000000', '.000Z');
+    } else if (!utcTimeString.endsWith('Z') && !utcTimeString.includes('+')) {
+        // If no timezone info, assume it's UTC
+        cleanedDateString = utcTimeString + 'Z';
+    }
+    
+    console.log('Cleaned date string:', cleanedDateString);
+    const utcDate = new Date(cleanedDateString);
+    console.log('Parsed as Date:', utcDate.toISOString());
+    
+    // Convert to IST by adding 5.5 hours, but return as UTC ISO string
+    // This way frontend will display the correct IST time
+    const istDate = new Date(utcDate.getTime() + (5.5 * 60 * 60 * 1000));
+    
+    // Format as if it's UTC but it's actually IST time
+    const year = istDate.getUTCFullYear();
+    const month = String(istDate.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(istDate.getUTCDate()).padStart(2, '0');
+    const hours = String(istDate.getUTCHours()).padStart(2, '0');
+    const minutes = String(istDate.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(istDate.getUTCSeconds()).padStart(2, '0');
+    const ms = String(istDate.getUTCMilliseconds()).padStart(3, '0');
+    
+    const istAsUTCString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}Z`;
+    
+    console.log('IST time as UTC ISO result:', istAsUTCString);
+    console.log('================================\n');
+    return istAsUTCString;
+}
+
 // Helper function to convert UTC to IST
 function convertToIST(utcTimeString: string): string {
     console.log('\n=== UTC STRING CONVERSION DEBUG ===');
     console.log('Input UTC string:', utcTimeString);
-    const utcDate = new Date(utcTimeString);
+    
+    // Handle Microsoft Graph date format (2025-06-08T18:30:00.0000000)
+    // Remove extra zeros and ensure proper ISO format
+    let cleanedDateString = utcTimeString;
+    if (utcTimeString.includes('.0000000')) {
+        cleanedDateString = utcTimeString.replace('.0000000', '.000Z');
+    } else if (!utcTimeString.endsWith('Z') && !utcTimeString.includes('+')) {
+        // If no timezone info, assume it's UTC
+        cleanedDateString = utcTimeString + 'Z';
+    }
+    
+    console.log('Cleaned date string:', cleanedDateString);
+    const utcDate = new Date(cleanedDateString);
     console.log('Parsed as Date:', utcDate.toISOString());
     const result = formatToIST(utcDate);
     console.log('Final IST result:', result);
@@ -534,10 +597,34 @@ export async function GET(request: Request) {
     // Get meetings data
     const meetingsData = await getMeetings(accessToken, startDate, endDate);
 
-    // Filter meetings by date range
+    // Filter meetings by date range - convert UTC meeting times to IST for date comparison
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
-        const meetingDate = new Date(meeting.startTime);
-        return meetingDate >= startDate && meetingDate <= endDate;
+        const meetingUTCDate = new Date(meeting.startTime);
+        
+        // Convert to IST for date comparison
+        const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+        
+        // Get the date part in IST
+        const meetingDateStr = meetingISTDate.toISOString().split('T')[0]; // YYYY-MM-DD
+        const startDateStr = startDate.toISOString().split('T')[0];
+        const endDateStr = endDate.toISOString().split('T')[0];
+        
+        // Convert to Date objects for comparison (just the date part)
+        const meetingDateOnly = new Date(meetingDateStr + 'T00:00:00.000Z');
+        const startDateOnly = new Date(startDateStr + 'T00:00:00.000Z');
+        const endDateOnly = new Date(endDateStr + 'T23:59:59.999Z');
+        
+        console.log('Meeting date filter check:', {
+            meetingSubject: meeting.subject,
+            meetingUTCTime: meeting.startTime,
+            meetingISTTime: meetingISTDate.toISOString(),
+            meetingDateOnly: meetingDateStr,
+            startDateOnly: startDateStr,
+            endDateOnly: endDateStr,
+            isInRange: meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly
+        });
+        
+        return meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
     });
 
     console.log(`\nFiltered ${meetingsData.meetings.length} meetings to ${dateFilteredMeetings.length} within date range`);
