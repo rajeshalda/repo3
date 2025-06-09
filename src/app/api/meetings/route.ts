@@ -165,37 +165,42 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
       totalReports: reportsData.value.length
     });
 
-    // If instanceDate is provided (for recurring meetings), filter the intervals
+    // If instanceDate is provided (for recurring meetings), filter the intervals with strict date matching
     if (instanceDate) {
-      console.log('Filtering attendance records for date:', instanceDate);
+      console.log('Filtering attendance records for exact date:', instanceDate);
       
       const filteredRecords = allAttendanceRecords.map(record => {
-        // Filter intervals for the specific date
+        // Filter intervals for EXACT date match only
         const dateSpecificIntervals = record.attendanceIntervals.filter(interval => {
-          const intervalDate = new Date(interval.joinDateTime).toISOString().split('T')[0];
-          const matches = intervalDate === instanceDate;
-          console.log('Interval comparison:', {
+          const joinTime = new Date(interval.joinDateTime);
+          const intervalDate = joinTime.toISOString().split('T')[0];
+          
+          // Only accept EXACT date matches - no timezone tolerance for now
+          const exactDateMatch = intervalDate === instanceDate;
+          
+          console.log('Strict interval comparison:', {
             email: record.emailAddress,
             intervalDate,
             instanceDate,
-            matches,
+            exactDateMatch,
             joinTime: interval.joinDateTime,
             leaveTime: interval.leaveDateTime
           });
-          return matches;
+          
+          return exactDateMatch;
         });
 
         // Recalculate total duration based on filtered intervals
         const totalDuration = dateSpecificIntervals.reduce((sum, interval) => 
           sum + interval.durationInSeconds, 0);
 
-        console.log('Filtered record:', {
+        console.log('Strictly filtered record:', {
           email: record.emailAddress,
           originalIntervals: record.attendanceIntervals.length,
           filteredIntervals: dateSpecificIntervals.length,
           originalDuration: record.totalAttendanceInSeconds,
           newDuration: totalDuration,
-          date: instanceDate
+          targetDate: instanceDate
         });
 
         return {
@@ -205,7 +210,7 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
         };
       });
 
-      // Only return records that have intervals for this date
+      // Only return records that have intervals for this exact date
       return filteredRecords.filter(record => record.attendanceIntervals.length > 0);
     }
     
@@ -289,6 +294,13 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
 }
 
 async function getMeetings(accessToken: string, startDate: Date, endDate: Date) {
+  // Calculate the user's viewing date range for filtering attendance records
+  // For multi-day ranges, we need to be more flexible with recurring meetings
+  const startIST = new Date(startDate.getTime() + (5.5 * 60 * 60 * 1000));
+  const endIST = new Date(endDate.getTime() + (5.5 * 60 * 60 * 1000));
+  const startViewingDate = startIST.toISOString().split('T')[0];
+  const endViewingDate = endIST.toISOString().split('T')[0];
+  const isMultiDayRange = startViewingDate !== endViewingDate;
   // Don't add extra day - frontend already sends properly formatted end date (23:59:59.999)
   console.log('Fetching meetings with date range:', {
     startDate: startDate.toISOString(),
@@ -388,6 +400,27 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
           const formattedString = `1*${meetingInfo.organizerId}*0**19:meeting_${meetingInfo.threadId}@thread.v2`;
           const base64MeetingId = Buffer.from(formattedString).toString('base64');
           
+          // For recurring meetings, use the specific meeting instance date for filtering attendance records
+          // This ensures that each recurring meeting instance only shows attendance from its own date
+          let instanceDateForFiltering: string | undefined;
+          if (baseMeetingData.isRecurring) {
+            // For recurring meetings, always use the specific instance date for filtering
+            // Convert meeting's start time to IST date to match attendance records
+            const meetingUTCDate = new Date(baseMeetingData.startTime);
+            const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+            instanceDateForFiltering = meetingISTDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            
+            console.log('Setting instance date for recurring meeting:', {
+              meetingSubject: baseMeetingData.subject,
+              meetingUTCTime: baseMeetingData.startTime,
+              meetingISTTime: meetingISTDate.toISOString(),
+              instanceDateForFiltering
+            });
+          } else {
+            // Non-recurring meetings don't need instance date filtering
+            instanceDateForFiltering = undefined;
+          }
+
           console.log('Attempting to fetch attendance with:', {
             organizerId: meetingInfo.organizerId,
             threadId: meetingInfo.threadId,
@@ -395,18 +428,16 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
             formattedString,
             base64MeetingId,
             isRecurring: baseMeetingData.isRecurring,
-            instanceDate: baseMeetingData.isRecurring ? new Date(meeting.start.dateTime).toISOString().split('T')[0] : undefined
+            isMultiDayRange: isMultiDayRange,
+            startViewingDate: startViewingDate,
+            endViewingDate: endViewingDate,
+            instanceDate: instanceDateForFiltering
           });
-
-          // For recurring meetings, pass the specific instance date
-          const instanceDate = baseMeetingData.isRecurring ? 
-            new Date(meeting.start.dateTime).toISOString().split('T')[0] : 
-            undefined;
 
           const attendanceRecords = await getAttendanceReport(
             meetingInfo.organizerId,
             base64MeetingId,
-            instanceDate
+            instanceDateForFiltering
           );
           
           if (attendanceRecords && attendanceRecords.length > 0) {
@@ -597,33 +628,30 @@ export async function GET(request: Request) {
     // Get meetings data
     const meetingsData = await getMeetings(accessToken, startDate, endDate);
 
-    // Filter meetings by date range - convert UTC meeting times to IST for date comparison
+    // Filter meetings by date range - use IST dates for proper filtering
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
         const meetingUTCDate = new Date(meeting.startTime);
         
-        // Convert to IST for date comparison
+        // Convert meeting time to IST for date comparison
         const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-        
-        // Get the date part in IST
         const meetingDateStr = meetingISTDate.toISOString().split('T')[0]; // YYYY-MM-DD
-        const startDateStr = startDate.toISOString().split('T')[0];
-        const endDateStr = endDate.toISOString().split('T')[0];
         
-        // Convert to Date objects for comparison (just the date part)
-        const meetingDateOnly = new Date(meetingDateStr + 'T00:00:00.000Z');
-        const startDateOnly = new Date(startDateStr + 'T00:00:00.000Z');
-        const endDateOnly = new Date(endDateStr + 'T00:00:00.000Z');
-        
-        // Check if this is a single day request in IST time
-        // Convert the start and end UTC times to IST to check if they're on the same day
+        // Convert request date range to IST for proper comparison
         const startIST = new Date(startDate.getTime() + (5.5 * 60 * 60 * 1000));
         const endIST = new Date(endDate.getTime() + (5.5 * 60 * 60 * 1000));
         const startISTDateStr = startIST.toISOString().split('T')[0];
         const endISTDateStr = endIST.toISOString().split('T')[0];
+        
+        // Convert to Date objects for comparison (just the date part)
+        const meetingDateOnly = new Date(meetingDateStr + 'T00:00:00.000Z');
+        const startDateOnly = new Date(startISTDateStr + 'T00:00:00.000Z');
+        const endDateOnly = new Date(endISTDateStr + 'T00:00:00.000Z');
+        
+        // Check if this is a single day request in IST time
         const isSingleDayRequest = startISTDateStr === endISTDateStr;
         
         // For single day requests, strictly check if the meeting starts on that day in IST
-        // For multi-day ranges, use the previous inclusive range logic
+        // For multi-day ranges, use IST date range for comparison
         let isInRange;
         if (isSingleDayRequest) {
             isInRange = meetingDateStr === startISTDateStr;
@@ -636,8 +664,6 @@ export async function GET(request: Request) {
             meetingUTCTime: meeting.startTime,
             meetingISTTime: meetingISTDate.toISOString(),
             meetingDateOnly: meetingDateStr,
-            startDateOnly: startDateStr,
-            endDateOnly: endDateStr,
             startISTDate: startISTDateStr,
             endISTDate: endISTDateStr,
             isSingleDayRequest: isSingleDayRequest,
@@ -651,6 +677,91 @@ export async function GET(request: Request) {
     if (meetingsData.meetings.length !== dateFilteredMeetings.length) {
         console.log(`\n⚠️ WARNING: ${meetingsData.meetings.length - dateFilteredMeetings.length} meetings were filtered out for being outside the requested date range`);
     }
+
+    // Deduplicate recurring meetings that have the same threadId/meetingId but different instances
+    console.log('\n==== DEDUPLICATING RECURRING MEETINGS ====');
+    const meetingsByKey = new Map<string, MeetingData>();
+    const deduplicatedMeetings: MeetingData[] = [];
+    
+    dateFilteredMeetings.forEach(meeting => {
+        const threadId = meeting.meetingInfo?.threadId;
+        const meetingId = meeting.meetingInfo?.meetingId;
+        const isRecurring = meeting.isRecurring;
+        
+        // Create a unique key for grouping
+        // For recurring meetings, include the IST date in the key to keep separate entries per date
+        let uniqueKey;
+        if (isRecurring && threadId) {
+            const meetingUTCDate = new Date(meeting.startTime);
+            const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+            const meetingDateStr = meetingISTDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            uniqueKey = `recurring_${threadId}_${meetingDateStr}`;
+        } else {
+            uniqueKey = `single_${meeting.rawData.id}`;
+        }
+        
+        if (meetingsByKey.has(uniqueKey)) {
+            // Merge attendance records and deduplicate by report ID
+            const existing = meetingsByKey.get(uniqueKey)!;
+            const existingReportIds = new Set(
+                (existing.attendanceRecords || []).map((record: AttendanceRecord) => record.rawRecord?.reportId || record.email + record.duration)
+            );
+            
+            const newRecords = (meeting.attendanceRecords || []).filter(
+                (record: AttendanceRecord) => !existingReportIds.has(record.rawRecord?.reportId || record.email + record.duration)
+            );
+            
+            if (newRecords.length > 0) {
+                existing.attendanceRecords = [
+                    ...(existing.attendanceRecords || []),
+                    ...newRecords
+                ];
+                
+                const meetingUTCDate = new Date(meeting.startTime);
+                const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+                const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
+                
+                console.log(`Merged duplicate recurring meeting: ${meeting.subject}`, {
+                    threadId,
+                    date: meetingDateStr,
+                    totalInstancesFound: 'multiple',
+                    newRecordsAdded: newRecords.length,
+                    totalRecords: existing.attendanceRecords.length
+                });
+            } else {
+                const meetingUTCDate = new Date(meeting.startTime);
+                const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+                const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
+                
+                console.log(`Skipped exact duplicate: ${meeting.subject}`, {
+                    threadId,
+                    date: meetingDateStr,
+                    reason: 'All attendance records already exist'
+                });
+            }
+        } else {
+            // First occurrence of this meeting
+            meetingsByKey.set(uniqueKey, { ...meeting });
+            const meetingUTCDate = new Date(meeting.startTime);
+            const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+            const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
+            
+            console.log(`Added meeting: ${meeting.subject}`, {
+                key: uniqueKey,
+                isRecurring,
+                date: meetingDateStr,
+                attendanceRecords: meeting.attendanceRecords?.length || 0
+            });
+        }
+    });
+    
+    // Convert map back to array
+    meetingsByKey.forEach(meeting => {
+        deduplicatedMeetings.push(meeting);
+    });
+    
+    console.log(`Deduplicated ${dateFilteredMeetings.length} meetings to ${deduplicatedMeetings.length} unique meetings`);
+    console.log('===============================================\n');
 
     // Get posted meetings storage - use AI agent storage instead of old manual storage
     // This will ensure we check against the same storage that AI agent uses
@@ -669,12 +780,12 @@ export async function GET(request: Request) {
     
     console.log('\n==== MEETINGS FILTERING DEBUG ====');
     console.log(`User Email: ${userEmail}`);
-    console.log(`Total meetings fetched: ${dateFilteredMeetings.length}`);
+    console.log(`Total meetings fetched: ${deduplicatedMeetings.length}`);
     console.log(`Total posted meetings for user: ${userPostedMeetings.length}`);
     
     console.log('\nProcessing current meetings:');
     const filteredMeetings = [];
-    for (const meeting of dateFilteredMeetings) {
+    for (const meeting of deduplicatedMeetings) {
         // Check if meeting is already posted using meetingId format
         const meetingId = meeting.meetingInfo?.meetingId || `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
         
@@ -736,11 +847,11 @@ export async function GET(request: Request) {
         toUTC: endDate.toISOString()
       },
       meetings: filteredMeetings,
-      totalMeetingsInPeriod: dateFilteredMeetings.length,
-      totalTimeInPeriod: dateFilteredMeetings.reduce((acc, meeting) => {
+      totalMeetingsInPeriod: deduplicatedMeetings.length,
+      totalTimeInPeriod: deduplicatedMeetings.reduce((acc: number, meeting: MeetingData) => {
         const userEmail = session?.user?.email;
         if (meeting.attendanceRecords?.length && userEmail) {
-          const userRecord = meeting.attendanceRecords.find(record => 
+          const userRecord = meeting.attendanceRecords.find((record: AttendanceRecord) => 
             record.email.toLowerCase() === userEmail.toLowerCase()
           );
           return acc + (userRecord?.duration || 0);
