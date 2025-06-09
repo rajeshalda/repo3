@@ -103,6 +103,7 @@ export async function POST(request: Request) {
         try {
             // For manual posts, verify the user actually attended the meeting if attendance records are provided
             let timeToUse = time;
+            let actualMeetingDate = date; // Default to the provided date
             
             if (attendanceRecords && Array.isArray(attendanceRecords)) {
                 console.log('Checking user attendance in provided records');
@@ -115,6 +116,20 @@ export async function POST(request: Request) {
                     console.log(`Found user's attendance record with duration: ${userRecord.duration} seconds`);
                     // Use the user's actual duration if available
                     timeToUse = userRecord.duration;
+                    
+                    // Extract the actual meeting date from attendance records for manual posts
+                    if (isManualPost && userRecord.intervals && userRecord.intervals.length > 0) {
+                        // Use the join date time from the first interval as the actual meeting date
+                        const joinDateTime = userRecord.intervals[0].joinDateTime;
+                        if (joinDateTime) {
+                            // Convert to YYYY-MM-DD format for the date field
+                            actualMeetingDate = new Date(joinDateTime).toISOString().split('T')[0];
+                            console.log(`📅 Using actual attendance date: ${actualMeetingDate} (from joinDateTime: ${joinDateTime})`);
+                        }
+                    } else if (isManualPost && userRecord.rawRecord?.reportId) {
+                        // Fallback: check if we have report metadata with meeting start time
+                        console.log('⚠️ No attendance intervals found, using provided date as fallback');
+                    }
                     
                     if (timeToUse <= 0) {
                         return NextResponse.json({ 
@@ -192,7 +207,7 @@ export async function POST(request: Request) {
 ╔════════════════════════ MANUAL POST DUPLICATE CHECK ════════════════════════╗
 ║ 🔍 Performing comprehensive duplicate detection for manual post             ║
 ║ 🆔 Meeting ID: ${primaryMeetingId ? primaryMeetingId.substring(0, 15) + '...' : 'N/A'} ║
-║ 📅 Date: ${date || 'N/A'}                                                  ║
+║ 📅 Date: ${actualMeetingDate || 'N/A'}                                     ║
 ║ 📝 Description: ${description ? description.substring(0, 20) + '...' : 'N/A'}    ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝`);
                 
@@ -233,7 +248,7 @@ export async function POST(request: Request) {
 │ 📊 Report ID: ${requestReportId}                                                      │
 │ 📊 Stored Report ID: ${m.reportId}                                                    │
 │ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                              │
-│ 📅 Request Date: ${date}                                                             │
+│ 📅 Request Date: ${actualMeetingDate}                                                │
 │ 📅 Stored Date: ${m.timeEntry?.date}                                                 │
 │ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                            │
 │ ✅ Match Method: Report ID (most reliable)                                           │
@@ -249,8 +264,8 @@ export async function POST(request: Request) {
                     let sameDate = true;
                     
                     // If date info is available, check if it's the same date
-                    if (m.timeEntry?.date && date) {
-                        sameDate = m.timeEntry.date === date;
+                    if (m.timeEntry?.date && actualMeetingDate) {
+                        sameDate = m.timeEntry.date === actualMeetingDate;
                     }
                     
                     const isDuplicate = sameId && sameDate;
@@ -259,7 +274,7 @@ export async function POST(request: Request) {
                         console.log(`
 ┌─────────────────────── DUPLICATE DETECTED BY MEETING ID (MANUAL) ───────────────────────┐
 │ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                              │
-│ 📅 Date: ${date}                                                                     │
+│ 📅 Date: ${actualMeetingDate}                                                        │
 │ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                            │
 │ ✅ Match Method: Meeting ID + Date (fallback)                                        │
 └─────────────────────────────────────────────────────────────────────────────────────┘`);
@@ -279,8 +294,8 @@ export async function POST(request: Request) {
                         
                         // Same date (if we have date information)
                         let sameDate = true;
-                        if (date && meeting.timeEntry?.date) {
-                            sameDate = meeting.timeEntry.date === date;
+                        if (actualMeetingDate && meeting.timeEntry?.date) {
+                            sameDate = meeting.timeEntry.date === actualMeetingDate;
                         }
                         
                         // Same duration (approximately)
@@ -298,7 +313,7 @@ export async function POST(request: Request) {
                             console.log(`
 ┌─────────────────────── DUPLICATE BY DESCRIPTION (MANUAL) ───────────────────────┐
 │ 📝 Description: ${description.substring(0, 25)}...                            │
-│ 📅 Date: ${date}                                                             │
+│ 📅 Date: ${actualMeetingDate}                                                │
 └───────────────────────────────────────────────────────────────────────────────┘`);
                         }
                         
@@ -326,7 +341,7 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
             // Create time entry with hours
             const result = await intervalsApi.createTimeEntry({
                 taskId,
-                date,
+                date: actualMeetingDate, // Use the actual meeting date (corrected for manual posts)
                 time: timeInHours > 0 ? timeInHours : 0.01, // Minimum time entry of 0.01 hours for manual posts
                 description: description || 'No description provided',
                 workType: workType || 'Meeting',
@@ -441,7 +456,7 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
                             taskTitle: taskTitle || taskName  // Prefer passed taskTitle, then fall back to taskName
                         } : null,
                         rawResponse: result,
-                        postedAt: convertToIST(date), // Convert date to IST format
+                        postedAt: convertToIST(actualMeetingDate), // Convert date to IST format
                         reportId: reportId // Add reportId if available
                     }
                 );
@@ -582,7 +597,7 @@ ${reportId ? `║ 📊 Report ID: ${reportId}                                   
                             taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}`
                         } : null,
                         rawResponse: result,
-                        postedAt: convertToIST(date),
+                        postedAt: convertToIST(actualMeetingDate),
                         reportId: reportId // Include reportId if we found it in the review
                     }
                 );
