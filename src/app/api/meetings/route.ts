@@ -793,12 +793,13 @@ export async function GET(request: Request) {
         const meetingId = meeting.meetingInfo?.meetingId || `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
         
         // Get user duration to check for recurring meetings with different durations
+        // Sum ALL user records for this meeting (handles merged meetings with multiple attendance records)
         let userDuration = 0;
         if (meeting.attendanceRecords?.length && userEmail) {
-            const userRecord = meeting.attendanceRecords.find(record => 
+            const userRecords = meeting.attendanceRecords.filter(record => 
                 record.email.toLowerCase() === userEmail.toLowerCase()
             );
-            userDuration = userRecord?.duration || 0;
+            userDuration = userRecords.reduce((sum, record) => sum + (record.duration || 0), 0);
         }
         
         // Check if meeting is already posted in AI agent storage
@@ -854,10 +855,12 @@ export async function GET(request: Request) {
       totalTimeInPeriod: deduplicatedMeetings.reduce((acc: number, meeting: MeetingData) => {
         const userEmail = session?.user?.email;
         if (meeting.attendanceRecords?.length && userEmail) {
-          const userRecord = meeting.attendanceRecords.find((record: AttendanceRecord) => 
+          // Sum ALL user records for this meeting (handles merged meetings with multiple attendance records)
+          const userRecords = meeting.attendanceRecords.filter((record: AttendanceRecord) => 
             record.email.toLowerCase() === userEmail.toLowerCase()
           );
-          return acc + (userRecord?.duration || 0);
+          const totalUserDuration = userRecords.reduce((sum, record) => sum + (record.duration || 0), 0);
+          return acc + totalUserDuration;
         }
         return acc;
       }, 0)

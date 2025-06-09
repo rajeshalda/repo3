@@ -17,6 +17,38 @@ interface PostedMeetingsFile {
     meetings: PostedMeeting[];
 }
 
+// Simple mutex implementation for file operations
+class FileMutex {
+    private locks = new Map<string, Promise<void>>();
+
+    async acquireLock<T>(key: string, operation: () => Promise<T>): Promise<T> {
+        // Wait for any existing operation on this file to complete
+        if (this.locks.has(key)) {
+            await this.locks.get(key);
+        }
+
+        // Create a new promise for this operation
+        let resolve: () => void;
+        const lockPromise = new Promise<void>((res) => {
+            resolve = res;
+        });
+        
+        this.locks.set(key, lockPromise);
+
+        try {
+            // Execute the operation
+            const result = await operation();
+            return result;
+        } finally {
+            // Release the lock
+            resolve!();
+            this.locks.delete(key);
+        }
+    }
+}
+
+const fileMutex = new FileMutex();
+
 export class PostedMeetingsStorage {
     private data: PostedMeetingsFile = { meetings: [] };
     private storagePath: string;
@@ -26,24 +58,48 @@ export class PostedMeetingsStorage {
     }
 
     private async loadData() {
-        try {
-            const fileContent = await fs.readFile(this.storagePath, 'utf-8');
-            this.data = JSON.parse(fileContent);
-        } catch (error) {
-            if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-                // File doesn't exist, initialize with empty data
-                this.data = { meetings: [] };
-                await this.saveData();
-            } else {
-                throw error;
+        return fileMutex.acquireLock(this.storagePath, async () => {
+            try {
+                const fileContent = await fs.readFile(this.storagePath, 'utf-8');
+                this.data = JSON.parse(fileContent);
+                
+                // Validate JSON structure
+                if (!this.data.meetings || !Array.isArray(this.data.meetings)) {
+                    console.warn('Invalid JSON structure, initializing with empty meetings array');
+                    this.data = { meetings: [] };
+                    await this.saveDataUnsafe();
+                }
+            } catch (error) {
+                if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+                    // File doesn't exist, initialize with empty data
+                    this.data = { meetings: [] };
+                    await this.saveDataUnsafe();
+                } else {
+                    console.error('Error loading posted meetings data:', error);
+                    // If JSON is corrupted, start fresh
+                    this.data = { meetings: [] };
+                    await this.saveDataUnsafe();
+                }
             }
-        }
+        });
+    }
+
+    private async saveDataUnsafe() {
+        const dir = path.dirname(this.storagePath);
+        await fs.mkdir(dir, { recursive: true });
+        
+        // Ensure clean JSON structure before writing
+        const cleanData = {
+            meetings: Array.isArray(this.data.meetings) ? this.data.meetings : []
+        };
+        
+        await fs.writeFile(this.storagePath, JSON.stringify(cleanData, null, 2));
     }
 
     private async saveData() {
-        const dir = path.dirname(this.storagePath);
-        await fs.mkdir(dir, { recursive: true });
-        await fs.writeFile(this.storagePath, JSON.stringify(this.data, null, 2));
+        return fileMutex.acquireLock(this.storagePath, async () => {
+            await this.saveDataUnsafe();
+        });
     }
 
     private getISTFormattedDate(date?: string | Date): string {

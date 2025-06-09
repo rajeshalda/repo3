@@ -16,6 +16,38 @@ interface PostedMeetingsFile {
     meetings: PostedMeeting[];
 }
 
+// Simple mutex implementation for file operations
+class FileMutex {
+    private locks = new Map<string, Promise<void>>();
+
+    async acquireLock<T>(key: string, operation: () => Promise<T>): Promise<T> {
+        // Wait for any existing operation on this file to complete
+        if (this.locks.has(key)) {
+            await this.locks.get(key);
+        }
+
+        // Create a new promise for this operation
+        let resolve: () => void;
+        const lockPromise = new Promise<void>((res) => {
+            resolve = res;
+        });
+        
+        this.locks.set(key, lockPromise);
+
+        try {
+            // Execute the operation
+            const result = await operation();
+            return result;
+        } finally {
+            // Release the lock
+            resolve!();
+            this.locks.delete(key);
+        }
+    }
+}
+
+const fileMutex = new FileMutex();
+
 export class AIAgentPostedMeetingsStorage {
     private storagePath: string;
     public data: PostedMeetingsFile = { meetings: [] };
@@ -25,42 +57,65 @@ export class AIAgentPostedMeetingsStorage {
     }
 
     async loadData() {
-        try {
-            const data = await fs.readFile(this.storagePath, 'utf-8');
-            const parsedData = JSON.parse(data);
+        return fileMutex.acquireLock(this.storagePath, async () => {
+            try {
+                const fileContent = await fs.readFile(this.storagePath, 'utf-8');
+                const parsedData = JSON.parse(fileContent);
 
-            // Clean up the data to only keep time entry format
-            this.data = {
-                meetings: parsedData.meetings
-                    .filter((m: any) => m.meetingId && m.timeEntry) // Only keep entries with time entry info
-                    .map((m: any) => ({
-                        meetingId: m.meetingId || m.id, // Handle both old and new format
-                        userId: m.userId,
-                        timeEntry: m.timeEntry,
-                        rawResponse: m.rawResponse,
-                        postedAt: m.postedAt || new Date().toISOString(),
-                        taskName: m.taskName, // Preserve taskName if it exists
-                        reportId: m.reportId // Preserve reportId if it exists
-                    }))
-            };
+                // Clean up the data to only keep time entry format
+                this.data = {
+                    meetings: parsedData.meetings
+                        .filter((m: any) => m.meetingId && m.timeEntry) // Only keep entries with time entry info
+                        .map((m: any) => ({
+                            meetingId: m.meetingId || m.id, // Handle both old and new format
+                            userId: m.userId,
+                            timeEntry: m.timeEntry,
+                            rawResponse: m.rawResponse,
+                            postedAt: m.postedAt || new Date().toISOString(),
+                            taskName: m.taskName, // Preserve taskName if it exists
+                            reportId: m.reportId // Preserve reportId if it exists
+                        }))
+                };
 
-            // Save cleaned data back to file
-            await this.saveData();
-        } catch {
-            // If file doesn't exist or can't be read, use empty data
-            this.data = { meetings: [] };
-        }
+                // Save cleaned data back to file
+                await this.saveDataUnsafe();
+            } catch (error) {
+                if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+                    console.log('Posted meetings file not found, creating new one');
+                    this.data = { meetings: [] };
+                    await this.saveDataUnsafe(); // Create initial file
+                } else {
+                    console.error('Error loading posted meetings data:', error);
+                    // If JSON is corrupted, start fresh
+                    this.data = { meetings: [] };
+                    await this.saveDataUnsafe(); // Create a clean file
+                }
+            }
+        });
     }
 
-    async saveData() {
+    // Unsafe version for internal use (already locked)
+    private async saveDataUnsafe() {
         try {
             const dir = path.dirname(this.storagePath);
             await fs.mkdir(dir, { recursive: true });
-            await fs.writeFile(this.storagePath, JSON.stringify(this.data, null, 2));
+            
+            // Ensure clean JSON structure before writing
+            const cleanData = {
+                meetings: Array.isArray(this.data.meetings) ? this.data.meetings : []
+            };
+            
+            await fs.writeFile(this.storagePath, JSON.stringify(cleanData, null, 2));
         } catch (error) {
             console.error('Error saving posted meetings data:', error);
             throw error;
         }
+    }
+
+    async saveData() {
+        return fileMutex.acquireLock(this.storagePath, async () => {
+            await this.saveDataUnsafe();
+        });
     }
 
     async addPostedMeeting(userId: string, postedMeeting: PostedMeeting) {

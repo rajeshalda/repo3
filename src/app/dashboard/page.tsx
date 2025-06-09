@@ -557,15 +557,45 @@ export default function DashboardPage() {
     const allResults: MatchResult[] = [];
 
     try {
-      while (currentIndex < meetingsData.meetings.length) {
+      // Expand meetings that have multiple attendance records into separate entries for task matching
+      const expandedMeetings: Meeting[] = [];
+      meetingsData.meetings.forEach(meeting => {
+        if (meeting.attendanceRecords && meeting.attendanceRecords.length > 1) {
+          // Group attendance records by their report ID to create separate meeting instances
+          const recordsByReport: { [key: string]: AttendanceRecord[] } = {};
+          meeting.attendanceRecords.forEach(record => {
+            const reportId = record.rawRecord?.reportId || 'unknown';
+            if (!recordsByReport[reportId]) {
+              recordsByReport[reportId] = [];
+            }
+            recordsByReport[reportId].push(record);
+          });
+
+          // Create separate meeting entries for each report
+          Object.keys(recordsByReport).forEach(reportId => {
+            expandedMeetings.push({
+              ...meeting,
+              attendanceRecords: recordsByReport[reportId],
+              expandedFromMerged: true,
+              originalReportId: reportId
+            } as Meeting);
+          });
+        } else {
+          // Single or no attendance records - keep as is
+          expandedMeetings.push(meeting);
+        }
+      });
+
+      while (currentIndex < expandedMeetings.length) {
         console.log(`Processing batch starting at index ${currentIndex}`);
         
         const response = await fetch('/api/meetings/match', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-            meetings: meetingsData.meetings,
-            startIndex: currentIndex 
+            meetings: expandedMeetings,
+            startIndex: currentIndex,
+            originalTotalCount: meetingsData.totalMeetingsInPeriod 
           }),
         });
 

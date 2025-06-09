@@ -341,10 +341,11 @@ export async function POST(request: Request) {
     }
 
     // Get request data
-    const { meetings: rawMeetings, startIndex = 0 } = await request.json();
+    const { meetings: rawMeetings, startIndex = 0, originalTotalCount } = await request.json();
     
-    // Deduplicate meetings before processing
-    const meetings = deduplicateMeetings(rawMeetings);
+    // For task matching, we want to keep separate instances to show individual meetings
+    // Don't deduplicate here - let each meeting instance be processed separately
+    const meetings = rawMeetings;
     
     console.log(`Processing meetings batch starting at index ${startIndex}`);
     console.log('Number of unique meetings to process:', meetings.length);
@@ -440,7 +441,7 @@ export async function POST(request: Request) {
       },
       summary: {
         processed: results.length,
-        totalMeetings: meetings.length
+        totalMeetings: originalTotalCount || meetings.length
       },
       nextBatch: nextIndex < meetings.length ? nextIndex : null
     });
