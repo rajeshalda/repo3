@@ -763,6 +763,9 @@ export async function GET(request: Request) {
     console.log(`Deduplicated ${dateFilteredMeetings.length} meetings to ${deduplicatedMeetings.length} unique meetings`);
     console.log('===============================================\n');
 
+    // Store the original count before deduplication for the total count display
+    const totalMeetingsBeforeDeduplication = dateFilteredMeetings.length;
+
     // Get posted meetings storage - use AI agent storage instead of old manual storage
     // This will ensure we check against the same storage that AI agent uses
     const aiAgentStorage = new AIAgentPostedMeetingsStorage();
@@ -847,7 +850,7 @@ export async function GET(request: Request) {
         toUTC: endDate.toISOString()
       },
       meetings: filteredMeetings,
-      totalMeetingsInPeriod: deduplicatedMeetings.length,
+      totalMeetingsInPeriod: totalMeetingsBeforeDeduplication,
       totalTimeInPeriod: deduplicatedMeetings.reduce((acc: number, meeting: MeetingData) => {
         const userEmail = session?.user?.email;
         if (meeting.attendanceRecords?.length && userEmail) {
