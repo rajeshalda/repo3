@@ -5,6 +5,7 @@ import { getAppGraphToken } from '@/lib/graph-app-auth';
 import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
 import { IST_TIMEZONE } from '@/lib/utils';
 import { AIAgentPostedMeetingsStorage } from '@/ai-agent/services/storage/posted-meetings';
+import { database } from '@/lib/database';
 import path from 'path';
 import fs from 'fs/promises';
 
@@ -766,20 +767,9 @@ export async function GET(request: Request) {
     // Store the original count before deduplication for the total count display
     const totalMeetingsBeforeDeduplication = dateFilteredMeetings.length;
 
-    // Get posted meetings storage - use AI agent storage instead of old manual storage
-    // This will ensure we check against the same storage that AI agent uses
-    const aiAgentStorage = new AIAgentPostedMeetingsStorage();
-    await aiAgentStorage.loadData();
-    
-    // Access the data directly from file
-    const filePath = path.join(process.cwd(), 'src/ai-agent/data/storage/json/ai-agent-meetings.json');
-    const fileContent = await fs.readFile(filePath, 'utf-8');
-    const aiAgentData = JSON.parse(fileContent);
-    const aiPostedMeetings = aiAgentData.meetings || [];
-    
-    // Filter meetings for current user
+    // Get posted meetings from SQLite database
     const userEmail = session.user?.email || '';
-    const userPostedMeetings = aiPostedMeetings.filter((m: { userId: string }) => m.userId === userEmail);
+    const userPostedMeetings = database.getMeetingsByUser(userEmail);
     
     console.log('\n==== MEETINGS FILTERING DEBUG ====');
     console.log(`User Email: ${userEmail}`);
@@ -802,13 +792,8 @@ export async function GET(request: Request) {
             userDuration = userRecords.reduce((sum, record) => sum + (record.duration || 0), 0);
         }
         
-        // Check if meeting is already posted in AI agent storage
-        // First get all meetings with the same ID - we'll use AIAgentPostedMeetingsStorage directly
-        const storage = new AIAgentPostedMeetingsStorage();
-        await storage.loadData();
-        
-        // Use the enhanced isPosted method that considers both duration and startTime
-        const isPosted = await storage.isPosted(userEmail, meetingId, userDuration, meeting.startTime);
+        // Check if meeting is already posted in SQLite database
+        const isPosted = database.isMeetingPosted(meetingId, userEmail);
         
         console.log('Meeting:', meeting.subject, 'ID:', meetingId, 'Duration:', userDuration, 'Is Posted:', isPosted);
         

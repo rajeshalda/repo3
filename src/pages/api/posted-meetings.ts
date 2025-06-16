@@ -1,28 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import { AIAgentPostedMeetingsStorage } from '../../ai-agent/services/storage/posted-meetings';
+import { database } from '@/lib/database';
+// Note: Using legacy review service for now - will be migrated to SQLite in next phase
 import { reviewService } from '../../ai-agent/services/review/review-service';
-import fs from 'fs/promises';
-import path from 'path';
 
 interface UnmatchedMeeting {
     id: string;
-    subject: string;
-    startTime: string;
-    duration: number;
+    subject?: string;
+    startTime?: string;
+    duration?: number;
     reason?: string;
-}
-
-interface UserData {
-    userId: string;
-    email: string;
-    intervalsApiKey: string;
-    lastSync: string;
-}
-
-interface UserDataFile {
-    users: UserData[];
-    postedMeetings: string[];
 }
 
 export default async function handler(
@@ -54,30 +41,33 @@ export default async function handler(
             return res.status(400).json({ error: 'User ID not found in session' });
         }
 
-        // Get user's Intervals API key
-        const userDataPath = path.join(process.cwd(), '.data', 'user-data.json');
-        const userData = JSON.parse(await fs.readFile(userDataPath, 'utf-8')) as UserDataFile;
-        const user = userData.users.find(u => u.userId === userId);
+        // Get user's Intervals API key from SQLite database
+        const user = database.getUserByEmail(userId);
         
-        if (!user?.intervalsApiKey) {
+        if (!user?.intervals_api_key) {
             console.log(`API: No Intervals API key found for user ${userId}`);
             return res.status(400).json({ error: 'Intervals API key not found' });
         }
 
-        // Load meetings using AIAgentPostedMeetingsStorage
-        console.log('API: Creating storage instance...');
-        const storage = new AIAgentPostedMeetingsStorage();
-        
-        console.log('API: Loading data...');
-        await storage.loadData();
-        
+        // Get posted meetings from SQLite database
         console.log('API: Getting posted meetings for user:', userId);
-        const postedMeetings = await storage.getPostedMeetings(userId);
+        const postedMeetings = database.getMeetingsByUser(userId);
         console.log('API: Found posted meetings:', postedMeetings);
 
+        // Convert database meetings to expected format
+        const formattedMeetings = postedMeetings.map(meeting => ({
+            meetingId: meeting.meeting_id,
+            userId: meeting.user_id,
+            timeEntry: meeting.time_entry ? JSON.parse(meeting.time_entry) : null,
+            rawResponse: meeting.raw_response ? JSON.parse(meeting.raw_response) : null,
+            postedAt: meeting.posted_at || meeting.created_at,
+            taskName: meeting.task_name,
+            reportId: meeting.report_id
+        }));
+
         // Sort meetings by posted date
-        const sortedMeetings = postedMeetings.sort((a, b) => 
-            new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()
+        const sortedMeetings = formattedMeetings.sort((a, b) => 
+            new Date(b.postedAt || 0).getTime() - new Date(a.postedAt || 0).getTime()
         );
         console.log('API: Sorted meetings:', sortedMeetings);
 
@@ -86,7 +76,7 @@ export default async function handler(
         const pendingReviews = await reviewService.getPendingReviews(userId);
         
         // Convert pending reviews to unmatched meetings format
-        const unmatchedMeetings: UnmatchedMeeting[] = pendingReviews.map(review => ({
+        const unmatchedMeetings: UnmatchedMeeting[] = pendingReviews.map((review: any) => ({
             id: review.id,
             subject: review.subject,
             startTime: review.startTime,

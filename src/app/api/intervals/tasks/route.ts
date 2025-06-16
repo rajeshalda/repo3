@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
-import { UserStorage } from '@/lib/user-storage';
+import { database } from '@/lib/database';
 import { IntervalsAPI } from '@/lib/intervals-api';
 import { fetchAllTasksDirectly } from '@/lib/intervals-direct-fetcher';
 
@@ -72,10 +72,10 @@ export async function GET() {
       );
     }
 
-    // Initialize storage and load data
-    const storage = new UserStorage();
-    await storage.loadData(); // Wait for data to load
-    const apiKey = await storage.getUserApiKey(session.user.email);
+    // Get user API key from database
+    console.log('Getting API key for user:', session.user.email);
+    const user = database.getUserByEmail(session.user.email);
+    const apiKey = user?.intervals_api_key;
 
     // Add API key format validation
     if (!apiKey) {

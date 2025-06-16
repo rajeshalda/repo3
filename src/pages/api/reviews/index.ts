@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import fs from 'fs/promises';
-import path from 'path';
+import { database } from '@/lib/database';
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,17 +21,9 @@ export default async function handler(
       return res.status(400).json({ error: 'User ID not found in session' });
     }
 
-    // Read reviews from the reviews.json file
-    const reviewsPath = path.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json', 'reviews.json');
-    
     try {
-      const reviewsData = await fs.readFile(reviewsPath, 'utf-8');
-      const allReviews = JSON.parse(reviewsData);
-      
-      // Filter reviews by userId
-      const userReviews = Array.isArray(allReviews) 
-        ? allReviews.filter(review => review.userId === userId)
-        : [];
+      // Get reviews from SQLite database
+      const userReviews = database.getReviewsByUser(userId);
       
       console.log(`Fetched ${userReviews.length} reviews for user ${userId}`);
       
@@ -41,8 +32,8 @@ export default async function handler(
         reviews: userReviews
       });
     } catch (error) {
-      console.error('Error reading reviews file:', error);
-      // If the file doesn't exist or is empty, return an empty array
+      console.error('Error reading reviews from database:', error);
+      // If there's an error, return an empty array
       return res.status(200).json({
         success: true,
         reviews: []

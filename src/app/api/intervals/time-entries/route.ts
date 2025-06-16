@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 import { IntervalsAPI } from '@/lib/intervals-api';
-import { UserStorage } from '@/lib/user-storage';
+import { database } from '@/lib/database';
 import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
 import { reviewService } from '@/ai-agent/services/review/review-service';
 import { AIAgentPostedMeetingsStorage } from '@/ai-agent/services/storage/posted-meetings';
@@ -15,12 +15,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // Initialize storage and load data
-        const storage = new UserStorage();
-        await storage.loadData();
-        
+        // Get API key from SQLite database
         console.log('Getting API key for user:', session.user.email);
-        const apiKey = await storage.getUserApiKey(session.user.email);
+        const user = database.getUserByEmail(session.user.email);
+        const apiKey = user?.intervals_api_key;
         console.log('API key found:', apiKey ? 'Yes' : 'No');
 
         if (!apiKey) {

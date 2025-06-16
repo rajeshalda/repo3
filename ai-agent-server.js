@@ -4,36 +4,113 @@ const http = require('http');
 const { promisify } = require('util');
 require('dotenv').config({ path: '.env.local' }); // Load environment variables
 
-// Path to store user preference data
-const USER_DATA_PATH = path.join(process.cwd(), 'src/ai-agent/data/storage/json/pm2-user-data.json');
-const POSTED_MEETINGS_PATH = path.join(process.cwd(), 'src/ai-agent/data/storage/json/ai-agent-meetings.json');
+// Import SQLite database
+const Database = require('better-sqlite3');
 
-// Create directory if it doesn't exist
-const ensureDirectoryExists = (dirPath) => {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+// Initialize SQLite database
+const dbPath = path.join(process.cwd(), 'data', 'application.sqlite');
+let db;
+
+// Database initialization function
+const initializeDatabase = () => {
+  try {
+    // Ensure data directory exists
+    const dataDir = path.dirname(dbPath);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    
+    db = new Database(dbPath);
+    
+    // Enable foreign keys
+    db.exec('PRAGMA foreign_keys = ON');
+    
+    // Create tables if they don't exist
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT UNIQUE NOT NULL,
+          email TEXT UNIQUE NOT NULL,
+          intervals_api_key TEXT,
+          last_sync DATETIME,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE TABLE IF NOT EXISTS user_settings (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT UNIQUE NOT NULL,
+          enabled BOOLEAN DEFAULT false,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+      );
+    `);
+    
+    console.log('✅ SQLite database initialized for AI agent server');
+  } catch (error) {
+    console.error('❌ Error initializing database:', error);
+    process.exit(1);
   }
 };
 
-// Ensure the storage directories exist
-ensureDirectoryExists(path.dirname(USER_DATA_PATH));
+// Initialize database on startup
+initializeDatabase();
 
-// Initialize user data if it doesn't exist
-if (!fs.existsSync(USER_DATA_PATH)) {
-  fs.writeFileSync(USER_DATA_PATH, JSON.stringify({ users: [] }, null, 2));
-}
+// Helper functions for database operations
+const getUserSettings = (userId) => {
+  try {
+    const stmt = db.prepare('SELECT * FROM user_settings WHERE user_id = ?');
+    return stmt.get(userId);
+  } catch (error) {
+    console.error('Error getting user settings:', error);
+    return null;
+  }
+};
 
-// Initialize meetings storage if it doesn't exist
-if (!fs.existsSync(POSTED_MEETINGS_PATH)) {
-  fs.writeFileSync(POSTED_MEETINGS_PATH, JSON.stringify({ meetings: [] }, null, 2));
-}
+const getAllEnabledUsers = () => {
+  try {
+    const stmt = db.prepare(`
+      SELECT u.user_id, u.email, s.enabled 
+      FROM users u 
+      LEFT JOIN user_settings s ON u.user_id = s.user_id 
+      WHERE s.enabled = 1
+    `);
+    return stmt.all();
+  } catch (error) {
+    console.error('Error getting enabled users:', error);
+    return [];
+  }
+};
 
-// Load user data
-let userData = JSON.parse(fs.readFileSync(USER_DATA_PATH, 'utf8'));
-
-// Helper to save user data
-const saveUserData = () => {
-  fs.writeFileSync(USER_DATA_PATH, JSON.stringify(userData, null, 2));
+const updateUserEnabled = (userId, enabled) => {
+  try {
+    // Ensure user exists in users table
+    const userStmt = db.prepare('SELECT * FROM users WHERE user_id = ?');
+    let user = userStmt.get(userId);
+    
+    if (!user) {
+      // Create user if doesn't exist
+      const insertUserStmt = db.prepare(`
+        INSERT INTO users (user_id, email, created_at, updated_at)
+        VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      `);
+      insertUserStmt.run(userId, userId);
+    }
+    
+    // Update or insert user settings
+    const settingsStmt = db.prepare(`
+      INSERT OR REPLACE INTO user_settings (user_id, enabled, updated_at)
+      VALUES (?, ?, CURRENT_TIMESTAMP)
+    `);
+    settingsStmt.run(userId, enabled ? 1 : 0);
+    
+    console.log(`✅ Updated user ${userId} enabled status to: ${enabled}`);
+    return true;
+  } catch (error) {
+    console.error('Error updating user enabled status:', error);
+    return false;
+  }
 };
 
 // Process meetings for a user
@@ -139,14 +216,17 @@ const processAllUsers = async () => {
       }
     }, 30 * 60 * 1000);
 
-    for (const user of userData.users) {
-      if (user.enabled) {
-        try {
-          await processMeetingsForUser(user.userId);
-        } catch (error) {
-          console.error(`Failed to process meetings for user ${user.userId}:`, error);
-          // Continue with next user even if one fails
-        }
+    // Get enabled users from SQLite database
+    const enabledUsers = getAllEnabledUsers();
+    
+    console.log(`📊 Found ${enabledUsers.length} enabled users in database`);
+    
+    for (const user of enabledUsers) {
+      try {
+        await processMeetingsForUser(user.user_id);
+      } catch (error) {
+        console.error(`Failed to process meetings for user ${user.user_id}:`, error);
+        // Continue with next user even if one fails
       }
     }
 
@@ -168,7 +248,7 @@ const processAllUsers = async () => {
 
 // Main function to start the processing cycle
 const startProcessingCycle = () => {
-  console.log('AI Agent Server started');
+  console.log('🤖 AI Agent Server started with SQLite backend');
   
   // Initialize cycle control variables
   global.isProcessingCycle = false;
@@ -217,28 +297,25 @@ const server = http.createServer((req, res) => {
           return;
         }
 
-        // Update or add user data
-        const existingUserIndex = userData.users.findIndex(user => user.userId === userId);
+        // Update user data in SQLite database
+        const success = updateUserEnabled(userId, enabled);
         
-        if (existingUserIndex >= 0) {
-          userData.users[existingUserIndex].enabled = enabled;
+        if (success) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ 
+            success: true, 
+            message: `AI agent ${enabled ? 'enabled' : 'disabled'} for user ${userId}` 
+          }));
+          
+          // If enabling, trigger processing immediately
+          if (enabled) {
+            processMeetingsForUser(userId).catch(error => {
+              console.error(`Error processing meetings after enabling for user ${userId}:`, error);
+            });
+          }
         } else {
-          userData.users.push({ userId, enabled });
-        }
-        
-        saveUserData();
-        
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ 
-          success: true, 
-          message: `AI agent ${enabled ? 'enabled' : 'disabled'} for user ${userId}` 
-        }));
-        
-        // If enabling, trigger processing immediately
-        if (enabled) {
-          processMeetingsForUser(userId).catch(error => {
-            console.error(`Error processing meetings after enabling for user ${userId}:`, error);
-          });
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: 'Failed to update user settings' }));
         }
       } catch (error) {
         console.error('Error processing agent-status request:', error);
@@ -257,8 +334,8 @@ const server = http.createServer((req, res) => {
       return;
     }
     
-    const user = userData.users.find(user => user.userId === userId);
-    const enabled = user ? user.enabled : false;
+    const userSettings = getUserSettings(userId);
+    const enabled = userSettings ? Boolean(userSettings.enabled) : false;
     
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 
@@ -268,14 +345,16 @@ const server = http.createServer((req, res) => {
   }
   // API endpoint to get system status
   else if (parsedUrl.pathname === '/api/status' && req.method === 'GET') {
-    const enabledUsers = userData.users.filter(user => user.enabled).length;
+    const enabledUsers = getAllEnabledUsers().length;
+    const allUsersStmt = db.prepare('SELECT COUNT(*) as count FROM users');
+    const totalUsers = allUsersStmt.get().count;
     
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 
       success: true, 
       status: 'running',
       enabledUsers,
-      totalUsers: userData.users.length,
+      totalUsers,
       uptime: process.uptime()
     }));
   }

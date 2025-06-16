@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
-import { UserStorage } from '@/lib/user-storage';
+import { database } from '@/lib/database';
 
 export async function POST(request: Request) {
   try {
@@ -21,11 +21,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'API key is required' }, { status: 400 });
     }
 
-    const storage = new UserStorage();
-    await storage.loadData();
-    
-    // Save the API key server-side
-    await storage.setUserApiKey(session.user.email, session.user.email, apiKey);
+    // Save the API key to SQLite database
+    const existingUser = database.getUserByEmail(session.user.email);
+    if (existingUser) {
+      // Update existing user's API key
+      database.updateUserApiKey(session.user.email, apiKey);
+      database.updateUserLastSync(session.user.email);
+    } else {
+      // Create new user
+      database.createUser({
+        user_id: session.user.email,
+        email: session.user.email,
+        intervals_api_key: apiKey,
+        last_sync: new Date().toISOString()
+      });
+    }
     
     return NextResponse.json({ success: true });
   } catch (error) {

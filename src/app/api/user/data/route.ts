@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
-import { UserStorage } from '@/lib/user-storage';
+import { database } from '@/lib/database';
 
 export async function GET() {
   try {
@@ -10,23 +10,21 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const storage = new UserStorage();
-    await storage.loadData();
-    
-    // Get the current user's data
     const userId = session.user.email;
-    const apiKey = await storage.getUserApiKey(userId);
+    
+    // Get user data from SQLite database
+    const user = database.getUserByEmail(userId);
     
     // Only return the current user's data for security
     const userData = {
-      users: apiKey ? [
+      users: user ? [
         {
-          userId,
-          email: userId,
-          intervalsApiKey: apiKey,
+          userId: user.user_id,
+          email: user.email,
+          intervalsApiKey: user.intervals_api_key,
         }
       ] : [],
-      hasApiKey: !!apiKey
+      hasApiKey: !!(user?.intervals_api_key)
     };
     
     return NextResponse.json(userData);

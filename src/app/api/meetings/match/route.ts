@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 import { IntervalsAPI } from '@/lib/intervals-api';
-import { UserStorage } from '@/lib/user-storage';
+import { database } from '@/lib/database';
 import { AzureOpenAIClient } from '@/lib/azure-openai';
 import { findKeywordMatches, generateMatchingPrompt } from '@/lib/matching-utils';
 import { fetchAllTasksDirectly } from '@/lib/intervals-direct-fetcher';
@@ -354,13 +354,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid meetings data' }, { status: 400 });
     }
 
-    // Get Intervals tasks
-    const storage = new UserStorage();
-    await storage.loadData();
-    const apiKey = storage.getUserApiKey(session.user.email);
-
-    // Get tasks directly using IntervalsAPI
-    const apiKeyValue = await apiKey;
+    // Get API key from SQLite database
+    console.log('Getting API key for user:', session.user.email);
+    const user = database.getUserByEmail(session.user.email);
+    console.log('Current users in storage:', user ? 'Found user: Yes' : 'Found user: No');
+    
+    const apiKeyValue = user?.intervals_api_key;
     if (!apiKeyValue) {
       return NextResponse.json({ error: 'Intervals API key not configured' }, { status: 400 });
     }
