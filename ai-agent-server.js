@@ -18,10 +18,10 @@ const initializeDatabase = () => {
     const dataDir = path.dirname(dbPath);
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
-    }
+  }
     
     db = new Database(dbPath);
-    
+
     // Enable foreign keys
     db.exec('PRAGMA foreign_keys = ON');
     
@@ -51,7 +51,7 @@ const initializeDatabase = () => {
   } catch (error) {
     console.error('❌ Error initializing database:', error);
     process.exit(1);
-  }
+}
 };
 
 // Initialize database on startup
@@ -222,11 +222,11 @@ const processAllUsers = async () => {
     console.log(`📊 Found ${enabledUsers.length} enabled users in database`);
     
     for (const user of enabledUsers) {
-      try {
+        try {
         await processMeetingsForUser(user.user_id);
-      } catch (error) {
+        } catch (error) {
         console.error(`Failed to process meetings for user ${user.user_id}:`, error);
-        // Continue with next user even if one fails
+          // Continue with next user even if one fails
       }
     }
 
@@ -301,17 +301,17 @@ const server = http.createServer((req, res) => {
         const success = updateUserEnabled(userId, enabled);
         
         if (success) {
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ 
-            success: true, 
-            message: `AI agent ${enabled ? 'enabled' : 'disabled'} for user ${userId}` 
-          }));
-          
-          // If enabling, trigger processing immediately
-          if (enabled) {
-            processMeetingsForUser(userId).catch(error => {
-              console.error(`Error processing meetings after enabling for user ${userId}:`, error);
-            });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ 
+          success: true, 
+          message: `AI agent ${enabled ? 'enabled' : 'disabled'} for user ${userId}` 
+        }));
+        
+        // If enabling, trigger processing immediately
+        if (enabled) {
+          processMeetingsForUser(userId).catch(error => {
+            console.error(`Error processing meetings after enabling for user ${userId}:`, error);
+          });
           }
         } else {
           res.writeHead(500, { 'Content-Type': 'application/json' });

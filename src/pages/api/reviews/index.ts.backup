@@ -27,28 +27,9 @@ export default async function handler(
       
       console.log(`Fetched ${userReviews.length} reviews for user ${userId}`);
       
-      // Transform the raw database objects to match the expected format
-      const formattedReviews = userReviews.map(review => ({
-        id: review.id,
-        userId: review.user_id,
-        subject: review.subject || '',
-        startTime: review.start_time || '',
-        endTime: review.end_time || '',
-        duration: review.duration || 0,
-        participants: review.participants ? JSON.parse(review.participants) : [],
-        keyPoints: review.key_points ? JSON.parse(review.key_points) : [],
-        suggestedTasks: review.suggested_tasks ? JSON.parse(review.suggested_tasks) : [],
-        status: review.status || 'pending',
-        confidence: review.confidence || 0,
-        reason: review.reason || '',
-        reportId: review.report_id
-      }));
-      
-      console.log(`Returning ${formattedReviews.length} formatted reviews`);
-      
       return res.status(200).json({
         success: true,
-        reviews: formattedReviews
+        reviews: userReviews
       });
     } catch (error) {
       console.error('Error reading reviews from database:', error);

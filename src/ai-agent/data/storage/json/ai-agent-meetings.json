@@ -1,3 +1,320 @@
 {
-  "meetings": []
+  "meetings": [
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxgRIQ==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHpAAA=",
+      "categories": [],
+      "subject": "Infra Meet",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 212 548 632 576 6\r\nPasscode: kG32Hy3f\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-16T10:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-16T10:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NDg2ZDRkMjMtNDBhYS00Y2M2LWEzNmUtYjZmMTBjMDgxY2Nk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "768311210",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-16",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 118,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-16T09:57:26.4111912Z",
+                "leaveDateTime": "2025-06-16T09:59:24.7778282Z",
+                "durationInSeconds": 118
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 118,
+          "averageDuration": 118,
+          "totalParticipants": 1
+        },
+        "reportId": "643b7c5c-e58d-4127-af67-0f2888efc2b1",
+        "allValidReports": [
+          {
+            "selectedReportId": "643b7c5c-e58d-4127-af67-0f2888efc2b1",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-16T10:00:00.0000000",
+              "duration": 122.027,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-16T10:03:32.133Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxgN/A==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHoAAA=",
+      "categories": [],
+      "subject": "UMG TASK MEET",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 290 245 615 641 7\r\nPasscode: zR3SS7GM\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-16T09:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-16T09:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MDhiMTE1ODItMjY4OS00NWRjLWJkZmQtNWZlNDEzZGExOGJi%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "110248266",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-16",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 91,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-16T09:46:15.7869764Z",
+                "leaveDateTime": "2025-06-16T09:47:47.6666157Z",
+                "durationInSeconds": 91
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 91,
+          "averageDuration": 91,
+          "totalParticipants": 1
+        },
+        "reportId": "a57ac969-de78-4bba-ae6d-290e140b55f9",
+        "allValidReports": [
+          {
+            "selectedReportId": "a57ac969-de78-4bba-ae6d-290e140b55f9",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-16T09:00:00.0000000",
+              "duration": 94.631,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-16T10:03:38.066Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxgN4w==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHnAAA=",
+      "categories": [],
+      "subject": "UMG",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 292 070 854 485 0\r\nPasscode: sN9Vz7Ab\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-16T08:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-16T08:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OGJlZTQyNzEtMTNhZS00OWEyLWI0MmYtZTVjNTNhYWI1NjA2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "819388034",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-16",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 90,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-16T09:26:26.6012843Z",
+                "leaveDateTime": "2025-06-16T09:27:56.7676534Z",
+                "durationInSeconds": 90
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 90,
+          "averageDuration": 90,
+          "totalParticipants": 1
+        },
+        "reportId": "af8f79c2-1cab-4bd7-8928-2b2bc6c3ea7f",
+        "allValidReports": [
+          {
+            "selectedReportId": "af8f79c2-1cab-4bd7-8928-2b2bc6c3ea7f",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-16T08:00:00.0000000",
+              "duration": 94.222,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-16T10:03:42.539Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxgVHQ==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHqAAA=",
+      "categories": [],
+      "subject": "UMG Migration Issue",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 261 670 113 877 7\r\nPasscode: vA3pN3W2\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-16T11:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-16T11:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTJmNThlZDItODdhNi00ODQ2LTgwZTUtNjljNzYzZjRhOWQ3%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "582302266",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-16",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 103,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-16T11:26:07.4122767Z",
+                "leaveDateTime": "2025-06-16T11:27:50.7412865Z",
+                "durationInSeconds": 103
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 103,
+          "averageDuration": 103,
+          "totalParticipants": 1
+        },
+        "reportId": "5f200af4-ca09-400b-a41e-4f0ce8b52d22",
+        "allValidReports": [
+          {
+            "selectedReportId": "5f200af4-ca09-400b-a41e-4f0ce8b52d22",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-16T11:00:00.0000000",
+              "duration": 107.023,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-16T11:28:35.626Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    }
+  ]
 }

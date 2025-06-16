@@ -8,6 +8,7 @@ import { ReviewMeeting } from '../review/types';
 import fs from 'fs/promises';
 import path from 'path';
 import { DateTime } from 'luxon';
+import { database } from '../../../lib/database';
 
 interface TaskMatch {
     taskId: string;
@@ -63,15 +64,16 @@ export class TaskService {
 
     private async getUserIntervalsApiKey(userId: string): Promise<string> {
         try {
-            const userDataPath = path.join(process.cwd(), '.data', 'user-data.json');
-            const userData = JSON.parse(await fs.readFile(userDataPath, 'utf-8')) as UserDataFile;
+            // Get API key from SQLite database
+            console.log('Getting API key from SQLite for user:', userId);
+            const user = database.getUserByEmail(userId);
             
-            const user = userData.users.find(u => u.userId === userId);
-            if (!user?.intervalsApiKey) {
+            if (!user?.intervals_api_key) {
                 throw new Error(`No Intervals API key found for user ${userId}`);
             }
             
-            return user.intervalsApiKey;
+            console.log('API key found in SQLite database for user:', userId);
+            return user.intervals_api_key;
         } catch (error) {
             console.error('Error getting Intervals API key:', error);
             throw new Error('Failed to get Intervals API key');

@@ -108,6 +108,7 @@ try {
             console.log(`📋 Subject: ${review.subject || 'N/A'}`);
             console.log(`📊 Status: ${review.status || 'pending'}`);
             console.log(`🎯 Confidence: ${review.confidence || 0}`);
+            console.log(`📊 Report ID: ${review.report_id || 'N/A'}`);
             console.log(`📅 Created: ${review.created_at}`);
             console.log('---');
         });

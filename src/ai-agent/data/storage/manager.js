@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.storageManager = exports.StorageManager = void 0;
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
+// Import SQLite database
+const database_1 = require("../../../lib/database");
+
 class StorageManager {
     constructor() {
         this.storagePath = path_1.default.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json');
@@ -28,8 +31,22 @@ class StorageManager {
             try {
                 await promises_1.default.access(this.meetingsFile);
             }
-            catch (_a) {
+            catch {
                 await promises_1.default.writeFile(this.meetingsFile, JSON.stringify({ meetings: [] }, null, 2), 'utf-8');
+            }
+            // Create reviews file with empty array if it doesn't exist
+            try {
+                await promises_1.default.access(this.reviewsPath);
+            }
+            catch {
+                await promises_1.default.writeFile(this.reviewsPath, JSON.stringify([], null, 2), 'utf-8');
+            }
+            // Create decisions file with empty array if it doesn't exist
+            try {
+                await promises_1.default.access(this.decisionsPath);
+            }
+            catch {
+                await promises_1.default.writeFile(this.decisionsPath, JSON.stringify([], null, 2), 'utf-8');
             }
         }
         catch (error) {
@@ -147,58 +164,159 @@ class StorageManager {
             throw new Error('Failed to restore from backup');
         }
     }
-    // Review-related methods
+    
+    // Review-related methods - NOW USING SQLITE
     async storeMeetingForReview(meeting) {
-        const reviews = await this.readReviews();
-        // Check if this meeting already exists in the reviews
-        const existingMeetingIndex = reviews.findIndex(review => review.id === meeting.id);
-        if (existingMeetingIndex !== -1) {
-            // Meeting already exists, update it instead of adding a duplicate
-            console.log(`Meeting with ID ${meeting.id} already exists in reviews, updating instead of adding duplicate`);
-            reviews[existingMeetingIndex] = meeting;
+        try {
+            // Check if this meeting already exists in the reviews for this user using SQLite
+            const existingReview = database_1.database.getReviewById(meeting.id);
+            
+            if (existingReview && existingReview.user_id === meeting.userId) {
+                // Meeting already exists for this user, update it
+                console.log(`Meeting with ID ${meeting.id} already exists in reviews for user ${meeting.userId}, updating`);
+                database_1.database.saveReview({
+                    id: meeting.id,
+                    user_id: meeting.userId,
+                    subject: meeting.subject,
+                    start_time: meeting.startTime,
+                    end_time: meeting.endTime,
+                    duration: meeting.duration,
+                    participants: JSON.stringify(meeting.participants || []),
+                    key_points: JSON.stringify(meeting.keyPoints || []),
+                    suggested_tasks: JSON.stringify(meeting.suggestedTasks || []),
+                    status: meeting.status,
+                    confidence: meeting.confidence,
+                    reason: meeting.reason,
+                    report_id: meeting.reportId
+                });
+            } else {
+                // Meeting doesn't exist for this user, add it
+                console.log(`Adding new meeting with ID ${meeting.id} for user ${meeting.userId} to reviews`);
+                database_1.database.saveReview({
+                    id: meeting.id,
+                    user_id: meeting.userId,
+                    subject: meeting.subject,
+                    start_time: meeting.startTime,
+                    end_time: meeting.endTime,
+                    duration: meeting.duration,
+                    participants: JSON.stringify(meeting.participants || []),
+                    key_points: JSON.stringify(meeting.keyPoints || []),
+                    suggested_tasks: JSON.stringify(meeting.suggestedTasks || []),
+                    status: meeting.status,
+                    confidence: meeting.confidence,
+                    reason: meeting.reason,
+                    report_id: meeting.reportId
+                });
+            }
+        } catch (error) {
+            console.error('Error storing meeting for review in SQLite:', error);
+            throw error;
         }
-        else {
-            // Meeting doesn't exist, add it
-            console.log(`Adding new meeting with ID ${meeting.id} to reviews`);
-            reviews.push(meeting);
-        }
-        await this.writeReviews(reviews);
     }
+    
     async getPendingReviews(userId) {
-        const reviews = await this.readReviews();
-        return reviews.filter(review => review.status === 'pending');
+        try {
+            const reviews = database_1.database.getPendingReviews(userId);
+            return reviews.map(review => ({
+                id: review.id,
+                userId: review.user_id,
+                subject: review.subject || '',
+                startTime: review.start_time || '',
+                endTime: review.end_time || '',
+                duration: review.duration || 0,
+                participants: review.participants ? JSON.parse(review.participants) : [],
+                keyPoints: review.key_points ? JSON.parse(review.key_points) : [],
+                suggestedTasks: review.suggested_tasks ? JSON.parse(review.suggested_tasks) : [],
+                status: review.status || 'pending',
+                confidence: review.confidence || 0,
+                reason: review.reason || '',
+                reportId: review.report_id
+            }));
+        } catch (error) {
+            console.error('Error getting pending reviews from SQLite:', error);
+            return [];
+        }
     }
+    
     async getAllReviews(userId) {
-        return this.readReviews();
+        try {
+            const reviews = database_1.database.getReviewsByUser(userId);
+            return reviews.map(review => ({
+                id: review.id,
+                userId: review.user_id,
+                subject: review.subject || '',
+                startTime: review.start_time || '',
+                endTime: review.end_time || '',
+                duration: review.duration || 0,
+                participants: review.participants ? JSON.parse(review.participants) : [],
+                keyPoints: review.key_points ? JSON.parse(review.key_points) : [],
+                suggestedTasks: review.suggested_tasks ? JSON.parse(review.suggested_tasks) : [],
+                status: review.status || 'pending',
+                confidence: review.confidence || 0,
+                reason: review.reason || '',
+                reportId: review.report_id
+            }));
+        } catch (error) {
+            console.error('Error getting all reviews from SQLite:', error);
+            return [];
+        }
     }
+    
     async getMeetingForReview(meetingId, userId) {
-        const reviews = await this.readReviews();
-        
-        // If userId is provided, find the meeting for that specific user
-        if (userId) {
-            return reviews.find(review => 
-                review.id === meetingId && 
-                review.userId === userId
-            ) || null;
+        try {
+            const review = database_1.database.getReviewById(meetingId);
+            
+            if (!review) {
+                return null;
+            }
+            
+            // If userId is provided, check if it matches
+            if (userId && review.user_id !== userId) {
+                return null;
+            }
+            
+            return {
+                id: review.id,
+                userId: review.user_id,
+                subject: review.subject || '',
+                startTime: review.start_time || '',
+                endTime: review.end_time || '',
+                duration: review.duration || 0,
+                participants: review.participants ? JSON.parse(review.participants) : [],
+                keyPoints: review.key_points ? JSON.parse(review.key_points) : [],
+                suggestedTasks: review.suggested_tasks ? JSON.parse(review.suggested_tasks) : [],
+                status: review.status || 'pending',
+                confidence: review.confidence || 0,
+                reason: review.reason || '',
+                reportId: review.report_id
+            };
+        } catch (error) {
+            console.error('Error getting meeting for review from SQLite:', error);
+            return null;
         }
-        
-        // If userId is not provided, just find the meeting by ID
-        // This is useful for getting the reportId from any user's meeting
-        return reviews.find(review => review.id === meetingId) || null;
     }
+    
     async updateReviewStatus(decision) {
-        const reviews = await this.readReviews();
-        const reviewIndex = reviews.findIndex(review => review.id === decision.meetingId);
-        if (reviewIndex !== -1) {
-            reviews[reviewIndex].status = decision.status;
-            await this.writeReviews(reviews);
+        try {
+            const review = database_1.database.getReviewById(decision.meetingId);
+            
+            if (review && review.user_id === decision.decidedBy) {
+                database_1.database.updateReviewStatus(decision.meetingId, decision.status);
+            } else {
+                console.warn(`No review found for meeting ${decision.meetingId} and user ${decision.decidedBy}`);
+            }
+        } catch (error) {
+            console.error('Error updating review status in SQLite:', error);
+            throw error;
         }
     }
+    
     async storeReviewDecision(decision) {
         const decisions = await this.readDecisions();
         decisions.push(decision);
         await this.writeDecisions(decisions);
     }
+    
     // Private helper methods
     async readReviews() {
         try {

@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { database } from '@/lib/database';
-// Note: Using legacy review service for now - will be migrated to SQLite in next phase
-import { reviewService } from '../../ai-agent/services/review/review-service';
 
 interface UnmatchedMeeting {
     id: string;
@@ -71,20 +69,31 @@ export default async function handler(
         );
         console.log('API: Sorted meetings:', sortedMeetings);
 
-        // Get unmatched meetings from the review service
+        // Get unmatched meetings from SQLite database
         console.log('API: Getting pending reviews (unmatched meetings) for user:', userId);
-        const pendingReviews = await reviewService.getPendingReviews(userId);
+        console.log('API: About to call database.getPendingReviews...');
         
-        // Convert pending reviews to unmatched meetings format
-        const unmatchedMeetings: UnmatchedMeeting[] = pendingReviews.map((review: any) => ({
-            id: review.id,
-            subject: review.subject,
-            startTime: review.startTime,
-            duration: review.duration,
-            reason: review.reason
-        }));
+        let unmatchedMeetings: UnmatchedMeeting[] = [];
         
-        console.log('API: Found unmatched meetings:', unmatchedMeetings);
+        try {
+            const pendingReviews = database.getPendingReviews(userId);
+            console.log('API: Raw pending reviews from database:', pendingReviews);
+            console.log('API: Number of pending reviews found:', pendingReviews.length);
+            
+            // Convert pending reviews to unmatched meetings format
+            unmatchedMeetings = pendingReviews.map((review: any) => ({
+                id: review.id,
+                subject: review.subject || '',
+                startTime: review.start_time || '',
+                duration: review.duration || 0,
+                reason: review.reason || 'No matching tasks found'
+            }));
+            
+            console.log('API: Converted unmatched meetings:', unmatchedMeetings);
+        } catch (dbError) {
+            console.error('API: Error calling database.getPendingReviews:', dbError);
+            unmatchedMeetings = [];
+        }
 
         const response = {
             success: true,
