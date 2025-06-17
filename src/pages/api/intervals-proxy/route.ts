@@ -1,18 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
-import fs from 'fs/promises';
+import { database } from '@/lib/database';
 
 const INTERVALS_BASE_URL = 'https://api.myintervals.com';
 
 async function getUserApiKey(userId: string): Promise<string | null> {
   try {
-    const userDataPath = path.join(process.cwd(), '.data', 'user-data.json');
-    const userData = await fs.readFile(userDataPath, 'utf-8');
-    const users = JSON.parse(userData).users;
-    const user = users.find((u: any) => u.userId === userId || u.email === userId);
-    return user?.intervalsApiKey || null;
+    console.log('Getting API key from SQLite for user:', userId);
+    const user = database.getUserByEmail(userId);
+    
+    if (!user?.intervals_api_key) {
+      console.log('No API key found in SQLite database for user:', userId);
+      return null;
+    }
+    
+    console.log('API key found in SQLite database for user:', userId);
+    return user.intervals_api_key;
   } catch (error) {
-    console.error('Error getting API key:', error);
+    console.error('Error getting API key from SQLite:', error);
     return null;
   }
 }
@@ -25,14 +29,20 @@ export async function POST(request: NextRequest) {
     // Get user ID from session or request
     const userId = request.headers.get('x-user-id');
     if (!userId) {
+      console.log('User ID not provided in request headers');
       return NextResponse.json({ error: 'User ID not provided' }, { status: 401 });
     }
 
-    // Get API key from server storage
+    console.log('Looking up API key for user:', userId);
+
+    // Get API key from SQLite database
     const apiKey = await getUserApiKey(userId);
     if (!apiKey) {
+      console.log('API key not found for user:', userId);
       return NextResponse.json({ error: 'API key not found' }, { status: 401 });
     }
+
+    console.log('Found API key for user:', userId, '- proceeding with request');
 
     // Make request to Intervals API
     const headers = {
@@ -42,6 +52,8 @@ export async function POST(request: NextRequest) {
     };
 
     const url = `${INTERVALS_BASE_URL}${endpoint}`;
+    console.log('Making request to intervals API:', url, 'for user:', userId);
+    
     const options: RequestInit = {
       method,
       headers,
@@ -52,9 +64,11 @@ export async function POST(request: NextRequest) {
     const responseData = await response.json();
 
     if (!response.ok) {
+      console.log(`Intervals API error for user ${userId}:`, responseData);
       return NextResponse.json(responseData, { status: response.status });
     }
 
+    console.log(`Intervals API request successful for user ${userId}`);
     return NextResponse.json(responseData);
   } catch (error) {
     console.error('Proxy error:', error);

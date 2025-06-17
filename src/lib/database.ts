@@ -173,8 +173,17 @@ export class AppDatabase {
     }
     
     getUserByEmail(email: string): UserData | null {
+        console.log(`Database: Looking up user by email: ${email}`);
         const stmt = this.db.prepare('SELECT * FROM users WHERE email = ? OR user_id = ?');
-        return stmt.get(email, email) as UserData | null;
+        const user = stmt.get(email, email) as UserData | null;
+        
+        if (user) {
+            console.log(`Database: Found user ${email} with API key: ${user.intervals_api_key ? 'Yes' : 'No'}`);
+        } else {
+            console.log(`Database: No user found for email: ${email}`);
+        }
+        
+        return user;
     }
     
     updateUserApiKey(userId: string, apiKey: string): void {

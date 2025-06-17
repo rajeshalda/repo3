@@ -52,6 +52,10 @@ export class IntervalsTimeEntryService {
     }
 
     private async makeRequest(endpoint: string, options: RequestInit = {}, userId: string) {
+        if (!userId) {
+            throw new Error('User ID is required for API requests');
+        }
+
         const headers = {
             'Content-Type': 'application/json',
             'x-user-id': userId
@@ -61,6 +65,8 @@ export class IntervalsTimeEntryService {
         const apiUrl = typeof window !== 'undefined' 
             ? window.location.origin 
             : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+            
+        console.log(`Making request for user ${userId} to endpoint: ${endpoint}`);
             
         try {
             const response = await fetch(`${apiUrl}/api/intervals-proxy`, {
@@ -79,25 +85,26 @@ export class IntervalsTimeEntryService {
             try {
                 responseData = JSON.parse(responseText);
             } catch (parseError) {
-                console.error('Failed to parse response as JSON:', responseText);
-                throw new Error(`Invalid JSON response: ${responseText}`);
+                console.error(`Failed to parse response as JSON for user ${userId}:`, responseText);
+                throw new Error(`Invalid JSON response for user ${userId}: ${responseText}`);
             }
 
             if (!response.ok) {
-                console.error(`API Error (${response.status}):`, responseData);
+                console.error(`API Error for user ${userId} (${response.status}):`, responseData);
                 if (responseData && responseData.error) {
                     // If error is an object, stringify it for better error messages
                     const errorMessage = typeof responseData.error === 'object' 
                         ? JSON.stringify(responseData.error)
                         : responseData.error.toString();
-                    throw new Error(`API Error: ${errorMessage}`);
+                    throw new Error(`API Error for user ${userId}: ${errorMessage}`);
                 }
-                throw new Error(`Failed to make request: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to make request for user ${userId}: ${response.status} ${response.statusText}`);
             }
 
+            console.log(`Successful API response for user ${userId} from endpoint: ${endpoint}`);
             return responseData;
         } catch (error) {
-            console.error(`Error in makeRequest to ${endpoint}:`, error);
+            console.error(`Error in makeRequest for user ${userId} to ${endpoint}:`, error);
             throw error;
         }
     }
