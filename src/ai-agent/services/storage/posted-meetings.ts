@@ -87,11 +87,11 @@ export class AIAgentPostedMeetingsStorage {
         }
     }
 
-    async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string): Promise<boolean> {
+    async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string, reportId?: string): Promise<boolean> {
         try {
             // For now, use simple meeting ID check
             // TODO: In the future, we could enhance this to check duration and startTime if needed
-            return database.isMeetingPosted(meetingId, userId);
+            return database.isMeetingPosted(meetingId, userId, reportId);
         } catch (error) {
             console.error('Error checking if meeting is posted:', error);
             return false;

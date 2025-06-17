@@ -480,6 +480,10 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
             }
             
             return meetingInstances;
+          } else {
+            // No attendance records found - include meeting with empty attendance
+            console.log('No attendance records found for meeting:', meeting.subject);
+            baseMeetingData.attendanceRecords = [];
           }
         } else {
           console.log('Skipping attendance fetch - missing threadId or organizerId:', meetingInfo);
@@ -679,93 +683,38 @@ export async function GET(request: Request) {
         console.log(`\n⚠️ WARNING: ${meetingsData.meetings.length - dateFilteredMeetings.length} meetings were filtered out for being outside the requested date range`);
     }
 
-    // Deduplicate recurring meetings that have the same threadId/meetingId but different instances
-    console.log('\n==== DEDUPLICATING RECURRING MEETINGS ====');
-    const meetingsByKey = new Map<string, MeetingData>();
-    const deduplicatedMeetings: MeetingData[] = [];
+    // Process meetings but avoid incorrect deduplication of separate sessions
+    console.log('\n==== PROCESSING MEETINGS (PRESERVING ALL SESSIONS) ====');
+    const processedMeetings: MeetingData[] = [];
     
     dateFilteredMeetings.forEach(meeting => {
         const threadId = meeting.meetingInfo?.threadId;
-        const meetingId = meeting.meetingInfo?.meetingId;
+        const reportId = meeting.meetingInfo?.reportId;
         const isRecurring = meeting.isRecurring;
         
-        // Create a unique key for grouping
-        // For recurring meetings, include the IST date in the key to keep separate entries per date
-        let uniqueKey;
-        if (isRecurring && threadId) {
-            const meetingUTCDate = new Date(meeting.startTime);
-            const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-            const meetingDateStr = meetingISTDate.toISOString().split('T')[0]; // YYYY-MM-DD
-            uniqueKey = `recurring_${threadId}_${meetingDateStr}`;
-        } else {
-            uniqueKey = `single_${meeting.rawData.id}`;
-        }
+        // Create a unique identifier that includes reportId to distinguish different sessions
+        const meetingUTCDate = new Date(meeting.startTime);
+        const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+        const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
         
-        if (meetingsByKey.has(uniqueKey)) {
-            // Merge attendance records and deduplicate by report ID
-            const existing = meetingsByKey.get(uniqueKey)!;
-            const existingReportIds = new Set(
-                (existing.attendanceRecords || []).map((record: AttendanceRecord) => record.rawRecord?.reportId || record.email + record.duration)
-            );
-            
-            const newRecords = (meeting.attendanceRecords || []).filter(
-                (record: AttendanceRecord) => !existingReportIds.has(record.rawRecord?.reportId || record.email + record.duration)
-            );
-            
-            if (newRecords.length > 0) {
-                existing.attendanceRecords = [
-                    ...(existing.attendanceRecords || []),
-                    ...newRecords
-                ];
-                
-                const meetingUTCDate = new Date(meeting.startTime);
-                const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-                const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
-                
-                console.log(`Merged duplicate recurring meeting: ${meeting.subject}`, {
-                    threadId,
-                    date: meetingDateStr,
-                    totalInstancesFound: 'multiple',
-                    newRecordsAdded: newRecords.length,
-                    totalRecords: existing.attendanceRecords.length
-                });
-            } else {
-                const meetingUTCDate = new Date(meeting.startTime);
-                const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-                const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
-                
-                console.log(`Skipped exact duplicate: ${meeting.subject}`, {
-                    threadId,
-                    date: meetingDateStr,
-                    reason: 'All attendance records already exist'
-                });
-            }
-        } else {
-            // First occurrence of this meeting
-            meetingsByKey.set(uniqueKey, { ...meeting });
-            const meetingUTCDate = new Date(meeting.startTime);
-            const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-            const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
-            
-            console.log(`Added meeting: ${meeting.subject}`, {
-                key: uniqueKey,
-                isRecurring,
-                date: meetingDateStr,
-                attendanceRecords: meeting.attendanceRecords?.length || 0
-            });
-        }
+        // Always add the meeting - don't merge different sessions
+        processedMeetings.push({ ...meeting });
+        
+        console.log(`Added meeting: ${meeting.subject}`, {
+            threadId: threadId || 'no-thread',
+            reportId: reportId || 'no-report',
+            isRecurring,
+            date: meetingDateStr,
+            attendanceRecords: meeting.attendanceRecords?.length || 0,
+            hasAttendance: (meeting.attendanceRecords?.length || 0) > 0
+        });
     });
     
-    // Convert map back to array
-    meetingsByKey.forEach(meeting => {
-        deduplicatedMeetings.push(meeting);
-    });
-    
-    console.log(`Deduplicated ${dateFilteredMeetings.length} meetings to ${deduplicatedMeetings.length} unique meetings`);
+    console.log(`Total meetings processed: ${processedMeetings.length} (preserving all sessions)`);
     console.log('===============================================\n');
 
-    // Store the original count before deduplication for the total count display
-    const totalMeetingsBeforeDeduplication = dateFilteredMeetings.length;
+    // Store the original count before processing for the total count display
+    const totalMeetingsBeforeProcessing = dateFilteredMeetings.length;
 
     // Get posted meetings from SQLite database
     const userEmail = session.user?.email || '';
@@ -773,12 +722,12 @@ export async function GET(request: Request) {
     
     console.log('\n==== MEETINGS FILTERING DEBUG ====');
     console.log(`User Email: ${userEmail}`);
-    console.log(`Total meetings fetched: ${deduplicatedMeetings.length}`);
+    console.log(`Total meetings fetched: ${processedMeetings.length}`);
     console.log(`Total posted meetings for user: ${userPostedMeetings.length}`);
     
     console.log('\nProcessing current meetings:');
     const filteredMeetings = [];
-    for (const meeting of deduplicatedMeetings) {
+    for (const meeting of processedMeetings) {
         // Check if meeting is already posted using meetingId format
         const meetingId = meeting.meetingInfo?.meetingId || `${userEmail.toLowerCase()}_${meeting.subject}_${meeting.startTime}`;
         
@@ -836,8 +785,8 @@ export async function GET(request: Request) {
         toUTC: endDate.toISOString()
       },
       meetings: filteredMeetings,
-      totalMeetingsInPeriod: totalMeetingsBeforeDeduplication,
-      totalTimeInPeriod: deduplicatedMeetings.reduce((acc: number, meeting: MeetingData) => {
+      totalMeetingsInPeriod: totalMeetingsBeforeProcessing,
+      totalTimeInPeriod: processedMeetings.reduce((acc: number, meeting: MeetingData) => {
         const userEmail = session?.user?.email;
         if (meeting.attendanceRecords?.length && userEmail) {
           // Sum ALL user records for this meeting (handles merged meetings with multiple attendance records)
