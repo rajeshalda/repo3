@@ -342,37 +342,47 @@ export class MeetingComparisonService {
                         // For meetings with multiple reports (recurring or user rejoining), create separate instances
                         const allValidReports = meeting.attendance?.allValidReports || [];
                         
-                        if (allValidReports.length > 1) {
-                            console.log(`🔄 Meeting "${meeting.subject}" has ${allValidReports.length} report instances (user rejoined multiple times)`);
-                            
+                        // DEBUG: Add detailed logging
+                        console.log(`🔧 DEBUG: Checking meeting "${meeting.subject}"`);
+                        console.log(`🔧 DEBUG: meeting.attendance exists: ${!!meeting.attendance}`);
+                        console.log(`🔧 DEBUG: allValidReports length: ${allValidReports.length}`);
+                        console.log(`🔧 DEBUG: allValidReports:`, allValidReports);
+                        console.log(`🔧 DEBUG: meeting.attendance.reportId: ${meeting.attendance?.reportId}`);
+                        
+                        if (allValidReports && allValidReports.length > 1) {
+                            console.log(`🔄 ENTERING MULTIPLE REPORTS BRANCH for "${meeting.subject}"`);
+                            // Multiple reports - create separate instances for each unposted report
                             const newInstances: ProcessedMeeting[] = [];
                             
                             for (const reportSelection of allValidReports) {
+                                const reportId = reportSelection.selectedReportId;
+                                
                                 // First check if the user actually attended this specific report session
                                 const userAttendedThisReport = await this.checkUserAttendanceForReport(
                                     meeting, 
-                                    reportSelection.selectedReportId, 
+                                    reportId, 
                                     meeting.userId
                                 );
                                 
                                 if (!userAttendedThisReport) {
-                                    console.log(`⏭️ User ${meeting.userId} did not attend report ${reportSelection.selectedReportId} - skipping instance creation`);
+                                    console.log(`⏭️ User ${meeting.userId} did not attend report ${reportId} - skipping instance creation`);
                                     continue;
                                 }
                                 
+                                // Check if this specific report has already been posted for this user
                                 const isPosted = await this.storage.isPosted(
                                     meeting.userId,
                                     meeting.id,
                                     0, // duration not needed for report ID check
                                     '', // dateTime not needed for report ID check
-                                    reportSelection.selectedReportId
+                                    reportId
                                 );
                                 
                                 if (!isPosted) {
                                     // Create attendance records specific to this report with user's actual attendance
                                     const userSpecificDuration = await this.getUserDurationForReport(
                                         meeting,
-                                        reportSelection.selectedReportId,
+                                        reportId,
                                         meeting.userId
                                     );
                                     
@@ -388,7 +398,7 @@ export class MeetingComparisonService {
                                     const reportInstance: ProcessedMeeting = {
                                         ...meeting,
                                         // Create a unique ID for this instance by appending report ID
-                                        id: `${meeting.id}-${reportSelection.selectedReportId.substring(0, 8)}`,
+                                        id: `${meeting.id}-${reportId.substring(0, 8)}`,
                                         attendance: {
                                             records: specificAttendanceRecords,
                                             summary: {
@@ -396,17 +406,18 @@ export class MeetingComparisonService {
                                                 averageDuration: userSpecificDuration,
                                                 totalParticipants: 1 // Just this user
                                             },
-                                            reportId: reportSelection.selectedReportId,
+                                            reportId: reportId,
                                             // Clear allValidReports to avoid infinite recursion
                                             allValidReports: undefined
                                         }
                                     };
                                     
                                     newInstances.push(reportInstance);
-                                    console.log(`✅ Report ${reportSelection.selectedReportId} not posted - creating instance with duration ${userSpecificDuration}s`);
+                                    console.log(`✅ Report ${reportId} not posted - creating instance with duration ${userSpecificDuration}s`);
                                     console.log(`🔧 DEBUG: Created instance with reportId = ${reportInstance.attendance?.reportId}, instanceId = ${reportInstance.id}`);
                                 } else {
-                                    console.log(`⏭️ Report ${reportSelection.selectedReportId} already posted - skipping`);
+                                    console.log(`⏭️ Duplicate: "${meeting.subject}" already posted with report ID ${reportId}`);
+                                    duplicatesCount++;
                                 }
                             }
                             
@@ -424,6 +435,7 @@ export class MeetingComparisonService {
                             // Single report or no reports - use existing logic
                             const reportId = meeting.attendance?.reportId;
                             
+                            // Check if this meeting has already been posted using report ID if available
                             const isPosted = await this.storage.isPosted(
                                 meeting.userId,
                                 meeting.id,
@@ -433,10 +445,11 @@ export class MeetingComparisonService {
                             );
                             
                             if (!isPosted) {
-                                console.log(`✅ Unique: "${meeting.subject}" [${meeting.id.substring(0, 15)}...]`);
+                                console.log(`✅ Unique: "${meeting.subject}" [${meeting.id.substring(0, 15)}...]${reportId ? ` with report ID ${reportId}` : ''}`);
                                 return [meeting];
                             } else {
-                                console.log(`⏭️ Duplicate: "${meeting.subject}" already posted`);
+                                console.log(`⏭️ Duplicate: "${meeting.subject}" already posted${reportId ? ` with report ID ${reportId}` : ''}`);
+                                duplicatesCount++;
                                 return [];
                             }
                         }
@@ -608,15 +621,141 @@ export class MeetingComparisonService {
         reportId: string, 
         userId: string
     ): Promise<number> {
-        // This would require making an API call to Microsoft Graph
-        // For now, we'll return a placeholder value that indicates attendance
-        // TODO: Implement actual Microsoft Graph API call
-        console.log(`📡 TODO: Implement actual API call to fetch attendance for report ${reportId}`);
+        try {
+            console.log(`📡 Fetching actual attendance for user ${userId} in report ${reportId}`);
+            
+            // Get Graph token
+            const accessToken = await this.getGraphToken();
+            
+            // Extract meeting info from join URL
+            if (!meeting.onlineMeeting?.joinUrl) {
+                console.log(`❌ No join URL available for meeting ${meeting.subject}`);
+                return 0;
+            }
+            
+            const { meetingId, organizerId } = this.extractMeetingInfo(meeting.onlineMeeting.joinUrl);
+            
+            if (!meetingId || !organizerId) {
+                console.log(`❌ Could not extract meeting info from join URL`);
+                return 0;
+            }
+            
+            // Get user info to get their Graph ID
+            const userResponse = await fetch(
+                `https://graph.microsoft.com/v1.0/users/${userId}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            if (!userResponse.ok) {
+                console.log(`❌ Failed to get user info for ${userId}`);
+                return 0;
+            }
+            
+            const userData = await userResponse.json();
+            const targetUserId = userData.id;
+            
+            // Format the meeting ID for API call
+            const formattedString = `1*${organizerId}*0**${meetingId}`;
+            const base64MeetingId = Buffer.from(formattedString).toString('base64');
+            
+            // Fetch attendance records for this specific report
+            const recordsResponse = await fetch(
+                `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports/${reportId}/attendanceRecords`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            if (!recordsResponse.ok) {
+                console.log(`❌ Failed to fetch attendance records for report ${reportId}: ${recordsResponse.status}`);
+                return 0;
+            }
+            
+            const recordsData = await recordsResponse.json();
+            const records = recordsData.value || [];
+            
+            console.log(`📊 Fetched ${records.length} attendance records for report ${reportId}`);
+            
+            // Find the current user's record
+            const userRecord = records.find((record: any) => 
+                record.emailAddress?.toLowerCase() === userId.toLowerCase()
+            );
+            
+            if (userRecord && userRecord.totalAttendanceInSeconds > 0) {
+                const duration = userRecord.totalAttendanceInSeconds;
+                console.log(`✅ Found user ${userId} in report ${reportId} with duration: ${Math.floor(duration/60)}m ${duration%60}s`);
+                return duration;
+            } else {
+                console.log(`❌ User ${userId} not found in report ${reportId} attendance records`);
+                return 0;
+            }
+        } catch (error) {
+            console.error(`❌ Error fetching attendance for report ${reportId}:`, error);
+            return 0;
+        }
+    }
+
+    /**
+     * Get Graph API access token
+     */
+    private async getGraphToken(): Promise<string> {
+        const tenantId = process.env.AZURE_AD_APP_TENANT_ID;
+        const clientId = process.env.AZURE_AD_APP_CLIENT_ID;
+        const clientSecret = process.env.AZURE_AD_APP_CLIENT_SECRET;
         
-        // Since we know this is a valid report ID (it's in allValidReports), 
-        // and the user is trying to post it, they likely attended
-        // Return a positive duration to indicate attendance
-        return 60; // Default 60 seconds attendance duration
+        if (!tenantId || !clientId || !clientSecret) {
+            throw new Error('Missing Microsoft Graph API configuration');
+        }
+        
+        const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+        const params = new URLSearchParams({
+            grant_type: 'client_credentials',
+            client_id: clientId,
+            client_secret: clientSecret,
+            scope: 'https://graph.microsoft.com/.default'
+        });
+
+        const response = await fetch(tokenUrl, {
+            method: 'POST',
+            body: params,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to get access token: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.access_token;
+    }
+
+    /**
+     * Extract meeting ID and organizer ID from Teams join URL
+     */
+    private extractMeetingInfo(joinUrl: string): { meetingId: string | undefined; organizerId: string | undefined } {
+        try {
+            const decodedUrl = decodeURIComponent(joinUrl);
+            const meetingMatch = decodedUrl.match(/19:meeting_([^@]+)@thread\.v2/);
+            const organizerMatch = decodedUrl.match(/"Oid":"([^"]+)"/);
+            
+            const meetingId = meetingMatch ? `19:meeting_${meetingMatch[1]}@thread.v2` : undefined;
+            const organizerId = organizerMatch ? organizerMatch[1] : undefined;
+            
+            return { meetingId, organizerId };
+        } catch (error) {
+            console.error('Error extracting meeting info:', error);
+            return { meetingId: undefined, organizerId: undefined };
+        }
     }
 }
 

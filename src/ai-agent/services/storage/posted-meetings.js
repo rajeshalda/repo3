@@ -18,7 +18,7 @@ class AIAgentPostedMeetingsStorage {
         return Promise.resolve();
     }
 
-    async addPostedMeeting(userId, postedMeeting) {
+    async addPostedMeeting(postedMeeting) {
         try {
             // Convert to database format
             const meetingData = {

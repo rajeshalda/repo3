@@ -216,7 +216,81 @@ export class MeetingService {
         try {
             // Check if meeting was already processed (double-check in case it was processed while in queue)
             const existingMeeting = await storageManager.getMeeting(meeting.id);
-            if (existingMeeting) {
+            
+            // If we have a cached meeting, check if new reports are available
+            if (existingMeeting && meeting.onlineMeeting?.joinUrl) {
+                try {
+                    const accessToken = await this.getGraphToken();
+                    const { meetingId, organizerId } = this.extractMeetingInfo(meeting.onlineMeeting.joinUrl);
+                    
+                    if (meetingId && organizerId) {
+                        // Get user info
+                        const userResponse = await fetch(
+                            `https://graph.microsoft.com/v1.0/users/${userId}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${accessToken}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+                        
+                        if (userResponse.ok) {
+                            const userData = await userResponse.json();
+                            const targetUserId = userData.id;
+                            
+                            const formattedString = `1*${organizerId}*0**${meetingId}`;
+                            const base64MeetingId = Buffer.from(formattedString).toString('base64');
+                            
+                            // Get current attendance reports
+                            const reportsResponse = await fetch(
+                                `https://graph.microsoft.com/v1.0/users/${targetUserId}/onlineMeetings/${base64MeetingId}/attendanceReports`,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${accessToken}`,
+                                        'Content-Type': 'application/json'
+                                    }
+                                }
+                            );
+                            
+                            if (reportsResponse.ok) {
+                                const reportsData = await reportsResponse.json();
+                                const currentReportCount = reportsData.value?.length || 0;
+                                const cachedReportCount = existingMeeting.attendance?.allValidReports?.length || 1;
+                                
+                                console.log(`🔧 CACHE CHECK: Meeting "${meeting.subject}"`);
+                                console.log(`🔧 CACHE CHECK: Current reports: ${currentReportCount}, Cached reports: ${cachedReportCount}`);
+                                
+                                // If we have more reports now than when cached, force reprocessing
+                                if (currentReportCount > cachedReportCount) {
+                                    console.log(`🔄 NEW REPORTS DETECTED: Found ${currentReportCount} reports vs ${cachedReportCount} cached. Forcing reprocessing...`);
+                                    // Don't return cached result, continue with fresh processing
+                                } else {
+                                    console.log(`♻️ USING CACHE: No new reports found, returning cached result`);
+                                    return existingMeeting;
+                                }
+                            } else {
+                                // If we can't check reports, use cached version
+                                console.log(`Meeting ${meeting.id} already processed while in queue, returning cached result`);
+                                return existingMeeting;
+                            }
+                        } else {
+                            // If we can't check reports, use cached version
+                            console.log(`Meeting ${meeting.id} already processed while in queue, returning cached result`);
+                            return existingMeeting;
+                        }
+                    } else {
+                        // If we can't extract meeting info, use cached version
+                        console.log(`Meeting ${meeting.id} already processed while in queue, returning cached result`);
+                        return existingMeeting;
+                    }
+                } catch (error) {
+                    // If any error occurs during report checking, use cached version
+                    console.log(`Meeting ${meeting.id} already processed while in queue, returning cached result`);
+                    return existingMeeting;
+                }
+            } else if (existingMeeting) {
+                // For non-online meetings, always use cache
                 console.log(`Meeting ${meeting.id} already processed while in queue, returning cached result`);
                 return existingMeeting;
             }

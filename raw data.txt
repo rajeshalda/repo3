@@ -1,71 +1,124 @@
- GET /api/auth/session 200 in 56ms
- GET /api/pm2/agent-status?userId=neha%40m365x92504196.onmicrosoft.com 304 in 10ms
- POST /api/pm2/agent-status 200 in 20ms
- ○ Compiling /api/process-meetings ...
- ✓ Compiled /api/process-meetings in 955ms (1874 modules)
-✅ Database schema initialized
-✅ SQLite database initialized: C:\Users\Rajesh.alda\Downloads\repo3\data\application.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                     .sqlite
-Processing meetings for user neha@m365x92504196.onmicrosoft.com from source: pm2
-Fetching meetings for user: neha@m365x92504196.onmicrosoft.com
+Processing meetings for user pradeepg@m365x92504196.onmicrosoft.com from source: pm2
+Fetching meetings for user: pradeepg@m365x92504196.onmicrosoft.com
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🚀 MEETING FETCH STARTED
-║ 👤 User: neha@m365x92504...
+║ 👤 User: pradeepg@m365x9...
 ╚════════════════════════════════════════════════════════╝
 🔑 Getting Graph API access token...
 ✅ Access token acquired successfully
 
 ┌─────────────────────────────────────────────────┐
 │ 📅 FETCHING MEETINGS FOR EXTENDED WINDOW         │
-│ 📆 IST range: 6/17/2025, 12:00:00 AM to              │
-│             6/18/2025, 11:59:59 PM              │
-│ 🌐 UTC range: 2025-06-15T18:30:00.000Z to              │
-│             2025-06-18T18:29:59.999Z              │
+│ 📆 IST range: 6/18/2025, 12:00:00 AM to              │
+│             6/19/2025, 11:59:59 PM              │
+│ 🌐 UTC range: 2025-06-16T18:30:00.000Z to              │
+│             2025-06-19T18:29:59.999Z              │
 └─────────────────────────────────────────────────┘
 📡 Fetching meetings from Graph API...
-✅ Received 3 meetings from API
+✅ Received 5 meetings from API
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │
-│ 📊 Total meetings before filtering: 3            │
+│ 📊 Total meetings before filtering: 5            │
 └─────────────────────────────────────────────────┘
 
 [RAW MEETING 1]
 {
-  "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKSUOg==\"",
-  "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgGAAA=",
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxhvNA==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=",
+  "categories": [],
+  "subject": "Lenovo PC Setup",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 290 617 240 038 3\r\nPasscode: Cq9bw9Dh\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-06-18T02:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-18T02:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Neha",
+        "address": "Neha@M365x92504196.onmicrosoft.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Yzg2M2E2ZGEtYzUwMy00MDFhLWFjNjYtMjQ2NmRiYmM3MDQw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "341693766",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 2]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxhtQQ==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=",
+  "categories": [],
+  "subject": "UMG Migration",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 213 076 262 430 9\r\nPasscode: bz68LU7G\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "importance": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "seriesMasterId": null,
+  "type": "singleInstance",
+  "start": {
+    "dateTime": "2025-06-18T00:00:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "end": {
+    "dateTime": "2025-06-18T00:30:00.0000000",
+    "timeZone": "India Standard Time"
+  },
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Neha",
+        "address": "Neha@M365x92504196.onmicrosoft.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "Pradeep Gupta",
+      "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_N2M1ZDFhZjctYmI5MS00MTNiLWI1OWYtZDRjOWIzNGI0NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+    "conferenceId": "988355004",
+    "tollNumber": "+1 323-618-1840"
+  }
+}
+
+[RAW MEETING 3]
+{
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxhTyQ==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHsAAA=",
   "categories": [],
   "subject": "UMG Migration Fixed",
   "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 812 638 096 9\r\nPasscode: Yr37TG6f\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
@@ -83,17 +136,6 @@ Fetching meetings for user: neha@m365x92504196.onmicrosoft.com
     "timeZone": "India Standard Time"
   },
   "attendees": [
-    {
-      "type": "required",
-      "status": {
-        "response": "none",
-        "time": "0001-01-01T00:00:00Z"
-      },
-      "emailAddress": {
-        "name": "Pradeep Gupta",
-        "address": "PradeepG@M365x92504196.OnMicrosoft.com"
-      }
-    },
     {
       "type": "required",
       "status": {
@@ -119,13 +161,13 @@ Fetching meetings for user: neha@m365x92504196.onmicrosoft.com
   }
 }
 
-[RAW MEETING 2]
+[RAW MEETING 4]
 {
-  "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKSUQw==\"",
-  "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=",
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxhT8Q==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHtAAA=",
   "categories": [],
-  "subject": "Universal Api Request",
-  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 221 434 218 034 0\r\nPasscode: DY9gU2Q4\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+  "subject": "Lenovo Client Meet",
+  "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 247 591 884 897\r\nPasscode: xi3vb347\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
   "importance": "normal",
   "isAllDay": false,
   "isCancelled": false,
@@ -147,28 +189,39 @@ Fetching meetings for user: neha@m365x92504196.onmicrosoft.com
         "time": "0001-01-01T00:00:00Z"
       },
       "emailAddress": {
-        "name": "Debra Berger",
-        "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        "name": "Megan Bowen",
+        "address": "MeganB@M365x92504196.OnMicrosoft.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Pradeep Gupta",
+        "address": "PradeepG@M365x92504196.OnMicrosoft.com"
       }
     }
   ],
   "organizer": {
     "emailAddress": {
-      "name": "Neha",
-      "address": "Neha@M365x92504196.onmicrosoft.com"
+      "name": "Megan Bowen",
+      "address": "MeganB@M365x92504196.OnMicrosoft.com"
     }
   },
   "onlineMeeting": {
-    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YWFlMTA3OTUtMjE5MC00OWYwLWJmNGYtZTVjYjcwMTY3Yjhm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%226bb5911c-640d-4764-8949-e4a9381131aa%22%7d",
-    "conferenceId": "167360776",
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZGJmYjgzM2UtNDU4My00MmVjLTk0YmMtOTBjNTQzY2Q5ZTY4%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%220a46ba91-dce8-4114-8cdc-4f09947eee7e%22%7d",
+    "conferenceId": "394478357",
     "tollNumber": "+1 323-618-1840"
   }
 }
 
-[RAW MEETING 3]
+[RAW MEETING 5]
 {
-  "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKSS+A==\"",
-  "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=",
+  "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxhN3A==\"",
+  "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHrAAA=",
   "categories": [],
   "subject": "Dell Meetup",
   "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 258 136 067 484 6\r\nPasscode: Dq32B82y\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
@@ -186,6 +239,17 @@ Fetching meetings for user: neha@m365x92504196.onmicrosoft.com
     "timeZone": "India Standard Time"
   },
   "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Neha",
+        "address": "Neha@M365x92504196.onmicrosoft.com"
+      }
+    },
     {
       "type": "required",
       "status": {
@@ -235,38 +299,37 @@ Fetching meetings for user: neha@m365x92504196.onmicrosoft.com
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ MEETINGS FILTERED                            │
-│ 📊 Total meetings after filtering: 3           │
+│ 📊 Total meetings after filtering: 2           │
 └─────────────────────────────────────────────────┘
 📋 Today's meetings:
-   1. "UMG Migration Fixed" (03:00 PM - 03:30 PM)
-   2. "Universal Api Request" (03:00 PM - 03:30 PM)
-   3. "Dell Meetup" (01:00 PM - 01:30 PM)
+   1. "Lenovo PC Setup" (02:00 AM - 02:30 AM)
+   2. "UMG Migration" (12:00 AM - 12:30 AM)
 
 ┌─────────────────────────────────────────────────┐
 │ 🔍 FETCHING ATTENDANCE RECORDS                  │
 └─────────────────────────────────────────────────┘
-📝 Processing online meeting: "UMG Migration Fixed"
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MmM3YmMwNmYtZjBkYy00NjJhLTgyZjgtMmZiMmFjMjc1NDAz@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
-Extracted Meeting ID: 19:meeting_MmM3YmMwNmYtZjBkYy00NjJhLTgyZjgtMmZiMmFjMjc1NDAz@thread.v2
+📝 Processing online meeting: "Lenovo PC Setup"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Yzg2M2E2ZGEtYzUwMy00MDFhLWFjNjYtMjQ2NmRiYmM3MDQw@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_Yzg2M2E2ZGEtYzUwMy00MDFhLWFjNjYtMjQ2NmRiYmM3MDQw@thread.v2
 Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
 🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_MmM3YmMwNmYtZjBkYy00NjJhLTgyZjgtMmZiMmFjMjc1NDAz@thread.v2
-Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NbU0zWW1Nd05tWXRaakJrWXkwME5qSmhMVGd5WmpndE1tWmlNbUZqTWpjMU5EQXpAdGhyZWFkLnYy     
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_Yzg2M2E2ZGEtYzUwMy00MDFhLWFjNjYtMjQ2NmRiYmM3MDQw@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZemcyTTJFMlpHRXRZelV3TXkwME1ERmhMV0ZqTmpZdE1qUTJObVJpWW1NM01EUXdAdGhyZWFkLnYy       
 Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('6bb5911c-640d-4764-8949-e4a9381131aa')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NbU0zWW1Nd05tWXRaakJrWXkwME5qSmhMVGd5WmpndE1tWmlNbUZqTWpjMU5EQXpAdGhyZWFkLnYy')/attendanceReports",
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZemcyTTJFMlpHRXRZelV3TXkwME1ERmhMV0ZqTmpZdE1qUTJObVJpWW1NM01EUXdAdGhyZWFkLnYy')/attendanceReports",
   "value": [
     {
-      "id": "78a71587-03cc-4a2a-b0d0-b257d71a4fc9",
+      "id": "8d4bfadf-ba17-4886-96f7-a9b51f2708db",
       "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-06-17T13:23:14.849Z",
-      "meetingEndDateTime": "2025-06-17T13:25:59.467Z",
+      "meetingStartDateTime": "2025-06-17T20:56:35.163Z",
+      "meetingEndDateTime": "2025-06-17T20:59:00.129Z",
       "externalEventInformation": []
     },
     {
-      "id": "6e9f9653-9365-48a2-9f4b-3bea31472a50",
-      "totalParticipantCount": 2,
-      "meetingStartDateTime": "2025-06-17T09:38:27.185Z",
-      "meetingEndDateTime": "2025-06-17T09:44:36.458Z",
+      "id": "52e35abb-c29e-4bca-8279-aec78d73f04d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-17T20:42:14.429Z",
+      "meetingEndDateTime": "2025-06-17T20:49:01.954Z",
       "externalEventInformation": []
     }
   ]
@@ -282,180 +345,32 @@ Reports data: {
 │ 🌅 Early Morning Target: YES  │
 └─────────────────────────────────────────────────┘
 Report time check: {
-  reportTime: '2025-06-17T13:23:14.849Z',
-  reportIST: '2025-06-17 18:53:14',
-  reportDateStr: '2025-06-17',
-  istTargetDateStr: '2025-06-17',
-  reportHourIST: 18,
+  reportTime: '2025-06-17T20:56:35.163Z',
+  reportIST: '2025-06-18 02:26:35',
+  reportDateStr: '2025-06-18',
+  istTargetDateStr: '2025-06-18',
+  reportHourIST: 2,
   isRelevant: true
 }
 Report time check: {
-  reportTime: '2025-06-17T09:38:27.185Z',
-  reportIST: '2025-06-17 15:08:27',
-  reportDateStr: '2025-06-17',
-  istTargetDateStr: '2025-06-17',
-  reportHourIST: 15,
+  reportTime: '2025-06-17T20:42:14.429Z',
+  reportIST: '2025-06-18 02:12:14',
+  reportDateStr: '2025-06-18',
+  istTargetDateStr: '2025-06-18',
+  reportHourIST: 2,
   isRelevant: true
 }
 🔧 DEBUG: Enhanced logic version running - relevantReports.length = 2
 🔄 Found 2 valid reports for meeting (user rejoined multiple times) - processing all reports
-🔍 Fetching attendance from report: 78a71587-03cc-4a2a-b0d0-b257d71a4fc9 (2025-06-17T13:23:14.849Z)
-✅ Found 1 attendance records for report 78a71587-03cc-4a2a-b0d0-b257d71a4fc9
-🔍 Fetching attendance from report: 6e9f9653-9365-48a2-9f4b-3bea31472a50 (2025-06-17T09:38:27.185Z)
-✅ Found 2 attendance records for report 6e9f9653-9365-48a2-9f4b-3bea31472a50
-✅ Combined attendance records from 2 reports: 3 total records
-✅ Added metadata for 2 reports to enable multi-instance processing
-
-┌─────────────────────────────────────────────────┐
-│ ✅ ATTENDANCE RECORDS FOUND                     │
-│ 📊 Total Records: 3             │
-│ 🕒 Meeting Start: 2025-06-17T13:23:14.849Z │
-│ 🔄 Total Reports: 2 (metadata attached) │
-└─────────────────────────────────────────────────┘
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NbU0zWW1Nd05tWXRaakJrWXkwME5qSmhMVGd5WmpndE1tWmlNbUZqTWpjMU5EQXpAdGhyZWFkLnYy/attendanceReports
-Found report ID: 78a71587-03cc-4a2a-b0d0-b257d71a4fc9
-✅ Found 3 attendance records for "UMG Migration Fixed"
-📝 Processing online meeting: "Universal Api Request"
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_YWFlMTA3OTUtMjE5MC00OWYwLWJmNGYtZTVjYjcwMTY3Yjhm@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"6bb5911c-640d-4764-8949-e4a9381131aa"}
-Extracted Meeting ID: 19:meeting_YWFlMTA3OTUtMjE5MC00OWYwLWJmNGYtZTVjYjcwMTY3Yjhm@thread.v2
-Extracted Organizer ID: 6bb5911c-640d-4764-8949-e4a9381131aa
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*6bb5911c-640d-4764-8949-e4a9381131aa*0**19:meeting_YWFlMTA3OTUtMjE5MC00OWYwLWJmNGYtZTVjYjcwMTY3Yjhm@thread.v2
-Base64 Meeting ID: MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19ZV0ZsTVRBM09UVXRNakU1TUMwME9XWXdMV0ptTkdZdFpUVmpZamN3TVRZM1lqaG1AdGhyZWFkLnYy     
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('6bb5911c-640d-4764-8949-e4a9381131aa')/onlineMeetings('MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19ZV0ZsTVRBM09UVXRNakU1TUMwME9XWXdMV0ptTkdZdFpUVmpZamN3TVRZM1lqaG1AdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "bc6f19f5-ea43-4fb8-b397-729600f091e3",
-      "totalParticipantCount": 2,
-      "meetingStartDateTime": "2025-06-17T09:51:42.909Z",
-      "meetingEndDateTime": "2025-06-17T09:55:04.171Z",
-      "externalEventInformation": []
-    },
-    {
-      "id": "b2186232-e341-4ee7-94ee-961950f86a56",
-      "totalParticipantCount": 1,
-      "meetingStartDateTime": "2025-06-17T09:45:06.646Z",
-      "meetingEndDateTime": "2025-06-17T09:51:02.906Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-06-16T18:30:00.000Z to       │
-│     2025-06-17T18:29:59.999Z                │
-│ 🕒 IST: 6/17/2025, 5:30:00 AM to │
-│     6/18/2025, 5:29:59 AM    │
-│ ⏰ Target Hour IST: 0              │
-│ 🌅 Early Morning Target: YES  │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-06-17T09:51:42.909Z',
-  reportIST: '2025-06-17 15:21:42',
-  reportDateStr: '2025-06-17',
-  istTargetDateStr: '2025-06-17',
-  reportHourIST: 15,
-  isRelevant: true
-}
-Report time check: {
-  reportTime: '2025-06-17T09:45:06.646Z',
-  reportIST: '2025-06-17 15:15:06',
-  reportDateStr: '2025-06-17',
-  istTargetDateStr: '2025-06-17',
-  reportHourIST: 15,
-  isRelevant: true
-}
-🔧 DEBUG: Enhanced logic version running - relevantReports.length = 2
-🔄 Found 2 valid reports for meeting (user rejoined multiple times) - processing all reports
-🔍 Fetching attendance from report: bc6f19f5-ea43-4fb8-b397-729600f091e3 (2025-06-17T09:51:42.909Z)
-✅ Found 2 attendance records for report bc6f19f5-ea43-4fb8-b397-729600f091e3
-🔍 Fetching attendance from report: b2186232-e341-4ee7-94ee-961950f86a56 (2025-06-17T09:45:06.646Z)
-✅ Found 1 attendance records for report b2186232-e341-4ee7-94ee-961950f86a56
-✅ Combined attendance records from 2 reports: 3 total records
-✅ Added metadata for 2 reports to enable multi-instance processing
-
-┌─────────────────────────────────────────────────┐
-│ ✅ ATTENDANCE RECORDS FOUND                     │
-│ 📊 Total Records: 3             │
-│ 🕒 Meeting Start: 2025-06-17T09:51:42.909Z │
-│ 🔄 Total Reports: 2 (metadata attached) │
-└─────────────────────────────────────────────────┘
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/6bb5911c-640d-4764-8949-e4a9381131aa/onlineMeetings/MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19ZV0ZsTVRBM09UVXRNakU1TUMwME9XWXdMV0ptTkdZdFpUVmpZamN3TVRZM1lqaG1AdGhyZWFkLnYy/attendanceReports
-Found report ID: bc6f19f5-ea43-4fb8-b397-729600f091e3
-✅ Found 3 attendance records for "Universal Api Request"
-📝 Processing online meeting: "Dell Meetup"
-Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_NzhiMDVmNTctOGZlOC00NDI2LWFkY2YtNzM2OTdkZjkyZmFm@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"6bb5911c-640d-4764-8949-e4a9381131aa"}
-Extracted Meeting ID: 19:meeting_NzhiMDVmNTctOGZlOC00NDI2LWFkY2YtNzM2OTdkZjkyZmFm@thread.v2
-Extracted Organizer ID: 6bb5911c-640d-4764-8949-e4a9381131aa
-🔍 Fetching attendance for meeting ID: 19:meeti...
-Formatted string: 1*6bb5911c-640d-4764-8949-e4a9381131aa*0**19:meeting_NzhiMDVmNTctOGZlOC00NDI2LWFkY2YtNzM2OTdkZjkyZmFm@thread.v2
-Base64 Meeting ID: MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19OemhpTURWbU5UY3RPR1psT0MwME5ESTJMV0ZrWTJZdE56TTJPVGRrWmpreVptRm1AdGhyZWFkLnYy     
-Reports data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('6bb5911c-640d-4764-8949-e4a9381131aa')/onlineMeetings('MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19OemhpTURWbU5UY3RPR1psT0MwME5ESTJMV0ZrWTJZdE56TTJPVGRrWmpreVptRm1AdGhyZWFkLnYy')/attendanceReports",
-  "value": [
-    {
-      "id": "e9c2417a-f297-4842-afe3-c51ad6ee2565",
-      "totalParticipantCount": 4,
-      "meetingStartDateTime": "2025-06-17T07:41:16.759Z",
-      "meetingEndDateTime": "2025-06-17T07:46:24.289Z",
-      "externalEventInformation": []
-    }
-  ]
-}
-
-┌─────────────────────────────────────────────────┐
-│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
-│ 📅 UTC: 2025-06-16T18:30:00.000Z to       │
-│     2025-06-17T18:29:59.999Z                │
-│ 🕒 IST: 6/17/2025, 5:30:00 AM to │
-│     6/18/2025, 5:29:59 AM    │
-│ ⏰ Target Hour IST: 0              │
-│ 🌅 Early Morning Target: YES  │
-└─────────────────────────────────────────────────┘
-Report time check: {
-  reportTime: '2025-06-17T07:41:16.759Z',
-  reportIST: '2025-06-17 13:11:16',
-  reportDateStr: '2025-06-17',
-  istTargetDateStr: '2025-06-17',
-  reportHourIST: 13,
-  isRelevant: true
-}
-🔧 DEBUG: Enhanced logic version running - relevantReports.length = 1
-Found 1 relevant reports, using most recent: e9c2417a-f297-4842-afe3-c51ad6ee2565     
+Using latest report for attendance records: 8d4bfadf-ba17-4886-96f7-a9b51f2708db       
 Records data: {
-  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('6bb5911c-640d-4764-8949-e4a9381131aa')/onlineMeetings('MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19OemhpTURWbU5UY3RPR1psT0MwME5ESTJMV0ZrWTJZdE56TTJPVGRrWmpreVptRm1AdGhyZWFkLnYy')/attendanceReports('e9c2417a-f297-4842-afe3-c51ad6ee2565')/attendanceRecords",
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZemcyTTJFMlpHRXRZelV3TXkwME1ERmhMV0ZqTmpZdE1qUTJObVJpWW1NM01EUXdAdGhyZWFkLnYy')/attendanceReports('8d4bfadf-ba17-4886-96f7-a9b51f2708db')/attendanceRecords",
   "value": [
-    {
-      "id": "6bb5911c-640d-4764-8949-e4a9381131aa",
-      "emailAddress": "Neha@M365x92504196.onmicrosoft.com",
-      "totalAttendanceInSeconds": 303,
-      "role": "Organizer",
-      "registrationId": null,
-      "identity": {
-        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
-        "id": "6bb5911c-640d-4764-8949-e4a9381131aa",
-        "displayName": "Neha",
-        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
-      },
-      "attendanceIntervals": [
-        {
-          "joinDateTime": "2025-06-17T07:41:21.1295898Z",
-          "leaveDateTime": "2025-06-17T07:46:24.289142Z",
-          "durationInSeconds": 303
-        }
-      ],
-      "externalRegistrationInformation": {
-        "referrer": null,
-        "registrationId": null
-      }
-    },
     {
       "id": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
       "emailAddress": "PradeepG@M365x92504196.OnMicrosoft.com",
-      "totalAttendanceInSeconds": 275,
-      "role": "Presenter",
+      "totalAttendanceInSeconds": 140,
+      "role": "Organizer",
       "registrationId": null,
       "identity": {
         "@odata.type": "#microsoft.graph.communicationsUserIdentity",
@@ -465,57 +380,9 @@ Records data: {
       },
       "attendanceIntervals": [
         {
-          "joinDateTime": "2025-06-17T07:41:31.3315519Z",
-          "leaveDateTime": "2025-06-17T07:46:06.580201Z",
-          "durationInSeconds": 275
-        }
-      ],
-      "externalRegistrationInformation": {
-        "referrer": null,
-        "registrationId": null
-      }
-    },
-    {
-      "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
-      "emailAddress": "DebraB@M365x92504196.OnMicrosoft.com",
-      "totalAttendanceInSeconds": 262,
-      "role": "Presenter",
-      "registrationId": null,
-      "identity": {
-        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
-        "id": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
-        "displayName": "Debra Berger",
-        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
-      },
-      "attendanceIntervals": [
-        {
-          "joinDateTime": "2025-06-17T07:41:48.9683605Z",
-          "leaveDateTime": "2025-06-17T07:46:11.0410143Z",
-          "durationInSeconds": 262
-        }
-      ],
-      "externalRegistrationInformation": {
-        "referrer": null,
-        "registrationId": null
-      }
-    },
-    {
-      "id": "0a46ba91-dce8-4114-8cdc-4f09947eee7e",
-      "emailAddress": "MeganB@M365x92504196.OnMicrosoft.com",
-      "totalAttendanceInSeconds": 241,
-      "role": "Presenter",
-      "registrationId": null,
-      "identity": {
-        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
-        "id": "0a46ba91-dce8-4114-8cdc-4f09947eee7e",
-        "displayName": "Megan Bowen",
-        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
-      },
-      "attendanceIntervals": [
-        {
-          "joinDateTime": "2025-06-17T07:42:13.4589618Z",
-          "leaveDateTime": "2025-06-17T07:46:14.8774417Z",
-          "durationInSeconds": 241
+          "joinDateTime": "2025-06-17T20:56:39.353148Z",
+          "leaveDateTime": "2025-06-17T20:59:00.1297338Z",
+          "durationInSeconds": 140
         }
       ],
       "externalRegistrationInformation": {
@@ -525,166 +392,349 @@ Records data: {
     }
   ]
 }
+✅ Added metadata for 2 reports to enable multi-instance processing
 
 ┌─────────────────────────────────────────────────┐
 │ ✅ ATTENDANCE RECORDS FOUND                     │
-│ 📊 Total Records: 4             │
-│ 🕒 Meeting Start: 2025-06-17T07:41:16.759Z │
+│ 📊 Total Records: 1             │
+│ 🕒 Meeting Start: 2025-06-17T20:56:35.163Z │
+│ 🔄 Total Reports: 2 (metadata attached) │
 └─────────────────────────────────────────────────┘
-Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/6bb5911c-640d-4764-8949-e4a9381131aa/onlineMeetings/MSo2YmI1OTExYy02NDBkLTQ3NjQtODk0OS1lNGE5MzgxMTMxYWEqMCoqMTk6bWVldGluZ19OemhpTURWbU5UY3RPR1psT0MwME5ESTJMV0ZrWTJZdE56TTJPVGRrWmpreVptRm1AdGhyZWFkLnYy/attendanceReports
-Found report ID: e9c2417a-f297-4842-afe3-c51ad6ee2565
-✅ Found 4 attendance records for "Dell Meetup"
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19ZemcyTTJFMlpHRXRZelV3TXkwME1ERmhMV0ZqTmpZdE1qUTJObVJpWW1NM01EUXdAdGhyZWFkLnYy/attendanceReports
+Found report ID: 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+✅ Found 1 attendance records for "Lenovo PC Setup"
+📝 Processing online meeting: "UMG Migration"
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_N2M1ZDFhZjctYmI5MS00MTNiLWI1OWYtZDRjOWIzNGI0NWZk@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Meeting ID: 19:meeting_N2M1ZDFhZjctYmI5MS00MTNiLWI1OWYtZDRjOWIzNGI0NWZk@thread.v2
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+🔍 Fetching attendance for meeting ID: 19:meeti...
+Formatted string: 1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_N2M1ZDFhZjctYmI5MS00MTNiLWI1OWYtZDRjOWIzNGI0NWZk@thread.v2
+Base64 Meeting ID: MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19OMk0xWkRGaFpqY3RZbUk1TVMwME1UTmlMV0kxT1dZdFpEUmpPV0l6TkdJME5XWmtAdGhyZWFkLnYy       
+ GET /api/pm2/status 200 in 13ms
+Reports data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19OMk0xWkRGaFpqY3RZbUk1TVMwME1UTmlMV0kxT1dZdFpEUmpPV0l6TkdJME5XWmtAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "5ba510e3-2247-4681-abd3-6d01ecfa8751",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-17T19:03:37.024Z",
+      "meetingEndDateTime": "2025-06-17T19:09:53.782Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "1cda8746-0597-4f34-87b8-99386a44f000",
+      "totalParticipantCount": 2,
+      "meetingStartDateTime": "2025-06-17T18:48:44.176Z",
+      "meetingEndDateTime": "2025-06-17T18:51:50.519Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+
+┌─────────────────────────────────────────────────┐
+│ 🔍 ATTENDANCE REPORT TIME WINDOW                │
+│ 📅 UTC: 2025-06-16T18:30:00.000Z to       │
+│     2025-06-17T18:29:59.999Z                │
+│ 🕒 IST: 6/17/2025, 5:30:00 AM to │
+│     6/18/2025, 5:29:59 AM    │
+│ ⏰ Target Hour IST: 0              │
+│ 🌅 Early Morning Target: YES  │
+└─────────────────────────────────────────────────┘
+Report time check: {
+  reportTime: '2025-06-17T19:03:37.024Z',
+  reportIST: '2025-06-18 00:33:37',
+  reportDateStr: '2025-06-18',
+  istTargetDateStr: '2025-06-18',
+  reportHourIST: 0,
+  isRelevant: true
+}
+Report time check: {
+  reportTime: '2025-06-17T18:48:44.176Z',
+  reportIST: '2025-06-18 00:18:44',
+  reportDateStr: '2025-06-18',
+  istTargetDateStr: '2025-06-18',
+  reportHourIST: 0,
+  isRelevant: true
+}
+🔧 DEBUG: Enhanced logic version running - relevantReports.length = 2
+🔄 Found 2 valid reports for meeting (user rejoined multiple times) - processing all reports
+Using latest report for attendance records: 5ba510e3-2247-4681-abd3-6d01ecfa8751       
+Records data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1                                   1MjgqMCoqMTk6bWVldGluZ19OMk0xWkRGaFpqY3RZbUk1TVMwME1UTmlMV0kxT1dZdFpEUmpPV0l6TkdJME5XWmt                                   tAdGhyZWFkLnYy')/attendanceReports('5  "value": [
+    {
+      "id": "6bb5911c-640d-4764-8949-e4a9381131aa",
+      "emailAddress": "Neha@M365x92504196.onmicrosoft.com",
+      "totalAttendanceInSeconds": 371,
+      "role": "Presenter",
+      "registrationId": null,
+      "identity": {
+        "@odata.type": "#microsoft.graph.communicationsUserIdentity",
+        "id": "6bb5911c-640d-4764-8949-e4a9381131aa",
+        "displayName": "Neha",
+        "tenantId": "d6b48afb-ae93-4180-bd0f-aa47c5c5b57b"
+      },
+      "attendanceIntervals": [
+        {
+          "joinDateTime": "2025-06-17T19:03:42.5747027Z",
+          "leaveDateTime": "2025-06-17T19:09:53.7820315Z",
+          "durationInSeconds": 371
+        }
+      ],
+      "externalRegistrationInformation": {
+        "referrer": null,
+        "registrationId": null
+      }
+    }
+  ]
+}
+✅ Added metadata for 2 reports to enable multi-instance processing
+
+┌─────────────────────────────────────────────────┐
+│ ✅ ATTENDANCE RECORDS FOUND                     │
+│ 📊 Total Records: 1             │
+│ 🕒 Meeting Start: 2025-06-17T19:03:37.024Z │
+│ 🔄 Total Reports: 2 (metadata attached) │
+└─────────────────────────────────────────────────┘
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19OMk0xWkRGaFpqY3RZbUk1TVMwME1UTmlMV0kxT1dZdFpEUmpPV0l6TkdJME5XWmtAdGhyZWFkLnYy/attendanceReports
+Found report ID: 5ba510e3-2247-4681-abd3-6d01ecfa8751
+✅ Found 1 attendance records for "UMG Migration"
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FETCH COMPLETED
-║ 📊 Total meetings: 3 | With attendance: 3
+║ 📊 Total meetings: 2 | With attendance: 2
 ║ 👥 Unique attendees: 0
 ╚════════════════════════════════════════════════════════╝
-Found 3 meetings for processing
+Found 2 meetings for processing
 
 ╔════════════════════════════════════════════════════════╗
-║ 🔄 STARTING BATCH PROCESSING [batch_1750177805044_emkyhj7py]
-║ 📊 Total meetings: 3
-║ 🆔 Cycle ID: cycle_1750177805044
+║ 🔄 STARTING BATCH PROCESSING [batch_1750196789232_5z3kbclf8]
+║ 📊 Total meetings: 2
+║ 🆔 Cycle ID: cycle_1750196789232
 ╚════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
-│ ▶️ Processing batch 1/1 (3 meetings) │
+│ ▶️ Processing batch 1/1 (2 meetings) │
 └─────────────────────────────────────────────────┘
 📶 Rate limiter status: 48/5 tokens available
+✅ Rate limiter tokens acquired
+📑 Processing meeting: "Lenovo PC Setup" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=]
+📥 QUEUE: Added meeting "Lenovo PC Setup" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=]
+📊 QUEUE STATUS: 1 item waiting
+⚙️ QUEUE: Starting queue processor...
+
+╔════════════════════════════════════════════════════════╗
+║ 🔄 QUEUE PROCESSOR STARTED                             ║
+║ 🆔 Cycle ID: cycle_1750196789243                   ║
 ║ 📊 Queue Length: 1                  ║
 ╚════════════════════════════════════════════════════════╝
-📑 Processing meeting: "Universal Api Request" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=]
-📥 QUEUE: Added meeting "Universal Api Request" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=]
+📑 Processing meeting: "UMG Migration" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=]
+📥 QUEUE: Added meeting "UMG Migration" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=]
 📊 QUEUE STATUS: 2 items waiting
-📑 Processing meeting: "Dell Meetup" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=]
-📥 QUEUE: Added meeting "Dell Meetup" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=]
-📊 QUEUE STATUS: 3 items waiting
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "UMG Migration Fixed" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgGAAA=]
-Meeting AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgGAAA= already processed while in queue, returning cached result
-✅ COMPLETED: "UMG Migration Fixed" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgGAAA=] in 0.01s
-✅ Successfully processed: "UMG Migration Fixed" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgGAAA=]
+🔍 PROCESSING: "Lenovo PC Setup" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=]
+🔧 CACHE CHECK: Meeting "Lenovo PC Setup"
+🔧 CACHE CHECK: Current reports: 2, Cached reports: 2
+♻️ USING CACHE: No new reports found, returning cached result
+✅ COMPLETED: "Lenovo PC Setup" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=] in 1.35s
+✅ Successfully processed: "Lenovo PC Setup" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=]
 ✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "Universal Api Request" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=]
-Meeting AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA= already processed while in queue, returning cached result
-✅ COMPLETED: "Universal Api Request" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=] in 0.00s
-✅ Successfully processed: "Universal Api Request" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=]
-✅ RATE LIMITER: Token acquired, processing next queue item
-🔍 PROCESSING: "Dell Meetup" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=]
-Meeting AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA= already processed while in queue, returning cached result
-✅ COMPLETED: "Dell Meetup" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=] in 0.00s
+🔍 PROCESSING: "UMG Migration" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=]
+🔧 CACHE CHECK: Meeting "UMG Migration"
+🔧 CACHE CHECK: Current reports: 2, Cached reports: 2
+♻️ USING CACHE: No new reports found, returning cached result
+✅ COMPLETED: "UMG Migration" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=] in 1.69s
 
 ╔════════════════════════════════════════════════════════╗
 ║ ✅ QUEUE PROCESSOR COMPLETED                           ║
-║ 🆔 Cycle ID: cycle_1750177805056                   ║
-║ ⏱️ Duration: 3.79s      ║
+║ 🆔 Cycle ID: cycle_1750196789243                   ║
+║ ⏱️ Duration: 5.57s      ║
 ╚════════════════════════════════════════════════════════╝
-✅ Successfully processed: "Dell Meetup" [AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=]
+✅ Successfully processed: "UMG Migration" [AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=]
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ Batch 1/1 completed                      │
-│ ✓ Progress: 3/3 meetings (100%)    │
-│ ✓ Success: 3 | Failed: 0               │
+│ ✓ Progress: 2/2 meetings (100%)    │
+│ ✓ Success: 2 | Failed: 0               │
 └─────────────────────────────────────────────────┘
 
 ╔════════════════════════════════════════════════════════╗
-║ 🏁 BATCH PROCESSING COMPLETED [batch_1750177805044_emkyhj7py]
-║ 📊 Total: 3 | Success: 3 | Failed: 0
+║ 🏁 BATCH PROCESSING COMPLETED [batch_1750196789232_5z3kbclf8]
+║ 📊 Total: 2 | Success: 2 | Failed: 0
 ║ 📈 Success rate: 100%
 ╚════════════════════════════════════════════════════════╝
 
 ╔════════════════════════════════════════════════════════╗
 ║ ⏱️ CYCLE COMPLETED                                     ║
 ║ 🆔 Cycle ID: null                   ║
-║ ⌛ Duration: 3.81s      ║
+║ ⌛ Duration: 5.58s      ║
 ╚════════════════════════════════════════════════════════╝
-Started batch processing with ID: batch_1750177805044_emkyhj7py
-Progress: 3/3 meetings processed
+Started batch processing with ID: batch_1750196789232_5z3kbclf8
+Progress: 2/2 meetings processed
 All meetings processed
-Successfully processed 3 meetings
+Successfully processed 2 meetings
 Filtering out already processed meetings and meetings the user didn't attend...
 
 ╔══════════════════════════════════════════════════════════╗
 ║ 🔍 MEETING FILTER STARTING                                ║
-║ 📊 Total meetings to check: 3                           ║
+║ 📊 Total meetings to check: 2                           ║
 ║ 🔄 Batch size: 3 | Delay: 15s                        ║
 ╚══════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
-│ 📦 Processing batch 1/1 (3 meetings) ║
+│ 📦 Processing batch 1/1 (2 meetings) ║
 └─────────────────────────────────────────────────┘
-🔄 Meeting "Universal Api Request" has 2 report instances (user rejoined multiple times)
-🔍 Checking if user neha@m365x92504196.onmicrosoft.com attended report bc6f19f5-ea43-4fb8-b397-729600f091e3
-🔍 Getting duration for user neha@m365x92504196.onmicrosoft.com in report bc6f19f5-ea43-4fb8-b397-729600f091e3
-✅ Found user duration in main report: 182 seconds
-✅ Unique: "UMG Migration Fixed" [AAMkADY0NjEwZTY...]
-✅ User neha@m365x92504196.onmicrosoft.com attended report bc6f19f5-ea43-4fb8-b397-729600f091e3 for 182 seconds
-✅ Unique: "Dell Meetup" [AAMkADY0NjEwZTY...]
-🔍 Getting duration for user neha@m365x92504196.onmicrosoft.com in report bc6f19f5-ea43-4fb8-b397-729600f091e3
-✅ Found user duration in main report: 182 seconds
-✅ Report bc6f19f5-ea43-4fb8-b397-729600f091e3 not posted - creating instance with duration 182s
-🔧 DEBUG: Created instance with reportId = bc6f19f5-ea43-4fb8-b397-729600f091e3, instanceId = AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=-bc6f19f5
-🔍 Checking if user neha@m365x92504196.onmicrosoft.com attended report b2186232-e341-4ee7-94ee-961950f86a56
-🔍 Getting duration for user neha@m365x92504196.onmicrosoft.com in report b2186232-e341-4ee7-94ee-961950f86a56
-🌐 Report b2186232-e341-4ee7-94ee-961950f86a56 is different from main report bc6f19f5-ea43-4fb8-b397-729600f091e3 - fetching actual attendance
-📡 TODO: Implement actual API call to fetch attendance for report b2186232-e341-4ee7-94ee-961950f86a56
-✅ Fetched actual user duration for report b2186232-e341-4ee7-94ee-961950f86a56: 60 seconds
-✅ User neha@m365x92504196.onmicrosoft.com attended report b2186232-e341-4ee7-94ee-961950f86a56 for 60 seconds
-🔍 Getting duration for user neha@m365x92504196.onmicrosoft.com in report b2186232-e341-4ee7-94ee-961950f86a56
-🌐 Report b2186232-e341-4ee7-94ee-961950f86a56 is different from main report bc6f19f5-ea43-4fb8-b397-729600f091e3 - fetching actual attendance
-📡 TODO: Implement actual API call to fetch attendance for report b2186232-e341-4ee7-94ee-961950f86a56
-✅ Fetched actual user duration for report b2186232-e341-4ee7-94ee-961950f86a56: 60 seconds
-✅ Report b2186232-e341-4ee7-94ee-961950f86a56 not posted - creating instance with duration 60s
-🔧 DEBUG: Created instance with reportId = b2186232-e341-4ee7-94ee-961950f86a56, instanceId = AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=-b2186232
+🔧 DEBUG: Checking meeting "Lenovo PC Setup"
+🔧 DEBUG: meeting.attendance exists: true
+🔧 DEBUG: allValidReports length: 2
+🔧 DEBUG: allValidReports: [
+  {
+    selectedReportId: '8d4bfadf-ba17-4886-96f7-a9b51f2708db',
+    confidence: 1,
+    reason: 'Valid report instance from 2025-06-17T20:56:35.163Z',
+    metadata: {
+      date: '2025-06-18T02:00:00.0000000',
+      duration: 144.966,
+      isRecurring: false,
+      totalReports: 2
+    }
+  },
+  {
+    selectedReportId: '52e35abb-c29e-4bca-8279-aec78d73f04d',
+    confidence: 1,
+    reason: 'Valid report instance from 2025-06-17T20:42:14.429Z',
+    metadata: {
+      date: '2025-06-18T02:00:00.0000000',
+      duration: 407.525,
+      isRecurring: false,
+      totalReports: 2
+    }
+  }
+]
+🔧 DEBUG: meeting.attendance.reportId: 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+🔄 ENTERING MULTIPLE REPORTS BRANCH for "Lenovo PC Setup"
+🔍 Checking if user pradeepg@m365x92504196.onmicrosoft.com attended report 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+🔍 Getting duration for user pradeepg@m365x92504196.onmicrosoft.com in report 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+✅ Found user duration in main report: 140 seconds
+🔧 DEBUG: Checking meeting "UMG Migration"
+🔧 DEBUG: meeting.attendance exists: true
+🔧 DEBUG: allValidReports length: 2
+🔧 DEBUG: allValidReports: [
+  {
+    selectedReportId: '5ba510e3-2247-4681-abd3-6d01ecfa8751',
+    confidence: 1,
+    reason: 'Valid report instance from 2025-06-17T19:03:37.024Z',
+    metadata: {
+      date: '2025-06-18T00:00:00.0000000',
+      duration: 376.758,
+      isRecurring: false,
+      totalReports: 2
+    }
+  },
+  {
+    selectedReportId: '1cda8746-0597-4f34-87b8-99386a44f000',
+    confidence: 1,
+    reason: 'Valid report instance from 2025-06-17T18:48:44.176Z',
+    metadata: {
+      date: '2025-06-18T00:00:00.0000000',
+      duration: 186.343,
+      isRecurring: false,
+      totalReports: 2
+    }
+  }
+]
+🔧 DEBUG: meeting.attendance.reportId: 5ba510e3-2247-4681-abd3-6d01ecfa8751
+🔄 ENTERING MULTIPLE REPORTS BRANCH for "UMG Migration"
+🔍 Checking if user pradeepg@m365x92504196.onmicrosoft.com attended report 5ba510e3-2247-4681-abd3-6d01ecfa8751
+🔍 Getting duration for user pradeepg@m365x92504196.onmicrosoft.com in report 5ba510e3-2247-4681-abd3-6d01ecfa8751
+❌ User not found in main report attendance records
+✅ User pradeepg@m365x92504196.onmicrosoft.com attended report 8d4bfadf-ba17-4886-96f7-a9b51f2708db for 140 seconds        
+❌ User pradeepg@m365x92504196.onmicrosoft.com did not attend report 5ba510e3-2247-4681-abd3-6d01ecfa8751
+⏭️ User pradeepg@m365x92504196.onmicrosoft.com did not attend report 5ba510e3-2247-4681-abd3-6d01ecfa8751 - skipping instannce creation
+🔍 Checking if user pradeepg@m365x92504196.onmicrosoft.com attended report 1cda8746-0597-4f34-87b8-99386a44f000
+🔍 Getting duration for user pradeepg@m365x92504196.onmicrosoft.com in report 1cda8746-0597-4f34-87b8-99386a44f000
+🌐 Report 1cda8746-0597-4f34-87b8-99386a44f000 is different from main report 5ba510e3-2247-4681-abd3-6d01ecfa8751 - fetching actual attendance
+📡 Fetching actual attendance for user pradeepg@m365x92504196.onmicrosoft.com in report 1cda8746-0597-4f34-87b8-99386a44f000
+🔍 Getting duration for user pradeepg@m365x92504196.onmicrosoft.com in report 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+✅ Found user duration in main report: 140 seconds
+✅ Report 8d4bfadf-ba17-4886-96f7-a9b51f2708db not posted - creating instance with duration 140s
+🔧 DEBUG: Created instance with reportId = 8d4bfadf-ba17-4886-96f7-a9b51f2708db, instanceId = AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=-8d4bfadf
+🔍 Checking if user pradeepg@m365x92504196.onmicrosoft.com attended report 52e35abb-c29e-4bca-8279-aec78d73f04d
+🔍 Getting duration for user pradeepg@m365x92504196.onmicrosoft.com in report 52e35abb-c29e-4bca-8279-aec78d73f04d
+🌐 Report 52e35abb-c29e-4bca-8279-aec78d73f04d is different from main report 8d4bfadf-ba17-4886-96f7-a9b51f2708db - fetching actual attendance
+📡 Fetching actual attendance for user pradeepg@m365x92504196.onmicrosoft.com in report 52e35abb-c29e-4bca-8279-aec78d73f04d
+📊 Fetched 2 attendance records for report 1cda8746-0597-4f34-87b8-99386a44f000
+✅ Found user pradeepg@m365x92504196.onmicrosoft.com in report 1cda8746-0597-4f34-87b8-99386a44f000 with duration: 2m 49s
+✅ Fetched actual user duration for report 1cda8746-0597-4f34-87b8-99386a44f000: 169 seconds
+✅ User pradeepg@m365x92504196.onmicrosoft.com attended report 1cda8746-0597-4f34-87b8-99386a44f000 for 169 seconds        
+🔍 Getting duration for user pradeepg@m365x92504196.onmicrosoft.com in report 1cda8746-0597-4f34-87b8-99386a44f000
+🌐 Report 1cda8746-0597-4f34-87b8-99386a44f000 is different from main report 5ba510e3-2247-4681-abd3-6d01ecfa8751 - fetching actual attendance
+📡 Fetching actual attendance for user pradeepg@m365x92504196.onmicrosoft.com in report 1cda8746-0597-4f34-87b8-99386a44f000
+📊 Fetched 2 attendance records for report 1cda8746-0597-4f34-87b8-99386a44f000
+✅ Found user pradeepg@m365x92504196.onmicrosoft.com in report 1cda8746-0597-4f34-87b8-99386a44f000 with duration: 2m 49s
+✅ Fetched actual user duration for report 1cda8746-0597-4f34-87b8-99386a44f000: 169 seconds
+✅ Report 1cda8746-0597-4f34-87b8-99386a44f000 not posted - creating instance with duration 169s
+🔧 DEBUG: Created instance with reportId = 1cda8746-0597-4f34-87b8-99386a44f000, instanceId = AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=-1cda8746
 
 ╔════════════════════════════════════════════════════════╗
-║ 🔄 MEETING SPLIT INTO 2 INSTANCES (MULTIPLE SESSIONS) ║
-║ 📝 Meeting: "Universal Api Request"                       ║
-║ 🆔 Original ID: AAMkADY0NjEwZTYzLTA4...     ║
+║ 🔄 MEETING SPLIT INTO 1 INSTANCES (MULTIPLE SESSIONS) ║
+║ 📝 Meeting: "UMG Migration"                       ║
+║ 🆔 Original ID: AAMkADZhZTY4NjljLTg2...     ║
+╚════════════════════════════════════════════════════════╝
+📊 Fetched 1 attendance records for report 52e35abb-c29e-4bca-8279-aec78d73f04d
+❌ User pradeepg@m365x92504196.onmicrosoft.com not found in report 52e35abb-c29e-4bca-8279-aec78d73f04d attendance records
+❌ User did not attend report 52e35abb-c29e-4bca-8279-aec78d73f04d (duration: 0)
+❌ User pradeepg@m365x92504196.onmicrosoft.com did not attend report 52e35abb-c29e-4bca-8279-aec78d73f04d
+⏭️ User pradeepg@m365x92504196.onmicrosoft.com did not attend report 52e35abb-c29e-4bca-8279-aec78d73f04d - skipping instannce creation
+
+╔════════════════════════════════════════════════════════╗
+║ 🔄 MEETING SPLIT INTO 1 INSTANCES (MULTIPLE SESSIONS) ║
+║ 📝 Meeting: "Lenovo PC Setup"                       ║
+║ 🆔 Original ID: AAMkADZhZTY4NjljLTg2...     ║
 ╚════════════════════════════════════════════════════════╝
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ Batch 1/1 completed                      ║
-│ 📊 Total: 3 | Unique: 4 | Duplicates: -1   ║
+│ 📊 Total: 2 | Unique: 2 | Duplicates: 0   ║
 └─────────────────────────────────────────────────┘
 
 ╔══════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FILTER COMPLETED                               ║
-║ 📊 Total: 3 | Duplicates: -1 | Unique: 4     ║
-║ 📈 Duplication rate: -33%                                   ║
+║ 📊 Total: 2 | Duplicates: 0 | Unique: 2     ║
+║ 📈 Duplication rate: 0%                                   ║
 ╚══════════════════════════════════════════════════════════╝
-User neha@m365x92504196.onmicrosoft.com attended meeting "UMG Migration Fixed" for 351 seconds
-User neha@m365x92504196.onmicrosoft.com attended meeting "Universal Api Request" for 182 seconds
-User neha@m365x92504196.onmicrosoft.com attended meeting "Universal Api Request" for 60 seconds
-User neha@m365x92504196.onmicrosoft.com attended meeting "Dell Meetup" for 303 seconds
-Found 4 unique meetings, 4 of which were attended by the user
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "Lenovo PC Setup" for 140 seconds
+User pradeepg@m365x92504196.onmicrosoft.com attended meeting "UMG Migration" for 169 seconds
+Found 2 unique meetings, 2 of which were attended by the user
 Checking review queue for meetings that might now have matching tasks...
-Found 0 meetings in review queue for user neha@m365x92504196.onmicrosoft.com
+Found 0 meetings in review queue for user pradeepg@m365x92504196.onmicrosoft.com
 Review queue reportIds: []
-Filtered meetings: 4 total → 4 new (0 already in review)
-Total meetings to process (new: 4 + review: 0): 4
+Filtered meetings: 2 total → 2 new (0 already in review)
+Total meetings to process (new: 2 + review: 0): 2
 Matching tasks to all meetings (new + review queue)...
-Matching tasks for meeting: UMG Migration Fixed
-Found user's attendance record with duration: 351 seconds
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Fetching tasks from Intervals for user: neha@m365x92504196.onmicrosoft.com
+Matching tasks for meeting: Lenovo PC Setup
+Found user's attendance record with duration: 140 seconds
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
 Fetching tasks using standard API implementation...
-Current user personid: 424773
-Raw tasks API response: Found 1 total tasks
-Total tasks from API: 1
-Found 1 open tasks assigned to user 424773
+Current user personid: 424516
+Raw tasks API response: Found 5 total tasks
+Total tasks from API: 5
+Task 16721463 (Pradeep Task) skipped: Task is closed
+Task 16721482 (Sandisk Task) skipped: Task is closed
+Task 16725134 (Recurring Meet) skipped: Task is closed
+Task 16726082 (Sandisk Task) skipped: Task is closed
+Found 1 open tasks assigned to user 424516
 Standard API returned 1 tasks
 Found 1 tasks in Intervals:
-- Dell Meetup (16742170)
+- UMG Task (16726667)
 Meeting analysis for matching: {
-  "subject": "UMG Migration Fixed",
-  "startTime": "2025-06-17T15:00:00.0000000",
-  "endTime": "2025-06-17T15:30:00.0000000",
-  "duration": 351,
+  "subject": "Lenovo PC Setup",
+  "startTime": "2025-06-18T02:00:00.0000000",
+  "endTime": "2025-06-18T02:30:00.0000000",
+  "duration": 140,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -696,82 +746,50 @@ Meeting analysis for matching: {
   "attendance": {
     "records": [
       {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 361,
-        "role": "Organizer",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T09:38:30.7808094Z",
-            "leaveDateTime": "2025-06-17T09:44:32.000308Z",
-            "durationInSeconds": 361
-          }
-        ]
-      },
-      {
-        "name": "Neha",
-        "email": "Neha@M365x92504196.onmicrosoft.com",
-        "duration": 351,
+        "name": "pradeepg",
+        "email": "pradeepg@m365x92504196.onmicrosoft.com",
+        "duration": 140,
         "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T09:38:45.2893433Z",
-            "leaveDateTime": "2025-06-17T09:44:36.4588245Z",
-            "durationInSeconds": 351
-          }
-        ]
+        "attendanceIntervals": []
       }
     ],
     "summary": {
-      "totalDuration": 712,
-      "averageDuration": 356,
-      "totalParticipants": 2
+      "totalDuration": 140,
+      "averageDuration": 140,
+      "totalParticipants": 1
     },
-    "reportId": "6e9f9653-9365-48a2-9f4b-3bea31472a50",
-    "allValidReports": [
-      {
-        "selectedReportId": "6e9f9653-9365-48a2-9f4b-3bea31472a50",
-        "confidence": 1,
-        "reason": "Single valid report available",
-        "metadata": {
-          "date": "2025-06-17T15:00:00.0000000",
-          "duration": 369.273,
-          "isRecurring": false,
-          "totalReports": 1
-        }
-      }
-    ]
+    "reportId": "8d4bfadf-ba17-4886-96f7-a9b51f2708db"
   }
 }
 Tasks data for matching: [
   {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
+    "id": "16726667",
+    "title": "UMG Task",
+    "projectid": "1430388",
+    "project": "UMG - O365 Tenant Split",
     "status": "Open",
     "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
+    "clientid": "391767",
+    "client": "UMG",
+    "moduleid": "552788",
+    "module": "Development",
+    "assigneeid": "424516",
     "matchingContext": {
       "isActive": false,
       "hasPriority": true,
       "hasDescription": false,
-      "projectContext": "NathCorp"
+      "projectContext": "UMG - O365 Tenant Split"
     }
   }
 ]
-Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.  
 
 Meeting Details:
 {
-  "subject": "UMG Migration Fixed",
-  "startTime": "2025-06-17T15:00:00.0000000",
-  "endTime": "2025-06-17T15:30:00.0000000",
-  "duration": 351,
+  "subject": "Lenovo PC Setup",
+  "startTime": "2025-06-18T02:00:00.0000000",
+  "endTime": "2025-06-18T02:30:00.0000000",
+  "duration": 140,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -783,73 +801,41 @@ Meeting Details:
   "attendance": {
     "records": [
       {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 361,
-        "role": "Organizer",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T09:38:30.7808094Z",
-            "leaveDateTime": "2025-06-17T09:44:32.000308Z",
-            "durationInSeconds": 361
-          }
-        ]
-      },
-      {
-        "name": "Neha",
-        "email": "Neha@M365x92504196.onmicrosoft.com",
-        "duration": 351,
+        "name": "pradeepg",
+        "email": "pradeepg@m365x92504196.onmicrosoft.com",
+        "duration": 140,
         "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T09:38:45.2893433Z",
-            "leaveDateTime": "2025-06-17T09:44:36.4588245Z",
-            "durationInSeconds": 351
-          }
-        ]
+        "attendanceIntervals": []
       }
     ],
     "summary": {
-      "totalDuration": 712,
-      "averageDuration": 356,
-      "totalParticipants": 2
+      "totalDuration": 140,
+      "averageDuration": 140,
+      "totalParticipants": 1
     },
-    "reportId": "6e9f9653-9365-48a2-9f4b-3bea31472a50",
-    "allValidReports": [
-      {
-        "selectedReportId": "6e9f9653-9365-48a2-9f4b-3bea31472a50",
-        "confidence": 1,
-        "reason": "Single valid report available",
-        "metadata": {
-          "date": "2025-06-17T15:00:00.0000000",
-          "duration": 369.273,
-          "isRecurring": false,
-          "totalReports": 1
-        }
-      }
-    ]
+    "reportId": "8d4bfadf-ba17-4886-96f7-a9b51f2708db"
   }
 }
 
 Available Tasks:
 [
   {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
+    "id": "16726667",
+    "title": "UMG Task",
+    "projectid": "1430388",
+    "project": "UMG - O365 Tenant Split",
     "status": "Open",
     "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
+    "clientid": "391767",
+    "client": "UMG",
+    "moduleid": "552788",
+    "module": "Development",
+    "assigneeid": "424516",
     "matchingContext": {
       "isActive": false,
       "hasPriority": true,
       "hasDescription": false,
-      "projectContext": "NathCorp"
+      "projectContext": "UMG - O365 Tenant Split"
     }
   }
 ]
@@ -861,7 +847,7 @@ IT COMPANY CONTEXT:
 
 IT DEPARTMENT SPECIALIZATIONS:
 1. Software Development:
-   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development      
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development
    - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
 
 2. DevOps & CI/CD:
@@ -902,7 +888,7 @@ MATCHING RULES:
 7. NEVER match with tasks that have a "Closed" status
 8. If the client is "Nathcorp", note that these are internal non-billable tasks
 9. If no assigned tasks match well, return an empty matchedTasks array
-10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level 
 
 CONFIDENCE SCORE GUIDELINES:
 - Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
@@ -952,104 +938,108 @@ Notes:
 OpenAI response: {
     "matchedTasks": [
         {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
+            "taskId": "16726667",
+            "taskTitle": "UMG Task",
             "meetingDetails": {
-                "subject": "UMG Migration Fixed",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 361
+                "subject": "Lenovo PC Setup",
+                "startTime": "2025-06-18T02:00:00.0000000",
+                "endTime": "2025-06-18T02:30:00.0000000",
+                "actualDuration": 140
             },
             "confidence": 0.2,
-            "reason": "The meeting subject 'UMG Migration Fixed' does not directly match any technical keywords or project context from the available task 'Dell Meetup'. However, since this is the only open, assigned task and both are internal (client: Internal/NathCorp), a minimal relevance can be established based on general IT meeting patterns and company context."
+            "reason": "The meeting subject 'Lenovo PC Setup' suggests an IT support or system administration activity, but there are no direct keyword matches to the available task. The only open task assigned to the user is 'UMG Task' under 'Development', which is only weakly related. Match made due to lack of better options and per guidelines to return any relevant task with confidence above 0."
         }
     ]
 }
 Raw OpenAI response: {
     "matchedTasks": [
         {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
+            "taskId": "16726667",
+            "taskTitle": "UMG Task",
             "meetingDetails": {
-                "subject": "UMG Migration Fixed",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 361
+                "subject": "Lenovo PC Setup",
+                "startTime": "2025-06-18T02:00:00.0000000",
+                "endTime": "2025-06-18T02:30:00.0000000",
+                "actualDuration": 140
             },
             "confidence": 0.2,
-            "reason": "The meeting subject 'UMG Migration Fixed' does not directly match any technical keywords or project context from the available task 'Dell Meetup'. However, since this is the only open, assigned task and both are internal (client: Internal/NathCorp), a minimal relevance can be established based on general IT meeting patterns and company context."
+            "reason": "The meeting subject 'Lenovo PC Setup' suggests an IT support or system administration activity, but there are no direct keyword matches to the available task. The only open task assigned to the user is 'UMG Task' under 'Development', which is only weakly related. Match made due to lack of better options and per guidelines to return any relevant task with confidence above 0."
         }
     ]
 }
 Extracted JSON: {
     "matchedTasks": [
         {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
+            "taskId": "16726667",
+            "taskTitle": "UMG Task",
             "meetingDetails": {
-                "subject": "UMG Migration Fixed",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 361
+                "subject": "Lenovo PC Setup",
+                "startTime": "2025-06-18T02:00:00.0000000",
+                "endTime": "2025-06-18T02:30:00.0000000",
+                "actualDuration": 140
             },
             "confidence": 0.2,
-            "reason": "The meeting subject 'UMG Migration Fixed' does not directly match any technical keywords or project context from the available task 'Dell Meetup'. However, since this is the only open, assigned task and both are internal (client: Internal/NathCorp), a minimal relevance can be established based on general IT meeting patterns and company context."
+            "reason": "The meeting subject 'Lenovo PC Setup' suggests an IT support or system administration activity, but there are no direct keyword matches to the available task. The only open task assigned to the user is 'UMG Task' under 'Development', which is only weakly related. Match made due to lack of better options and per guidelines to return any relevant task with confidence above 0."
         }
     ]
 }
 Parsed tasks: [
   {
-    "taskId": "16742170",
-    "taskTitle": "Dell Meetup",
+    "taskId": "16726667",
+    "taskTitle": "UMG Task",
     "meetingDetails": {
-      "subject": "UMG Migration Fixed",
-      "startTime": "2025-06-17T15:00:00.0000000",
-      "endTime": "2025-06-17T15:30:00.0000000",
-      "actualDuration": 361
+      "subject": "Lenovo PC Setup",
+      "startTime": "2025-06-18T02:00:00.0000000",
+      "endTime": "2025-06-18T02:30:00.0000000",
+      "actualDuration": 140
     },
     "confidence": 0.2,
-    "reason": "The meeting subject 'UMG Migration Fixed' does not directly match any technical keywords or project context from the available task 'Dell Meetup'. However, since this is the only open, assigned task and both are internal (client: Internal/NathCorp), a minimal relevance can be established based on general IT meeting patterns and company context."
+    "reason": "The meeting subject 'Lenovo PC Setup' suggests an IT support or system administration activity, but there are no direct keyword matches to the available task. The only open task assigned to the user is 'UMG Task' under 'Development', which is only weakly related. Match made due to lack of better options and per guidelines to return any relevant task with confidence above 0."
   }
 ]
 Parsed matching result: {
-  "meetingSubject": "UMG Migration Fixed",
+  "meetingSubject": "Lenovo PC Setup",
   "matchedTasks": [
     {
-      "taskId": "16742170",
-      "taskTitle": "Dell Meetup",
+      "taskId": "16726667",
+      "taskTitle": "UMG Task",
       "meetingDetails": {
-        "subject": "UMG Migration Fixed",
-        "startTime": "2025-06-17T15:00:00.0000000",
-        "endTime": "2025-06-17T15:30:00.0000000",
-        "actualDuration": 361
+        "subject": "Lenovo PC Setup",
+        "startTime": "2025-06-18T02:00:00.0000000",
+        "endTime": "2025-06-18T02:30:00.0000000",
+        "actualDuration": 140
       },
       "confidence": 0.2,
-      "reason": "The meeting subject 'UMG Migration Fixed' does not directly match any technical keywords or project context from the available task 'Dell Meetup'. However, since this is the only open, assigned task and both are internal (client: Internal/NathCorp), a minimal relevance can be established based on general IT meeting patterns and company context."
+      "reason": "The meeting subject 'Lenovo PC Setup' suggests an IT support or system administration activity, but there are no direct keyword matches to the available task. The only open task assigned to the user is 'UMG Task' under 'Development', which is only weakly related. Match made due to lack of better options and per guidelines to return any relevant task with confidence above 0."
     }
   ]
 }
-Using best match for meeting "UMG Migration Fixed": Task 16742170 (Dell Meetup) with confidence 0.2
-Found 1 matches for meeting: UMG Migration Fixed
-Matching tasks for meeting: Universal Api Request
-Found user's attendance record with duration: 182 seconds
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Fetching tasks from Intervals for user: neha@m365x92504196.onmicrosoft.com
+Using best match for meeting "Lenovo PC Setup": Task 16726667 (UMG Task) with confidence 0.2
+Found 1 matches for meeting: Lenovo PC Setup
+Matching tasks for meeting: UMG Migration
+Found user's attendance record with duration: 169 seconds
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Fetching tasks from Intervals for user: pradeepg@m365x92504196.onmicrosoft.com
 Fetching tasks using standard API implementation...
-Current user personid: 424773
-Raw tasks API response: Found 1 total tasks
-Total tasks from API: 1
-Found 1 open tasks assigned to user 424773
+Current user personid: 424516
+Raw tasks API response: Found 5 total tasks
+Total tasks from API: 5
+Task 16721463 (Pradeep Task) skipped: Task is closed
+Task 16721482 (Sandisk Task) skipped: Task is closed
+Task 16725134 (Recurring Meet) skipped: Task is closed
+Task 16726082 (Sandisk Task) skipped: Task is closed
+Found 1 open tasks assigned to user 424516
 Standard API returned 1 tasks
 Found 1 tasks in Intervals:
-- Dell Meetup (16742170)
+- UMG Task (16726667)
 Meeting analysis for matching: {
-  "subject": "Universal Api Request",
-  "startTime": "2025-06-17T15:00:00.0000000",
-  "endTime": "2025-06-17T15:30:00.0000000",
-  "duration": 182,
+  "subject": "UMG Migration",
+  "startTime": "2025-06-18T00:00:00.0000000",
+  "endTime": "2025-06-18T00:30:00.0000000",
+  "duration": 169,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -1061,50 +1051,50 @@ Meeting analysis for matching: {
   "attendance": {
     "records": [
       {
-        "name": "neha",
-        "email": "neha@m365x92504196.onmicrosoft.com",
-        "duration": 182,
+        "name": "pradeepg",
+        "email": "pradeepg@m365x92504196.onmicrosoft.com",
+        "duration": 169,
         "role": "Presenter",
         "attendanceIntervals": []
       }
     ],
     "summary": {
-      "totalDuration": 182,
-      "averageDuration": 182,
+      "totalDuration": 169,
+      "averageDuration": 169,
       "totalParticipants": 1
     },
-    "reportId": "bc6f19f5-ea43-4fb8-b397-729600f091e3"
+    "reportId": "1cda8746-0597-4f34-87b8-99386a44f000"
   }
 }
 Tasks data for matching: [
   {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
+    "id": "16726667",
+    "title": "UMG Task",
+    "projectid": "1430388",
+    "project": "UMG - O365 Tenant Split",
     "status": "Open",
     "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
+    "clientid": "391767",
+    "client": "UMG",
+    "moduleid": "552788",
+    "module": "Development",
+    "assigneeid": "424516",
     "matchingContext": {
       "isActive": false,
       "hasPriority": true,
       "hasDescription": false,
-      "projectContext": "NathCorp"
+      "projectContext": "UMG - O365 Tenant Split"
     }
   }
 ]
-Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
+Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.  
 
 Meeting Details:
 {
-  "subject": "Universal Api Request",
-  "startTime": "2025-06-17T15:00:00.0000000",
-  "endTime": "2025-06-17T15:30:00.0000000",
-  "duration": 182,
+  "subject": "UMG Migration",
+  "startTime": "2025-06-18T00:00:00.0000000",
+  "endTime": "2025-06-18T00:30:00.0000000",
+  "duration": 169,
   "analysis": {
     "keyPoints": [],
     "suggestedCategories": [],
@@ -1116,41 +1106,41 @@ Meeting Details:
   "attendance": {
     "records": [
       {
-        "name": "neha",
-        "email": "neha@m365x92504196.onmicrosoft.com",
-        "duration": 182,
+        "name": "pradeepg",
+        "email": "pradeepg@m365x92504196.onmicrosoft.com",
+        "duration": 169,
         "role": "Presenter",
         "attendanceIntervals": []
       }
     ],
     "summary": {
-      "totalDuration": 182,
-      "averageDuration": 182,
+      "totalDuration": 169,
+      "averageDuration": 169,
       "totalParticipants": 1
     },
-    "reportId": "bc6f19f5-ea43-4fb8-b397-729600f091e3"
+    "reportId": "1cda8746-0597-4f34-87b8-99386a44f000"
   }
 }
 
 Available Tasks:
 [
   {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
+    "id": "16726667",
+    "title": "UMG Task",
+    "projectid": "1430388",
+    "project": "UMG - O365 Tenant Split",
     "status": "Open",
     "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
+    "clientid": "391767",
+    "client": "UMG",
+    "moduleid": "552788",
+    "module": "Development",
+    "assigneeid": "424516",
     "matchingContext": {
       "isActive": false,
       "hasPriority": true,
       "hasDescription": false,
-      "projectContext": "NathCorp"
+      "projectContext": "UMG - O365 Tenant Split"
     }
   }
 ]
@@ -1162,7 +1152,7 @@ IT COMPANY CONTEXT:
 
 IT DEPARTMENT SPECIALIZATIONS:
 1. Software Development:
-   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development      
+   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development
    - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
 
 2. DevOps & CI/CD:
@@ -1203,7 +1193,7 @@ MATCHING RULES:
 7. NEVER match with tasks that have a "Closed" status
 8. If the client is "Nathcorp", note that these are internal non-billable tasks
 9. If no assigned tasks match well, return an empty matchedTasks array
-10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level 
 
 CONFIDENCE SCORE GUIDELINES:
 - Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
@@ -1250,1299 +1240,315 @@ Notes:
 6. The actualDuration should be taken from the attendance records and is in seconds
 7. Tasks with status "Closed" should NEVER be included in matchedTasks
 8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
- GET /api/pm2/status 200 in 14ms
+ GET /api/pm2/status 200 in 12ms
 OpenAI response: {
     "matchedTasks": [
         {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
+            "taskId": "16726667",
+            "taskTitle": "UMG Task",
             "meetingDetails": {
-                "subject": "Universal Api Request",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 182
+                "subject": "UMG Migration",
+                "startTime": "2025-06-18T00:00:00.0000000",
+                "endTime": "2025-06-18T00:30:00.0000000",
+                "actualDuration": 169
             },
-            "confidence": 0.4,
-            "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is directly relevant to software development and integration tasks. While the available task 'Dell Meetup' does not explicitly mention APIs or development, it is the only open, assigned task. The match is based on the technical keyword in the meeting subject, resulting in medium confidence."
+            "confidence": 0.7,
+            "reason": "The meeting subject 'UMG Migration' directly matches the project context 'UMG - O365 Tenant Split' and the task title 'UMG Task'. Both reference 'UMG', and 'Migration' is commonly associated with O365 tenant split projects, indicating strong relevance to this development task. The task is open and assigned to the meeting's presenter."
         }
     ]
 }
 Raw OpenAI response: {
     "matchedTasks": [
         {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
+            "taskId": "16726667",
+            "taskTitle": "UMG Task",
             "meetingDetails": {
-                "subject": "Universal Api Request",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 182
+                "subject": "UMG Migration",
+                "startTime": "2025-06-18T00:00:00.0000000",
+                "endTime": "2025-06-18T00:30:00.0000000",
+                "actualDuration": 169
             },
-            "confidence": 0.4,
-            "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is directly relevant to software development and integration tasks. While the available task 'Dell Meetup' does not explicitly mention APIs or development, it is the only open, assigned task. The match is based on the technical keyword in the meeting subject, resulting in medium confidence."
+            "confidence": 0.7,
+            "reason": "The meeting subject 'UMG Migration' directly matches the project context 'UMG - O365 Tenant Split' and the task title 'UMG Task'. Both reference 'UMG', and 'Migration' is commonly associated with O365 tenant split projects, indicating strong relevance to this development task. The task is open and assigned to the meeting's presenter."
         }
     ]
 }
 Extracted JSON: {
     "matchedTasks": [
         {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
+            "taskId": "16726667",
+            "taskTitle": "UMG Task",
             "meetingDetails": {
-                "subject": "Universal Api Request",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 182
+                "subject": "UMG Migration",
+                "startTime": "2025-06-18T00:00:00.0000000",
+                "endTime": "2025-06-18T00:30:00.0000000",
+                "actualDuration": 169
             },
-            "confidence": 0.4,
-            "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is directly relevant to software development and integration tasks. While the available task 'Dell Meetup' does not explicitly mention APIs or development, it is the only open, assigned task. The match is based on the technical keyword in the meeting subject, resulting in medium confidence."
+            "confidence": 0.7,
+            "reason": "The meeting subject 'UMG Migration' directly matches the project context 'UMG - O365 Tenant Split' and the task title 'UMG Task'. Both reference 'UMG', and 'Migration' is commonly associated with O365 tenant split projects, indicating strong relevance to this development task. The task is open and assigned to the meeting's presenter."
         }
     ]
 }
 Parsed tasks: [
   {
-    "taskId": "16742170",
-    "taskTitle": "Dell Meetup",
+    "taskId": "16726667",
+    "taskTitle": "UMG Task",
     "meetingDetails": {
-      "subject": "Universal Api Request",
-      "startTime": "2025-06-17T15:00:00.0000000",
-      "endTime": "2025-06-17T15:30:00.0000000",
-      "actualDuration": 182
+      "subject": "UMG Migration",
+      "startTime": "2025-06-18T00:00:00.0000000",
+      "endTime": "2025-06-18T00:30:00.0000000",
+      "actualDuration": 169
     },
-    "confidence": 0.4,
-    "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is directly relevant to software development and integration tasks. While the available task 'Dell Meetup' does not explicitly mention APIs or development, it is the only open, assigned task. The match is based on the technical keyword in the meeting subject, resulting in medium confidence."
+    "confidence": 0.7,
+    "reason": "The meeting subject 'UMG Migration' directly matches the project context 'UMG - O365 Tenant Split' and the task title 'UMG Task'. Both reference 'UMG', and 'Migration' is commonly associated with O365 tenant split projects, indicating strong relevance to this development task. The task is open and assigned to the meeting's presenter."
   }
 ]
 Parsed matching result: {
-  "meetingSubject": "Universal Api Request",
+  "meetingSubject": "UMG Migration",
   "matchedTasks": [
     {
-      "taskId": "16742170",
-      "taskTitle": "Dell Meetup",
+      "taskId": "16726667",
+      "taskTitle": "UMG Task",
       "meetingDetails": {
-        "subject": "Universal Api Request",
-        "startTime": "2025-06-17T15:00:00.0000000",
-        "endTime": "2025-06-17T15:30:00.0000000",
-        "actualDuration": 182
+        "subject": "UMG Migration",
+        "startTime": "2025-06-18T00:00:00.0000000",
+        "endTime": "2025-06-18T00:30:00.0000000",
+        "actualDuration": 169
       },
-      "confidence": 0.4,
-      "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is directly relevant to software development and integration tasks. While the available task 'Dell Meetup' does not explicitly mention APIs or development, it is the only open, assigned task. The match is based on the technical keyword in the meeting subject, resulting in medium confidence."
+      "confidence": 0.7,
+      "reason": "The meeting subject 'UMG Migration' directly matches the project context 'UMG - O365 Tenant Split' and the task title 'UMG Task'. Both reference 'UMG', and 'Migration' is commonly associated with O365 tenant split projects, indicating strong relevance to this development task. The task is open and assigned to the meeting's presenter."
     }
   ]
 }
-Using best match for meeting "Universal Api Request": Task 16742170 (Dell Meetup) with confidence 0.4
-Found 1 matches for meeting: Universal Api Request
-Matching tasks for meeting: Universal Api Request
-Found user's attendance record with duration: 60 seconds
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Fetching tasks from Intervals for user: neha@m365x92504196.onmicrosoft.com
-Fetching tasks using standard API implementation...
-Current user personid: 424773
-Raw tasks API response: Found 1 total tasks
-Total tasks from API: 1
-Found 1 open tasks assigned to user 424773
-Standard API returned 1 tasks
-Found 1 tasks in Intervals:
-- Dell Meetup (16742170)
-Meeting analysis for matching: {
-  "subject": "Universal Api Request",
-  "startTime": "2025-06-17T15:00:00.0000000",
-  "endTime": "2025-06-17T15:30:00.0000000",
-  "duration": 60,
-  "analysis": {
-    "keyPoints": [],
-    "suggestedCategories": [],
-    "confidence": 0.5,
-    "context": {
-      "patterns": []
-    }
-  },
-  "attendance": {
-    "records": [
-      {
-        "name": "neha",
-        "email": "neha@m365x92504196.onmicrosoft.com",
-        "duration": 60,
-        "role": "Presenter",
-        "attendanceIntervals": []
-      }
-    ],
-    "summary": {
-      "totalDuration": 60,
-      "averageDuration": 60,
-      "totalParticipants": 1
-    },
-    "reportId": "b2186232-e341-4ee7-94ee-961950f86a56"
-  }
-}
-Tasks data for matching: [
-  {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "NathCorp"
-    }
-  }
-]
-Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
-
-Meeting Details:
-{
-  "subject": "Universal Api Request",
-  "startTime": "2025-06-17T15:00:00.0000000",
-  "endTime": "2025-06-17T15:30:00.0000000",
-  "duration": 60,
-  "analysis": {
-    "keyPoints": [],
-    "suggestedCategories": [],
-    "confidence": 0.5,
-    "context": {
-      "patterns": []
-    }
-  },
-  "attendance": {
-    "records": [
-      {
-        "name": "neha",
-        "email": "neha@m365x92504196.onmicrosoft.com",
-        "duration": 60,
-        "role": "Presenter",
-        "attendanceIntervals": []
-      }
-    ],
-    "summary": {
-      "totalDuration": 60,
-      "averageDuration": 60,
-      "totalParticipants": 1
-    },
-    "reportId": "b2186232-e341-4ee7-94ee-961950f86a56"
-  }
-}
-
-Available Tasks:
-[
-  {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "NathCorp"
-    }
-  }
-]
-
-IT COMPANY CONTEXT:
-- We are an IT company with specialized departments handling various technical responsibilities
-- Meetings are typically focused on specific departmental tasks and projects
-- Each department has its own typical projects, tools, and terminology
-
-IT DEPARTMENT SPECIALIZATIONS:
-1. Software Development:
-   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development      
-   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
-
-2. DevOps & CI/CD:
-   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
-   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
-
-3. Infrastructure & Cloud:
-   - Topics: server management, cloud architecture, network configuration, capacity planning
-   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
-
-4. QA & Testing:
-   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing
-   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
-
-5. IT Support & Helpdesk:
-   - Topics: incident management, user support, troubleshooting, ticket resolution
-   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
-
-6. Security & Compliance:
-   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
-   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
-
-7. Data & Analytics:
-   - Topics: data modeling, analytics implementation, reporting, database management
-   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
-
-8. System Administration:
-   - Topics: system maintenance, updates, monitoring, user management
-   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
-
-MATCHING RULES:
-1. Prioritize tasks with direct keyword matches to the meeting subject or description
-2. Match meetings to the most specific department based on technical keywords in the subject/description
-3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
-4. If still unclear, default to the department where the user has the most assigned tasks
-5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
-6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
-7. NEVER match with tasks that have a "Closed" status
-8. If the client is "Nathcorp", note that these are internal non-billable tasks
-9. If no assigned tasks match well, return an empty matchedTasks array
-10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
-
-CONFIDENCE SCORE GUIDELINES:
-- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
-- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
-- High (0.7-0.9): Strong evidence with clear technical keyword matches
-- Perfect (1.0): Exact match between meeting subject and technical task
-- Score of 0: Task is not assigned to the user or task is closed
-
-EXAMPLES:
-✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
-✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
-✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
-✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
-✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
-✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
-✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
-✗ BAD: Any match with a task that has status "Closed" (should be excluded)
-
-Analyze the meeting and tasks, then provide your response in the following JSON format:
-
-{
-    "matchedTasks": [
-        {
-            "taskId": "string",
-            "taskTitle": "string",
-            "meetingDetails": {
-                "subject": "string",
-                "startTime": "string",
-                "endTime": "string",
-                "actualDuration": number  // Use the duration from attendance records in seconds
-            },
-            "confidence": number,
-            "reason": "string"
-        }
-    ]
-}
-
-Notes:
-1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
-2. Confidence should be a number between 0 and 1
-3. Provide clear reasons for each match based on specific evidence
-4. Return valid JSON that can be parsed directly
-5. Include all required fields for each task
-6. The actualDuration should be taken from the attendance records and is in seconds
-7. Tasks with status "Closed" should NEVER be included in matchedTasks
-8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
-OpenAI response: {
-    "matchedTasks": [
-        {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
-            "meetingDetails": {
-                "subject": "Universal Api Request",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 60
-            },
-            "confidence": 0.2,
-            "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is commonly associated with Software Development tasks. However, the available task 'Dell Meetup' does not directly reference APIs or software development, and there is no further context or description to strengthen the match. The task is open and assigned to the user, so it is included with low confidence based on minimal keyword overlap."
-        }
-    ]
-}
-Raw OpenAI response: {
-    "matchedTasks": [
-        {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
-            "meetingDetails": {
-                "subject": "Universal Api Request",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 60
-            },
-            "confidence": 0.2,
-            "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is commonly associated with Software Development tasks. However, the available task 'Dell Meetup' does not directly reference APIs or software development, and there is no further context or description to strengthen the match. The task is open and assigned to the user, so it is included with low confidence based on minimal keyword overlap."
-        }
-    ]
-}
-Extracted JSON: {
-    "matchedTasks": [
-        {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
-            "meetingDetails": {
-                "subject": "Universal Api Request",
-                "startTime": "2025-06-17T15:00:00.0000000",
-                "endTime": "2025-06-17T15:30:00.0000000",
-                "actualDuration": 60
-            },
-            "confidence": 0.2,
-            "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is commonly associated with Software Development tasks. However, the available task 'Dell Meetup' does not directly reference APIs or software development, and there is no further context or description to strengthen the match. The task is open and assigned to the user, so it is included with low confidence based on minimal keyword overlap."
-        }
-    ]
-}
-Parsed tasks: [
-  {
-    "taskId": "16742170",
-    "taskTitle": "Dell Meetup",
-    "meetingDetails": {
-      "subject": "Universal Api Request",
-      "startTime": "2025-06-17T15:00:00.0000000",
-      "endTime": "2025-06-17T15:30:00.0000000",
-      "actualDuration": 60
-    },
-    "confidence": 0.2,
-    "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is commonly associated with Software Development tasks. However, the available task 'Dell Meetup' does not directly reference APIs or software development, and there is no further context or description to strengthen the match. The task is open and assigned to the user, so it is included with low confidence based on minimal keyword overlap."
-  }
-]
-Parsed matching result: {
-  "meetingSubject": "Universal Api Request",
-  "matchedTasks": [
-    {
-      "taskId": "16742170",
-      "taskTitle": "Dell Meetup",
-      "meetingDetails": {
-        "subject": "Universal Api Request",
-        "startTime": "2025-06-17T15:00:00.0000000",
-        "endTime": "2025-06-17T15:30:00.0000000",
-        "actualDuration": 60
-      },
-      "confidence": 0.2,
-      "reason": "The meeting subject 'Universal Api Request' contains the keyword 'API', which is commonly associated with Software Development tasks. However, the available task 'Dell Meetup' does not directly reference APIs or software development, and there is no further context or description to strengthen the match. The task is open and assigned to the user, so it is included with low confidence based on minimal keyword overlap."
-    }
-  ]
-}
-Using best match for meeting "Universal Api Request": Task 16742170 (Dell Meetup) with confidence 0.2
-Found 1 matches for meeting: Universal Api Request
-Matching tasks for meeting: Dell Meetup
-Found user's attendance record with duration: 303 seconds
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Fetching tasks from Intervals for user: neha@m365x92504196.onmicrosoft.com
-Fetching tasks using standard API implementation...
-Current user personid: 424773
-Raw tasks API response: Found 1 total tasks
-Total tasks from API: 1
-Found 1 open tasks assigned to user 424773
-Standard API returned 1 tasks
-Found 1 tasks in Intervals:
-- Dell Meetup (16742170)
-Meeting analysis for matching: {
-  "subject": "Dell Meetup",
-  "startTime": "2025-06-17T13:00:00.0000000",
-  "endTime": "2025-06-17T13:30:00.0000000",
-  "duration": 303,
-  "analysis": {
-    "keyPoints": [],
-    "suggestedCategories": [],
-    "confidence": 0.5,
-    "context": {
-      "patterns": []
-    }
-  },
-  "attendance": {
-    "records": [
-      {
-        "name": "Neha",
-        "email": "Neha@M365x92504196.onmicrosoft.com",
-        "duration": 303,
-        "role": "Organizer",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:41:21.1295898Z",
-            "leaveDateTime": "2025-06-17T07:46:24.289142Z",
-            "durationInSeconds": 303
-          }
-        ]
-      },
-      {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 275,
-        "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:41:31.3315519Z",
-            "leaveDateTime": "2025-06-17T07:46:06.580201Z",
-            "durationInSeconds": 275
-          }
-        ]
-      },
-      {
-        "name": "Debra Berger",
-        "email": "DebraB@M365x92504196.OnMicrosoft.com",
-        "duration": 262,
-        "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:41:48.9683605Z",
-            "leaveDateTime": "2025-06-17T07:46:11.0410143Z",
-            "durationInSeconds": 262
-          }
-        ]
-      },
-      {
-        "name": "Megan Bowen",
-        "email": "MeganB@M365x92504196.OnMicrosoft.com",
-        "duration": 241,
-        "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:42:13.4589618Z",
-            "leaveDateTime": "2025-06-17T07:46:14.8774417Z",
-            "durationInSeconds": 241
-          }
-        ]
-      }
-    ],
-    "summary": {
-      "totalDuration": 1081,
-      "averageDuration": 270.25,
-      "totalParticipants": 4
-    },
-    "reportId": "e9c2417a-f297-4842-afe3-c51ad6ee2565",
-    "allValidReports": [
-      {
-        "selectedReportId": "e9c2417a-f297-4842-afe3-c51ad6ee2565",
-        "confidence": 1,
-        "reason": "Single valid report available",
-        "metadata": {
-          "date": "2025-06-17T13:00:00.0000000",
-          "duration": 307.53,
-          "isRecurring": false,
-          "totalReports": 1
-        }
-      }
-    ]
-  }
-}
-Tasks data for matching: [
-  {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "NathCorp"
-    }
-  }
-]
-Generated prompt for OpenAI: You are an AI assistant for an IT company that matches technical meetings with appropriate development tasks. Your goal is to find the most relevant task for each meeting based on concrete evidence, not assumptions.
-
-Meeting Details:
-{
-  "subject": "Dell Meetup",
-  "startTime": "2025-06-17T13:00:00.0000000",
-  "endTime": "2025-06-17T13:30:00.0000000",
-  "duration": 303,
-  "analysis": {
-    "keyPoints": [],
-    "suggestedCategories": [],
-    "confidence": 0.5,
-    "context": {
-      "patterns": []
-    }
-  },
-  "attendance": {
-    "records": [
-      {
-        "name": "Neha",
-        "email": "Neha@M365x92504196.onmicrosoft.com",
-        "duration": 303,
-        "role": "Organizer",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:41:21.1295898Z",
-            "leaveDateTime": "2025-06-17T07:46:24.289142Z",
-            "durationInSeconds": 303
-          }
-        ]
-      },
-      {
-        "name": "Pradeep Gupta",
-        "email": "PradeepG@M365x92504196.OnMicrosoft.com",
-        "duration": 275,
-        "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:41:31.3315519Z",
-            "leaveDateTime": "2025-06-17T07:46:06.580201Z",
-            "durationInSeconds": 275
-          }
-        ]
-      },
-      {
-        "name": "Debra Berger",
-        "email": "DebraB@M365x92504196.OnMicrosoft.com",
-        "duration": 262,
-        "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:41:48.9683605Z",
-            "leaveDateTime": "2025-06-17T07:46:11.0410143Z",
-            "durationInSeconds": 262
-          }
-        ]
-      },
-      {
-        "name": "Megan Bowen",
-        "email": "MeganB@M365x92504196.OnMicrosoft.com",
-        "duration": 241,
-        "role": "Presenter",
-        "attendanceIntervals": [
-          {
-            "joinDateTime": "2025-06-17T07:42:13.4589618Z",
-            "leaveDateTime": "2025-06-17T07:46:14.8774417Z",
-            "durationInSeconds": 241
-          }
-        ]
-      }
-    ],
-    "summary": {
-      "totalDuration": 1081,
-      "averageDuration": 270.25,
-      "totalParticipants": 4
-    },
-    "reportId": "e9c2417a-f297-4842-afe3-c51ad6ee2565",
-    "allValidReports": [
-      {
-        "selectedReportId": "e9c2417a-f297-4842-afe3-c51ad6ee2565",
-        "confidence": 1,
-        "reason": "Single valid report available",
-        "metadata": {
-          "date": "2025-06-17T13:00:00.0000000",
-          "duration": 307.53,
-          "isRecurring": false,
-          "totalReports": 1
-        }
-      }
-    ]
-  }
-}
-
-Available Tasks:
-[
-  {
-    "id": "16742170",
-    "title": "Dell Meetup",
-    "projectid": "1430380",
-    "project": "NathCorp",
-    "status": "Open",
-    "priority": "3",
-    "clientid": "391762",
-    "client": "Internal",
-    "moduleid": "552786",
-    "module": "Out of Scope",
-    "assigneeid": "424773",
-    "matchingContext": {
-      "isActive": false,
-      "hasPriority": true,
-      "hasDescription": false,
-      "projectContext": "NathCorp"
-    }
-  }
-]
-
-IT COMPANY CONTEXT:
-- We are an IT company with specialized departments handling various technical responsibilities
-- Meetings are typically focused on specific departmental tasks and projects
-- Each department has its own typical projects, tools, and terminology
-
-IT DEPARTMENT SPECIALIZATIONS:
-1. Software Development:
-   - Topics: API integration, code reviews, software architecture, sprint planning, bug fixes, feature development      
-   - Keywords: coding, development, programming, frontend, backend, APIs, database, frameworks, libraries
-
-2. DevOps & CI/CD:
-   - Topics: pipeline automation, deployment strategies, infrastructure as code, continuous integration
-   - Keywords: Jenkins, Docker, Kubernetes, GitLab CI, GitHub Actions, pipelines, automation, deployment
-
-3. Infrastructure & Cloud:
-   - Topics: server management, cloud architecture, network configuration, capacity planning
-   - Keywords: AWS, Azure, GCP, servers, VMs, containers, networking, storage, load balancing
-
-4. QA & Testing:
-   - Topics: test planning, automation testing, quality assurance, regression testing, performance testing
-   - Keywords: QA, testing, test cases, test automation, quality, bugs, defects, selenium, cypress
-
-5. IT Support & Helpdesk:
-   - Topics: incident management, user support, troubleshooting, ticket resolution
-   - Keywords: tickets, support, helpdesk, incidents, user problems, troubleshooting, service desk
-
-6. Security & Compliance:
-   - Topics: vulnerability assessment, security audits, compliance monitoring, access management
-   - Keywords: security, vulnerabilities, audits, compliance, firewall, authentication, authorization
-
-7. Data & Analytics:
-   - Topics: data modeling, analytics implementation, reporting, database management
-   - Keywords: data warehouse, ETL, analytics, reporting, dashboards, BI, SQL, data modeling
-
-8. System Administration:
-   - Topics: system maintenance, updates, monitoring, user management
-   - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
-
-MATCHING RULES:
-1. Prioritize tasks with direct keyword matches to the meeting subject or description
-2. Match meetings to the most specific department based on technical keywords in the subject/description
-3. When the meeting subject is just a person's name or vague (e.g., "call me"), look for department clues in the description
-4. If still unclear, default to the department where the user has the most assigned tasks
-5. Meeting duration is NOT a reliable indicator of meeting type in our technical environment
-6. ONLY match with tasks that are assigned to the current user (check assigneeid field)
-7. NEVER match with tasks that have a "Closed" status
-8. If the client is "Nathcorp", note that these are internal non-billable tasks
-9. If no assigned tasks match well, return an empty matchedTasks array
-10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
-
-CONFIDENCE SCORE GUIDELINES:
-- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
-- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
-- High (0.7-0.9): Strong evidence with clear technical keyword matches
-- Perfect (1.0): Exact match between meeting subject and technical task
-- Score of 0: Task is not assigned to the user or task is closed
-
-EXAMPLES:
-✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
-✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
-✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
-✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
-✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
-✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
-✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
-✗ BAD: Any match with a task that has status "Closed" (should be excluded)
-
-Analyze the meeting and tasks, then provide your response in the following JSON format:
-
-{
-    "matchedTasks": [
-        {
-            "taskId": "string",
-            "taskTitle": "string",
-            "meetingDetails": {
-                "subject": "string",
-                "startTime": "string",
-                "endTime": "string",
-                "actualDuration": number  // Use the duration from attendance records in seconds
-            },
-            "confidence": number,
-            "reason": "string"
-        }
-    ]
-}
-
-Notes:
-1. Only include tasks with meaningful relevance to the meeting AND assigned to the user
-2. Confidence should be a number between 0 and 1
-3. Provide clear reasons for each match based on specific evidence
-4. Return valid JSON that can be parsed directly
-5. Include all required fields for each task
-6. The actualDuration should be taken from the attendance records and is in seconds
-7. Tasks with status "Closed" should NEVER be included in matchedTasks
-8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
- POST /api/process-meetings?userId=neha%40m365x92504196.onmicrosoft.com&source=pm2 200 in 29998ms
-OpenAI response: {
-    "matchedTasks": [
-        {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
-            "meetingDetails": {
-                "subject": "Dell Meetup",
-                "startTime": "2025-06-17T13:00:00.0000000",
-                "endTime": "2025-06-17T13:30:00.0000000",
-                "actualDuration": 303
-            },
-            "confidence": 1.0,
-            "reason": "The meeting subject 'Dell Meetup' is an exact match to the task title 'Dell Meetup'. Both refer to the same event, and the task is open and assigned to the user. No additional technical context is available, but the direct match of subject and title warrants a perfect confidence score."
-        }
-    ]
-}
-Raw OpenAI response: {
-    "matchedTasks": [
-        {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
-            "meetingDetails": {
-                "subject": "Dell Meetup",
-                "startTime": "2025-06-17T13:00:00.0000000",
-                "endTime": "2025-06-17T13:30:00.0000000",
-                "actualDuration": 303
-            },
-            "confidence": 1.0,
-            "reason": "The meeting subject 'Dell Meetup' is an exact match to the task title 'Dell Meetup'. Both refer to the same event, and the task is open and assigned to the user. No additional technical context is available, but the direct match of subject and title warrants a perfect confidence score."
-        }
-    ]
-}
-Extracted JSON: {
-    "matchedTasks": [
-        {
-            "taskId": "16742170",
-            "taskTitle": "Dell Meetup",
-            "meetingDetails": {
-                "subject": "Dell Meetup",
-                "startTime": "2025-06-17T13:00:00.0000000",
-                "endTime": "2025-06-17T13:30:00.0000000",
-                "actualDuration": 303
-            },
-            "confidence": 1.0,
-            "reason": "The meeting subject 'Dell Meetup' is an exact match to the task title 'Dell Meetup'. Both refer to the same event, and the task is open and assigned to the user. No additional technical context is available, but the direct match of subject and title warrants a perfect confidence score."
-        }
-    ]
-}
-Parsed tasks: [
-  {
-    "taskId": "16742170",
-    "taskTitle": "Dell Meetup",
-    "meetingDetails": {
-      "subject": "Dell Meetup",
-      "startTime": "2025-06-17T13:00:00.0000000",
-      "endTime": "2025-06-17T13:30:00.0000000",
-      "actualDuration": 303
-    },
-    "confidence": 1,
-    "reason": "The meeting subject 'Dell Meetup' is an exact match to the task title 'Dell Meetup'. Both refer to the same event, and the task is open and assigned to the user. No additional technical context is available, but the direct match of subject and title warrants a perfect confidence score."
-  }
-]
-Parsed matching result: {
-  "meetingSubject": "Dell Meetup",
-  "matchedTasks": [
-    {
-      "taskId": "16742170",
-      "taskTitle": "Dell Meetup",
-      "meetingDetails": {
-        "subject": "Dell Meetup",
-        "startTime": "2025-06-17T13:00:00.0000000",
-        "endTime": "2025-06-17T13:30:00.0000000",
-        "actualDuration": 303
-      },
-      "confidence": 1,
-      "reason": "The meeting subject 'Dell Meetup' is an exact match to the task title 'Dell Meetup'. Both refer to the same event, and the task is open and assigned to the user. No additional technical context is available, but the direct match of subject and title warrants a perfect confidence score."
-    }
-  ]
-}
-Using best match for meeting "Dell Meetup": Task 16742170 (Dell Meetup) with confidence 1
-Found 1 matches for meeting: Dell Meetup
+Using best match for meeting "UMG Migration": Task 16726667 (UMG Task) with confidence 0.7
+Found 1 matches for meeting: UMG Migration
 Creating time entries...
-Creating time entry for meeting: UMG Migration Fixed
+Creating time entry for meeting: Lenovo PC Setup
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🚀 TIME ENTRY CREATION STARTED
-║ 📝 Meeting: UMG Migration Fixed
-║ 🔄 Task: Dell Meetup
+║ 📝 Meeting: Lenovo PC Setup
+║ 🔄 Task: UMG Task
 ╚════════════════════════════════════════════════════════╝
 ⏳ Fetching person & task information...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /me/
- ✓ Compiled /api/intervals-proxy in 242ms (1889 modules)
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /me/
+ ✓ Compiled /api/intervals-proxy in 237ms (1893 modules)
 ✅ Database schema initialized
 ✅ SQLite database initialized: C:\Users\Rajesh.alda\Downloads\repo3\data\application.sqlite
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/me/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":1,"me":[{"id":"424773","localid":"10","clientid":null,"title":"","firstname":"Neha","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"neha","groupid":"4","group":"Resource","client":null,"num...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 1428ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /me/
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /task/16742170
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/task/16742170?limit=500 for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"task":{"id":"16742170","localid":"26","assignee":[{"personid":"424773","assignee":"Neha","assigneeactive":"t","personlocalid":"10"}],"assigneeid":"424773","follower":[],"followerid":"","owner":[{"personid":"424773","owner":"Neha","owneractive":"t","person...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 633ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /task/16742170
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/me/ for user: pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/process-meetings?userId=pradeepg%40m365x92504196.onmicrosoft.com&source=pm2 200 in 29997ms
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":1,"me":[{"id":"424516","localid":"7","clientid":null,"title":"","firstname":"Pradeep","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeep","groupid":"4","group":"Resource","client":null...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 1278ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /me/
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /task/16726667
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/task/16726667?limit=500 for user: pradeepg@m365x92504196.onmicrosoft.com
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"task":{"id":"16726667","localid":"18","assignee":[{"personid":"424516","assignee":"Pradeep","assigneeactive":"t","personlocalid":"7"}],"assigneeid":"424516","follower":[],"followerid":"","owner":[{"personid":"424516","owner":"Pradeep","owneractive":"t","p...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 581ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /task/16726667
 Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
+  id: '16726667',
+  title: 'UMG Task',
   status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
+  client: 'UMG',
+  assigneeid: '424516'
 }
 Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
+  id: '16726667',
+  title: 'UMG Task',
   status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
+  client: 'UMG',
+  assigneeid: '424516'
 }
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ USER & TASK INFO RETRIEVED                    │
 │ 👤 User:                          │
-│ 📋 Task: #16742170 - Dell Meetup │
-│ 🏢 Client: Internal | Project: NathCorp │
+│ 📋 Task: #16726667 - UMG Task │
+│ 🏢 Client: UMG | Project: UMG - O365 Tenant Split │
 └─────────────────────────────────────────────────┘
-⏳ Fetching work types for project 1430380...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /projectworktype/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/projectworktype/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 490ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /projectworktype/
-Found 1 work types for project 1430380: [
-  {
-    id: '805554',
-    name: 'Admin',
-    projectId: '1430380',
-    workTypeId: '805554',
-    projectWorkTypeId: '31511469'
-  }
-]
+⏳ Fetching work types for project 1430388...
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /projectworktype/
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/projectworktype/ for user: pradeepg@m365x92504196.onmicrosoft.com
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 604ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /projectworktype/
+Found 0 work types for project 1430388: []
 ℹ️ Using worktype ID 805564 for India-Meeting
-🔧 DEBUG: Meeting reportId = 6e9f9653-9365-48a2-9f4b-3bea31472a50, Meeting ID = AAMkADY0NjEwZTYzLTA4...
-🔍 Fetching attendance for specific report ID: 6e9f9653-9365-48a2-9f4b-3bea31472a50
-📊 Fetched 2 attendance records for report 6e9f9653-9365-48a2-9f4b-3bea31472a50
-✅ Found specific attendance: 5m 51s for report 6e9f9653-9365-48a2-9f4b-3bea31472a50
-💰 Billable status: NO ✗ (Client: Internal)
+🔧 DEBUG: Meeting reportId = 8d4bfadf-ba17-4886-96f7-a9b51f2708db, Meeting ID = AAMkADZhZTY4NjljLTg2...
+🔍 Fetching attendance for specific report ID: 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+ GET /api/pm2/status 200 in 12ms
+📊 Fetched 1 attendance records for report 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+✅ Found specific attendance: 2m 20s for report 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+💰 Billable status: YES ✓ (Client: UMG)
 
 ┌─────────────────────────────────────────────────┐
 │ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: 2025-06-17 (from UTC 2025-06-17)  │
-│ ⏱️ Duration: 0.1 hours (5m 51s)  │
-│ 💰 Billable: No                              │
+│ 📆 Date: 2025-06-17 (from UTC 2025-06-18)  │
+│ ⏱️ Duration: 0.04 hours (2m 20s)  │
+│ 💰 Billable: Yes                              │
 └─────────────────────────────────────────────────┘
 📡 Sending time entry request to Intervals API...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /time
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/time for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"Created","code":201,"time":{"id":"108695853","projectid":"1430380","moduleid":"552786","taskid":"16742170","worktypeid":"805564","personid":"424773","date":"2025-06-17","datemodified":"2025-06-17 16:30:36","time":"0.1","description":"UMG Migration Fixed","billable":"f","...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 915ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /time
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /time
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/time for user: pradeepg@m365x92504196.onmicrosoft.com
+ GET /api/pm2/status 200 in 17ms
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"Created","code":201,"time":{"id":"108701097","projectid":"1430388","moduleid":"552788","taskid":"16726667","worktypeid":"805564","personid":"424516","date":"2025-06-17","datemodified":"2025-06-17 21:46:57","time":"0.04","description":"Lenovo PC Setup","billable":"t","wor...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 872ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /time
 ✅ Time entry creation successful!
-📝 Time entry created with ID: 108695853
+📝 Time entry created with ID: 108701097
 💾 Saving meeting details to storage...
-Saving posted meeting with time entry...
-Posted timestamp: { utc: '2025-06-17T16:30:36.385Z', ist: '2025-06-17T22:00:36.385 IST' }
-[2025-06-17T16:30:36.385Z] Found report ID in meeting data: 6e9f9653-9365-48a2-9f4b-3bea31472a50
-Meeting saved to SQLite database: AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgGAAA=
+[2025-06-17T21:46:57.078Z] Found report ID in meeting data: 8d4bfadf-ba17-4886-96f7-a9b51f2708db
+Meeting saved to SQLite database: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHvAAA=-8d4bfadf
 Successfully saved posted meeting with time entry
 ✅ Meeting details saved successfully
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 TIME ENTRY CREATION COMPLETED
-║ ✅ Time Entry ID: 108695853
-║ ⏱️ Duration: 0.1 hours
+║ ✅ Time Entry ID: 108701097
+║ ⏱️ Duration: 0.04 hours
 ╚════════════════════════════════════════════════════════╝
-Successfully created time entry for: UMG Migration Fixed
-Creating time entry for meeting: Universal Api Request
+Successfully created time entry for: Lenovo PC Setup
+ GET /api/pm2/status 200 in 13ms
+Creating time entry for meeting: UMG Migration
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🚀 TIME ENTRY CREATION STARTED
-║ 📝 Meeting: Universal Api Request
-║ 🔄 Task: Dell Meetup
+║ 📝 Meeting: UMG Migration
+║ 🔄 Task: UMG Task
 ╚════════════════════════════════════════════════════════╝
 ⏳ Fetching person & task information...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /me/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/me/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":1,"me":[{"id":"424773","localid":"10","clientid":null,"title":"","firstname":"Neha","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"neha","groupid":"4","group":"Resource","client":null,"num...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 682ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /me/
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /task/16742170
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/task/16742170?limit=500 for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"task":{"id":"16742170","localid":"26","assignee":[{"personid":"424773","assignee":"Neha","assigneeactive":"t","personlocalid":"10"}],"assigneeid":"424773","follower":[],"followerid":"","owner":[{"personid":"424773","owner":"Neha","owneractive":"t","person...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 666ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /task/16742170
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /me/
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/me/ for user: pradeepg@m365x92504196.onmicrosoft.com
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":1,"me":[{"id":"424516","localid":"7","clientid":null,"title":"","firstname":"Pradeep","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"pradeep","groupid":"4","group":"Resource","client":null...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 484ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /me/
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /task/16726667
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/task/16726667?limit=500 for user: pradeepg@m365x92504196.onmicrosoft.com
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"task":{"id":"16726667","localid":"18","assignee":[{"personid":"424516","assignee":"Pradeep","assigneeactive":"t","personlocalid":"7"}],"assigneeid":"424516","follower":[],"followerid":"","owner":[{"personid":"424516","owner":"Pradeep","owneractive":"t","p...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 565ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /task/16726667
 Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
+  id: '16726667',
+  title: 'UMG Task',
   status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
+  client: 'UMG',
+  assigneeid: '424516'
 }
 Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
+  id: '16726667',
+  title: 'UMG Task',
   status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
+  client: 'UMG',
+  assigneeid: '424516'
 }
 
 ┌─────────────────────────────────────────────────┐
 │ ✓ USER & TASK INFO RETRIEVED                    │
 │ 👤 User:                          │
-│ 📋 Task: #16742170 - Dell Meetup │
-│ 🏢 Client: Internal | Project: NathCorp │
+│ 📋 Task: #16726667 - UMG Task │
+│ 🏢 Client: UMG | Project: UMG - O365 Tenant Split │
 └─────────────────────────────────────────────────┘
-⏳ Fetching work types for project 1430380...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /projectworktype/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/projectworktype/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 513ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /projectworktype/
-Found 1 work types for project 1430380: [
-  {
-    id: '805554',
-    name: 'Admin',
-    projectId: '1430380',
-    workTypeId: '805554',
-    projectWorkTypeId: '31511469'
-  }
-]
+⏳ Fetching work types for project 1430388...
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /projectworktype/
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/projectworktype/ for user: pradeepg@m365x92504196.onmicrosoft.com
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 487ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /projectworktype/
+Found 0 work types for project 1430388: []
 ℹ️ Using worktype ID 805564 for India-Meeting
-🔧 DEBUG: Meeting reportId = bc6f19f5-ea43-4fb8-b397-729600f091e3, Meeting ID = AAMkADY0NjEwZTYzLTA4...
-🔍 Fetching attendance for specific report ID: bc6f19f5-ea43-4fb8-b397-729600f091e3
-📊 Fetched 2 attendance records for report bc6f19f5-ea43-4fb8-b397-729600f091e3
-✅ Found specific attendance: 3m 2s for report bc6f19f5-ea43-4fb8-b397-729600f091e3
-💰 Billable status: NO ✗ (Client: Internal)
+🔧 DEBUG: Meeting reportId = 1cda8746-0597-4f34-87b8-99386a44f000, Meeting ID = AAMkADZhZTY4NjljLTg2...
+🔍 Fetching attendance for specific report ID: 1cda8746-0597-4f34-87b8-99386a44f000
+📊 Fetched 2 attendance records for report 1cda8746-0597-4f34-87b8-99386a44f000
+✅ Found specific attendance: 2m 49s for report 1cda8746-0597-4f34-87b8-99386a44f000
+💰 Billable status: YES ✓ (Client: UMG)
 
 ┌─────────────────────────────────────────────────┐
 │ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: 2025-06-17 (from UTC 2025-06-17)  │
-│ ⏱️ Duration: 0.05 hours (3m 2s)  │
-│ 💰 Billable: No                              │
+│ 📆 Date: 2025-06-17 (from UTC 2025-06-18)  │
+│ ⏱️ Duration: 0.05 hours (2m 49s)  │
+│ 💰 Billable: Yes                              │
 └─────────────────────────────────────────────────┘
 📡 Sending time entry request to Intervals API...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /time
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/time for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"Created","code":201,"time":{"id":"108695860","projectid":"1430380","moduleid":"552786","taskid":"16742170","worktypeid":"805564","personid":"424773","date":"2025-06-17","datemodified":"2025-06-17 16:30:42","time":"0.05","description":"Universal Api Request","billable":"f...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 1183ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /time
+Making request for user pradeepg@m365x92504196.onmicrosoft.com to endpoint: /time
+Looking up API key for user: pradeepg@m365x92504196.onmicrosoft.com
+Getting API key from SQLite for user: pradeepg@m365x92504196.onmicrosoft.com
+Database: Looking up user by email: pradeepg@m365x92504196.onmicrosoft.com
+Database: Found user pradeepg@m365x92504196.onmicrosoft.com with API key: Yes
+API key found in SQLite database for user: pradeepg@m365x92504196.onmicrosoft.com
+Found API key for user: pradeepg@m365x92504196.onmicrosoft.com - proceeding with request
+Making request to intervals API: https://api.myintervals.com/time for user: pradeepg@m365x92504196.onmicrosoft.com
+Intervals API response for user pradeepg@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
+Response data: {"personid":424516,"status":"Created","code":201,"time":{"id":"108701098","projectid":"1430388","moduleid":"552788","taskid":"16726667","worktypeid":"805564","personid":"424516","date":"2025-06-17","datemodified":"2025-06-17 21:47:03","time":"0.05","description":"UMG Migration","billable":"t","workt...
+Intervals API request successful for user pradeepg@m365x92504196.onmicrosoft.com
+ POST /api/intervals-proxy 200 in 900ms
+Successful API response for user pradeepg@m365x92504196.onmicrosoft.com from endpoint: /time
 ✅ Time entry creation successful!
-📝 Time entry created with ID: 108695860
+📝 Time entry created with ID: 108701098
 💾 Saving meeting details to storage...
-Saving posted meeting with time entry...
-Posted timestamp: { utc: '2025-06-17T16:30:43.200Z', ist: '2025-06-17T22:00:43.200 IST' }
-[2025-06-17T16:30:43.200Z] Found report ID in meeting data: bc6f19f5-ea43-4fb8-b397-729600f091e3
-Meeting saved to SQLite database: AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=-bc6f19f5
+[2025-06-17T21:47:02.959Z] Found report ID in meeting data: 1cda8746-0597-4f34-87b8-99386a44f000
+Meeting saved to SQLite database: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHuAAA=-1cda8746
 Successfully saved posted meeting with time entry
 ✅ Meeting details saved successfully
 
 ╔════════════════════════════════════════════════════════╗
 ║ 🏁 TIME ENTRY CREATION COMPLETED
-║ ✅ Time Entry ID: 108695860
+║ ✅ Time Entry ID: 108701098
 ║ ⏱️ Duration: 0.05 hours
 ╚════════════════════════════════════════════════════════╝
-Successfully created time entry for: Universal Api Request
- GET /api/auth/session 200 in 165ms
- GET /api/pm2/agent-status?userId=neha%40m365x92504196.onmicrosoft.com 200 in 25ms
-Creating time entry for meeting: Universal Api Request
-
-╔════════════════════════════════════════════════════════╗
-║ 🚀 TIME ENTRY CREATION STARTED
-║ 📝 Meeting: Universal Api Request
-║ 🔄 Task: Dell Meetup
-╚════════════════════════════════════════════════════════╝
-⏳ Fetching person & task information...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /me/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/me/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":1,"me":[{"id":"424773","localid":"10","clientid":null,"title":"","firstname":"Neha","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"neha","groupid":"4","group":"Resource","client":null,"num...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 547ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /me/
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /task/16742170
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/task/16742170?limit=500 for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"task":{"id":"16742170","localid":"26","assignee":[{"personid":"424773","assignee":"Neha","assigneeactive":"t","personlocalid":"10"}],"assigneeid":"424773","follower":[],"followerid":"","owner":[{"personid":"424773","owner":"Neha","owneractive":"t","person...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 601ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /task/16742170
-Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
-  status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
-}
-Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
-  status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
-}
-
-┌─────────────────────────────────────────────────┐
-│ ✓ USER & TASK INFO RETRIEVED                    │
-│ 👤 User:                          │
-│ 📋 Task: #16742170 - Dell Meetup │
-│ 🏢 Client: Internal | Project: NathCorp │
-└─────────────────────────────────────────────────┘
-⏳ Fetching work types for project 1430380...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /projectworktype/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/projectworktype/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 584ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /projectworktype/
-Found 1 work types for project 1430380: [
-  {
-    id: '805554',
-    name: 'Admin',
-    projectId: '1430380',
-    workTypeId: '805554',
-    projectWorkTypeId: '31511469'
-  }
-]
-ℹ️ Using worktype ID 805564 for India-Meeting
-🔧 DEBUG: Meeting reportId = b2186232-e341-4ee7-94ee-961950f86a56, Meeting ID = AAMkADY0NjEwZTYzLTA4...
-🔍 Fetching attendance for specific report ID: b2186232-e341-4ee7-94ee-961950f86a56
- GET /api/pm2/status 200 in 45ms
- GET /api/auth/session 200 in 52ms
- GET /api/pm2/agent-status?userId=neha%40m365x92504196.onmicrosoft.com 304 in 12ms
-📊 Fetched 1 attendance records for report b2186232-e341-4ee7-94ee-961950f86a56
-✅ Found specific attendance: 5m 52s for report b2186232-e341-4ee7-94ee-961950f86a56
-💰 Billable status: NO ✗ (Client: Internal)
-
-┌─────────────────────────────────────────────────┐
-│ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: 2025-06-17 (from UTC 2025-06-17)  │
-│ ⏱️ Duration: 0.1 hours (5m 52s)  │
-│ 💰 Billable: No                              │
-└─────────────────────────────────────────────────┘
-📡 Sending time entry request to Intervals API...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /time
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/time for user: neha@m365x92504196.onmicrosoft.com
- POST /api/pm2/agent-status 200 in 70ms
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"Created","code":201,"time":{"id":"108695863","projectid":"1430380","moduleid":"552786","taskid":"16742170","worktypeid":"805564","personid":"424773","date":"2025-06-17","datemodified":"2025-06-17 16:30:49","time":"0.1","description":"Universal Api Request","billable":"f"...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 939ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /time
-✅ Time entry creation successful!
-📝 Time entry created with ID: 108695863
-💾 Saving meeting details to storage...
-Saving posted meeting with time entry...
-Posted timestamp: { utc: '2025-06-17T16:30:49.878Z', ist: '2025-06-17T22:00:49.878 IST' }
-[2025-06-17T16:30:49.878Z] Found report ID in meeting data: b2186232-e341-4ee7-94ee-961950f86a56
-Meeting saved to SQLite database: AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgHAAA=-b2186232
-Successfully saved posted meeting with time entry
-✅ Meeting details saved successfully
-
-╔════════════════════════════════════════════════════════╗
-║ 🏁 TIME ENTRY CREATION COMPLETED
-║ ✅ Time Entry ID: 108695863
-║ ⏱️ Duration: 0.1 hours
-╚════════════════════════════════════════════════════════╝
-Successfully created time entry for: Universal Api Request
-Creating time entry for meeting: Dell Meetup
-
-╔════════════════════════════════════════════════════════╗
-║ 🚀 TIME ENTRY CREATION STARTED
-║ 📝 Meeting: Dell Meetup
-║ 🔄 Task: Dell Meetup
-╚════════════════════════════════════════════════════════╝
-⏳ Fetching person & task information...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /me/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/me/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":1,"me":[{"id":"424773","localid":"10","clientid":null,"title":"","firstname":"Neha","lastname":null,"primaryaccount":"f","notes":"","allprojects":"t","private":"f","tips":"f","username":"neha","groupid":"4","group":"Resource","client":null,"num...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 513ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /me/
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /task/16742170
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/task/16742170?limit=500 for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"task":{"id":"16742170","localid":"26","assignee":[{"personid":"424773","assignee":"Neha","assigneeactive":"t","personlocalid":"10"}],"assigneeid":"424773","follower":[],"followerid":"","owner":[{"personid":"424773","owner":"Neha","owneractive":"t","person...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 669ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /task/16742170
-Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
-  status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
-}
-Retrieved task details: {
-  id: '16742170',
-  title: 'Dell Meetup',
-  status: 'Open',
-  client: 'Internal',
-  assigneeid: '424773'
-}
-
-┌─────────────────────────────────────────────────┐
-│ ✓ USER & TASK INFO RETRIEVED                    │
-│ 👤 User:                          │
-│ 📋 Task: #16742170 - Dell Meetup │
-│ 🏢 Client: Internal | Project: NathCorp │
-└─────────────────────────────────────────────────┘
-⏳ Fetching work types for project 1430380...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /projectworktype/
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/projectworktype/ for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"OK","code":200,"listcount":143,"projectworktype":[{"id":"31511425","projectid":"1430376","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511436","projectid":"1430377","worktypeid":"805554","worktype":"Admin","active":"t"},{"id":"31511447","projectid":"143...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 501ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /projectworktype/
-Found 1 work types for project 1430380: [
-  {
-    id: '805554',
-    name: 'Admin',
-    projectId: '1430380',
-    workTypeId: '805554',
-    projectWorkTypeId: '31511469'
-  }
-]
-ℹ️ Using worktype ID 805564 for India-Meeting
-🔧 DEBUG: Meeting reportId = e9c2417a-f297-4842-afe3-c51ad6ee2565, Meeting ID = AAMkADY0NjEwZTYzLTA4...
-🔍 Fetching attendance for specific report ID: e9c2417a-f297-4842-afe3-c51ad6ee2565
-📊 Fetched 4 attendance records for report e9c2417a-f297-4842-afe3-c51ad6ee2565
-✅ Found specific attendance: 5m 3s for report e9c2417a-f297-4842-afe3-c51ad6ee2565
-💰 Billable status: NO ✗ (Client: Internal)
-
-┌─────────────────────────────────────────────────┐
-│ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: 2025-06-17 (from UTC 2025-06-17)  │
-│ ⏱️ Duration: 0.08 hours (5m 3s)  │
-│ 💰 Billable: No                              │
-└─────────────────────────────────────────────────┘
-📡 Sending time entry request to Intervals API...
-Making request for user neha@m365x92504196.onmicrosoft.com to endpoint: /time
-Looking up API key for user: neha@m365x92504196.onmicrosoft.com
-Getting API key from SQLite for user: neha@m365x92504196.onmicrosoft.com
-Database: Looking up user by email: neha@m365x92504196.onmicrosoft.com
-Database: Found user neha@m365x92504196.onmicrosoft.com with API key: Yes
-API key found in SQLite database for user: neha@m365x92504196.onmicrosoft.com
-Found API key for user: neha@m365x92504196.onmicrosoft.com - proceeding with request
-Making request to intervals API: https://api.myintervals.com/time for user: neha@m365x92504196.onmicrosoft.com
-Intervals API response for user neha@m365x92504196.onmicrosoft.com: Status 200, content-type: application/json
-Response data: {"personid":424773,"status":"Created","code":201,"time":{"id":"108695866","projectid":"1430380","moduleid":"552786","taskid":"16742170","worktypeid":"805564","personid":"424773","date":"2025-06-17","datemodified":"2025-06-17 16:30:55","time":"0.08","description":"Dell Meetup","billable":"f","worktyp...
-Intervals API request successful for user neha@m365x92504196.onmicrosoft.com
- POST /api/intervals-proxy 200 in 880ms
-Successful API response for user neha@m365x92504196.onmicrosoft.com from endpoint: /time
-✅ Time entry creation successful!
-📝 Time entry created with ID: 108695866
-💾 Saving meeting details to storage...
-Saving posted meeting with time entry...
-Posted timestamp: { utc: '2025-06-17T16:30:56.160Z', ist: '2025-06-17T22:00:56.160 IST' }
-[2025-06-17T16:30:56.160Z] Found report ID in meeting data: e9c2417a-f297-4842-afe3-c51ad6ee2565
-Meeting saved to SQLite database: AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgFAAA=
-Successfully saved posted meeting with time entry
-✅ Meeting details saved successfully
-
-╔════════════════════════════════════════════════════════╗
-║ 🏁 TIME ENTRY CREATION COMPLETED
-║ ✅ Time Entry ID: 108695866
-║ ⏱️ Duration: 0.08 hours
-╚════════════════════════════════════════════════════════╝
-Successfully created time entry for: Dell Meetup
- GET /api/pm2/status 200 in 8ms
+Successfully created time entry for: UMG Migration

@@ -1,7 +1,7 @@
 import { database, type MeetingData } from '@/lib/database';
 
 interface TimeEntryResponse {
-    id: string;
+    id?: string;
     projectid: string;
     moduleid: string;
     taskid: string;
@@ -89,9 +89,15 @@ export class AIAgentPostedMeetingsStorage {
 
     async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string, reportId?: string): Promise<boolean> {
         try {
-            // For now, use simple meeting ID check
-            // TODO: In the future, we could enhance this to check duration and startTime if needed
-            return database.isMeetingPosted(meetingId, userId, reportId);
+            // If report ID is provided, it's the most reliable way to check for duplicates
+            if (reportId) {
+                console.log(`Checking if meeting with report ID ${reportId} is already posted for user ${userId}`);
+                return database.isMeetingPosted('', userId, reportId); // meeting_id is not needed when report_id is provided
+            } else {
+                // Fallback to meeting ID check if no report ID is available
+                console.log(`No report ID provided, checking if meeting ${meetingId} is posted for user ${userId}`);
+                return database.isMeetingPosted(meetingId, userId);
+            }
         } catch (error) {
             console.error('Error checking if meeting is posted:', error);
             return false;

@@ -22,10 +22,11 @@ interface UserDataFile {
 interface PostedMeeting {
     meetingId: string;
     userId: string;
-    timeEntry: TimeEntryResponse;
+    timeEntry: Partial<TimeEntryResponse>;
     rawResponse: any;
     postedAt: string;
     taskName?: string;
+    reportId?: string;
 }
 
 interface PostedMeetingsFile {
@@ -248,56 +249,50 @@ export class IntervalsTimeEntryService {
         timeEntry: TimeEntryResponse, 
         rawResponse: any, 
         userId: string, 
-        taskName: string
+        taskName?: string
     ): Promise<void> {
         try {
-            console.log('Saving posted meeting with time entry...');
+            // Extract the report ID from the meeting data
+            const reportId = meeting.attendance?.reportId;
             
-            const storage = new AIAgentPostedMeetingsStorage();
-            await storage.loadData();
+            if (!reportId) {
+                console.warn(`[${new Date().toISOString()}] No report ID found in meeting data, this may cause duplication issues`);
+            } else {
+                console.log(`[${new Date().toISOString()}] Found report ID in meeting data: ${reportId}`);
+            }
+            
+            const postedTimestamp = {
+                utc: new Date().toISOString(),
+                ist: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) + ' IST'
+            };
 
-            // Create a timestamp in IST timezone (UTC+05:30)
-            const now = new Date();
-            const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
-            
-            // Format the date properly to remove UTC marker 'Z' and explicitly mark as IST
-            // Format: YYYY-MM-DDTHH:MM:SS IST
-            const istTimestamp = istDate.toISOString().replace('Z', '') + ' IST';
-            
-            console.log('Posted timestamp:', {
-                utc: now.toISOString(),
-                ist: istTimestamp
-            });
-
-            // Add taskTitle to the timeEntry object
-            if (timeEntry) {
+            // Ensure timeEntry has all required fields
+            if (timeEntry && !timeEntry.taskTitle && taskName) {
                 timeEntry.taskTitle = taskName;
             }
 
-            // Extract the reportId from meeting attendance data if available
-            let reportId: string | undefined;
-            if (meeting.attendance?.reportId) {
-                reportId = meeting.attendance.reportId;
-                console.log(`[${now.toISOString()}] Found report ID in meeting data: ${reportId}`);
+            // Make sure meeting.id is defined
+            if (!meeting.id) {
+                console.warn(`Meeting ID is missing! Using subject as fallback ID: ${meeting.subject}`);
             }
 
-            // Only save the meeting in the time entry format
             const postedMeeting = {
-                meetingId: meeting.id,
+                meetingId: meeting.id || `meeting-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
                 userId: userId,
-                timeEntry: timeEntry,
+                timeEntry: timeEntry as any, // Cast to any to avoid type issues
                 rawResponse: rawResponse,
-                postedAt: istTimestamp, // Use explicitly formatted IST timestamp
-                taskName: taskName,
-                reportId: reportId // Add the report ID if available
+                postedAt: postedTimestamp.utc,
+                taskName: taskName || '',
+                reportId: reportId || undefined
             };
 
-            await storage.addPostedMeeting(userId, postedMeeting);
-            
+            // Save to database
+            const storage = new AIAgentPostedMeetingsStorage();
+            await storage.addPostedMeeting(postedMeeting);
             console.log('Successfully saved posted meeting with time entry');
         } catch (error) {
             console.error('Error saving posted meeting:', error);
-            throw new Error('Failed to save posted meeting data');
+            throw error;
         }
     }
 

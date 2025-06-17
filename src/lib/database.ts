@@ -114,7 +114,8 @@ export class AppDatabase {
                 task_name TEXT,
                 report_id TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+                UNIQUE(user_id, report_id)
             );
             
             -- Reviews table
@@ -266,25 +267,23 @@ export class AppDatabase {
     }
     
     isMeetingPosted(meetingId: string, userId: string, reportId?: string): boolean {
-        let stmt;
-        let params;
-        
         if (reportId) {
-            stmt = this.db.prepare(`
+            const stmt = this.db.prepare(`
                 SELECT COUNT(*) as count FROM meetings 
-                WHERE meeting_id = ? AND user_id = ? AND report_id = ?
+                WHERE user_id = ? AND report_id = ?
             `);
-            params = [meetingId, userId, reportId];
+            const params = [userId, reportId];
+            const result = stmt.get(...params) as { count: number };
+            return result.count > 0;
         } else {
-            stmt = this.db.prepare(`
+            const stmt = this.db.prepare(`
                 SELECT COUNT(*) as count FROM meetings 
                 WHERE meeting_id = ? AND user_id = ?
             `);
-            params = [meetingId, userId];
+            const params = [meetingId, userId];
+            const result = stmt.get(...params) as { count: number };
+            return result.count > 0;
         }
-        
-        const result = stmt.get(...params) as { count: number };
-        return result.count > 0;
     }
     
     clearUserMeetings(userId: string): void {

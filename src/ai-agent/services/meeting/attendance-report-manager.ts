@@ -107,13 +107,24 @@ export class AttendanceReportManager {
     private async validateReports(report: EnhancedAttendanceReport): Promise<AttendanceReportInfo[]> {
         const validReports: AttendanceReportInfo[] = [];
 
-        for (const reportInfo of report.reports) {
+        console.log(`🔧 DEBUG: Starting validation of ${report.reports.length} reports`);
+        
+        for (let i = 0; i < report.reports.length; i++) {
+            const reportInfo = report.reports[i];
+            console.log(`🔧 DEBUG: Validating report ${i + 1}/${report.reports.length}: ${reportInfo.id}`);
+            
             const validation = await this.validateReport(reportInfo, report.meetingDate);
+            console.log(`🔧 DEBUG: Report ${reportInfo.id} validation result:`, validation);
+            
             if (validation.isValid) {
                 validReports.push(reportInfo);
+                console.log(`✅ DEBUG: Report ${reportInfo.id} is VALID - added to validReports`);
+            } else {
+                console.log(`❌ DEBUG: Report ${reportInfo.id} is INVALID - reason: ${validation.reason}`);
             }
         }
 
+        console.log(`🔧 DEBUG: Validation complete. Valid reports: ${validReports.length}/${report.reports.length}`);
         return validReports;
     }
 

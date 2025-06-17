@@ -444,20 +444,17 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
 ╚═══════════════════════════════════════════════════════════════════╝`);
                 }
                 
-                await storageForManual.addPostedMeeting(
-                    session.user.email,
-                    {
-                        meetingId: primaryMeetingId || '', // Use the primary ID (Graph ID if available)
-                        userId: session.user.email,
-                        timeEntry: result.time ? { 
-                            ...result.time,
-                            taskTitle: taskTitle || taskName  // Prefer passed taskTitle, then fall back to taskName
-                        } : null,
-                        rawResponse: result,
-                        postedAt: convertToIST(actualMeetingDate), // Convert date to IST format
-                        reportId: reportId // Add reportId if available
-                    }
-                );
+                await storageForManual.addPostedMeeting({
+                    meetingId: primaryMeetingId || '', // Use the primary ID (Graph ID if available)
+                    userId: session.user.email,
+                    timeEntry: result.time ? { 
+                        ...result.time,
+                        taskTitle: taskTitle || taskName  // Prefer passed taskTitle, then fall back to taskName
+                    } : null,
+                    rawResponse: result,
+                    postedAt: convertToIST(actualMeetingDate), // Convert date to IST format
+                    reportId: reportId // Add reportId if available
+                });
                 
                 // IMPORTANT: Remove meeting from review queue for manual posts using reportId only
                 // This was missing and causing the issue where manually posted meetings stayed in review
@@ -585,20 +582,17 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
 ${reportId ? `║ 📊 Report ID: ${reportId}                                          ║` : ''}
 ╚═════════════════════════════════════════════════════════════════╝`);
 
-                await storageForAgent.addPostedMeeting(
-                    session.user.email,
-                    {
-                        meetingId: primaryMeetingId || '',
-                        userId: session.user.email,
-                        timeEntry: result.time ? { 
-                            ...result.time,
-                            taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}`
-                        } : null,
-                        rawResponse: result,
-                        postedAt: convertToIST(actualMeetingDate),
-                        reportId: reportId // Include reportId if we found it in the review
-                    }
-                );
+                await storageForAgent.addPostedMeeting({
+                    meetingId: primaryMeetingId || '',
+                    userId: session.user.email,
+                    timeEntry: result.time ? { 
+                        ...result.time,
+                        taskTitle: taskTitle || taskDetails?.title || `Task ${taskId}`
+                    } : null,
+                    rawResponse: result,
+                    postedAt: convertToIST(actualMeetingDate),
+                    reportId: reportId // Include reportId if we found it in the review
+                });
 
                 console.log(`
 ┌─────────────────── STORAGE STATUS ───────────────────┐
@@ -615,7 +609,7 @@ ${reportId ? `│ 📊 Report ID: ${reportId}                                │
                         // Get the meeting from review to retrieve any reportId
                         const reviewMeeting = await storageManager.getMeetingForReview(primaryMeetingId || '', session.user.email);
                         
-                        // Update the stored meeting with reportId if available from review
+                        // If we found a review meeting with reportId, log it but don't update storage since we already saved it
                         if (reviewMeeting && reviewMeeting.reportId) {
                             reportId = reviewMeeting.reportId;
                             console.log(`
@@ -624,13 +618,6 @@ ${reportId ? `│ 📊 Report ID: ${reportId}                                │
 ║ 📊 Report ID: ${reportId}                                          ║
 ║ 🆔 Meeting ID: ${primaryMeetingId?.substring(0, 20)}...            ║
 ╚═══════════════════════════════════════════════════════════════════╝`);
-                            
-                            // Update the posted meeting with reportId
-                            await storageForAgent.updatePostedMeetingReportId(
-                                session.user.email,
-                                primaryMeetingId || '',
-                                reportId
-                            );
                         }
                     }
                     
