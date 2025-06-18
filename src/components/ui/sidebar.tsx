@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, ChevronRight, FileCheck, Book, Terminal } from 'lucide-react';
+import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, ChevronRight, FileCheck, Book } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
 
@@ -51,11 +51,6 @@ export function Sidebar({ currentView, onViewChange, className }: SidebarProps) 
       name: 'AI Agent',
       icon: AIChipIcon,
       view: 'ai-agent'
-    },
-    {
-      name: 'Live Logs',
-      icon: Terminal,
-      view: 'logs'
     }
   ];
 

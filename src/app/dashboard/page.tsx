@@ -38,7 +38,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AIAgentView } from '@/components/ai-agent-view';
 import { handleApiResponse } from '@/lib/api-helpers';
-import LiveLogsViewer from '@/components/live-logs-viewer';
 import {
   Tabs,
   TabsList,
@@ -759,12 +758,6 @@ export default function DashboardPage() {
     switch (currentView) {
       case 'ai-agent':
         return <AIAgentView />;
-      case 'logs':
-        return (
-          <div className="px-4 sm:px-6">
-            <LiveLogsViewer />
-          </div>
-        );
       default:
         return (
           <>
