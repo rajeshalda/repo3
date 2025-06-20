@@ -120,9 +120,11 @@ export async function POST(request: Request) {
                         // Use the join date time from the first interval as the actual meeting date
                         const joinDateTime = userRecord.intervals[0].joinDateTime;
                         if (joinDateTime) {
-                            // Convert to YYYY-MM-DD format for the date field
-                            actualMeetingDate = new Date(joinDateTime).toISOString().split('T')[0];
-                            console.log(`📅 Using actual attendance date: ${actualMeetingDate} (from joinDateTime: ${joinDateTime})`);
+                            // Convert UTC to IST first, then extract date portion
+                            const joinUTC = new Date(joinDateTime);
+                            const joinIST = new Date(joinUTC.getTime() + (5.5 * 60 * 60 * 1000));
+                            actualMeetingDate = joinIST.toISOString().split('T')[0];
+                            console.log(`📅 Using actual attendance date (IST): ${actualMeetingDate} (from joinDateTime: ${joinDateTime})`);
                         }
                     } else if (isManualPost && userRecord.rawRecord?.reportId) {
                         // Fallback: check if we have report metadata with meeting start time
