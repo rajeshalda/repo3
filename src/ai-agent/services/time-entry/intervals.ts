@@ -500,6 +500,30 @@ export class IntervalsTimeEntryService {
             const isBillable = !isNonBillableClient;
             console.log(`💰 Billable status: ${isBillable ? 'YES ✓' : 'NO ✗'} (Client: ${taskDetails.client})`);
 
+            // Determine the correct date to use for time entry
+            // Priority: 1) timeEntryDate (corrected IST date), 2) joinDateTime (attendance-based), 3) scheduled time
+            let timeEntryDate: string;
+            let dateSource: string;
+
+            if (meeting.timeEntryDate) {
+                // Use the corrected timeEntryDate set by agent (already in YYYY-MM-DD format)
+                timeEntryDate = meeting.timeEntryDate;
+                dateSource = `corrected IST date (${meeting.timeEntryDate})`;
+            } else if (attendanceRecords[0]?.attendanceIntervals[0]?.joinDateTime) {
+                // Convert attendance joinDateTime to IST date
+                const joinDateTime = attendanceRecords[0].attendanceIntervals[0].joinDateTime;
+                const joinUTC = new Date(joinDateTime);
+                const joinIST = new Date(joinUTC.getTime() + (5.5 * 60 * 60 * 1000));
+                timeEntryDate = joinIST.toISOString().split('T')[0];
+                dateSource = `attendance IST date (${timeEntryDate} from ${joinDateTime})`;
+            } else {
+                // Fallback to scheduled time converted to IST
+                const scheduledUTC = new Date(meeting.start.dateTime);
+                const scheduledIST = new Date(scheduledUTC.getTime() + (5.5 * 60 * 60 * 1000));
+                timeEntryDate = scheduledIST.toISOString().split('T')[0];
+                dateSource = `scheduled IST date (${timeEntryDate})`;
+            }
+
             // Prepare time entry data
             const timeEntry: TimeEntry = {
                 projectid: taskDetails.projectid,
@@ -507,9 +531,7 @@ export class IntervalsTimeEntryService {
                 taskid: taskDetails.id,
                 worktypeid: worktypeId,
                 personid: person.id,
-                date: DateTime.fromISO(attendanceRecords[0]?.attendanceIntervals[0]?.joinDateTime || meeting.start.dateTime)
-                    .toUTC()
-                    .toFormat('yyyy-MM-dd'), // Use UTC date instead of IST
+                date: timeEntryDate,
                 time: timeInHours,
                 description: meeting.subject,
                 billable: isBillable ? 't' : 'f'
@@ -519,7 +541,7 @@ export class IntervalsTimeEntryService {
             console.log(`
 ┌─────────────────────────────────────────────────┐
 │ 📊 TIME ENTRY DETAILS                           │
-│ 📆 Date: ${timeEntry.date} (from UTC ${meeting.start.dateTime.split('T')[0]})  │
+│ 📆 Date: ${timeEntry.date} (from ${dateSource})  │
 │ ⏱️ Duration: ${timeInHours} hours (${Math.floor(userDuration/60)}m ${userDuration%60}s)  │
 │ 💰 Billable: ${isBillable ? 'Yes' : 'No'}                              │
 └─────────────────────────────────────────────────┘`);

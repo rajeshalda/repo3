@@ -211,26 +211,9 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
             const reportDateStr = reportDateIST.toISODate() || '';
             const istTargetDateStr = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' }).toISODate() || '';
             
-            // Check if dates match directly
-            let isRelevant = (reportDateStr === istTargetDateStr);
-            
-            // Special handling for early morning meetings (12:00 AM to 5:30 AM IST)
-            if (!isRelevant) {
-                const reportHourIST = reportDateIST.hour;
-                const isEarlyMorning = reportHourIST >= 0 && reportHourIST < 5.5;
-                
-                if (isEarlyMorning) {
-                    // For early morning meetings, check if the report date is within 1 day of target
-                    const targetDateIST = DateTime.fromJSDate(istStartDate, { zone: 'Asia/Kolkata' });
-                    const dayDifference = Math.abs(targetDateIST.diff(reportDateIST, 'days').days);
-                    
-                    // Allow meetings within 1 day difference for early morning meetings
-                    if (dayDifference <= 1) {
-                        console.log(`Early morning meeting detected (${reportHourIST}h IST). Including despite date mismatch.`);
-                        isRelevant = true;
-                    }
-                }
-            }
+            // STRICT RULE: Only include reports that exactly match the target date
+            // This fixes the issue where multiple dates were being included for the same query
+            const isRelevant = (reportDateStr === istTargetDateStr);
             
             console.log('Report time check:', {
                 reportTime: report.meetingStartDateTime, 
@@ -238,7 +221,7 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
                 reportDateStr,
                 istTargetDateStr,
                 reportHourIST: reportDateIST.hour,
-                isRelevant
+                isRelevant: isRelevant ? 'EXACT_DATE_MATCH' : 'DATE_MISMATCH_EXCLUDED'
             });
             
             return isRelevant;
@@ -514,28 +497,37 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             const meetingEndUTC = DateTime.fromISO(meeting.end.dateTime);
             const meetingStartIST = meetingStartUTC.setZone('Asia/Kolkata');
             
-            // For recurring meetings, only include if:
-            // 1. Meeting starts within the UTC window AND
-            // 2. Meeting is not a future instance beyond current UTC window
-            if (meeting.seriesMasterId) {
-                const isInWindow = meetingStartUTC.toMillis() >= utcStartWindow.toMillis() && 
-                                  meetingStartUTC.toMillis() <= utcEndWindow.toMillis();
-                
-                if (isInWindow) {
-                    // For recurring meetings, we'll set the timeEntryDate later when we have the attendance report
-                    meeting.timeEntryDate = undefined;
-                }
-                
-                return isInWindow;
+            // Enhanced filtering: Include meetings scheduled on the date OR that will be checked for attendance
+            const meetingUTCDate = new Date(meeting.start.dateTime);
+            const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+            const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
+            
+            // Check if meeting is scheduled within the requested date range
+            const targetDateStr = istStartDateTime.toFormat('yyyy-MM-dd');
+            const isScheduledInRange = meetingDateStr === targetDateStr;
+            
+            console.log(`📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', isScheduledInRange: ${isScheduledInRange} }`);
+            
+            // For now, include all meetings scheduled in range
+            // The attendance filtering will happen during attendance record processing
+            // This ensures we don't miss midnight meetings that were attended on different dates
+            if (isScheduledInRange) {
+                // Set the timeEntryDate based on scheduled time for now
+                // This will be updated during attendance processing if needed
+                meeting.timeEntryDate = meetingDateStr;
+                return true;
             }
             
-            // For non-recurring meetings, use the original logic
-            const isInDay = meetingStartIST.hasSame(istStartDateTime, 'day');
-            if (isInDay) {
-                // For non-recurring meetings, use the actual meeting date
-                meeting.timeEntryDate = meetingStartUTC.toFormat('yyyy-MM-dd');
+            // For meetings scheduled outside the range, we'll still process them if they have online meeting info
+            // This handles the case where a meeting was scheduled on a different date but attended on the target date
+            if (meeting.onlineMeeting?.joinUrl) {
+                console.log(`📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', hasOnlineMeeting: true, willCheckAttendance: true }`);
+                meeting.timeEntryDate = undefined; // Will be set during attendance processing
+                return true;
             }
-            return isInDay;
+            
+            console.log(`📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', excluded: true }`);
+            return false;
         });
 
         // Deduplicate meetings by id and IST date
@@ -590,6 +582,33 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                     const attendanceRecords = await getAttendanceRecords(userId, meetingId, organizerId, accessToken, istStartDate, istEndDate);
                     
                     if (attendanceRecords.length > 0) {
+                        // Check if the user attended this meeting and set correct timeEntryDate based on attendance
+                        const userRecord = attendanceRecords.find(record => 
+                            record.emailAddress?.toLowerCase() === userId.toLowerCase()
+                        );
+                        
+                        if (userRecord && userRecord.attendanceIntervals && userRecord.attendanceIntervals.length > 0) {
+                            // Use the join date time from the first interval as the actual meeting date for time entry
+                            const joinDateTime = userRecord.attendanceIntervals[0].joinDateTime;
+                            if (joinDateTime) {
+                                // Convert to IST first, then extract date portion
+                                const joinUTC = new Date(joinDateTime);
+                                const joinIST = new Date(joinUTC.getTime() + (5.5 * 60 * 60 * 1000));
+                                const attendanceDateStr = joinIST.toISOString().split('T')[0];
+                                
+                                console.log(`📅 AGENT ATTENDANCE CORRECTION: ${truncatedSubject} attended on ${attendanceDateStr} (from joinDateTime: ${joinDateTime})`);
+                                
+                                // Update the timeEntryDate to reflect when user actually attended
+                                meeting.timeEntryDate = attendanceDateStr;
+                                
+                                // Check if this attendance date matches our target date
+                                const targetDateStr = istStartDateTime.toFormat('yyyy-MM-dd');
+                                if (attendanceDateStr !== targetDateStr) {
+                                    console.log(`📅 AGENT ATTENDANCE FILTER: Meeting ${truncatedSubject} scheduled for different date but attended on target date ${targetDateStr}`);
+                                }
+                            }
+                        }
+                        
                         // Get report ID for this meeting instance
                         let reportId: string | undefined;
                         
@@ -663,9 +682,21 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                 console.log(`ℹ️ Not an online meeting: ${truncatedSubject}`);
             }
         }
-        console.log(`\n╔════════════════════════════════════════════════════════╗\n║ 🏁 MEETING FETCH COMPLETED                             \n║ 📊 Total meetings: ${uniqueMeetings.length} | With attendance: ${attendanceReport.attendedMeetings}\n║ 👥 Unique attendees: ${Object.keys(attendanceReport.attendanceByPerson).length}\n╚════════════════════════════════════════════════════════╝`);
+        // Final filter: Only include meetings where user attended on the target date
+        const targetDateStr = istStartDateTime.toFormat('yyyy-MM-dd');
+        const finalFilteredMeetings = uniqueMeetings.filter(meeting => {
+            if (meeting.timeEntryDate === targetDateStr) {
+                console.log(`✅ AGENT FINAL FILTER: Including ${meeting.subject || 'Untitled'} (timeEntryDate: ${meeting.timeEntryDate})`);
+                return true;
+            } else {
+                console.log(`❌ AGENT FINAL FILTER: Excluding ${meeting.subject || 'Untitled'} (timeEntryDate: ${meeting.timeEntryDate}, target: ${targetDateStr})`);
+                return false;
+            }
+        });
+        
+        console.log(`\n╔════════════════════════════════════════════════════════╗\n║ 🏁 MEETING FETCH COMPLETED                             \n║ 📊 Total meetings: ${finalFilteredMeetings.length} | With attendance: ${attendanceReport.attendedMeetings}\n║ 👥 Unique attendees: ${Object.keys(attendanceReport.attendanceByPerson).length}\n╚════════════════════════════════════════════════════════╝`);
         return {
-            meetings: uniqueMeetings,
+            meetings: finalFilteredMeetings,
             attendanceReport
         };
     } catch (error: unknown) {

@@ -347,7 +347,8 @@ export class MeetingService {
                                     const reportManager = new AttendanceReportManager();
                                     
                                     // Process all reports using the manager
-                                    const meetingDate = meeting.start.dateTime;
+                                    // Use timeEntryDate if set by agent, otherwise fall back to scheduled dateTime
+                                    const meetingDate = meeting.timeEntryDate ? `${meeting.timeEntryDate}T00:00:00.0000000` : meeting.start.dateTime;
                                     const isRecurring = !!meeting.seriesMasterId;
                                     
                                     // Check if there are multiple reports (user rejoined multiple times)
@@ -364,6 +365,8 @@ export class MeetingService {
 │ 🕒 Meeting IST: ${meetingStartIST}                        │
 │ ⏰ Hour (IST): ${meetingStartHourIST}                     │
 │ 🌅 Early Morning: ${isEarlyMorning ? 'YES' : 'NO'}        │
+│ 🎯 Target Date: ${meeting.timeEntryDate || 'Not set (using scheduled)'}        │
+│ 📊 Validation Date: ${meetingDate}                        │
 └─────────────────────────────────────────────────────────┘`);
                                     
                                     // For meetings with multiple reports (recurring OR user rejoined multiple times), get ALL valid reports

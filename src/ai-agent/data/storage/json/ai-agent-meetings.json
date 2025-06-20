@@ -2283,6 +2283,7 @@
         "conferenceId": "484573162",
         "tollNumber": "+1 323-618-1840"
       },
+      "timeEntryDate": "2025-06-21",
       "analysis": {
         "keyPoints": [],
         "suggestedCategories": [],
@@ -2291,7 +2292,43 @@
           "patterns": []
         }
       },
-      "lastProcessed": "2025-06-19T12:36:56.365Z",
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 68,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-20T18:49:17.8287348Z",
+                "leaveDateTime": "2025-06-20T18:50:26.0361906Z",
+                "durationInSeconds": 68
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 68,
+          "averageDuration": 68,
+          "totalParticipants": 1
+        },
+        "reportId": "d40425a5-ddb3-485c-8004-f9254d874d47",
+        "allValidReports": [
+          {
+            "selectedReportId": "d40425a5-ddb3-485c-8004-f9254d874d47",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-20T18:49:09.794Z",
+            "metadata": {
+              "date": "2025-06-21T00:00:00.0000000",
+              "duration": 76.242,
+              "isRecurring": true,
+              "totalReports": 6
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-20T21:09:35.408Z",
       "userId": "pradeepg@m365x92504196.onmicrosoft.com"
     },
     {

@@ -147,34 +147,13 @@ export class AttendanceReportManager {
         const endTime = new Date(report.meetingEndDateTime).getTime();
         const duration = (endTime - startTime) / 1000;
 
-        // Validate the report
-        // For early morning meetings (12:00 AM to 5:30 AM IST), the reportDate will be the same as targetDate
-        // in IST timezone, even though they might be different in UTC
+        // STRICT VALIDATION: Only allow reports that exactly match the target date
+        // This prevents posting meetings from other dates when agent runs for a specific target date
         if (reportDate !== targetDateStr) {
-            // Additional check for early morning meetings crossing UTC day boundary
-            const reportHourIST = reportDateIST.hour;
-            const isEarlyMorning = reportHourIST >= 0 && reportHourIST < 5.5; // 12:00 AM to 5:30 AM
-            
-            // Special handling for the day boundary edge case
-            // If the meeting is early morning and the target date is the previous day,
-            // we'll check if they're only one day apart
-            if (isEarlyMorning) {
-                const dayDifference = Math.abs(targetDateIST.diff(reportDateIST, 'days').days);
-                if (dayDifference <= 1) {
-                    // Allow a 1-day difference for early morning meetings
-                    console.log(`Early morning meeting detected (${reportHourIST} IST). Allowing despite date mismatch.`);
-                    return {
-                        isValid: true,
-                        reason: 'Report is valid for early morning meeting (crossing day boundary)',
-                        reportDate,
-                        duration
-                    };
-                }
-            }
-            
+            console.log(`🚨 STRICT DATE VALIDATION: Report date ${reportDate} ≠ target date ${targetDateStr} - EXCLUDED`);
             return {
                 isValid: false,
-                reason: 'Report date does not match target date',
+                reason: 'Report date does not match target date (strict validation for agent)',
                 reportDate,
                 duration
             };
