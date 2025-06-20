@@ -176,12 +176,10 @@ export function PM2Status() {
                 variant="secondary" 
                 size="sm"
                 onClick={restartAgent}
-                disabled={true}
-                className="cursor-not-allowed opacity-60 relative"
-                title="This function is currently disabled by administrator"
+                disabled={false}
+                title="Restart the PM2 AI Agent service"
               >
-                <span className="relative z-10">Restart Agent</span>
-                <span className="absolute inset-0 bg-gray-200 opacity-20 rounded pointer-events-none"></span>
+                Restart Agent
               </Button>
             </div>
           </div>

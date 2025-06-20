@@ -6,6 +6,13 @@ import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
 import { IST_TIMEZONE } from '@/lib/utils';
 import { AIAgentPostedMeetingsStorage } from '@/ai-agent/services/storage/posted-meetings';
 import { database } from '@/lib/database';
+import { 
+  convertDateRangeToUTC, 
+  isMeetingInISTDateRange, 
+  formatToIST as formatToISTNew,
+  filterAttendanceByISTDate,
+  filterMeetingsByISTDate 
+} from '@/lib/timezone-utils';
 import path from 'path';
 import fs from 'fs/promises';
 
@@ -149,10 +156,12 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
       const recordsData = await recordsResponse.json();
       
       if (recordsData.value && recordsData.value.length > 0) {
-        // Add each record with its reportId without merging
+        // Add each record with its reportId and meetingStartDateTime without merging
         for (const record of recordsData.value) {
-          // Add reportId to each record for deduplication
+          // Add reportId and meetingStartDateTime to each record for filtering
           record.reportId = report.id;
+          record.meetingStartDateTime = report.meetingStartDateTime;
+          record.meetingEndDateTime = report.meetingEndDateTime;
           
           // Don't merge - treat each reportId as a separate record
           // Add as a new record
@@ -294,13 +303,22 @@ function extractMeetingInfo(joinUrl: string, bodyPreview: string) {
   return result;
 }
 
-async function getMeetings(accessToken: string, startDate: Date, endDate: Date) {
-  // Calculate the user's viewing date range for filtering attendance records
-  // For multi-day ranges, we need to be more flexible with recurring meetings
+async function getMeetings(accessToken: string, startDate: Date, endDate: Date, istDateRange?: {startISTDate: string, endISTDate: string}) {
+  // Use the properly calculated IST dates if provided, otherwise fallback to old method
+  let startViewingDate: string;
+  let endViewingDate: string;
+  
+  if (istDateRange) {
+    startViewingDate = istDateRange.startISTDate;
+    endViewingDate = istDateRange.endISTDate;
+  } else {
+    // Fallback to old calculation method
   const startIST = new Date(startDate.getTime() + (5.5 * 60 * 60 * 1000));
   const endIST = new Date(endDate.getTime() + (5.5 * 60 * 60 * 1000));
-  const startViewingDate = startIST.toISOString().split('T')[0];
-  const endViewingDate = endIST.toISOString().split('T')[0];
+    startViewingDate = startIST.toISOString().split('T')[0];
+    endViewingDate = endIST.toISOString().split('T')[0];
+  }
+  
   const isMultiDayRange = startViewingDate !== endViewingDate;
   // Don't add extra day - frontend already sends properly formatted end date (23:59:59.999)
   console.log('Fetching meetings with date range:', {
@@ -442,10 +460,45 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date) 
           );
           
           if (attendanceRecords && attendanceRecords.length > 0) {
-            // Group attendance records by reportId
+            // First, filter out attendance records that don't belong to the requested IST date range
+            // We need to check the meetingStartDateTime of each attendance report
+            const filteredAttendanceRecords = attendanceRecords.filter((record: RawAttendanceRecord) => {
+              if (!record.reportId) return true; // Keep records without reportId for safety
+              
+              // Get the attendance report's meetingStartDateTime from the rawRecord
+              const attendanceStartTime = (record as any).meetingStartDateTime;
+              if (!attendanceStartTime) return true; // Keep if no start time info
+              
+              try {
+                // Convert attendance start time to IST date
+                const attendanceUTC = new Date(attendanceStartTime);
+                const attendanceIST = new Date(attendanceUTC.getTime() + (5.5 * 60 * 60 * 1000));
+                const attendanceISTDate = attendanceIST.toISOString().split('T')[0];
+                
+                // Check if this attendance session belongs to our requested date range
+                const belongsToDateRange = attendanceISTDate >= startViewingDate && attendanceISTDate <= endViewingDate;
+                
+                console.log('🕐 ATTENDANCE REPORT DATE FILTER:', {
+                  reportId: record.reportId,
+                  attendanceStartTime,
+                  attendanceISTDate,
+                  requestedRange: `${startViewingDate} to ${endViewingDate}`,
+                  belongsToDateRange
+                });
+                
+                return belongsToDateRange;
+              } catch (error) {
+                console.error('Error filtering attendance record:', error);
+                return true; // Keep on error for safety
+              }
+            });
+            
+            console.log(`📊 ATTENDANCE FILTERING: ${attendanceRecords.length} total reports, ${filteredAttendanceRecords.length} after IST date filtering`);
+            
+            // Group filtered attendance records by reportId
             const recordsByReportId = new Map<string, RawAttendanceRecord[]>();
             
-            attendanceRecords.forEach((record: RawAttendanceRecord) => {
+            filteredAttendanceRecords.forEach((record: RawAttendanceRecord) => {
               const reportId = record.reportId || 'no-report';
               if (!recordsByReportId.has(reportId)) {
                 recordsByReportId.set(reportId, []);
@@ -611,18 +664,23 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Date range is required' }, { status: 400 });
     }
 
-    // Parse the dates - they should already be properly formatted from frontend
+    // Parse the dates and properly convert to UTC using our timezone utilities
     const startDate = new Date(from);
     const endDate = new Date(to);
     
-    // Don't modify the dates - they should already have proper time boundaries from frontend
+    // Use proper timezone conversion
+    const utcRange = convertDateRangeToUTC({ from: startDate, to: endDate });
+    if (!utcRange) {
+      return NextResponse.json({ error: 'Invalid date range' }, { status: 400 });
+    }
 
-    console.log('\n=== DATE RANGE DEBUG ===');
-    console.log('Original from:', from);
-    console.log('Original to:', to);
-    console.log('Start date with time:', startDate.toISOString());
-    console.log('End date with time:', endDate.toISOString());
-    console.log('======================\n');
+    // Use the corrected UTC range for Graph API calls
+    const correctedStartDate = new Date(utcRange.start);
+    const correctedEndDate = new Date(utcRange.end);
+
+    // Get the IST date range for strict filtering
+    const startISTDate = formatToISTNew(utcRange.start, 'yyyy-MM-dd').replace(/ IST$/, ''); // Remove IST suffix
+    const endISTDate = formatToISTNew(utcRange.end, 'yyyy-MM-dd').replace(/ IST$/, ''); // Remove IST suffix
 
     // Get access token
     const accessToken = session.user.accessToken;
@@ -630,52 +688,70 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'No access token found' }, { status: 401 });
     }
 
-    // Get meetings data
-    const meetingsData = await getMeetings(accessToken, startDate, endDate);
+    // For early morning attendance sessions, we need to also check meetings from the previous day
+    // Extend the search range backwards by 24 hours to catch meetings from previous day with early morning attendance
+    const extendedStartDate = new Date(correctedStartDate.getTime() - (24 * 60 * 60 * 1000)); // 24 hours earlier (full previous day)
+    
+    console.log('🔍 EXTENDED MEETING SEARCH RANGE:', {
+      originalStart: correctedStartDate.toISOString(),
+      extendedStart: extendedStartDate.toISOString(),
+      endDate: correctedEndDate.toISOString(),
+      reason: 'Including full previous day meetings for early morning attendance sessions'
+    });
 
-    // Filter meetings by date range - use IST dates for proper filtering
+    // Get meetings data using extended UTC range to catch previous day meetings with early morning attendance
+    const meetingsData = await getMeetings(accessToken, extendedStartDate, correctedEndDate, {
+      startISTDate,
+      endISTDate
+    });
+
+    console.log('📅 IST DATE RANGE FOR FILTERING:', {
+      startISTDate,
+      endISTDate,
+      utcRangeStart: utcRange.start,
+      utcRangeEnd: utcRange.end
+    });
+
+    // Enhanced date filtering: Include meetings scheduled on the date OR attended on the date
+    console.log('🚀 ENHANCED DATE FILTERING - Including scheduled meetings for the date AND attended meetings');
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
         const meetingUTCDate = new Date(meeting.startTime);
-        
-        // Convert meeting time to IST for date comparison
         const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-        const meetingDateStr = meetingISTDate.toISOString().split('T')[0]; // YYYY-MM-DD
+        const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
         
-        // Convert request date range to IST for proper comparison
-        const startIST = new Date(startDate.getTime() + (5.5 * 60 * 60 * 1000));
-        const endIST = new Date(endDate.getTime() + (5.5 * 60 * 60 * 1000));
-        const startISTDateStr = startIST.toISOString().split('T')[0];
-        const endISTDateStr = endIST.toISOString().split('T')[0];
+        // Check if meeting is scheduled within the requested date range
+        const isScheduledInRange = meetingDateStr >= startISTDate && meetingDateStr <= endISTDate;
         
-        // Convert to Date objects for comparison (just the date part)
-        const meetingDateOnly = new Date(meetingDateStr + 'T00:00:00.000Z');
-        const startDateOnly = new Date(startISTDateStr + 'T00:00:00.000Z');
-        const endDateOnly = new Date(endISTDateStr + 'T00:00:00.000Z');
-        
-        // Check if this is a single day request in IST time
-        const isSingleDayRequest = startISTDateStr === endISTDateStr;
-        
-        // For single day requests, strictly check if the meeting starts on that day in IST
-        // For multi-day ranges, use IST date range for comparison
-        let isInRange;
-        if (isSingleDayRequest) {
-            isInRange = meetingDateStr === startISTDateStr;
-        } else {
-            isInRange = meetingDateOnly >= startDateOnly && meetingDateOnly <= endDateOnly;
+        // Check if meeting has attendance within the requested date range
+        let hasAttendanceInRange = false;
+        if (meeting.attendanceRecords?.length > 0) {
+            const userEmail = session?.user?.email;
+            if (userEmail) {
+                const userRecords = meeting.attendanceRecords.filter((record: AttendanceRecord) => 
+                    record.email.toLowerCase() === userEmail.toLowerCase()
+                );
+                
+                if (userRecords.length > 0 && userRecords[0].intervals && userRecords[0].intervals.length > 0) {
+                    const joinTime = userRecords[0].intervals[0].joinDateTime;
+                    const joinUTCDate = new Date(joinTime);
+                    const joinISTDate = new Date(joinUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
+                    const joinDateStr = joinISTDate.toISOString().split('T')[0];
+                    hasAttendanceInRange = joinDateStr >= startISTDate && joinDateStr <= endISTDate;
+                }
+            }
         }
         
-        console.log('Meeting date filter check:', {
-            meetingSubject: meeting.subject,
-            meetingUTCTime: meeting.startTime,
-            meetingISTTime: meetingISTDate.toISOString(),
-            meetingDateOnly: meetingDateStr,
-            startISTDate: startISTDateStr,
-            endISTDate: endISTDateStr,
-            isSingleDayRequest: isSingleDayRequest,
-            isInRange: isInRange
+        const includeInResults = isScheduledInRange || hasAttendanceInRange;
+        
+        console.log(`📅 DATE FILTER: ${meeting.subject}`, {
+            scheduled: meetingDateStr,
+            isScheduledInRange,
+            hasAttendanceInRange,
+            includeInResults,
+            requestedRange: `${startISTDate} to ${endISTDate}`
         });
         
-        return isInRange;
+        return includeInResults;
     });
 
     console.log(`\nFiltered ${meetingsData.meetings.length} meetings to ${dateFilteredMeetings.length} within date range`);
@@ -762,29 +838,87 @@ export async function GET(request: Request) {
         }
     }
 
-    console.log('\n=== FINAL RESPONSE DEBUG ===');
+    console.log('\n=== FINAL RESPONSE DEBUG (ATTENDANCE-BASED TIMEZONE) ===');
     console.log('Time range:', {
-        fromIST: convertToIST(startDate.toISOString()),
-        toIST: convertToIST(endDate.toISOString()),
-        fromUTC: startDate.toISOString(),
-        toUTC: endDate.toISOString()
+        fromIST: formatToISTNew(utcRange.start),
+        toIST: formatToISTNew(utcRange.end),
+        fromUTC: utcRange.start,
+        toUTC: utcRange.end
     });
-    console.log('First meeting times (if any):', filteredMeetings[0] ? {
-        subject: filteredMeetings[0].subject,
-        displayStartTime: convertToIST(filteredMeetings[0].startTime),
-        displayEndTime: convertToIST(filteredMeetings[0].endTime)
-    } : 'No meetings');
+    
+    // Debug the first meeting with attendance-based timing
+    if (filteredMeetings[0]) {
+        const firstMeeting = filteredMeetings[0];
+        const userEmail = session?.user?.email;
+        let displayTimes = {
+            subject: firstMeeting.subject,
+            scheduledStartTime: formatToISTNew(firstMeeting.startTime),
+            scheduledEndTime: formatToISTNew(firstMeeting.endTime),
+            actualAttendanceTime: 'No attendance data'
+        };
+        
+        // Check if this meeting has attendance data
+        if (firstMeeting.attendanceRecords && firstMeeting.attendanceRecords.length > 0 && userEmail) {
+            const userRecords = firstMeeting.attendanceRecords.filter((record: AttendanceRecord) => 
+                record.email.toLowerCase() === userEmail.toLowerCase()
+            );
+            
+            if (userRecords.length > 0 && userRecords[0].intervals && userRecords[0].intervals.length > 0) {
+                const earliestJoinTime = userRecords[0].intervals[0].joinDateTime;
+                displayTimes.actualAttendanceTime = formatToISTNew(earliestJoinTime);
+            }
+        }
+        
+        console.log('First meeting times (attendance-corrected):', displayTimes);
+    } else {
+        console.log('First meeting times: No meetings');
+    }
     console.log('===========================\n');
 
     return NextResponse.json({
       total: filteredMeetings.length,
       timeRange: {
-        from: convertToIST(startDate.toISOString()),
-        to: convertToIST(endDate.toISOString()),
-        fromUTC: startDate.toISOString(),
-        toUTC: endDate.toISOString()
+        from: formatToISTNew(utcRange.start),
+        to: formatToISTNew(utcRange.end),
+        fromUTC: utcRange.start,
+        toUTC: utcRange.end
       },
-      meetings: filteredMeetings,
+      meetings: filteredMeetings.map(meeting => {
+        // If meeting has attendance records, use the earliest attendance time for display
+        // This ensures meetings are shown on the date the user actually attended
+        if (meeting.attendanceRecords && meeting.attendanceRecords.length > 0) {
+          const userEmail = session?.user?.email;
+          if (userEmail) {
+            const userRecords = meeting.attendanceRecords.filter((record: AttendanceRecord) => 
+              record.email.toLowerCase() === userEmail.toLowerCase()
+            );
+            
+            if (userRecords.length > 0 && userRecords[0].intervals && userRecords[0].intervals.length > 0) {
+              // Use the earliest join time as the meeting start time for display
+              const earliestJoinTime = userRecords[0].intervals[0].joinDateTime;
+              
+              // Calculate duration from intervals instead of using scheduled end time
+              const totalAttendanceDuration = userRecords.reduce((sum, record) => 
+                sum + (record.duration || 0), 0
+              );
+              
+              // Calculate end time based on join time + attendance duration
+              const attendanceStartTime = new Date(earliestJoinTime);
+              const attendanceEndTime = new Date(attendanceStartTime.getTime() + (totalAttendanceDuration * 1000));
+              
+              return {
+                ...meeting,
+                startTime: earliestJoinTime, // Use actual attendance time
+                endTime: attendanceEndTime.toISOString(), // Use calculated end time based on attendance
+                displayNote: `Attended on ${formatToISTNew(earliestJoinTime, 'dd/MM/yyyy')}`
+              };
+            }
+          }
+        }
+        
+        // Fallback to scheduled time if no attendance data
+        return meeting;
+      }),
       totalMeetingsInPeriod: totalMeetingsBeforeProcessing,
       totalTimeInPeriod: processedMeetings.reduce((acc: number, meeting: MeetingData) => {
         const userEmail = session?.user?.email;

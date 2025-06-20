@@ -879,7 +879,93 @@
           "patterns": []
         }
       },
-      "lastProcessed": "2025-06-18T16:11:35.938Z",
+      "attendance": {
+        "records": [
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 334,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:51:44.4164459Z",
+                "leaveDateTime": "2025-06-19T09:57:19.3214495Z",
+                "durationInSeconds": 334
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 249,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:50:17.2572916Z",
+                "leaveDateTime": "2025-06-19T09:54:26.2893369Z",
+                "durationInSeconds": 249
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 332,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:56:06.1623894Z",
+                "leaveDateTime": "2025-06-19T10:01:38.1760096Z",
+                "durationInSeconds": 332
+              }
+            ]
+          },
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 523,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:57:43.8183579Z",
+                "leaveDateTime": "2025-06-19T10:06:27.2660361Z",
+                "durationInSeconds": 523
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1438,
+          "averageDuration": 359.5,
+          "totalParticipants": 4
+        },
+        "reportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+        "allValidReports": [
+          {
+            "selectedReportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:50:13.506Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 973.76,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          },
+          {
+            "selectedReportId": "4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:36:23.365Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 206.056,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:20:48.981Z",
       "userId": "pradeepg@m365x92504196.onmicrosoft.com"
     },
     {
@@ -944,7 +1030,54 @@
           "patterns": []
         }
       },
-      "lastProcessed": "2025-06-18T16:11:38.921Z",
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 111,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:48:12.7222954Z",
+                "leaveDateTime": "2025-06-19T09:50:03.8753935Z",
+                "durationInSeconds": 111
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 111,
+          "averageDuration": 111,
+          "totalParticipants": 1
+        },
+        "reportId": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+        "allValidReports": [
+          {
+            "selectedReportId": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:47:54.305Z",
+            "metadata": {
+              "date": "2025-06-19T12:30:00.0000000",
+              "duration": 129.57,
+              "isRecurring": true,
+              "totalReports": 4
+            }
+          },
+          {
+            "selectedReportId": "0e5136c7-1d35-4f8f-88ce-29b6f79fb823",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:37:46.735Z",
+            "metadata": {
+              "date": "2025-06-19T12:30:00.0000000",
+              "duration": 99.314,
+              "isRecurring": true,
+              "totalReports": 4
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:37:12.407Z",
       "userId": "pradeepg@m365x92504196.onmicrosoft.com"
     },
     {
@@ -1943,6 +2076,3224 @@
       },
       "lastProcessed": "2025-06-18T16:12:30.601Z",
       "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxiYpw==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3a_NZmrAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8wAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHzAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:36:48.570Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxjmPg==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3a_NZmrAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB_wAAEA==",
+      "categories": [],
+      "subject": "Demo2",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 295 038 818 623 2\r\nPasscode: RU2yP66r\r\n________________________________\r\nDial in by phone\r\n+91 22 6259 09",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwH7AAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T13:22:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T13:52:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "prabhjot",
+          "address": "prabhjot@M365x92504196.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22eff742b5-e3cd-4419-b5ef-23af6dfa06e3%22%7d",
+        "conferenceId": "190135437",
+        "tollNumber": "+91 22 6259 0936"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:20:36.325Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxiWUg==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3a_NZmrAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8AAAEA==",
+      "categories": [],
+      "subject": "Recurring Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 410 159 670 8\r\nPasscode: DC78TS3H\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHwAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T12:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T13:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "484573162",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:36:56.365Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxjmwA==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwH8AAA=",
+      "categories": [],
+      "subject": "HR MEETUP",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 256 229 635 484 1\r\nPasscode: MR6ZW9tu\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T15:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T16:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDY4MjFkNDgtOWNhOC00ZWMyLTkwMzktYjYzZDgzNzg2MmEw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "827701083",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 365,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:44.6901173Z",
+                "leaveDateTime": "2025-06-19T10:13:50.0626864Z",
+                "durationInSeconds": 365
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 359,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:53.2626333Z",
+                "leaveDateTime": "2025-06-19T10:13:52.3048972Z",
+                "durationInSeconds": 359
+              }
+            ]
+          },
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 356,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:00.6069909Z",
+                "leaveDateTime": "2025-06-19T10:13:56.9314162Z",
+                "durationInSeconds": 356
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 354,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:05.7243391Z",
+                "leaveDateTime": "2025-06-19T10:14:00.516314Z",
+                "durationInSeconds": 354
+              }
+            ]
+          },
+          {
+            "name": "prabhjot",
+            "email": "prabhjot@M365x92504196.onmicrosoft.com",
+            "duration": 17,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:31.2502937Z",
+                "leaveDateTime": "2025-06-19T10:08:48.6038094Z",
+                "durationInSeconds": 17
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1451,
+          "averageDuration": 290.2,
+          "totalParticipants": 5
+        },
+        "reportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+        "allValidReports": [
+          {
+            "selectedReportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T15:30:00.0000000",
+              "duration": 379.162,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:20:44.612Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxjmPg==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3a7EPAEAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB_wAAEA==",
+      "categories": [],
+      "subject": "Demo2",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 295 038 818 623 2\r\nPasscode: RU2yP66r\r\n________________________________\r\nDial in by phone\r\n+91 22 6259 09",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwH7AAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T13:22:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T13:52:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "prabhjot",
+          "address": "prabhjot@M365x92504196.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22eff742b5-e3cd-4419-b5ef-23af6dfa06e3%22%7d",
+        "conferenceId": "190135437",
+        "tollNumber": "+91 22 6259 0936"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "prabhjot",
+            "email": "prabhjot@M365x92504196.onmicrosoft.com",
+            "duration": 76,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T07:52:35.9070444Z",
+                "leaveDateTime": "2025-06-19T07:53:52.0884917Z",
+                "durationInSeconds": 76
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 76,
+          "averageDuration": 76,
+          "totalParticipants": 1
+        },
+        "reportId": "1ecbbd5a-4f38-420d-ad97-2d35dbee67f7",
+        "allValidReports": [
+          {
+            "selectedReportId": "1ecbbd5a-4f38-420d-ad97-2d35dbee67f7",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T13:22:00.0000000",
+              "duration": 80.639,
+              "isRecurring": true,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:20:53.402Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAKxjifw==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwH6AAA=",
+      "categories": [],
+      "subject": "TestDemo",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 216 358 938 002 2\r\nPasscode: td7ZL9De\r\n________________________________\r\nDial in by phone\r\n+91 22 6259 09",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T11:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T11:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "prabhjot",
+          "address": "prabhjot@M365x92504196.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NGEyNjFhYjYtNzAxMi00NGMxLWJhMzgtODYwOTBhMTk4MjVk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22eff742b5-e3cd-4419-b5ef-23af6dfa06e3%22%7d",
+        "conferenceId": "670378639",
+        "tollNumber": "+91 22 6259 0936"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 63,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T07:40:59.2853015Z",
+                "leaveDateTime": "2025-06-19T07:42:02.8719859Z",
+                "durationInSeconds": 63
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 63,
+          "averageDuration": 63,
+          "totalParticipants": 1
+        },
+        "reportId": "53aa32ad-5c02-4c43-bf46-237205386c72",
+        "allValidReports": [
+          {
+            "selectedReportId": "53aa32ad-5c02-4c43-bf46-237205386c72",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T07:40:46.242Z",
+            "metadata": {
+              "date": "2025-06-19T11:00:00.0000000",
+              "duration": 76.629,
+              "isRecurring": false,
+              "totalReports": 2
+            }
+          },
+          {
+            "selectedReportId": "4c29da2c-681a-4e9b-a094-b27925c263fa",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T07:36:27.381Z",
+            "metadata": {
+              "date": "2025-06-19T11:00:00.0000000",
+              "duration": 90.05,
+              "isRecurring": false,
+              "totalReports": 2
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:21:06.724Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKSvpw==\"",
+      "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZAFRAAgI3a_NZmrAAEYAAAAAaxZak218Zk_xO1MvOdevrQcA_oUGcruqT0O9Lg_2ALvO6QAAAAABDQAA_oUGcruqT0O9Lg_2ALvO6QAAKKh4EAAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgQAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:37:20.791Z",
+      "userId": "neha@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKStbA==\"",
+      "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZAFRAAgI3a_NZmrAAEYAAAAAaxZak218Zk_xO1MvOdevrQcA_oUGcruqT0O9Lg_2ALvO6QAAAAABDQAA_oUGcruqT0O9Lg_2ALvO6QAAKKh4DQAAEA==",
+      "categories": [],
+      "subject": "Recurring Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 410 159 670 8\r\nPasscode: DC78TS3H\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgNAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T12:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T13:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "484573162",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:37:26.816Z",
+      "userId": "neha@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAK6FYbg==\"",
+      "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAArpkzHAAA=",
+      "categories": [],
+      "subject": "HR MEETUP",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 256 229 635 484 1\r\nPasscode: MR6ZW9tu\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T15:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T16:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDY4MjFkNDgtOWNhOC00ZWMyLTkwMzktYjYzZDgzNzg2MmEw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "827701083",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 365,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:44.6901173Z",
+                "leaveDateTime": "2025-06-19T10:13:50.0626864Z",
+                "durationInSeconds": 365
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 359,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:53.2626333Z",
+                "leaveDateTime": "2025-06-19T10:13:52.3048972Z",
+                "durationInSeconds": 359
+              }
+            ]
+          },
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 356,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:00.6069909Z",
+                "leaveDateTime": "2025-06-19T10:13:56.9314162Z",
+                "durationInSeconds": 356
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 354,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:05.7243391Z",
+                "leaveDateTime": "2025-06-19T10:14:00.516314Z",
+                "durationInSeconds": 354
+              }
+            ]
+          },
+          {
+            "name": "prabhjot",
+            "email": "prabhjot@M365x92504196.onmicrosoft.com",
+            "duration": 17,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:31.2502937Z",
+                "leaveDateTime": "2025-06-19T10:08:48.6038094Z",
+                "durationInSeconds": 17
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1451,
+          "averageDuration": 290.2,
+          "totalParticipants": 5
+        },
+        "reportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+        "allValidReports": [
+          {
+            "selectedReportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T15:30:00.0000000",
+              "duration": 379.162,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:25:29.534Z",
+      "userId": "neha@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKSvpw==\"",
+      "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZAFRAAgI3a7EPAEAAEYAAAAAaxZak218Zk_xO1MvOdevrQcA_oUGcruqT0O9Lg_2ALvO6QAAAAABDQAA_oUGcruqT0O9Lg_2ALvO6QAAKKh4EAAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgQAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 334,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:51:44.4164459Z",
+                "leaveDateTime": "2025-06-19T09:57:19.3214495Z",
+                "durationInSeconds": 334
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 249,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:50:17.2572916Z",
+                "leaveDateTime": "2025-06-19T09:54:26.2893369Z",
+                "durationInSeconds": 249
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 332,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:56:06.1623894Z",
+                "leaveDateTime": "2025-06-19T10:01:38.1760096Z",
+                "durationInSeconds": 332
+              }
+            ]
+          },
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 523,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:57:43.8183579Z",
+                "leaveDateTime": "2025-06-19T10:06:27.2660361Z",
+                "durationInSeconds": 523
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1438,
+          "averageDuration": 359.5,
+          "totalParticipants": 4
+        },
+        "reportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+        "allValidReports": [
+          {
+            "selectedReportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:50:13.506Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 973.76,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          },
+          {
+            "selectedReportId": "4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:36:23.365Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 206.056,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:25:35.229Z",
+      "userId": "neha@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKStbA==\"",
+      "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZAFRAAgI3a7EPAEAAEYAAAAAaxZak218Zk_xO1MvOdevrQcA_oUGcruqT0O9Lg_2ALvO6QAAAAABDQAA_oUGcruqT0O9Lg_2ALvO6QAAKKh4DQAAEA==",
+      "categories": [],
+      "subject": "Recurring Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 410 159 670 8\r\nPasscode: DC78TS3H\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgNAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T12:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T13:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "484573162",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 111,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:48:12.7222954Z",
+                "leaveDateTime": "2025-06-19T09:50:03.8753935Z",
+                "durationInSeconds": 111
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 111,
+          "averageDuration": 111,
+          "totalParticipants": 1
+        },
+        "reportId": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+        "allValidReports": [
+          {
+            "selectedReportId": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:47:54.305Z",
+            "metadata": {
+              "date": "2025-06-19T12:30:00.0000000",
+              "duration": 129.57,
+              "isRecurring": true,
+              "totalReports": 4
+            }
+          },
+          {
+            "selectedReportId": "0e5136c7-1d35-4f8f-88ce-29b6f79fb823",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:37:46.735Z",
+            "metadata": {
+              "date": "2025-06-19T12:30:00.0000000",
+              "duration": 99.314,
+              "isRecurring": true,
+              "totalReports": 4
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:37:37.433Z",
+      "userId": "neha@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"+oUGcruqT0O9Lg+2ALvO6QAAKKS3cw==\"",
+      "id": "AAMkADY0NjEwZTYzLTA4ZGItNDNiYi1hNzUyLTczMjIxNmM2MzU0ZABGAAAAAABrFlqTbXxmT7E7Uy8516_tBwD6hQZyu6pPQ70uD7YAu87pAAAAAAENAAD6hQZyu6pPQ70uD7YAu87pAAAoqHgXAAA=",
+      "categories": [],
+      "subject": "Test Meet",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 279 394 321 694 3\r\nPasscode: JA22CU6E\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T00:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T00:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Neha",
+          "address": "Neha@M365x92504196.onmicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_M2UzYjY5Y2MtM2I5MC00YzY5LWJmOTItNGJhMjVmMTMzNmE2%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%226bb5911c-640d-4764-8949-e4a9381131aa%22%7d",
+        "conferenceId": "328459507",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 154,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-18T18:58:16.0849092Z",
+                "leaveDateTime": "2025-06-18T19:00:50.6932836Z",
+                "durationInSeconds": 154
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 154,
+          "averageDuration": 154,
+          "totalParticipants": 1
+        },
+        "reportId": "907f13c5-dbb3-4775-92b2-8d466180cf47",
+        "allValidReports": [
+          {
+            "selectedReportId": "907f13c5-dbb3-4775-92b2-8d466180cf47",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T00:00:00.0000000",
+              "duration": 157.8,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:26:24.131Z",
+      "userId": "neha@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAALDJcIg==\"",
+      "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3a_NZmrAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAALD7xGgAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAsPvEaAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:37:41.782Z",
+      "userId": "debrab@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAALDmQLQ==\"",
+      "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAsRkVhAAA=",
+      "categories": [],
+      "subject": "Project Team Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 227 883 652 825 3\r\nPasscode: p6ZQ696p\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T20:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T22:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lidia Holloway",
+            "address": "LidiaH@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Adele Vance",
+            "address": "AdeleV@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lynne Robbins",
+            "address": "LynneR@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Isaiah Langer",
+            "address": "IsaiahL@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Christie Cline",
+            "address": "ChristieC@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZTAyMTZhNzMtMDljZC00NDEzLTk2MzUtZGIzZDRiNWFkYjM1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%220a46ba91-dce8-4114-8cdc-4f09947eee7e%22%7d",
+        "conferenceId": "752918511",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 1278,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:15:25.7759207Z",
+                "leaveDateTime": "2025-06-19T10:36:43.8845818Z",
+                "durationInSeconds": 1278
+              }
+            ]
+          },
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 1156,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:17:16.358115Z",
+                "leaveDateTime": "2025-06-19T10:36:33.2744987Z",
+                "durationInSeconds": 1156
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 2434,
+          "averageDuration": 1217,
+          "totalParticipants": 2
+        },
+        "reportId": "b1854ba9-d7c7-4dbe-aefb-dffa4fbdb8b8",
+        "allValidReports": [
+          {
+            "selectedReportId": "b1854ba9-d7c7-4dbe-aefb-dffa4fbdb8b8",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T20:30:00.0000000",
+              "duration": 1280.578,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:27:02.109Z",
+      "userId": "debrab@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAALDmUTQ==\"",
+      "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAsRkViAAA=",
+      "categories": [],
+      "subject": "Future Meet",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 250 224 930 615\r\nPasscode: E86FJ2Nt\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T18:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T18:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjIzNTdlODYtODc4Zi00OWEzLTg1OTItY2E1OTgzMDAxZmQ5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%220a46ba91-dce8-4114-8cdc-4f09947eee7e%22%7d",
+        "conferenceId": "424960722",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 69,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:57:52.713941Z",
+                "leaveDateTime": "2025-06-19T10:59:02.505982Z",
+                "durationInSeconds": 69
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 69,
+          "averageDuration": 69,
+          "totalParticipants": 1
+        },
+        "reportId": "11dfc1b8-efca-40fe-9823-c83395b6a499",
+        "allValidReports": [
+          {
+            "selectedReportId": "11dfc1b8-efca-40fe-9823-c83395b6a499",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T18:00:00.0000000",
+              "duration": 72.846,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:27:06.614Z",
+      "userId": "debrab@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAALDmMqA==\"",
+      "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAsRkVgAAA=",
+      "categories": [],
+      "subject": "HR MEETUP",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 256 229 635 484 1\r\nPasscode: MR6ZW9tu\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T15:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T16:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDY4MjFkNDgtOWNhOC00ZWMyLTkwMzktYjYzZDgzNzg2MmEw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "827701083",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 365,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:44.6901173Z",
+                "leaveDateTime": "2025-06-19T10:13:50.0626864Z",
+                "durationInSeconds": 365
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 359,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:53.2626333Z",
+                "leaveDateTime": "2025-06-19T10:13:52.3048972Z",
+                "durationInSeconds": 359
+              }
+            ]
+          },
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 356,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:00.6069909Z",
+                "leaveDateTime": "2025-06-19T10:13:56.9314162Z",
+                "durationInSeconds": 356
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 354,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:05.7243391Z",
+                "leaveDateTime": "2025-06-19T10:14:00.516314Z",
+                "durationInSeconds": 354
+              }
+            ]
+          },
+          {
+            "name": "prabhjot",
+            "email": "prabhjot@M365x92504196.onmicrosoft.com",
+            "duration": 17,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:31.2502937Z",
+                "leaveDateTime": "2025-06-19T10:08:48.6038094Z",
+                "durationInSeconds": 17
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1451,
+          "averageDuration": 290.2,
+          "totalParticipants": 5
+        },
+        "reportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+        "allValidReports": [
+          {
+            "selectedReportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T15:30:00.0000000",
+              "duration": 379.162,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:27:10.083Z",
+      "userId": "debrab@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"c1GImMu9N0+5TBKtnfYrxgAALDJcIg==\"",
+      "id": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwFRAAgI3a7EPAEAAEYAAAAAhEoAfA7WyUW0_QhTTcgLrAcAc1GImMu9N0_5TBKtnfYrxgAAAAABDQAAc1GImMu9N0_5TBKtnfYrxgAALD7xGgAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkAGU4ZTUwM2UxLWE2ZmYtNDEyYi04YjMxLTE4ZDVjOWJjYTU1NwBGAAAAAACESgB8DtbJRbT5CFNNyAusBwBzUYiYy703T7lMEq2d9ivGAAAAAAENAABzUYiYy703T7lMEq2d9ivGAAAsPvEaAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 334,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:51:44.4164459Z",
+                "leaveDateTime": "2025-06-19T09:57:19.3214495Z",
+                "durationInSeconds": 334
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 249,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:50:17.2572916Z",
+                "leaveDateTime": "2025-06-19T09:54:26.2893369Z",
+                "durationInSeconds": 249
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 332,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:56:06.1623894Z",
+                "leaveDateTime": "2025-06-19T10:01:38.1760096Z",
+                "durationInSeconds": 332
+              }
+            ]
+          },
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 523,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:57:43.8183579Z",
+                "leaveDateTime": "2025-06-19T10:06:27.2660361Z",
+                "durationInSeconds": 523
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1438,
+          "averageDuration": 359.5,
+          "totalParticipants": 4
+        },
+        "reportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+        "allValidReports": [
+          {
+            "selectedReportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:50:13.506Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 973.76,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          },
+          {
+            "selectedReportId": "4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:36:23.365Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 206.056,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:27:13.912Z",
+      "userId": "debrab@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp9a3Q==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a_NZmrAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAMpNmhgAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAyk2aGAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:38:15.395Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp9Fng==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a_NZmrAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAMpNmgwAAEA==",
+      "categories": [],
+      "subject": "Recurring Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 410 159 670 8\r\nPasscode: DC78TS3H\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAyk2aDAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T12:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T13:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "484573162",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:38:22.044Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAAAIzpg==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a7EPAEAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAAAI6VgAAEA==",
+      "categories": [
+        "Red Category"
+      ],
+      "subject": "Project Tailspin",
+      "bodyPreview": "",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAAAjpWAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T03:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T05:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lidia Holloway",
+            "address": "LidiaH@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Adele Vance",
+            "address": "AdeleV@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lynne Robbins",
+            "address": "LynneR@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Isaiah Langer",
+            "address": "IsaiahL@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": null,
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:27:51.998Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAAAI0Bw==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a7EPAEAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAAAI6UQAAEA==",
+      "categories": [
+        "Green Category"
+      ],
+      "subject": "Weekly Marketing Lunch",
+      "bodyPreview": "When: Occurs every Thursday from 12:00 PM to 1:00 PM effective 2/9/2012. (UTC-08:00) Pacific Time (US & Canada)\r\nWhere: TBD\r\n\r\n*~*~*~*~*~*~*~*~*~*",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAAAjpRAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-20T00:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-20T01:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Adele Vance",
+            "address": "AdeleV@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lidia Holloway",
+            "address": "LidiaH@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Isaiah Langer",
+            "address": "IsaiahL@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lynne Robbins",
+            "address": "LynneR@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": null,
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:27:53.980Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAAAI0DA==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a7EPAEAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAAAI6UwAAEA==",
+      "categories": [],
+      "subject": "Tailspin Project Discussion",
+      "bodyPreview": "When: Occurs every Thursday from 10:00 AM to 11:00 AM effective 2/9/2012. (UTC-08:00) Pacific Time (US & Canada)\r\nWhere: My Office\r\n\r\n*~*~*~*~*~*~*~*~*~*",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAAAjpTAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T22:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T23:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Isaiah Langer",
+            "address": "IsaiahL@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": null,
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:27:56.092Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp/vnQ==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a7EPAEAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAAAI6VAAAEA==",
+      "categories": [],
+      "subject": "Project Team Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 227 883 652 825 3\r\nPasscode: p6ZQ696p\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAAAjpUAAA=",
+      "type": "exception",
+      "start": {
+        "dateTime": "2025-06-19T20:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T22:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lidia Holloway",
+            "address": "LidiaH@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Adele Vance",
+            "address": "AdeleV@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Lynne Robbins",
+            "address": "LynneR@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Isaiah Langer",
+            "address": "IsaiahL@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Christie Cline",
+            "address": "ChristieC@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZTAyMTZhNzMtMDljZC00NDEzLTk2MzUtZGIzZDRiNWFkYjM1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%220a46ba91-dce8-4114-8cdc-4f09947eee7e%22%7d",
+        "conferenceId": "752918511",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 1278,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:15:25.7759207Z",
+                "leaveDateTime": "2025-06-19T10:36:43.8845818Z",
+                "durationInSeconds": 1278
+              }
+            ]
+          },
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 1156,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:17:16.358115Z",
+                "leaveDateTime": "2025-06-19T10:36:33.2744987Z",
+                "durationInSeconds": 1156
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 2434,
+          "averageDuration": 1217,
+          "totalParticipants": 2
+        },
+        "reportId": "b1854ba9-d7c7-4dbe-aefb-dffa4fbdb8b8",
+        "allValidReports": [
+          {
+            "selectedReportId": "b1854ba9-d7c7-4dbe-aefb-dffa4fbdb8b8",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T20:30:00.0000000",
+              "duration": 1280.578,
+              "isRecurring": true,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:29:22.171Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp/+7Q==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAyk2aOAAA=",
+      "categories": [],
+      "subject": "Future Meet",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 250 224 930 615\r\nPasscode: E86FJ2Nt\r\n________________________________\r\nDial in by phone\r\n+1 323-618-1840,",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T18:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T18:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjIzNTdlODYtODc4Zi00OWEzLTg1OTItY2E1OTgzMDAxZmQ5%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%220a46ba91-dce8-4114-8cdc-4f09947eee7e%22%7d",
+        "conferenceId": "424960722",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 69,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:57:52.713941Z",
+                "leaveDateTime": "2025-06-19T10:59:02.505982Z",
+                "durationInSeconds": 69
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 69,
+          "averageDuration": 69,
+          "totalParticipants": 1
+        },
+        "reportId": "11dfc1b8-efca-40fe-9823-c83395b6a499",
+        "allValidReports": [
+          {
+            "selectedReportId": "11dfc1b8-efca-40fe-9823-c83395b6a499",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T18:00:00.0000000",
+              "duration": 72.846,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:29:25.512Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp/vTQ==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAyk2aNAAA=",
+      "categories": [],
+      "subject": "HR MEETUP",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 256 229 635 484 1\r\nPasscode: MR6ZW9tu\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-19T15:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T16:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "prabhjot",
+            "address": "prabhjot@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDY4MjFkNDgtOWNhOC00ZWMyLTkwMzktYjYzZDgzNzg2MmEw%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "827701083",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-19",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 365,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:44.6901173Z",
+                "leaveDateTime": "2025-06-19T10:13:50.0626864Z",
+                "durationInSeconds": 365
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 359,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:07:53.2626333Z",
+                "leaveDateTime": "2025-06-19T10:13:52.3048972Z",
+                "durationInSeconds": 359
+              }
+            ]
+          },
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 356,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:00.6069909Z",
+                "leaveDateTime": "2025-06-19T10:13:56.9314162Z",
+                "durationInSeconds": 356
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 354,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:05.7243391Z",
+                "leaveDateTime": "2025-06-19T10:14:00.516314Z",
+                "durationInSeconds": 354
+              }
+            ]
+          },
+          {
+            "name": "prabhjot",
+            "email": "prabhjot@M365x92504196.onmicrosoft.com",
+            "duration": 17,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T10:08:31.2502937Z",
+                "leaveDateTime": "2025-06-19T10:08:48.6038094Z",
+                "durationInSeconds": 17
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1451,
+          "averageDuration": 290.2,
+          "totalParticipants": 5
+        },
+        "reportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+        "allValidReports": [
+          {
+            "selectedReportId": "4777c063-4eef-4b05-b042-7e20b5fac6c9",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-19T15:30:00.0000000",
+              "duration": 379.162,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:29:29.573Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp9a3Q==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a7EPAEAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAMpNmhgAAEA==",
+      "categories": [],
+      "subject": "AI Integration Strategy Session",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAyk2aGAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T14:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T14:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Debra Berger",
+            "address": "DebraB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Debra Berger",
+          "address": "DebraB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+        "conferenceId": "17390033",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Debra Berger",
+            "email": "DebraB@M365x92504196.OnMicrosoft.com",
+            "duration": 334,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:51:44.4164459Z",
+                "leaveDateTime": "2025-06-19T09:57:19.3214495Z",
+                "durationInSeconds": 334
+              }
+            ]
+          },
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 249,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:50:17.2572916Z",
+                "leaveDateTime": "2025-06-19T09:54:26.2893369Z",
+                "durationInSeconds": 249
+              }
+            ]
+          },
+          {
+            "name": "Neha",
+            "email": "Neha@M365x92504196.onmicrosoft.com",
+            "duration": 332,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:56:06.1623894Z",
+                "leaveDateTime": "2025-06-19T10:01:38.1760096Z",
+                "durationInSeconds": 332
+              }
+            ]
+          },
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 523,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:57:43.8183579Z",
+                "leaveDateTime": "2025-06-19T10:06:27.2660361Z",
+                "durationInSeconds": 523
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 1438,
+          "averageDuration": 359.5,
+          "totalParticipants": 4
+        },
+        "reportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+        "allValidReports": [
+          {
+            "selectedReportId": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:50:13.506Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 973.76,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          },
+          {
+            "selectedReportId": "4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:36:23.365Z",
+            "metadata": {
+              "date": "2025-06-19T14:00:00.0000000",
+              "duration": 206.056,
+              "isRecurring": true,
+              "totalReports": 2
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:29:32.773Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAMp9Fng==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a7EPAEAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAMpNmgwAAEA==",
+      "categories": [],
+      "subject": "Recurring Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 410 159 670 8\r\nPasscode: DC78TS3H\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAyk2aDAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-19T12:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-19T13:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Neha",
+            "address": "Neha@M365x92504196.onmicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "484573162",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 111,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-19T09:48:12.7222954Z",
+                "leaveDateTime": "2025-06-19T09:50:03.8753935Z",
+                "durationInSeconds": 111
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 111,
+          "averageDuration": 111,
+          "totalParticipants": 1
+        },
+        "reportId": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+        "allValidReports": [
+          {
+            "selectedReportId": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-19T09:47:54.305Z",
+            "metadata": {
+              "date": "2025-06-19T12:30:00.0000000",
+              "duration": 129.57,
+              "isRecurring": true,
+              "totalReports": 4
+            }
+          },
+          {
+            "selectedReportId": "0e5136c7-1d35-4f8f-88ce-29b6f79fb823",
+            "confidence": 1,
+            "reason": "Valid report instance from 2025-06-18T18:37:46.735Z",
+            "metadata": {
+              "date": "2025-06-19T12:30:00.0000000",
+              "duration": 99.314,
+              "isRecurring": true,
+              "totalReports": 4
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-19T12:38:45.073Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"0qxidKFHmEyQQrmHOmtaZgAAAAI0Dw==\"",
+      "id": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQFRAAgI3a37EZdAAEYAAAAAIP9LNyz_GUqEGuk76Gq4ogcA0qxidKFHmEyQQrmHOmtaZgAAAAABDQAA0qxidKFHmEyQQrmHOmtaZgAAAAI6VQAAEA==",
+      "categories": [
+        "Blue Category"
+      ],
+      "subject": "Company Meeting",
+      "bodyPreview": "When: Occurs every Wednesday from 8:30 AM to 11:00 AM effective 2/8/2012. (UTC-08:00) Pacific Time (US & Canada)\r\n\r\n*~*~*~*~*~*~*~*~*~*",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": "AAMkADEyZTgzZjc2LTdmZmYtNDExNi1hNDVlLTMyMjMzYmM3Y2UyZQBGAAAAAAAg-0s3LP4ZSoQa6TvoariiBwDSrGJ0oUeYTJBCuYc6a1pmAAAAAAENAADSrGJ0oUeYTJBCuYc6a1pmAAAAAjpVAAA=",
+      "type": "occurrence",
+      "start": {
+        "dateTime": "2025-06-18T21:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-18T23:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Christie Cline",
+            "address": "ChristieC@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "All Employees",
+            "address": "Employees@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": null,
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "lastProcessed": "2025-06-19T12:31:05.593Z",
+      "userId": "meganb@m365x92504196.onmicrosoft.com"
     }
   ]
 }

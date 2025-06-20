@@ -36,88 +36,11 @@ export function convertLocalDateToUTC(date: Date, timeString: string): Date {
   return new Date(new Date(localDateString).toLocaleString('en-US', { timeZone: userTimezone }));
 }
 
-// Convert date range to UTC times for Graph API
+// Convert date range to UTC times for Graph API - now delegating to timezone utilities
 export function convertDateRangeToUTC(dateRange: DateRange | undefined) {
-  if (!dateRange?.from || !dateRange?.to) return null;
-
-  try {
-    // Always use IST timezone for business logic, regardless of system timezone
-    // This ensures consistent behavior for all users of this IST-focused application
-    
-    const startDate = new Date(dateRange.from);
-    const endDate = new Date(dateRange.to);
-    
-    // Get the calendar date components (year, month, day) from the selected dates
-    const startYear = startDate.getFullYear();
-    const startMonth = startDate.getMonth();
-    const startDay = startDate.getDate();
-    
-    const endYear = endDate.getFullYear();
-    const endMonth = endDate.getMonth();
-    const endDay = endDate.getDate();
-    
-    // Create IST date strings for the start and end of the selected days
-    // IST is UTC+5:30, so we need to create dates that represent the IST day
-    const startIST = new Date(`${startYear}-${String(startMonth + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}T00:00:00+05:30`);
-    const endIST = new Date(`${endYear}-${String(endMonth + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}T23:59:59.999+05:30`);
-    
-    // Convert to UTC (the +05:30 offset is automatically handled by the Date constructor)
-    const startUTC = startIST;
-    const endUTC = endIST;
-
-    console.log('IST-fixed date range conversion:', {
-      inputDates: {
-        from: dateRange.from.toISOString(),
-        to: dateRange.to.toISOString(),
-        fromLocal: dateRange.from.toLocaleDateString(),
-        toLocal: dateRange.to.toLocaleDateString()
-      },
-      calendarDates: {
-        startCalendar: `${startYear}-${String(startMonth + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}`,
-        endCalendar: `${endYear}-${String(endMonth + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}`
-      },
-      istRange: {
-        startIST: `${startYear}-${String(startMonth + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}T00:00:00+05:30`,
-        endIST: `${endYear}-${String(endMonth + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}T23:59:59.999+05:30`
-      },
-      utcRange: {
-        start: startUTC.toISOString(),
-        end: endUTC.toISOString()
-      },
-      explanation: 'Fixed IST timezone handling: Calendar dates always converted to IST day range in UTC terms'
-    });
-
-    return {
-      start: startUTC.toISOString(),
-      end: endUTC.toISOString(),
-      timezone: IST_TIMEZONE
-    };
-  } catch (error) {
-    console.error('Error in date range conversion:', error);
-    
-    // Fallback method - use UTC dates
-    const startDate = new Date(dateRange.from);
-    const endDate = new Date(dateRange.to);
-    
-    const startUTC = new Date(Date.UTC(
-      startDate.getFullYear(), 
-      startDate.getMonth(), 
-      startDate.getDate(), 
-      0, 0, 0, 0
-    ));
-    const endUTC = new Date(Date.UTC(
-      endDate.getFullYear(), 
-      endDate.getMonth(), 
-      endDate.getDate(), 
-      23, 59, 59, 999
-    ));
-    
-    return {
-      start: startUTC.toISOString(),
-      end: endUTC.toISOString(),
-      timezone: 'UTC'
-    };
-  }
+  // Use the proper timezone utility that fixes the IST conversion issues
+  const { convertDateRangeToUTC: convertDateRangeToUTCNew } = require('./timezone-utils');
+  return convertDateRangeToUTCNew(dateRange);
 }
 
 // Format date with specific timezone

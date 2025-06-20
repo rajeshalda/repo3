@@ -958,37 +958,18 @@ export default function DashboardPage() {
                                         timeZone: 'Asia/Kolkata'
                                       })}</div>
                                       <div className="text-muted-foreground">
-                                        {item.record && item.record.intervals && item.record.intervals.length > 0 ? (
-                                          // If there's a record with intervals, show the first interval's time
-                                          <>
-                                            {new Date(item.record.intervals[0].joinDateTime).toLocaleTimeString([], { 
-                                              hour: 'numeric',
-                                              minute: '2-digit',
-                                              hour12: true,
-                                              timeZone: 'Asia/Kolkata'
-                                            })} - {new Date(item.record.intervals[0].leaveDateTime).toLocaleTimeString([], { 
-                                              hour: 'numeric',
-                                              minute: '2-digit',
-                                              hour12: true,
-                                              timeZone: 'Asia/Kolkata'
-                                            })}
-                                          </>
-                                        ) : (
-                                          // Otherwise show the scheduled meeting time
-                                          <>
-                                            {new Date(item.meeting.startTime).toLocaleTimeString([], { 
-                                              hour: 'numeric',
-                                              minute: '2-digit',
-                                              hour12: true,
-                                              timeZone: 'Asia/Kolkata'
-                                            })} - {new Date(item.meeting.endTime).toLocaleTimeString([], { 
-                                              hour: 'numeric',
-                                              minute: '2-digit',
-                                              hour12: true,
-                                              timeZone: 'Asia/Kolkata'
-                                            })}
-                                          </>
-                                        )}
+                                        {/* Always show the scheduled meeting time, not the actual attendance time */}
+                                        {new Date(item.meeting.startTime).toLocaleTimeString([], { 
+                                          hour: 'numeric',
+                                          minute: '2-digit',
+                                          hour12: true,
+                                          timeZone: 'Asia/Kolkata'
+                                        })} - {new Date(item.meeting.endTime).toLocaleTimeString([], { 
+                                          hour: 'numeric',
+                                          minute: '2-digit',
+                                          hour12: true,
+                                          timeZone: 'Asia/Kolkata'
+                                        })}
                                       </div>
                                     </div>
                                   </TableCell>
