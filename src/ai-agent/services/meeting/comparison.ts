@@ -314,10 +314,51 @@ export class MeetingComparisonService {
     public async filterNewMeetings(meetings: ProcessedMeeting[]): Promise<ProcessedMeeting[]> {
         await this.storage.loadData();
         
+        // First, deduplicate meetings by userId + reportId to prevent processing the same report multiple times
+        const uniqueInputMeetings = meetings.reduce((acc, meeting) => {
+            // For meetings with multiple reports, we need to check each report
+            const allValidReports = meeting.attendance?.allValidReports || [];
+            
+            if (allValidReports.length > 0) {
+                // This meeting has multiple reports - check if we've already processed any of these reports for this user
+                const hasNewReports = allValidReports.some(report => {
+                    const reportKey = `${meeting.userId}_${report.selectedReportId}`;
+                    return !acc.some(existingMeeting => {
+                        const existingReports = existingMeeting.attendance?.allValidReports || [];
+                        return existingReports.some(existingReport => 
+                            `${existingMeeting.userId}_${existingReport.selectedReportId}` === reportKey
+                        );
+                    });
+                });
+                
+                if (hasNewReports) {
+                    acc.push(meeting);
+                } else {
+                    console.log(`🔄 INPUT DEDUP: Skipping meeting "${meeting.subject}" [${meeting.id}] - all reports already processed for user ${meeting.userId}`);
+                }
+            } else {
+                // Single report meeting - use original reportId
+                const reportId = meeting.attendance?.reportId;
+                const reportKey = `${meeting.userId}_${reportId}`;
+                
+                const existingMeeting = acc.find(m => {
+                    const existingReportId = m.attendance?.reportId;
+                    return `${m.userId}_${existingReportId}` === reportKey;
+                });
+                
+                if (!existingMeeting) {
+                    acc.push(meeting);
+                } else {
+                    console.log(`🔄 INPUT DEDUP: Skipping duplicate meeting "${meeting.subject}" [${meeting.id}] - reportId ${reportId} already processed for user ${meeting.userId}`);
+                }
+            }
+            return acc;
+        }, [] as ProcessedMeeting[]);
+
         console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║ 🔍 MEETING FILTER STARTING                                ║
-║ 📊 Total meetings to check: ${meetings.length}                           ║
+║ 📊 Input meetings: ${meetings.length} | After dedup: ${uniqueInputMeetings.length}                    ║
 ║ 🔄 Batch size: 3 | Delay: 15s                        ║
 ╚══════════════════════════════════════════════════════════╝`);
 
@@ -326,10 +367,10 @@ export class MeetingComparisonService {
         let duplicatesCount = 0;
 
         // Process meetings in batches
-        for (let i = 0; i < meetings.length; i += batchSize) {
-            const batch = meetings.slice(i, i + batchSize);
+        for (let i = 0; i < uniqueInputMeetings.length; i += batchSize) {
+            const batch = uniqueInputMeetings.slice(i, i + batchSize);
             const batchNumber = Math.floor(i / batchSize) + 1;
-            const totalBatches = Math.ceil(meetings.length / batchSize);
+            const totalBatches = Math.ceil(uniqueInputMeetings.length / batchSize);
 
             console.log(`
 ┌─────────────────────────────────────────────────┐
@@ -475,7 +516,7 @@ export class MeetingComparisonService {
 └─────────────────────────────────────────────────┘`);
 
             // Add delay between batches if not the last batch
-            if (i + batchSize < meetings.length) {
+            if (i + batchSize < uniqueInputMeetings.length) {
                 await this.delay(this.DELAY_MS);
             }
         }
@@ -483,8 +524,8 @@ export class MeetingComparisonService {
         console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║ 🏁 MEETING FILTER COMPLETED                               ║
-║ 📊 Total: ${meetings.length} | Duplicates: ${duplicatesCount} | Unique: ${uniqueMeetings.length}     ║
-║ 📈 Duplication rate: ${Math.round((duplicatesCount / meetings.length) * 100)}%                                   ║
+║ 📊 Processed: ${uniqueInputMeetings.length} | Duplicates: ${duplicatesCount} | Unique: ${uniqueMeetings.length}     ║
+║ 📈 Duplication rate: ${uniqueInputMeetings.length > 0 ? Math.round((duplicatesCount / uniqueInputMeetings.length) * 100) : 0}%                                   ║
 ╚══════════════════════════════════════════════════════════╝`);
 
         return uniqueMeetings;

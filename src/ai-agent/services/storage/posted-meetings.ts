@@ -89,15 +89,51 @@ export class AIAgentPostedMeetingsStorage {
 
     async isPosted(userId: string, meetingId: string, duration?: number, startTime?: string, reportId?: string): Promise<boolean> {
         try {
-            // If report ID is provided, it's the most reliable way to check for duplicates
+            // First check by report ID if provided
             if (reportId) {
                 console.log(`Checking if meeting with report ID ${reportId} is already posted for user ${userId}`);
-                return database.isMeetingPosted('', userId, reportId); // meeting_id is not needed when report_id is provided
-            } else {
-                // Fallback to meeting ID check if no report ID is available
-                console.log(`No report ID provided, checking if meeting ${meetingId} is posted for user ${userId}`);
-                return database.isMeetingPosted(meetingId, userId);
+                const isReportPosted = database.isMeetingPosted('', userId, reportId);
+                if (isReportPosted) {
+                    return true;
+                }
             }
+            
+            // Additional check for recurring meetings: check by meeting ID to prevent duplicate subjects on same date
+            if (meetingId) {
+                console.log(`Checking if meeting ${meetingId} is already posted for user ${userId}`);
+                const isMeetingPosted = database.isMeetingPosted(meetingId, userId);
+                if (isMeetingPosted) {
+                    console.log(`Meeting ${meetingId} already posted for user ${userId} - preventing duplicate`);
+                    return true;
+                }
+            }
+            
+            // For recurring meetings, also check if we already have a time entry for the same date and similar duration
+            if (startTime && duration) {
+                const meetingDate = new Date(startTime).toISOString().split('T')[0];
+                const userMeetings = database.getMeetingsByUser(userId);
+                
+                for (const existingMeeting of userMeetings) {
+                    try {
+                        const existingTimeEntry = existingMeeting.time_entry ? JSON.parse(existingMeeting.time_entry) : null;
+                        if (existingTimeEntry && existingTimeEntry.date === meetingDate && existingTimeEntry.description) {
+                            const existingDuration = parseFloat(existingTimeEntry.time) * 3600; // Convert hours to seconds
+                            const durationDiff = Math.abs(existingDuration - duration);
+                            
+                            // If we have a meeting on the same date with similar duration (within 2 minutes), consider it a duplicate
+                            if (durationDiff <= 120) {
+                                console.log(`Found similar meeting on ${meetingDate} with duration diff of ${durationDiff}s - preventing duplicate`);
+                                return true;
+                            }
+                        }
+                    } catch (parseError) {
+                        // Skip invalid time entries
+                        continue;
+                    }
+                }
+            }
+            
+            return false;
         } catch (error) {
             console.error('Error checking if meeting is posted:', error);
             return false;

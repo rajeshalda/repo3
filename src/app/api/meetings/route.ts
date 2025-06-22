@@ -175,36 +175,40 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
       totalReports: reportsData.value.length
     });
 
-    // If instanceDate is provided (for recurring meetings), filter the intervals with strict date matching
+    // If instanceDate is provided (for recurring meetings), filter the intervals with IST date matching
     if (instanceDate) {
-      console.log('Filtering attendance records for exact date:', instanceDate);
+      console.log('Filtering attendance records for IST date:', instanceDate);
       
       const filteredRecords = allAttendanceRecords.map(record => {
-        // Filter intervals for EXACT date match only
+        // Filter intervals using IST timezone conversion instead of UTC
         const dateSpecificIntervals = record.attendanceIntervals.filter(interval => {
           const joinTime = new Date(interval.joinDateTime);
-          const intervalDate = joinTime.toISOString().split('T')[0];
           
-          // Only accept EXACT date matches - no timezone tolerance for now
-          const exactDateMatch = intervalDate === instanceDate;
+          // Convert UTC time to IST for proper date comparison
+          const joinTimeIST = new Date(joinTime.getTime() + (5.5 * 60 * 60 * 1000));
+          const intervalDateIST = joinTimeIST.toISOString().split('T')[0];
           
-          console.log('Strict interval comparison:', {
+          // Match against IST date, not UTC date
+          const istDateMatch = intervalDateIST === instanceDate;
+          
+          console.log('IST interval comparison:', {
             email: record.emailAddress,
-            intervalDate,
+            intervalDateUTC: joinTime.toISOString().split('T')[0],
+            intervalDateIST,
             instanceDate,
-            exactDateMatch,
+            istDateMatch,
             joinTime: interval.joinDateTime,
             leaveTime: interval.leaveDateTime
           });
           
-          return exactDateMatch;
+          return istDateMatch;
         });
 
         // Recalculate total duration based on filtered intervals
         const totalDuration = dateSpecificIntervals.reduce((sum, interval) => 
           sum + interval.durationInSeconds, 0);
 
-        console.log('Strictly filtered record:', {
+        console.log('IST filtered record:', {
           email: record.emailAddress,
           originalIntervals: record.attendanceIntervals.length,
           filteredIntervals: dateSpecificIntervals.length,
@@ -220,7 +224,7 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
         };
       });
 
-      // Only return records that have intervals for this exact date
+      // Only return records that have intervals for this exact IST date
       return filteredRecords.filter(record => record.attendanceIntervals.length > 0);
     }
     
@@ -715,6 +719,7 @@ export async function GET(request: Request) {
     // Enhanced date filtering: Include meetings scheduled on the date OR attended on the date
     console.log('🚀 ENHANCED DATE FILTERING - Including scheduled meetings for the date AND attended meetings');
     const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
+        // Use proper timezone utility for meeting scheduled time
         const meetingUTCDate = new Date(meeting.startTime);
         const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
         const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
@@ -722,7 +727,7 @@ export async function GET(request: Request) {
         // Check if meeting is scheduled within the requested date range
         const isScheduledInRange = meetingDateStr >= startISTDate && meetingDateStr <= endISTDate;
         
-        // Check if meeting has attendance within the requested date range
+        // Check if meeting has attendance within the requested date range using proper IST conversion
         let hasAttendanceInRange = false;
         if (meeting.attendanceRecords?.length > 0) {
             const userEmail = session?.user?.email;
@@ -731,12 +736,24 @@ export async function GET(request: Request) {
                     record.email.toLowerCase() === userEmail.toLowerCase()
                 );
                 
-                if (userRecords.length > 0 && userRecords[0].intervals && userRecords[0].intervals.length > 0) {
-                    const joinTime = userRecords[0].intervals[0].joinDateTime;
-                    const joinUTCDate = new Date(joinTime);
-                    const joinISTDate = new Date(joinUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-                    const joinDateStr = joinISTDate.toISOString().split('T')[0];
-                    hasAttendanceInRange = joinDateStr >= startISTDate && joinDateStr <= endISTDate;
+                // Check ALL intervals for any that fall within the IST date range
+                if (userRecords.length > 0) {
+                    for (const record of userRecords) {
+                        if (record.intervals && record.intervals.length > 0) {
+                            for (const interval of record.intervals) {
+                                const joinTime = new Date(interval.joinDateTime);
+                                // Convert to IST using proper timezone conversion
+                                const joinISTDate = new Date(joinTime.getTime() + (5.5 * 60 * 60 * 1000));
+                                const joinDateStr = joinISTDate.toISOString().split('T')[0];
+                                
+                                if (joinDateStr >= startISTDate && joinDateStr <= endISTDate) {
+                                    hasAttendanceInRange = true;
+                                    break;
+                                }
+                            }
+                            if (hasAttendanceInRange) break;
+                        }
+                    }
                 }
             }
         }

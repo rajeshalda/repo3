@@ -1,0 +1,826 @@
+📅 TIMEZONE CONVERSION DEBUG: {
+  inputRange: { from: '2025-06-22T18:30:00.000Z', to: '2025-06-23T18:29:59.999Z' },
+  calendarDates: { startCalendar: '2025-06-23', endCalendar: '2025-06-23' },
+  istDayBoundaries: {
+    startOfDayIST: '2025-06-22T18:30:00.000Z',
+    endOfDayIST: '2025-06-23T18:29:59.999Z'
+  }
+}
+✅ PROPER UTC CONVERSION RESULT: {
+  start: '2025-06-22T18:30:00.000Z',
+  end: '2025-06-23T18:29:59.999Z',
+  timezone: 'Asia/Kolkata',
+  verification: {
+    startUTCBackToIST: '2025-06-23 00:00:00 GMT+5:30',
+    endUTCBackToIST: '2025-06-23 23:59:59 GMT+5:30'
+  }
+}
+🔍 EXTENDED MEETING SEARCH RANGE: {
+  originalStart: '2025-06-22T18:30:00.000Z',
+  extendedStart: '2025-06-21T18:30:00.000Z',
+  endDate: '2025-06-23T18:29:59.999Z',
+  reason: 'Including full previous day meetings for early morning attendance sessions'
+}
+Fetching meetings with date range: {
+  startDate: '2025-06-21T18:30:00.000Z',
+  endDate: '2025-06-23T18:29:59.999Z'
+}
+Fetching from: https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=2025-06-21T18:30:00.000Z&endDateTime=2025-06-23T18:29:59.999Z&$select=id,subject,start,end,onlineMeeting,bodyPreview,organizer,type,seriesMasterId
+Fetched 4 meetings in this batch
+Found recurring meeting instance: {
+  subject: 'Demo2',
+  start: '2025-06-23T07:52:00.0000000',
+  seriesMasterId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwH7AAA=',
+  type: 'occurrence'
+}
+Found recurring meeting instance: {
+  subject: 'AI Integration Strategy Session',
+  start: '2025-06-23T08:30:00.0000000',
+  seriesMasterId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHzAAA=',
+  type: 'occurrence'
+}
+Found recurring meeting instance: {
+  subject: 'Recurring Meeting',
+  start: '2025-06-23T07:00:00.0000000',
+  seriesMasterId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAArKwHwAAA=',
+  type: 'occurrence'
+}
+Total meetings fetched: 4
+Processing meeting: {
+  subject: 'Nokia Meet',
+  start: '2025-06-22T17:30:00.0000000',
+  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAvNe8vAAA=',
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true,
+  isRecurring: false
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 274 251 270 009 0\r\n' +
+    'Passcode: Ln2sk9Fn\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Thread ID: ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+Extracted Meeting Info: {
+  "meetingId": "274251270009",
+  "threadId": "ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy",
+  "organizerId": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 274 251 270 009 0\r\nPasscode: Ln2sk9Fn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAvNe8vAAA=
+Attempting to fetch attendance with: {
+  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
+  threadId: 'ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy',
+  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAvNe8vAAA=',
+  formattedString: '1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_ZjJmZjdiYzctYmVkNi00ODJiLWFhMTYtODFiZmMyYzA0MzUy@thread.v2',
+  base64MeetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakptWmpkaVl6Y3RZbVZrTmkwME9ESmlMV0ZoTVRZdE9ERmlabU15WXpBME16VXlAdGhyZWFkLnYy',
+  isRecurring: false,
+  isMultiDayRange: false,
+  startViewingDate: '2025-06-23',
+  endViewingDate: '2025-06-23',
+  instanceDate: undefined
+}
+Fetching attendance for meeting: {
+  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
+  meetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakptWmpkaVl6Y3RZbVZrTmkwME9ESmlMV0ZoTVRZdE9ERmlabU15WXpBME16VXlAdGhyZWFkLnYy',
+  instanceDate: undefined
+}
+Processing meeting: {
+  subject: 'Demo2',
+  start: '2025-06-23T07:52:00.0000000',
+  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB_wAAEA==',
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true,
+  isRecurring: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22eff742b5-e3cd-4419-b5ef-23af6dfa06e3%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 295 038 818 623 2\r\n' +
+    'Passcode: RU2yP66r\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+91 22 6259 09'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"eff742b5-e3cd-4419-b5ef-23af6dfa06e3"}
+Extracted Thread ID: MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1
+Extracted Organizer ID: eff742b5-e3cd-4419-b5ef-23af6dfa06e3
+Extracted Meeting Info: {
+  "meetingId": "295038818623",
+  "threadId": "MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1",
+  "organizerId": "eff742b5-e3cd-4419-b5ef-23af6dfa06e3",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22eff742b5-e3cd-4419-b5ef-23af6dfa06e3%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 295 038 818 623 2\r\nPasscode: RU2yP66r\r\n________________________________\r\nDial in by phone\r\n+91 22 6259 09"
+}
+Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB_wAAEA==   
+Setting instance date for recurring meeting: {
+  meetingSubject: 'Demo2',
+  meetingUTCTime: '2025-06-23T07:52:00.000Z',
+  meetingISTTime: '2025-06-23T13:22:00.000Z',
+  instanceDateForFiltering: '2025-06-23'
+}
+Attempting to fetch attendance with: {
+  organizerId: 'eff742b5-e3cd-4419-b5ef-23af6dfa06e3',
+  threadId: 'MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1',
+  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB_wAAEA==',
+  formattedString: '1*eff742b5-e3cd-4419-b5ef-23af6dfa06e3*0**19:meeting_MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1@thread.v2',
+  base64MeetingId: 'MSplZmY3NDJiNS1lM2NkLTQ0MTktYjVlZi0yM2FmNmRmYTA2ZTMqMCoqMTk6bWVldGluZ19NbUUxWXpSaU5XRXRZVE0zTkMwMFpXSmxMV0kzTVdFdE1URm1ZVFk1TUdVNE5qWTFAdGhyZWFkLnYy',
+  isRecurring: true,
+  isMultiDayRange: false,
+  startViewingDate: '2025-06-23',
+  endViewingDate: '2025-06-23',
+  instanceDate: '2025-06-23'
+}
+Fetching attendance for meeting: {
+  organizerId: 'eff742b5-e3cd-4419-b5ef-23af6dfa06e3',
+  meetingId: 'MSplZmY3NDJiNS1lM2NkLTQ0MTktYjVlZi0yM2FmNmRmYTA2ZTMqMCoqMTk6bWVldGluZ19NbUUxWXpSaU5XRXRZVE0zTkMwMFpXSmxMV0kzTVdFdE1URm1ZVFk1TUdVNE5qWTFAdGhyZWFkLnYy',
+  instanceDate: '2025-06-23'
+}
+Processing meeting: {
+  subject: 'AI Integration Strategy Session',
+  start: '2025-06-23T08:30:00.0000000',
+  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8wAAEA==',
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true,
+  isRecurring: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 217 055 072 025 8\r\n' +
+    'Passcode: NR3on3Tn\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"413c1c34-3d3c-4196-90df-ddc0088bef0c"}
+Extracted Thread ID: Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk
+Extracted Organizer ID: 413c1c34-3d3c-4196-90df-ddc0088bef0c
+Extracted Meeting Info: {
+  "meetingId": "217055072025",
+  "threadId": "Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk",
+  "organizerId": "413c1c34-3d3c-4196-90df-ddc0088bef0c",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%22413c1c34-3d3c-4196-90df-ddc0088bef0c%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 055 072 025 8\r\nPasscode: NR3on3Tn\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8wAAEA==   
+Setting instance date for recurring meeting: {
+  meetingSubject: 'AI Integration Strategy Session',
+  meetingUTCTime: '2025-06-23T08:30:00.000Z',
+  meetingISTTime: '2025-06-23T14:00:00.000Z',
+  instanceDateForFiltering: '2025-06-23'
+}
+Attempting to fetch attendance with: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  threadId: 'Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk',
+  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8wAAEA==',
+  formattedString: '1*413c1c34-3d3c-4196-90df-ddc0088bef0c*0**19:meeting_Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk@thread.v2',
+  base64MeetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OemswTmpVeE1Ea3RNR1UxTmkwME1HWmxMVGxqWldZdFl6WmpOakExTVRVM05XWmtAdGhyZWFkLnYy',
+  isRecurring: true,
+  isMultiDayRange: false,
+  startViewingDate: '2025-06-23',
+  endViewingDate: '2025-06-23',
+  instanceDate: '2025-06-23'
+}
+Fetching attendance for meeting: {
+  organizerId: '413c1c34-3d3c-4196-90df-ddc0088bef0c',
+  meetingId: 'MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OemswTmpVeE1Ea3RNR1UxTmkwME1HWmxMVGxqWldZdFl6WmpOakExTVRVM05XWmtAdGhyZWFkLnYy',
+  instanceDate: '2025-06-23'
+}
+Processing meeting: {
+  subject: 'Recurring Meeting',
+  start: '2025-06-23T07:00:00.0000000',
+  id: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8AAAEA==',
+  bodyPreview: '__________________________________________________...',
+  hasOnlineMeeting: true,
+  isRecurring: true
+}
+Extracting from: {
+  joinUrl: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d',
+  bodyPreview: '________________________________________________________________________________\r\n' +
+    'Microsoft Teams Need help?\r\n' +
+    'Join the meeting now\r\n' +
+    'Meeting ID: 232 410 159 670 8\r\n' +
+    'Passcode: DC78TS3H\r\n' +
+    '________________________________\r\n' +
+    'Dial in by phone\r\n' +
+    '+1 323-618-184'
+}
+Decoded URL: https://teams.microsoft.com/l/meetup-join/19:meeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm@thread.v2/0?context={"Tid":"d6b48afb-ae93-4180-bd0f-aa47c5c5b57b","Oid":"90e2f3e7-ee86-4bc6-93ff-ccf55a60c528"}
+Extracted Thread ID: MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm
+Extracted Organizer ID: 90e2f3e7-ee86-4bc6-93ff-ccf55a60c528
+Extracted Meeting Info: {
+  "meetingId": "232410159670",
+  "threadId": "MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm",
+  "organizerId": "90e2f3e7-ee86-4bc6-93ff-ccf55a60c528",
+  "rawJoinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+  "rawBodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 232 410 159 670 8\r\nPasscode: DC78TS3H\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184"
+}
+Added Graph API ID to meetingInfo: AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8AAAEA==   
+Setting instance date for recurring meeting: {
+  meetingSubject: 'Recurring Meeting',
+  meetingUTCTime: '2025-06-23T07:00:00.000Z',
+  meetingISTTime: '2025-06-23T12:30:00.000Z',
+  instanceDateForFiltering: '2025-06-23'
+}
+Attempting to fetch attendance with: {
+  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
+  threadId: 'MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm',
+  graphId: 'AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgFRAAgI3bHo5agAAEYAAAAAtTEFJYhcZ0WJfp0diZJDZwcAZ8Z32MWuA0S5etkqKuTXaQAAAAABDQAAZ8Z32MWuA0S5etkqKuTXaQAAKysB8AAAEA==',
+  formattedString: '1*90e2f3e7-ee86-4bc6-93ff-ccf55a60c528*0**19:meeting_MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm@thread.v2',
+  base64MeetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy',
+  isRecurring: true,
+  isMultiDayRange: false,
+  startViewingDate: '2025-06-23',
+  endViewingDate: '2025-06-23',
+  instanceDate: '2025-06-23'
+}
+Fetching attendance for meeting: {
+  organizerId: '90e2f3e7-ee86-4bc6-93ff-ccf55a60c528',
+  meetingId: 'MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy',
+  instanceDate: '2025-06-23'
+}
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/eff742b5-e3cd-4419-b5ef-23af6dfa06e3/onlineMeetings/MSplZmY3NDJiNS1lM2NkLTQ0MTktYjVlZi0yM2FmNmRmYTA2ZTMqMCoqMTk6bWVldGluZ19NbUUxWXpSaU5XRXRZVE0zTkMwMFpXSmxMV0kzTVdFdE1URm1ZVFk1TUdVNE5qWTFAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('eff742b5-e3cd-4419-b5ef-23af6dfa06e3')/onlineMeetings('MSplZmY3NDJiNS1lM2NkLTQ0MTktYjVlZi0yM2FmNmRmYTA2ZTMqMCoqMTk6bWVldGluZ19NbUUxWXpSaU5XRXRZVE0zTkMwMFpXSmxMV0kzTVdFdE1URm1ZVFk1TUdVNE5qWTFAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "1ecbbd5a-4f38-420d-ad97-2d35dbee67f7",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-19T07:52:31.449Z",
+      "meetingEndDateTime": "2025-06-19T07:53:52.088Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Processing report: {
+  reportId: '1ecbbd5a-4f38-420d-ad97-2d35dbee67f7',
+  meetingStart: '2025-06-19T07:52:31.449Z',
+  meetingEnd: '2025-06-19T07:53:52.088Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/eff742b5-e3cd-4419-b5ef-23af6dfa06e3/onlineMeetings/MSplZmY3NDJiNS1lM2NkLTQ0MTktYjVlZi0yM2FmNmRmYTA2ZTMqMCoqMTk6bWVldGluZ19NbUUxWXpSaU5XRXRZVE0zTkMwMFpXSmxMV0kzTVdFdE1URm1ZVFk1TUdVNE5qWTFAdGhyZWFkLnYy/attendanceReports/1ecbbd5a-4f38-420d-ad97-2d35dbee67f7/attendanceRecords
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakptWmpkaVl6Y3RZbVZrTmkwME9ESmlMV0ZoTVRZdE9ERmlabU15WXpBME16VXlAdGhyZWFkLnYy/attendanceReports
+Fetching attendance reports from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OemswTmpVeE1Ea3RNR1UxTmkwME1HWmxMVGxqWldZdFl6WmpOakExTVRVM05XWmtAdGhyZWFkLnYy/attendanceReports
+Combined all attendance records: { totalRecords: 1, totalReports: 1 }
+Filtering attendance records for exact date: 2025-06-23
+Strict interval comparison: {
+  email: 'prabhjot@M365x92504196.onmicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T07:52:35.9070444Z',
+  leaveTime: '2025-06-19T07:53:52.0884917Z'
+}
+Strictly filtered record: {
+  email: 'prabhjot@M365x92504196.onmicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 76,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+No attendance records found for meeting: Demo2
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "4b48ee81-b25b-494e-b929-a887e0fc486d",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-22T18:54:54.474Z",
+      "meetingEndDateTime": "2025-06-22T18:56:56.367Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "ce2aef4e-060e-410e-a30d-a7f45b6ac092",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-22T18:43:57.969Z",
+      "meetingEndDateTime": "2025-06-22T18:52:02.402Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "b983d3fa-082a-4f96-9668-a113a25738fc",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-22T18:23:19.632Z",
+      "meetingEndDateTime": "2025-06-22T18:41:42.061Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "d40425a5-ddb3-485c-8004-f9254d874d47",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-20T18:49:09.794Z",
+      "meetingEndDateTime": "2025-06-20T18:50:26.036Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "b7eca09d-e213-4bc5-a5ee-7573ba6041a0",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-19T22:11:24.417Z",
+      "meetingEndDateTime": "2025-06-19T22:13:42.06Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "42eff31a-dc95-4d8c-9289-34d1416b474e",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-19T09:47:54.305Z",
+      "meetingEndDateTime": "2025-06-19T09:50:03.875Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "0e5136c7-1d35-4f8f-88ce-29b6f79fb823",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-18T18:37:46.735Z",
+      "meetingEndDateTime": "2025-06-18T18:39:26.049Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "e97b3e28-112c-47ab-ba05-7315100f0c4b",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-18T07:30:05.147Z",
+      "meetingEndDateTime": "2025-06-18T07:31:47.894Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "e8e16ab9-7407-4a66-bc4d-57e9579bef4b",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-18T07:26:39.857Z",
+      "meetingEndDateTime": "2025-06-18T07:29:07.67Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Processing report: {
+  reportId: '4b48ee81-b25b-494e-b929-a887e0fc486d',
+  meetingStart: '2025-06-22T18:54:54.474Z',
+  meetingEnd: '2025-06-22T18:56:56.367Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/4b48ee81-b25b-494e-b929-a887e0fc486d/attendanceRecords
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('413c1c34-3d3c-4196-90df-ddc0088bef0c')/onlineMeetings('MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OemswTmpVeE1Ea3RNR1UxTmkwME1HWmxMVGxqWldZdFl6WmpOakExTVRVM05XWmtAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "c92e797e-a7a4-4835-be69-37d4f08a6116",
+      "totalParticipantCount": 4,
+      "meetingStartDateTime": "2025-06-19T09:50:13.506Z",
+      "meetingEndDateTime": "2025-06-19T10:06:27.266Z",
+      "externalEventInformation": []
+    },
+    {
+      "id": "4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12",
+      "totalParticipantCount": 3,
+      "meetingStartDateTime": "2025-06-18T18:36:23.365Z",
+      "meetingEndDateTime": "2025-06-18T18:39:49.421Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Processing report: {
+  reportId: 'c92e797e-a7a4-4835-be69-37d4f08a6116',
+  meetingStart: '2025-06-19T09:50:13.506Z',
+  meetingEnd: '2025-06-19T10:06:27.266Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OemswTmpVeE1Ea3RNR1UxTmkwME1HWmxMVGxqWldZdFl6WmpOakExTVRVM05XWmtAdGhyZWFkLnYy/attendanceReports/c92e797e-a7a4-4835-be69-37d4f08a6116/attendanceRecords
+Reports Data: {
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('90e2f3e7-ee86-4bc6-93ff-ccf55a60c528')/onlineMeetings('MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakptWmpkaVl6Y3RZbVZrTmkwME9ESmlMV0ZoTVRZdE9ERmlabU15WXpBME16VXlAdGhyZWFkLnYy')/attendanceReports",
+  "value": [
+    {
+      "id": "9e79be56-2825-4310-8ade-9ca8d0453374",
+      "totalParticipantCount": 1,
+      "meetingStartDateTime": "2025-06-22T17:39:25.44Z",
+      "meetingEndDateTime": "2025-06-22T18:17:41.873Z",
+      "externalEventInformation": []
+    }
+  ]
+}
+Processing report: {
+  reportId: '9e79be56-2825-4310-8ade-9ca8d0453374',
+  meetingStart: '2025-06-22T17:39:25.44Z',
+  meetingEnd: '2025-06-22T18:17:41.873Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19aakptWmpkaVl6Y3RZbVZrTmkwME9ESmlMV0ZoTVRZdE9ERmlabU15WXpBME16VXlAdGhyZWFkLnYy/attendanceReports/9e79be56-2825-4310-8ade-9ca8d0453374/attendanceRecords
+Processing report: {
+  reportId: 'ce2aef4e-060e-410e-a30d-a7f45b6ac092',
+  meetingStart: '2025-06-22T18:43:57.969Z',
+  meetingEnd: '2025-06-22T18:52:02.402Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/ce2aef4e-060e-410e-a30d-a7f45b6ac092/attendanceRecords
+Processing report: {
+  reportId: '4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12',
+  meetingStart: '2025-06-18T18:36:23.365Z',
+  meetingEnd: '2025-06-18T18:39:49.421Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/413c1c34-3d3c-4196-90df-ddc0088bef0c/onlineMeetings/MSo0MTNjMWMzNC0zZDNjLTQxOTYtOTBkZi1kZGMwMDg4YmVmMGMqMCoqMTk6bWVldGluZ19OemswTmpVeE1Ea3RNR1UxTmkwME1HWmxMVGxqWldZdFl6WmpOakExTVRVM05XWmtAdGhyZWFkLnYy/attendanceReports/4b7d6a7b-c5cb-4116-b9bf-11f2cddb9e12/attendanceRecords
+Combined all attendance records: { totalRecords: 1, totalReports: 1 }
+🕐 ATTENDANCE REPORT DATE FILTER: {
+  reportId: '9e79be56-2825-4310-8ade-9ca8d0453374',
+  attendanceStartTime: '2025-06-22T17:39:25.44Z',
+  attendanceISTDate: '2025-06-22',
+  requestedRange: '2025-06-23 to 2025-06-23',
+  belongsToDateRange: false
+}
+📊 ATTENDANCE FILTERING: 1 total reports, 0 after IST date filtering
+Processing report: {
+  reportId: 'b983d3fa-082a-4f96-9668-a113a25738fc',
+  meetingStart: '2025-06-22T18:23:19.632Z',
+  meetingEnd: '2025-06-22T18:41:42.061Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/b983d3fa-082a-4f96-9668-a113a25738fc/attendanceRecords
+Combined all attendance records: { totalRecords: 7, totalReports: 2 }
+Filtering attendance records for exact date: 2025-06-23
+Strict interval comparison: {
+  email: 'DebraB@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T09:51:44.4164459Z',
+  leaveTime: '2025-06-19T09:57:19.3214495Z'
+}
+Strictly filtered record: {
+  email: 'DebraB@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 334,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T09:50:17.2572916Z',
+  leaveTime: '2025-06-19T09:54:26.2893369Z'
+}
+Strictly filtered record: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 249,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'Neha@M365x92504196.onmicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T09:56:06.1623894Z',
+  leaveTime: '2025-06-19T10:01:38.1760096Z'
+}
+Strictly filtered record: {
+  email: 'Neha@M365x92504196.onmicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 332,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T09:57:43.8183579Z',
+  leaveTime: '2025-06-19T10:06:27.2660361Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 523,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'DebraB@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-18',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-18T18:36:29.758713Z',
+  leaveTime: '2025-06-18T18:39:39.365619Z'
+}
+Strictly filtered record: {
+  email: 'DebraB@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 189,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'Neha@M365x92504196.onmicrosoft.com',
+  intervalDate: '2025-06-18',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-18T18:38:14.2624318Z',
+  leaveTime: '2025-06-18T18:39:45.381291Z'
+}
+Strictly filtered record: {
+  email: 'Neha@M365x92504196.onmicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 91,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-18',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-18T18:39:00.4765752Z',
+  leaveTime: '2025-06-18T18:39:49.4218182Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 48,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+No attendance records found for meeting: AI Integration Strategy Session
+Processing report: {
+  reportId: 'd40425a5-ddb3-485c-8004-f9254d874d47',
+  meetingStart: '2025-06-20T18:49:09.794Z',
+  meetingEnd: '2025-06-20T18:50:26.036Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/d40425a5-ddb3-485c-8004-f9254d874d47/attendanceRecords
+Processing report: {
+  reportId: 'b7eca09d-e213-4bc5-a5ee-7573ba6041a0',
+  meetingStart: '2025-06-19T22:11:24.417Z',
+  meetingEnd: '2025-06-19T22:13:42.06Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/b7eca09d-e213-4bc5-a5ee-7573ba6041a0/attendanceRecords
+Processing report: {
+  reportId: '42eff31a-dc95-4d8c-9289-34d1416b474e',
+  meetingStart: '2025-06-19T09:47:54.305Z',
+  meetingEnd: '2025-06-19T09:50:03.875Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/42eff31a-dc95-4d8c-9289-34d1416b474e/attendanceRecords
+Processing report: {
+  reportId: '0e5136c7-1d35-4f8f-88ce-29b6f79fb823',
+  meetingStart: '2025-06-18T18:37:46.735Z',
+  meetingEnd: '2025-06-18T18:39:26.049Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/0e5136c7-1d35-4f8f-88ce-29b6f79fb823/attendanceRecords
+Processing report: {
+  reportId: 'e97b3e28-112c-47ab-ba05-7315100f0c4b',
+  meetingStart: '2025-06-18T07:30:05.147Z',
+  meetingEnd: '2025-06-18T07:31:47.894Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/e97b3e28-112c-47ab-ba05-7315100f0c4b/attendanceRecords
+Processing report: {
+  reportId: 'e8e16ab9-7407-4a66-bc4d-57e9579bef4b',
+  meetingStart: '2025-06-18T07:26:39.857Z',
+  meetingEnd: '2025-06-18T07:29:07.67Z'
+}
+Fetching attendance records from: https://graph.microsoft.com/v1.0/users/90e2f3e7-ee86-4bc6-93ff-ccf55a60c528/onlineMeetings/MSo5MGUyZjNlNy1lZTg2LTRiYzYtOTNmZi1jY2Y1NWE2MGM1MjgqMCoqMTk6bWVldGluZ19NalEzTURVeU56Y3RNbVUzWlMwMFlUQTJMVGhpWkRrdE9EZ3hPRGN3TjJFMU5UbG1AdGhyZWFkLnYy/attendanceReports/e8e16ab9-7407-4a66-bc4d-57e9579bef4b/attendanceRecords
+Combined all attendance records: { totalRecords: 9, totalReports: 9 }
+Filtering attendance records for exact date: 2025-06-23
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-22',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-22T18:54:59.5599497Z',
+  leaveTime: '2025-06-22T18:56:56.367494Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 116,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-22',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-22T18:44:02.8788175Z',
+  leaveTime: '2025-06-22T18:52:02.4020798Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 479,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-22',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-22T18:23:25.3558913Z',
+  leaveTime: '2025-06-22T18:41:42.0615192Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 1096,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-20',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-20T18:49:17.8287348Z',
+  leaveTime: '2025-06-20T18:50:26.0361906Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 68,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T22:11:28.6008657Z',
+  leaveTime: '2025-06-19T22:13:42.060172Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 133,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-19',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-19T09:48:12.7222954Z',
+  leaveTime: '2025-06-19T09:50:03.8753935Z'
+}
+Strictly filtered record: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 111,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-18',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-18T18:37:50.7311799Z',
+  leaveTime: '2025-06-18T18:39:26.0499864Z'
+}
+Strictly filtered record: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 95,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-18',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-18T07:30:08.8981073Z',
+  leaveTime: '2025-06-18T07:31:47.8944542Z'
+}
+Strictly filtered record: {
+  email: 'PradeepG@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 98,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+Strict interval comparison: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  intervalDate: '2025-06-18',
+  instanceDate: '2025-06-23',
+  exactDateMatch: false,
+  joinTime: '2025-06-18T07:26:43.747418Z',
+  leaveTime: '2025-06-18T07:29:07.6704154Z'
+}
+Strictly filtered record: {
+  email: 'MeganB@M365x92504196.OnMicrosoft.com',
+  originalIntervals: 1,
+  filteredIntervals: 0,
+  originalDuration: 143,
+  newDuration: 0,
+  targetDate: '2025-06-23'
+}
+No attendance records found for meeting: Recurring Meeting
+📅 IST DATE RANGE FOR FILTERING: {
+  startISTDate: '2025-06-23',
+  endISTDate: '2025-06-23',
+  utcRangeStart: '2025-06-22T18:30:00.000Z',
+  utcRangeEnd: '2025-06-23T18:29:59.999Z'
+}
+🚀 ENHANCED DATE FILTERING - Including scheduled meetings for the date AND attended meetings
+📅 DATE FILTER: Demo2 {
+  scheduled: '2025-06-23',
+  isScheduledInRange: true,
+  hasAttendanceInRange: false,
+  includeInResults: true,
+  requestedRange: '2025-06-23 to 2025-06-23'
+}
+📅 DATE FILTER: AI Integration Strategy Session {
+  scheduled: '2025-06-23',
+  isScheduledInRange: true,
+  hasAttendanceInRange: false,
+  includeInResults: true,
+  requestedRange: '2025-06-23 to 2025-06-23'
+}
+📅 DATE FILTER: Recurring Meeting {
+  scheduled: '2025-06-23',
+  isScheduledInRange: true,
+  hasAttendanceInRange: false,
+  includeInResults: true,
+  requestedRange: '2025-06-23 to 2025-06-23'
+}
+
+Filtered 3 meetings to 3 within date range
+
+==== PROCESSING MEETINGS (PRESERVING ALL SESSIONS) ====
+Added meeting: Demo2 {
+  threadId: 'MmE1YzRiNWEtYTM3NC00ZWJlLWI3MWEtMTFmYTY5MGU4NjY1',
+  reportId: 'no-report',
+  isRecurring: true,
+  date: '2025-06-23',
+  attendanceRecords: 0,
+  hasAttendance: false
+}
+Added meeting: AI Integration Strategy Session {
+  threadId: 'Nzk0NjUxMDktMGU1Ni00MGZlLTljZWYtYzZjNjA1MTU3NWZk',
+  reportId: 'no-report',
+  isRecurring: true,
+  date: '2025-06-23',
+  attendanceRecords: 0,
+  hasAttendance: false
+}
+Added meeting: Recurring Meeting {
+  threadId: 'MjQ3MDUyNzctMmU3ZS00YTA2LThiZDktODgxODcwN2E1NTlm',
+  reportId: 'no-report',
+  isRecurring: true,
+  date: '2025-06-23',
+  attendanceRecords: 0,
+  hasAttendance: false
+}
+Total meetings processed: 3 (preserving all sessions)
+===============================================
+
+
+==== MEETINGS FILTERING DEBUG ====
+User Email: pradeepg@m365x92504196.onmicrosoft.com
+Total meetings fetched: 3
+Total posted meetings for user: 1
+
+Processing current meetings:
+Meeting: Demo2 ID: 295038818623 Duration: 0 Is Posted: false
+Adding to filtered meetings list
+Meeting: AI Integration Strategy Session ID: 217055072025 Duration: 0 Is Posted: false
+Adding to filtered meetings list
+Meeting: Recurring Meeting ID: 232410159670 Duration: 0 Is Posted: false
+Adding to filtered meetings list
+
+=== FINAL RESPONSE DEBUG (ATTENDANCE-BASED TIMEZONE) ===
+Time range: {
+  fromIST: '23/06/2025, 12:00 AM IST',
+  toIST: '23/06/2025, 11:59 PM IST',
+  fromUTC: '2025-06-22T18:30:00.000Z',
+  toUTC: '2025-06-23T18:29:59.999Z'
+}
+First meeting times (attendance-corrected): {
+  subject: 'Demo2',
+  scheduledStartTime: '23/06/2025, 01:22 PM IST',
+  scheduledEndTime: '23/06/2025, 01:52 PM IST',
+  actualAttendanceTime: 'No attendance data'
+}
+===========================
+
+ GET /api/meetings?from=2025-06-22T18%3A30%3A00.000Z&to=2025-06-23T18%3A29%3A59.999Z 200 in 6459ms     
