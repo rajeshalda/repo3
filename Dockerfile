@@ -8,8 +8,8 @@ WORKDIR /app
 RUN npm install -g pm2 && \
     apk add --no-cache bash curl tzdata python3 make g++
 
-# Set timezone to IST (Asia/Kolkata) to match application logic
-ENV TZ=Asia/Kolkata
+# Set timezone to UTC for consistency
+ENV TZ=UTC
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -33,9 +33,7 @@ RUN npm rebuild better-sqlite3
 # Create a simple startup file with better error handling
 RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'set -e' >> /app/start.sh && \
-    echo 'export TZ=Asia/Kolkata' >> /app/start.sh && \
     echo 'echo "Container timezone: $(date)"' >> /app/start.sh && \
-    echo 'echo "Node.js timezone: $(node -e \"console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)\")"' >> /app/start.sh && \
     echo 'echo "Starting PM2 for AI agent..."' >> /app/start.sh && \
     echo 'pm2 start pm2.config.js' >> /app/start.sh && \
     echo 'sleep 3' >> /app/start.sh && \

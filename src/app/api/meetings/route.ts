@@ -13,7 +13,6 @@ import {
   filterAttendanceByISTDate,
   filterMeetingsByISTDate 
 } from '@/lib/timezone-utils';
-import { toZonedTime, fromZonedTime, formatInTimeZone } from 'date-fns-tz';
 import path from 'path';
 import fs from 'fs/promises';
 
@@ -181,13 +180,13 @@ async function getAttendanceReport(organizerId: string, meetingId: string, insta
       console.log('Filtering attendance records for IST date:', instanceDate);
       
       const filteredRecords = allAttendanceRecords.map(record => {
-        // Filter intervals using proper timezone conversion
+        // Filter intervals using IST timezone conversion instead of UTC
         const dateSpecificIntervals = record.attendanceIntervals.filter(interval => {
           const joinTime = new Date(interval.joinDateTime);
           
-          // Convert UTC time to IST using proper timezone handling
-          const joinTimeIST = toZonedTime(joinTime, IST_TIMEZONE);
-          const intervalDateIST = formatInTimeZone(joinTime, IST_TIMEZONE, 'yyyy-MM-dd');
+          // Convert UTC time to IST for proper date comparison
+          const joinTimeIST = new Date(joinTime.getTime() + (5.5 * 60 * 60 * 1000));
+          const intervalDateIST = joinTimeIST.toISOString().split('T')[0];
           
           // Match against IST date, not UTC date
           const istDateMatch = intervalDateIST === instanceDate;
@@ -317,11 +316,11 @@ async function getMeetings(accessToken: string, startDate: Date, endDate: Date, 
     startViewingDate = istDateRange.startISTDate;
     endViewingDate = istDateRange.endISTDate;
   } else {
-    // Fallback using proper timezone conversion
-    const startIST = toZonedTime(startDate, IST_TIMEZONE);
-    const endIST = toZonedTime(endDate, IST_TIMEZONE);
-    startViewingDate = formatInTimeZone(startDate, IST_TIMEZONE, 'yyyy-MM-dd');
-    endViewingDate = formatInTimeZone(endDate, IST_TIMEZONE, 'yyyy-MM-dd');
+    // Fallback to old calculation method
+  const startIST = new Date(startDate.getTime() + (5.5 * 60 * 60 * 1000));
+  const endIST = new Date(endDate.getTime() + (5.5 * 60 * 60 * 1000));
+    startViewingDate = startIST.toISOString().split('T')[0];
+    endViewingDate = endIST.toISOString().split('T')[0];
   }
   
   const isMultiDayRange = startViewingDate !== endViewingDate;
