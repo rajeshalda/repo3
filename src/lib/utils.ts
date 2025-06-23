@@ -6,9 +6,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Get user's timezone
+// Constants for IST timezone
+export const IST_TIMEZONE = 'Asia/Kolkata';
+export const IST_OFFSET = 5.5 * 60 * 60 * 1000; // 5:30 hours in milliseconds
+
+// Get user's timezone - forced to IST for consistent behavior across environments
 export function getUserTimezone(): string {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  // For this application, we always use IST timezone to ensure consistency
+  // between localhost and Azure deployment
+  return IST_TIMEZONE;
 }
 
 // Format date with user's timezone
@@ -56,10 +62,6 @@ export function formatDateWithTimezone(dateString: string, timezone: string = ge
     timeZone: timezone
   });
 }
-
-// Constants for IST timezone
-export const IST_TIMEZONE = 'Asia/Kolkata';
-export const IST_OFFSET = 5.5 * 60 * 60 * 1000; // 5:30 hours in milliseconds
 
 // Consistent date formatting function
 export function formatDateIST(date: Date | string | null | undefined, options: Intl.DateTimeFormatOptions = {}): string {
