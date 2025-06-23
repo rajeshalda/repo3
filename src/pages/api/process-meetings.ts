@@ -284,7 +284,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     status: 'approved',
                     feedback: `Auto-processed: matched to task ${result.matchedTasks[0].taskTitle} (reportId: ${meetingReportId})`,
                     decidedAt: new Date().toISOString(),
-                    decidedBy: `ai-agent-${userId}`
+                    decidedBy: userId as string
                   });
                 } else {
                   console.warn(`Could not find review meeting with reportId ${meetingReportId} for status update`);

@@ -285,9 +285,29 @@ export class StorageManager {
                 return null;
             }
             
-            // If userId is provided, check if it matches
-            if (userId && review.user_id !== userId) {
-                return null;
+            // If userId is provided, check if it matches using flexible matching
+            if (userId) {
+                const originalUserId = review.user_id;
+                const requestingUserId = userId;
+                
+                // Check for exact match first
+                let userMatches = originalUserId === requestingUserId;
+                
+                // If no exact match, check if requesting user has ai-agent prefix
+                if (!userMatches && requestingUserId.startsWith('ai-agent-')) {
+                    const userWithoutPrefix = requestingUserId.replace('ai-agent-', '');
+                    userMatches = originalUserId === userWithoutPrefix;
+                }
+                
+                // If no match yet, check if original user had ai-agent prefix and requesting user doesn't
+                if (!userMatches && originalUserId.startsWith('ai-agent-')) {
+                    const originalWithoutPrefix = originalUserId.replace('ai-agent-', '');
+                    userMatches = originalWithoutPrefix === requestingUserId;
+                }
+                
+                if (!userMatches) {
+                    return null;
+                }
             }
             
             return {
@@ -315,10 +335,35 @@ export class StorageManager {
         try {
             const review = database.getReviewById(decision.meetingId);
             
-            if (review && review.user_id === decision.decidedBy) {
-                database.updateReviewStatus(decision.meetingId, decision.status);
+            if (review) {
+                // More flexible user matching to handle different user ID formats
+                // Handle cases where review was created with user@domain but update uses ai-agent prefix
+                const originalUserId = review.user_id;
+                const decidedByUserId = decision.decidedBy;
+                
+                // Check for exact match first
+                let userMatches = originalUserId === decidedByUserId;
+                
+                // If no exact match, check if decidedBy is the original user with ai-agent prefix
+                if (!userMatches && decidedByUserId.startsWith('ai-agent-')) {
+                    const userWithoutPrefix = decidedByUserId.replace('ai-agent-', '');
+                    userMatches = originalUserId === userWithoutPrefix;
+                }
+                
+                // If no match yet, check if original user had ai-agent prefix and decidedBy doesn't
+                if (!userMatches && originalUserId.startsWith('ai-agent-')) {
+                    const originalWithoutPrefix = originalUserId.replace('ai-agent-', '');
+                    userMatches = originalWithoutPrefix === decidedByUserId;
+                }
+                
+                if (userMatches) {
+                    database.updateReviewStatus(decision.meetingId, decision.status);
+                    console.log(`Successfully updated review status for meeting ${decision.meetingId} from ${originalUserId} by ${decidedByUserId}`);
+                } else {
+                    console.warn(`No review found for meeting ${decision.meetingId} and user ${decision.decidedBy} (original user: ${originalUserId})`);
+                }
             } else {
-                console.warn(`No review found for meeting ${decision.meetingId} and user ${decision.decidedBy}`);
+                console.warn(`No review found for meeting ${decision.meetingId}`);
             }
         } catch (error) {
             console.error('Error updating review status in SQLite:', error);
