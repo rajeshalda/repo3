@@ -11,17 +11,27 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb'
-    }
+    },
+    esmExternals: true,
   },
   env: {
-    PORT: process.env.PORT || '8080'
+    PORT: process.env.PORT || '8080',
   },
   // Required for Azure Web App
   httpAgentOptions: {
     keepAlive: true,
-  }
-  // 'serverOptions' removed as it's not a valid Next.js config option
-  // Port configuration should be handled through env variables or scripts
+  },
+  // Webpack configuration to handle timezone data properly
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Ensure timezone data is available on the server
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

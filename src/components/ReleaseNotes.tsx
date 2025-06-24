@@ -9,7 +9,7 @@ const releaseNotes = `
 
 &nbsp;
 
-## 🌟 Version 2.2.2 (June 2025)
+## 🌟 Version 2.2.2 (June 2025) Dev Test
 
 &nbsp;
 

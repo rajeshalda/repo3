@@ -1,7 +1,7 @@
 import { format, parseISO, startOfDay, endOfDay } from 'date-fns';
 import { toZonedTime, fromZonedTime, formatInTimeZone } from 'date-fns-tz';
 
-// Constants
+// Constants for backward compatibility
 export const IST_TIMEZONE = 'Asia/Kolkata';
 
 interface DateRange {
@@ -16,15 +16,18 @@ interface UTCRange {
 }
 
 /**
- * Properly convert a date range to UTC for Graph API calls
- * This ensures that when user selects "June 19" in IST, we only get meetings 
- * that actually fall on June 19 in IST timezone
+ * Convert a date range to UTC for Graph API calls - works with any timezone
+ * @param dateRange - The date range selected by user
+ * @param userTimezone - User's timezone (detected from browser)
  */
-export function convertDateRangeToUTC(dateRange: DateRange | undefined): UTCRange | null {
+export function convertDateRangeToUTCWithTimezone(
+  dateRange: DateRange | undefined, 
+  userTimezone: string = 'UTC'
+): UTCRange | null {
   if (!dateRange?.from || !dateRange?.to) return null;
 
   try {
-    // Get the date parts from the selected dates (these represent calendar dates in user's context)
+    // Get the date parts from the selected dates
     const startYear = dateRange.from.getFullYear();
     const startMonth = dateRange.from.getMonth();
     const startDay = dateRange.from.getDate();
@@ -33,15 +36,16 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined): UTCRang
     const endMonth = dateRange.to.getMonth();
     const endDay = dateRange.to.getDate();
 
-    // Create IST date strings in the format that fromZonedTime expects
+    // Create date strings for start and end of day
     const startDateStr = `${startYear}-${String(startMonth + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}`;
     const endDateStr = `${endYear}-${String(endMonth + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}`;
 
-    // Create proper IST date objects for start and end of day
-    const startOfDayIST = new Date(`${startDateStr}T00:00:00`);
-    const endOfDayIST = new Date(`${endDateStr}T23:59:59.999`);
+    // Create proper timezone date objects for start and end of day
+    const startOfDayLocal = new Date(`${startDateStr}T00:00:00`);
+    const endOfDayLocal = new Date(`${endDateStr}T23:59:59.999`);
 
     console.log('📅 TIMEZONE CONVERSION DEBUG:', {
+      userTimezone,
       inputRange: {
         from: dateRange.from.toISOString(),
         to: dateRange.to.toISOString()
@@ -50,28 +54,27 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined): UTCRang
         startCalendar: startDateStr,
         endCalendar: endDateStr
       },
-      istDayBoundaries: {
-        startOfDayIST: startOfDayIST.toISOString(),
-        endOfDayIST: endOfDayIST.toISOString()
+      localDayBoundaries: {
+        startOfDay: startOfDayLocal.toISOString(),
+        endOfDay: endOfDayLocal.toISOString()
       }
     });
 
-    // Convert IST day boundaries to UTC using the proper fromZonedTime function
-    // This treats the date objects as if they are in IST timezone and converts to UTC
-    const startUTC = fromZonedTime(startOfDayIST, IST_TIMEZONE);
-    const endUTC = fromZonedTime(endOfDayIST, IST_TIMEZONE);
+    // Convert local day boundaries to UTC using the user's timezone
+    const startUTC = fromZonedTime(startOfDayLocal, userTimezone);
+    const endUTC = fromZonedTime(endOfDayLocal, userTimezone);
 
     const result = {
       start: startUTC.toISOString(),
       end: endUTC.toISOString(),
-      timezone: IST_TIMEZONE
+      timezone: userTimezone
     };
 
-    console.log('✅ PROPER UTC CONVERSION RESULT:', {
+    console.log('✅ UTC CONVERSION RESULT:', {
       ...result,
       verification: {
-        startUTCBackToIST: formatInTimeZone(startUTC, IST_TIMEZONE, 'yyyy-MM-dd HH:mm:ss zzz'),
-        endUTCBackToIST: formatInTimeZone(endUTC, IST_TIMEZONE, 'yyyy-MM-dd HH:mm:ss zzz')
+        startUTCBackToUserTZ: formatInTimeZone(startUTC, userTimezone, 'yyyy-MM-dd HH:mm:ss zzz'),
+        endUTCBackToUserTZ: formatInTimeZone(endUTC, userTimezone, 'yyyy-MM-dd HH:mm:ss zzz')
       }
     });
 
@@ -83,39 +86,46 @@ export function convertDateRangeToUTC(dateRange: DateRange | undefined): UTCRang
 }
 
 /**
- * Check if a meeting time falls within the requested IST date range
- * This function ensures meetings are filtered by their IST date, not UTC date
+ * Legacy function for backward compatibility - delegates to new function with IST
  */
-export function isMeetingInISTDateRange(
+export function convertDateRangeToUTC(dateRange: DateRange | undefined): UTCRange | null {
+  return convertDateRangeToUTCWithTimezone(dateRange, IST_TIMEZONE);
+}
+
+/**
+ * Check if a meeting time falls within the requested date range in user's timezone
+ */
+export function isMeetingInUserDateRange(
   meetingUTCTime: string, 
   requestStartUTC: string, 
-  requestEndUTC: string
+  requestEndUTC: string,
+  userTimezone: string = 'UTC'
 ): boolean {
   try {
-    // Convert meeting UTC time to IST
+    // Convert meeting UTC time to user's timezone
     const meetingUTC = parseISO(meetingUTCTime);
-    const meetingIST = toZonedTime(meetingUTC, IST_TIMEZONE);
+    const meetingInUserTZ = toZonedTime(meetingUTC, userTimezone);
     
-    // Convert request boundary UTC times to IST
+    // Convert request boundary UTC times to user's timezone
     const requestStartUTCDate = parseISO(requestStartUTC);
     const requestEndUTCDate = parseISO(requestEndUTC);
-    const requestStartIST = toZonedTime(requestStartUTCDate, IST_TIMEZONE);
-    const requestEndIST = toZonedTime(requestEndUTCDate, IST_TIMEZONE);
+    const requestStartInUserTZ = toZonedTime(requestStartUTCDate, userTimezone);
+    const requestEndInUserTZ = toZonedTime(requestEndUTCDate, userTimezone);
 
     // Get just the date parts for comparison
-    const meetingISTDate = format(meetingIST, 'yyyy-MM-dd');
-    const requestStartISTDate = format(requestStartIST, 'yyyy-MM-dd');
-    const requestEndISTDate = format(requestEndIST, 'yyyy-MM-dd');
+    const meetingUserTZDate = format(meetingInUserTZ, 'yyyy-MM-dd');
+    const requestStartUserTZDate = format(requestStartInUserTZ, 'yyyy-MM-dd');
+    const requestEndUserTZDate = format(requestEndInUserTZ, 'yyyy-MM-dd');
 
-    // Check if meeting IST date falls within the request IST date range
-    const isInRange = meetingISTDate >= requestStartISTDate && meetingISTDate <= requestEndISTDate;
+    // Check if meeting date falls within the request date range
+    const isInRange = meetingUserTZDate >= requestStartUserTZDate && meetingUserTZDate <= requestEndUserTZDate;
 
     console.log('🕐 MEETING TIME FILTER CHECK:', {
-      meetingSubject: 'Meeting', // Will be provided by caller
+      userTimezone,
       meetingUTCTime,
-      meetingISTTime: formatInTimeZone(meetingUTC, IST_TIMEZONE, 'yyyy-MM-dd HH:mm:ss zzz'),
-      meetingISTDate,
-      requestRangeIST: `${requestStartISTDate} to ${requestEndISTDate}`,
+      meetingUserTZTime: formatInTimeZone(meetingUTC, userTimezone, 'yyyy-MM-dd HH:mm:ss zzz'),
+      meetingUserTZDate,
+      requestRangeUserTZ: `${requestStartUserTZDate} to ${requestEndUserTZDate}`,
       isInRange
     });
 
@@ -127,86 +137,128 @@ export function isMeetingInISTDateRange(
 }
 
 /**
- * Format a UTC date string to IST with proper timezone handling
+ * Legacy IST-specific function for backward compatibility
  */
-export function formatToIST(utcDateString: string, formatString: string = 'dd/MM/yyyy, hh:mm a'): string {
+export function isMeetingInISTDateRange(
+  meetingUTCTime: string, 
+  requestStartUTC: string, 
+  requestEndUTC: string
+): boolean {
+  return isMeetingInUserDateRange(meetingUTCTime, requestStartUTC, requestEndUTC, IST_TIMEZONE);
+}
+
+/**
+ * Format a UTC date string to user's timezone with proper timezone handling
+ */
+export function formatToUserTimezone(
+  utcDateString: string, 
+  userTimezone: string = 'UTC',
+  formatString: string = 'dd/MM/yyyy, hh:mm a'
+): string {
   try {
     const utcDate = parseISO(utcDateString);
-    return formatInTimeZone(utcDate, IST_TIMEZONE, `${formatString} 'IST'`);
+    return formatInTimeZone(utcDate, userTimezone, `${formatString} 'zzz'`);
   } catch (error) {
-    console.error('❌ Error formatting to IST:', error);
+    console.error('❌ Error formatting to user timezone:', error);
     return 'Invalid Date';
   }
 }
 
 /**
- * Get current time in IST
+ * Legacy IST function for backward compatibility
  */
-export function getCurrentTimeIST(): string {
-  return formatInTimeZone(new Date(), IST_TIMEZONE, 'yyyy-MM-dd HH:mm:ss zzz');
+export function formatToIST(utcDateString: string, formatString: string = 'dd/MM/yyyy, hh:mm a'): string {
+  return formatToUserTimezone(utcDateString, IST_TIMEZONE, formatString);
 }
 
 /**
- * Filter meetings to only include those that actually fall on the requested IST dates
- * This is the key function to prevent early morning meetings from being included in the wrong date
+ * Get current time in user's timezone
  */
-export function filterMeetingsByISTDate(
+export function getCurrentTimeInTimezone(timezone: string = 'UTC'): string {
+  return formatInTimeZone(new Date(), timezone, 'yyyy-MM-dd HH:mm:ss zzz');
+}
+
+/**
+ * Legacy IST function
+ */
+export function getCurrentTimeIST(): string {
+  return getCurrentTimeInTimezone(IST_TIMEZONE);
+}
+
+/**
+ * Filter meetings to only include those that fall on the requested dates in user's timezone
+ */
+export function filterMeetingsByUserDate(
   meetings: any[], 
-  fromISTDate: string, 
-  toISTDate: string
+  fromDate: string, 
+  toDate: string,
+  userTimezone: string = 'UTC'
 ): any[] {
   return meetings.filter(meeting => {
     try {
       const meetingUTC = parseISO(meeting.startTime);
-      const meetingIST = toZonedTime(meetingUTC, IST_TIMEZONE);
-      const meetingISTDate = format(meetingIST, 'yyyy-MM-dd');
+      const meetingUserTZ = toZonedTime(meetingUTC, userTimezone);
+      const meetingUserTZDate = format(meetingUserTZ, 'yyyy-MM-dd');
       
-      const isInRange = meetingISTDate >= fromISTDate && meetingISTDate <= toISTDate;
+      const isInRange = meetingUserTZDate >= fromDate && meetingUserTZDate <= toDate;
       
-      console.log('🗓️ MEETING DATE FILTER (STRICT IST):', {
+      console.log('🗓️ MEETING DATE FILTER:', {
+        userTimezone,
         subject: meeting.subject,
         meetingUTCTime: meeting.startTime,
-        meetingISTTime: formatInTimeZone(meetingUTC, IST_TIMEZONE, 'yyyy-MM-dd HH:mm:ss zzz'),
-        meetingISTDate,
-        requestedRange: `${fromISTDate} to ${toISTDate}`,
+        meetingUserTZTime: formatInTimeZone(meetingUTC, userTimezone, 'yyyy-MM-dd HH:mm:ss zzz'),
+        meetingUserTZDate,
+        requestedRange: `${fromDate} to ${toDate}`,
         isIncluded: isInRange
       });
 
       return isInRange;
     } catch (error) {
-      console.error('❌ Error filtering meeting by IST date:', error);
+      console.error('❌ Error filtering meeting by user timezone date:', error);
       return false;
     }
   });
 }
 
 /**
- * Filter attendance records to only include those from the exact target date in IST
- * This prevents attendance from different IST dates being included
+ * Legacy IST function for backward compatibility
  */
-export function filterAttendanceByISTDate(
+export function filterMeetingsByISTDate(
+  meetings: any[], 
+  fromISTDate: string, 
+  toISTDate: string
+): any[] {
+  return filterMeetingsByUserDate(meetings, fromISTDate, toISTDate, IST_TIMEZONE);
+}
+
+/**
+ * Filter attendance records to only include those from the exact target date in user's timezone
+ */
+export function filterAttendanceByUserDate(
   attendanceRecords: any[], 
-  targetISTDate: string
+  targetDate: string,
+  userTimezone: string = 'UTC'
 ): any[] {
   return attendanceRecords.filter(record => {
     if (!record.intervals || record.intervals.length === 0) return false;
 
-    // Filter intervals to only include those from the target IST date
+    // Filter intervals to only include those from the target date in user's timezone
     const filteredIntervals = record.intervals.filter((interval: any) => {
       try {
         const joinTimeUTC = parseISO(interval.joinDateTime);
-        const joinTimeIST = toZonedTime(joinTimeUTC, IST_TIMEZONE);
-        const intervalISTDate = format(joinTimeIST, 'yyyy-MM-dd');
+        const joinTimeUserTZ = toZonedTime(joinTimeUTC, userTimezone);
+        const intervalUserTZDate = format(joinTimeUserTZ, 'yyyy-MM-dd');
         
-        const isValidDate = intervalISTDate === targetISTDate;
+        const isValidDate = intervalUserTZDate === targetDate;
         
         console.log('📊 ATTENDANCE INTERVAL FILTER:', {
+          userTimezone,
           email: record.email,
-          intervalISTDate,
-          targetISTDate,
+          intervalUserTZDate,
+          targetDate,
           isValidDate,
           joinTimeUTC: interval.joinDateTime,
-          joinTimeIST: formatInTimeZone(joinTimeUTC, IST_TIMEZONE, 'yyyy-MM-dd HH:mm:ss zzz')
+          joinTimeUserTZ: formatInTimeZone(joinTimeUTC, userTimezone, 'yyyy-MM-dd HH:mm:ss zzz')
         });
 
         return isValidDate;
@@ -226,4 +278,14 @@ export function filterAttendanceByISTDate(
 
     return true;
   });
+}
+
+/**
+ * Legacy IST function for backward compatibility
+ */
+export function filterAttendanceByISTDate(
+  attendanceRecords: any[], 
+  targetISTDate: string
+): any[] {
+  return filterAttendanceByUserDate(attendanceRecords, targetISTDate, IST_TIMEZONE);
 } 

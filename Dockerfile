@@ -8,7 +8,8 @@ WORKDIR /app
 RUN npm install -g pm2 && \
     apk add --no-cache bash curl tzdata python3 make g++
 
-# Set timezone to UTC for consistency
+# Keep timezone as UTC for consistency across environments
+# Application will handle user timezones dynamically
 ENV TZ=UTC
 
 # Copy package.json and package-lock.json
@@ -34,6 +35,7 @@ RUN npm rebuild better-sqlite3
 RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'set -e' >> /app/start.sh && \
     echo 'echo "Container timezone: $(date)"' >> /app/start.sh && \
+    echo 'echo "TZ environment variable: $TZ"' >> /app/start.sh && \
     echo 'echo "Starting PM2 for AI agent..."' >> /app/start.sh && \
     echo 'pm2 start pm2.config.js' >> /app/start.sh && \
     echo 'sleep 3' >> /app/start.sh && \
