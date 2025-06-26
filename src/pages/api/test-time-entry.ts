@@ -189,6 +189,7 @@ export default async function handler(
                 // Further filter to only include meetings the user actually attended
                 const attendedMeetings = uniqueMeetings.filter(meeting => {
                     // Check if the user actually attended this meeting
+                    // Handle both simple attendance.records and advanced allValidReports formats
                     if (meeting.attendance?.records) {
                         const userRecord = meeting.attendance.records.find(record => 
                             record.email.toLowerCase() === userId.toLowerCase()
@@ -202,6 +203,14 @@ export default async function handler(
                             return false;
                         }
                     }
+                    // Check allValidReports format (from AI agent processing)
+                    else if (meeting.attendance?.allValidReports && meeting.attendance.allValidReports.length > 0) {
+                        // Meeting has allValidReports, which means it was processed by AI agent and has attendance data
+                        // The meeting comparison service will handle creating instances with proper attendance records
+                        console.log(`User ${userId} has attendance data in allValidReports format for meeting "${meeting.subject}" with ${meeting.attendance.allValidReports.length} reports`);
+                        return true;
+                    }
+                    
                     console.log(`No attendance records found for meeting "${meeting.subject}". Skipping.`);
                     return false;
                 });

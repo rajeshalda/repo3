@@ -5790,6 +5790,121 @@
       },
       "lastProcessed": "2025-06-23T17:35:18.686Z",
       "userId": "pradeepg@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAME7TMQ==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAAAwY_WyAAA=",
+      "categories": [],
+      "subject": "Test Meeting",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 286 674 458 788 9\r\nPasscode: Kx3Hh3no\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-06-25T00:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-06-25T01:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x92504196.OnMicrosoft.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Pradeep Gupta",
+            "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Megan Bowen",
+          "address": "MeganB@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDk5Y2UyMWMtN2YxMi00YjJkLTgyNDEtNDE3ODE2YmVjYjZk%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%220a46ba91-dce8-4114-8cdc-4f09947eee7e%22%7d",
+        "conferenceId": "264297487",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-06-25",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Megan Bowen",
+            "email": "MeganB@M365x92504196.OnMicrosoft.com",
+            "duration": 1205,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-24T18:35:45.2212906Z",
+                "leaveDateTime": "2025-06-24T18:55:50.4566402Z",
+                "durationInSeconds": 1205
+              }
+            ]
+          },
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 1194,
+            "role": "Presenter",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-06-24T18:35:51.8148845Z",
+                "leaveDateTime": "2025-06-24T18:55:46.6666272Z",
+                "durationInSeconds": 1194
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 2399,
+          "averageDuration": 1199.5,
+          "totalParticipants": 2
+        },
+        "reportId": "c34df161-f13d-4343-80ef-62cfd9ae1aaa",
+        "allValidReports": [
+          {
+            "selectedReportId": "c34df161-f13d-4343-80ef-62cfd9ae1aaa",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-06-25T00:00:00.0000000",
+              "duration": 1208.961,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-06-24T19:02:35.617Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
     }
   ]
 }
