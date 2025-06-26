@@ -22,7 +22,7 @@ RUN npm install --force
 COPY .env.local ./.env.local
 
 # Update .env.local for Azure
-RUN sed -i "s|http://localhost:8080|https://chronopulse.azurewebsites.net|g" .env.local && \
+RUN sed -i "s|http://localhost:8080|https://premium-interval.azurewebsites.net|g" .env.local && \
     sed -i "s|http://localhost:3100|http://localhost:3100|g" .env.local
 
 # Copy the rest of the application

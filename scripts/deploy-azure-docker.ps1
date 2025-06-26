@@ -1,9 +1,9 @@
 # Azure Web App Docker Deployment Script (PowerShell)
 
 # Configuration
-$RESOURCE_GROUP = "intervaltime"
-$APP_NAME = "chronopulse"
-$DOCKER_IMAGE = "rajeshalda/meeting-time-tracker:latest"
+$RESOURCE_GROUP = "paid-intervals"
+$APP_NAME = "premium-interval"
+$DOCKER_IMAGE = "anjanikumarialda/paid-hub"
 $DOCKER_REGISTRY = "https://index.docker.io"
 
 Write-Host "Starting deployment process..." -ForegroundColor Yellow
