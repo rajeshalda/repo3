@@ -5,63 +5,48 @@ import { ScrollArea } from './ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
 
 const releaseNotes = `
-# 📌 Meeting Time Tracker - Release Notes
+# Meeting Time Tracker - Release Notes
 
-&nbsp;
+## Version 2.2.2 (June 2025)
 
-## 🌟 Version 2.2.2 (June 2025) Dev Test
+### Timezone Bug Fixes
+- **Timezone Consistency**: Resolved timezone-related issues to ensure consistent meeting count across all user timezones
+- **Date Range Conversion**: Fixed convertDateRangeToUTC function to properly preserve calendar dates
+- **Data Processing**: Eliminated redundant date manipulation in both API and frontend components
+- **User Experience**: All users now see identical meetings for the same calendar date regardless of their timezone setting
 
-&nbsp;
+### User Interface Improvements
+- **Display Clarity**: Enhanced timezone display formatting and standardized font sizes in AI Agent view
+- **Visual Consistency**: Improved overall interface consistency and readability
 
-### 🔧 Timezone Bug Fixes
-- 🌏 Fixed timezone bug: ensure same meeting count across all timezones
-- 📅 Fixed convertDateRangeToUTC to preserve calendar dates
-- 🔄 Removed redundant date manipulation in API and frontend
-- ✅ Now all users see same meetings for same calendar date regardless of timezone
+### Recurring Meetings Enhancement
+- **Session Display**: Multiple attendance sessions for recurring meetings are now displayed separately
+- **Backend Processing**: Enhanced backend logic to maintain separate records for different report IDs
+- **Frontend Updates**: Modified frontend to display each attendance session as individual table rows
+- **API Matching**: Improved API matching logic to process each session separately during task assignment
+- **Code Optimization**: Removed redundant frontend date filtering logic
+- **Session Identification**: Added session numbering for better identification of multi-session meetings
 
-&nbsp;
+**Issue Resolved**: Fixed a critical issue where recurring meetings with multiple attendance sessions were incorrectly merged into single entries instead of being displayed separately.
 
-### 🎨 UI Improvements
-- 🖥️ Clarify timezone display and standardize font sizes in AI Agent view
+### Attendance Processing Improvements
+- **Comprehensive Processing**: Enhanced system to process all attendance reports for recurring meetings
+- **Method Enhancement**: Added processAllValidReports() method to handle multiple reports efficiently
+- **Instance Creation**: Implemented separate meeting instance creation for each unposted report ID
+- **Data Accuracy**: Enhanced attendance data fetching to ensure accurate billing per report
+- **Revenue Protection**: Prevents revenue loss from users who rejoin recurring meetings
 
-&nbsp;
+### Interface Text Updates
+- **Status Clarity**: Updated duration column text from "Not Attended" to "Meeting did not start" for better clarity
 
-### 📊 Recurring Meetings Fix
-- 🔁 Display multiple attendance sessions separately for recurring meetings
-- 🛠️ Fix backend to preserve separate records for different report IDs
-- 📋 Update frontend to show each attendance session as individual table row
-- 🎯 Fix API matching to process each session separately during task assignment
-- 🧹 Remove redundant frontend date filtering
-- 🔢 Improve display of multi-session meetings with session numbering
+### Review Queue System Fixes
+- **AI Agent Processing**: Resolved issue preventing AI agent from processing existing review queue meetings
+- **Manual Posting**: Added missing review queue removal functionality for manual posting operations
+- **Matching Algorithm**: Implemented reportId-based matching for reliable deduplication
+- **State Management**: Enhanced UI state management for immediate user interface updates
+- **Error Handling**: Added comprehensive error handling and logging capabilities
 
-Fixes issue where recurring meetings with multiple attendance sessions were being merged into single entries instead of showing separately.
-
-&nbsp;
-
-### 💰 Attendance Processing Improvements
-- 📊 Process all attendance reports for recurring meetings
-- ➕ Add processAllValidReports() method to handle multiple reports
-- 🔄 Create separate meeting instances for each unposted report ID
-- 📈 Fetch specific attendance data per report for accurate billing
-- 💵 Prevents missing revenue from users rejoining recurring meetings
-
-&nbsp;
-
-### 🏷️ UI Text Updates
-- 📝 Change "Not Attended" to "Meeting did not start" in duration column
-
-&nbsp;
-
-### 🔄 Review Queue Fixes
-- 🤖 Fix AI agent not processing existing review queue meetings
-- ➕ Add missing review queue removal for manual posting
-- 🎯 Implement reportId-based matching for reliable deduplication
-- 🎨 Enhance UI state management for immediate updates
-- 🛡️ Add comprehensive error handling and logging
-
-Fixes issues where meetings would remain in review queue after posting, requiring manual page refresh. Both AI agent and manual posting now consistently remove meetings from review queue immediately.
-
-
+**Issue Resolved**: Fixed critical issues where meetings would remain in the review queue after posting, previously requiring manual page refresh. Both AI agent and manual posting operations now consistently remove meetings from the review queue immediately upon completion.
 `;
 
 export function ReleaseNotes() {

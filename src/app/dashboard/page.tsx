@@ -92,10 +92,16 @@ interface Meeting {
   description?: string;
   startTime: string;
   endTime: string;
+  originalStartTime?: string; // Preserve original scheduled start time
+  originalEndTime?: string;   // Preserve original scheduled end time
   isTeamsMeeting: boolean;
   organizer?: string;
   meetingInfo?: {
     meetingId: string;
+    threadId?: string;
+    organizerId?: string;
+    graphId?: string;
+    reportId?: string;
   };
   attendanceRecords: AttendanceRecord[];
   rawData: RawMeetingData;
@@ -358,6 +364,7 @@ export default function DashboardPage() {
     setDateRange(newRange);
     // Clear match results when date range changes
     setMatchResults(null);
+    
     if (newRange?.from && newRange?.to) {
       const utcDateRange = convertDateRangeToUTC(newRange);
       console.log('Date range changed:', {
@@ -375,6 +382,14 @@ export default function DashboardPage() {
       }));
       // Also clear from localStorage
       localStorage.removeItem('taskMatches');
+    } else {
+      // Clear all data when date range is cleared
+      setMeetingsData(null);
+      setRawMeetingsData(null);
+      setTotalAttendanceSeconds(0);
+      localStorage.removeItem('meetingsDateRange');
+      localStorage.removeItem('taskMatches');
+      console.log('Date range cleared - all data cleared');
     }
   };
 
@@ -901,9 +916,12 @@ export default function DashboardPage() {
                               </TableCell>
                             </TableRow>
                           ) : meetingsData && meetingsData.meetings ? (
-                            // Flatten meetings to create a separate row for each attendance record
-                            meetingsData.meetings.flatMap((meeting) => {
-                              const scheduledDuration = (new Date(meeting.endTime).getTime() - new Date(meeting.startTime).getTime()) / 1000;
+                                        // Flatten meetings to create a separate row for each attendance record
+            meetingsData.meetings.flatMap((meeting) => {
+              // Use original scheduled times if available, otherwise use current times
+              const originalStart = (meeting as any).originalStartTime || meeting.startTime;
+              const originalEnd = (meeting as any).originalEndTime || meeting.endTime;
+              const scheduledDuration = (new Date(originalEnd).getTime() - new Date(originalStart).getTime()) / 1000;
                               const userRecords = meeting.attendanceRecords.filter(record => record.name === session?.user?.name);
                               
                               // If no user records, return just the base meeting
@@ -912,7 +930,9 @@ export default function DashboardPage() {
                                   meeting,
                                   record: null as AttendanceRecord | null,
                                   index: 0,
-                                  scheduledDuration
+                                  scheduledDuration,
+                                  originalStart,
+                                  originalEnd
                                 }];
                               }
                               
@@ -921,16 +941,33 @@ export default function DashboardPage() {
                                 meeting,
                                 record,
                                 index,
-                                scheduledDuration
+                                scheduledDuration,
+                                originalStart,
+                                originalEnd
                               }));
-                            }).map((item: { 
+                                                          }).map((item: { 
                               meeting: Meeting; 
                               record: AttendanceRecord | null; 
                               index: number; 
-                              scheduledDuration: number 
-                            }) => {
+                              scheduledDuration: number;
+                              originalStart: string;
+                              originalEnd: string;
+                            }, arrayIndex) => {
+                              // Create a stable but unique key using multiple identifiers
+                              const keyParts = [
+                                'meeting',
+                                item.meeting.meetingInfo?.graphId || item.meeting.meetingInfo?.threadId || item.meeting.subject.replace(/[^a-zA-Z0-9]/g, '_'),
+                                item.originalStart,
+                                item.meeting.startTime,
+                                item.record?.rawRecord?.reportId || 'no-record',
+                                item.record?.rawRecord?.emailAddress?.replace(/[^a-zA-Z0-9]/g, '_') || 'no-email',
+                                item.index,
+                                arrayIndex // Add array index as final disambiguator
+                              ];
+                              const uniqueKey = keyParts.join('-');
+                              
                               return (
-                                <TableRow key={`${item.meeting.meetingInfo?.meetingId || item.meeting.subject}_${item.meeting.startTime}_${item.record?.rawRecord?.reportId || 'no-record'}_${item.index}`}>
+                                <TableRow key={uniqueKey}>
                                   <TableCell className="px-4 py-3">
                                     <div className="flex flex-col">
                                       <div className="font-medium truncate max-w-[200px] sm:max-w-[300px]">
@@ -942,7 +979,7 @@ export default function DashboardPage() {
                                         </Badge>
                                       )}
                                       <div className="text-xs text-muted-foreground mt-1 md:hidden">
-                                        {new Date(item.meeting.startTime).toLocaleTimeString([], { 
+                                        {new Date(item.originalStart).toLocaleTimeString([], { 
                                           hour: 'numeric',
                                           minute: '2-digit',
                                           hour12: true
@@ -952,19 +989,19 @@ export default function DashboardPage() {
                                   </TableCell>
                                   <TableCell className="px-4 py-3 hidden md:table-cell">
                                     <div className="text-sm space-y-1">
-                                      <div>{new Date(item.meeting.startTime).toLocaleDateString([], { 
+                                      <div>{new Date(item.originalStart).toLocaleDateString([], { 
                                         month: 'short',
                                         day: 'numeric',
                                         timeZone: 'Asia/Kolkata'
                                       })}</div>
                                       <div className="text-muted-foreground">
                                         {/* Always show the scheduled meeting time, not the actual attendance time */}
-                                        {new Date(item.meeting.startTime).toLocaleTimeString([], { 
+                                        {new Date(item.originalStart).toLocaleTimeString([], { 
                                           hour: 'numeric',
                                           minute: '2-digit',
                                           hour12: true,
                                           timeZone: 'Asia/Kolkata'
-                                        })} - {new Date(item.meeting.endTime).toLocaleTimeString([], { 
+                                        })} - {new Date(item.originalEnd).toLocaleTimeString([], { 
                                           hour: 'numeric',
                                           minute: '2-digit',
                                           hour12: true,

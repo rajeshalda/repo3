@@ -683,8 +683,19 @@ export async function GET(request: Request) {
     const correctedEndDate = new Date(utcRange.end);
 
     // Get the IST date range for strict filtering
-    const startISTDate = formatToISTNew(utcRange.start, 'yyyy-MM-dd').replace(/ IST$/, ''); // Remove IST suffix
-    const endISTDate = formatToISTNew(utcRange.end, 'yyyy-MM-dd').replace(/ IST$/, ''); // Remove IST suffix
+    // Extract just the date part without timezone suffix for proper comparison
+    // Use direct IST conversion to avoid unwanted timezone suffixes
+    const startUTCDate = new Date(utcRange.start);
+    const endUTCDate = new Date(utcRange.end);
+    const startISTDate = new Date(startUTCDate.getTime() + (5.5 * 60 * 60 * 1000)).toISOString().split('T')[0];
+    const endISTDate = new Date(endUTCDate.getTime() + (5.5 * 60 * 60 * 1000)).toISOString().split('T')[0];
+    
+    console.log('📅 IST DATE RANGE FOR FILTERING:', {
+      startISTDate,
+      endISTDate,
+      utcRangeStart: utcRange.start,
+      utcRangeEnd: utcRange.end
+    });
 
     // Get access token
     const accessToken = session.user.accessToken;
@@ -925,6 +936,10 @@ export async function GET(request: Request) {
               
               return {
                 ...meeting,
+                // Preserve original scheduled times for calculating scheduled duration
+                originalStartTime: meeting.startTime,
+                originalEndTime: meeting.endTime,
+                // Override display times with attendance times
                 startTime: earliestJoinTime, // Use actual attendance time
                 endTime: attendanceEndTime.toISOString(), // Use calculated end time based on attendance
                 displayNote: `Attended on ${formatToISTNew(earliestJoinTime, 'dd/MM/yyyy')}`
