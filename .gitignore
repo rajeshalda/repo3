@@ -130,3 +130,4 @@ dist
 .pnp.*
 data/application.sqlite
 data/application.sqlite
+/data
