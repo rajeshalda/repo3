@@ -675,12 +675,7 @@ ${reportId ? `│ 📊 Report ID: ${reportId}                                │
 
 // Helper method to convert a date string to IST format
 function convertToIST(dateStr: string): string {
-    // Instead of using the meeting date's time, use the current time
-    const now = new Date();
-    
-    // Add 5.5 hours to convert from UTC to IST
-    const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
-    
-    // Return ISO string with IST marker
-    return istDate.toISOString().replace('Z', '') + ' IST';
+    // Return current UTC time as ISO string
+    // The frontend formatDateIST function will handle the IST conversion
+    return new Date().toISOString();
 } 

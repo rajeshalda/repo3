@@ -1391,7 +1391,7 @@ export function AIAgentView() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
-                      Meeting Date (UTC)
+                      Meeting Date
                     </TableHead>
                     <TableHead className="font-semibold text-sm text-foreground">
                       Meeting Name

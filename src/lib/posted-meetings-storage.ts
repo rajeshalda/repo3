@@ -104,8 +104,10 @@ export class PostedMeetingsStorage {
 
     private getISTFormattedDate(date?: string | Date): string {
         const now = date ? new Date(date) : new Date();
-        const istDate = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
-        return istDate.toISOString().replace('Z', '') + ' IST';
+        
+        // Return UTC time as ISO string
+        // The frontend formatDateIST function will handle the IST conversion
+        return now.toISOString();
     }
 
     async addPostedMeeting(email: string, meeting: { 
