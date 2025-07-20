@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 const releaseNotes = `
 # Meeting Time Tracker - Release Notes
 
-## Version 2.2.2 (June 2025)
+## Version 2.2.3 (July 2025)
 
 ### Timezone Bug Fixes
 - **Timezone Consistency**: Resolved timezone-related issues to ensure consistent meeting count across all user timezones
