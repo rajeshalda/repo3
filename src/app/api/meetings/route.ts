@@ -727,60 +727,9 @@ export async function GET(request: Request) {
       utcRangeEnd: utcRange.end
     });
 
-    // Enhanced date filtering: Include meetings scheduled on the date OR attended on the date
-    console.log('🚀 ENHANCED DATE FILTERING - Including scheduled meetings for the date AND attended meetings');
-    const dateFilteredMeetings = meetingsData.meetings.filter(meeting => {
-        // Use proper timezone utility for meeting scheduled time
-        const meetingUTCDate = new Date(meeting.startTime);
-        const meetingISTDate = new Date(meetingUTCDate.getTime() + (5.5 * 60 * 60 * 1000));
-        const meetingDateStr = meetingISTDate.toISOString().split('T')[0];
-        
-        // Check if meeting is scheduled within the requested date range
-        const isScheduledInRange = meetingDateStr >= startISTDate && meetingDateStr <= endISTDate;
-        
-        // Check if meeting has attendance within the requested date range using proper IST conversion
-        let hasAttendanceInRange = false;
-        if (meeting.attendanceRecords?.length > 0) {
-            const userEmail = session?.user?.email;
-            if (userEmail) {
-                const userRecords = meeting.attendanceRecords.filter((record: AttendanceRecord) => 
-                    record.email.toLowerCase() === userEmail.toLowerCase()
-                );
-                
-                // Check ALL intervals for any that fall within the IST date range
-                if (userRecords.length > 0) {
-                    for (const record of userRecords) {
-                        if (record.intervals && record.intervals.length > 0) {
-                            for (const interval of record.intervals) {
-                                const joinTime = new Date(interval.joinDateTime);
-                                // Convert to IST using proper timezone conversion
-                                const joinISTDate = new Date(joinTime.getTime() + (5.5 * 60 * 60 * 1000));
-                                const joinDateStr = joinISTDate.toISOString().split('T')[0];
-                                
-                                if (joinDateStr >= startISTDate && joinDateStr <= endISTDate) {
-                                    hasAttendanceInRange = true;
-                                    break;
-                                }
-                            }
-                            if (hasAttendanceInRange) break;
-                        }
-                    }
-                }
-            }
-        }
-        
-        const includeInResults = isScheduledInRange || hasAttendanceInRange;
-        
-        console.log(`📅 DATE FILTER: ${meeting.subject}`, {
-            scheduled: meetingDateStr,
-            isScheduledInRange,
-            hasAttendanceInRange,
-            includeInResults,
-            requestedRange: `${startISTDate} to ${endISTDate}`
-        });
-        
-        return includeInResults;
-    });
+    // Enhanced date filtering: Use strict IST date filtering utility
+    console.log('🚀 STRICT IST DATE FILTERING - Only meetings with IST date in range will be included');
+    const dateFilteredMeetings = filterMeetingsByISTDate(meetingsData.meetings, startISTDate, endISTDate);
 
     console.log(`\nFiltered ${meetingsData.meetings.length} meetings to ${dateFilteredMeetings.length} within date range`);
     if (meetingsData.meetings.length !== dateFilteredMeetings.length) {
