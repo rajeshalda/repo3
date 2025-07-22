@@ -55,24 +55,30 @@ MATCHING RULES:
 7. NEVER match with tasks that have a "Closed" status
 8. If the client is "Nathcorp", note that these are internal non-billable tasks
 9. If no assigned tasks match well, return an empty matchedTasks array
-10. IMPORTANT: Always return at least one matching task if ANY relevance can be determined, regardless of confidence level
+10. CRITICAL: Only match when there is CLEAR and MEANINGFUL relevance between the meeting and task
+11. DO NOT match meetings to tasks just because they are the only available option
+12. If the meeting subject is generic (e.g., "Recurring Meeting", "Call", "Meeting") and has no technical context, return empty matchedTasks array
+13. Meetings with vague titles and no technical keywords should be sent for review, not matched to any task
 
 CONFIDENCE SCORE GUIDELINES:
-- Low (0.1-0.3): Minimal evidence, mostly based on general IT meeting patterns
-- Medium (0.4-0.6): Some concrete evidence connecting to specific technical area
-- High (0.7-0.9): Strong evidence with clear technical keyword matches
+- Low (0.4-0.5): Some concrete evidence connecting to specific technical area
+- Medium (0.6-0.7): Good evidence with clear technical keyword matches
+- High (0.8-0.9): Strong evidence with clear technical keyword matches
 - Perfect (1.0): Exact match between meeting subject and technical task
 - Score of 0: Task is not assigned to the user or task is closed
+- NO MATCH: Return empty matchedTasks array for meetings with no technical context or relevance
 
 EXAMPLES:
 ✓ GOOD: Meeting "Jenkins Pipeline Troubleshooting" matches DevOps task with confidence 0.8
 ✓ GOOD: Meeting "Azure VM Migration Planning" matches Infrastructure task with confidence 0.9
 ✓ GOOD: Meeting "API Integration Discussion" matches Development task with confidence 0.8
-✓ GOOD: Meeting "John" matches the most common department task type for the user with confidence 0.3
-✓ GOOD: Meeting with vague title still matches best available task with confidence 0.2
+✓ GOOD: Meeting "John" with description mentioning "code review" matches Development task with confidence 0.6
+✗ BAD: Meeting "Recurring Meeting" with no technical context matches any task (should return empty array)
+✗ BAD: Meeting "Call" with no technical context matches any task (should return empty array)
 ✗ BAD: Meeting "Sarah" matches QA task with confidence 0.7 (no evidence of QA activity)
 ✗ BAD: Any match with a task not assigned to the current user (should have confidence 0)
 ✗ BAD: Any match with a task that has status "Closed" (should be excluded)
+✗ BAD: Matching to the only available task when there's no clear relevance (should return empty array)
 
 Analyze the meeting and tasks, then provide your response in the following JSON format:
 
@@ -101,7 +107,9 @@ Notes:
 5. Include all required fields for each task
 6. The actualDuration should be taken from the attendance records and is in seconds
 7. Tasks with status "Closed" should NEVER be included in matchedTasks
-8. IMPORTANT: Return matches for ANY confidence level above 0, no matter how low - we'd rather have a low confidence match than no match at all
+8. CRITICAL: Return empty matchedTasks array if there is no clear and meaningful relevance
+9. It's better to return no matches than to match incorrectly
+10. Generic meetings without technical context should return empty matchedTasks array
 `.trim();
 
 export const generateTaskMatchingPrompt = (meetingAnalysis: string, tasksData: string): string => {

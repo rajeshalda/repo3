@@ -19571,6 +19571,85 @@
       },
       "lastProcessed": "2025-07-18T10:20:47.567Z",
       "userId": "harpreetsingh@m365x92504196.onmicrosoft.com"
+    },
+    {
+      "@odata.etag": "W/\"Z8Z32MWuA0S5etkqKuTXaQAAQaFOQw==\"",
+      "id": "AAMkADZhZTY4NjljLTg2NmMtNDZhNS1hZjk5LTUxZjMxMDQzYmY4YgBGAAAAAAC1MQUliFxnRYl_nR2JkkNnBwBnxnfYxa4DRLl62Soq5NdpAAAAAAENAABnxnfYxa4DRLl62Soq5NdpAABBvTkcAAA=",
+      "categories": [],
+      "subject": "Task Test 1",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 298 724 747 523 1\r\nPasscode: ae3MD2DS\r\n________________________________\r\nDial in by phone\r\n+1 323-618-184",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-07-22T10:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-07-22T11:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x92504196.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDc4NmIwODYtMGRjYi00M2E5LTk0ZmItNjM1Njg1MTA1ZmFh%40thread.v2/0?context=%7b%22Tid%22%3a%22d6b48afb-ae93-4180-bd0f-aa47c5c5b57b%22%2c%22Oid%22%3a%2290e2f3e7-ee86-4bc6-93ff-ccf55a60c528%22%7d",
+        "conferenceId": "607216603",
+        "tollNumber": "+1 323-618-1840"
+      },
+      "timeEntryDate": "2025-07-22",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x92504196.OnMicrosoft.com",
+            "duration": 78,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-07-22T05:18:42.8664053Z",
+                "leaveDateTime": "2025-07-22T05:20:01.3179866Z",
+                "durationInSeconds": 78
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 78,
+          "averageDuration": 78,
+          "totalParticipants": 1
+        },
+        "reportId": "3dda5d94-c1c7-4c49-8a33-ab8bf01048b4",
+        "allValidReports": [
+          {
+            "selectedReportId": "3dda5d94-c1c7-4c49-8a33-ab8bf01048b4",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-07-22T00:00:00.0000000",
+              "duration": 80.954,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-07-22T05:21:06.336Z",
+      "userId": "pradeepg@m365x92504196.onmicrosoft.com"
     }
   ]
 }
