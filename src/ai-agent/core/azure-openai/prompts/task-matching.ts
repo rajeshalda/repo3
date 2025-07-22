@@ -85,19 +85,30 @@ BEFORE RETURNING A MATCH, ASK:
 1. "Is there a logical connection between this meeting and this task?"
 2. "Would a reasonable person agree this meeting relates to this task?"
 3. "Am I forcing a match just to avoid returning empty?"
+4. "Is this meeting subject too generic or vague to confidently categorize?"
 
-IF THE ANSWER TO ANY IS "NO" → Return empty array for human review
+GENERIC/VAGUE MEETING FILTER:
+NEVER match these types of generic subjects:
+- Single words without context: "meeting", "call", "discussion", "sync"
+- Random words unrelated to work: "joker", "test", "random", "hello"
+- Generic numbered meetings: "meeting 1", "meeting 7", "call 2"  
+- Overly broad terms: "urgent meeting", "quick call", "catch up"
+- Personal names only without context: "John", "Sarah", "Mike"
+
+IF THE ANSWER TO ANY QUALITY GATE QUESTION IS "NO" → Return empty array for human review
 
 WHEN TO RETURN EMPTY ARRAY:
+- Meeting subject is generic, vague, or lacks meaningful context
 - No clear semantic, company, or contextual connection exists
-- Meeting subject is completely unrelated to available tasks
+- Meeting subject is completely unrelated to available tasks (like "joker", "random")
 - You're unsure about the connection and just guessing
 - The match feels forced or artificial
 
 WHEN TO RETURN A MATCH:
 - Clear keyword, company, or semantic connection exists
+- Meeting has specific, work-related context
 - Meeting type logically relates to task department/function
-- Reasonable person would agree there's a connection
+- Reasonable person would agree there's a meaningful connection
 
 6. PATTERN RECOGNITION
 RECOGNIZE THESE PATTERNS:
@@ -115,6 +126,12 @@ HR & EMPLOYEE EVENT PATTERNS:
 - "Benefits meeting", "Policy discussion", "Company announcement" → HR tasks
 - "Holiday party", "Team lunch", "Employee appreciation" → HR Meetings
 - "All hands", "Town hall", "Company meeting" → HR or internal coordination tasks
+
+AVOID GENERIC MATCHES:
+- DO NOT match generic words like "meeting", "call", "sync" to HR tasks just because they contain meeting-related terms
+- DO NOT match random or unrelated words like "joker", "test", "hello" to any tasks
+- DO NOT match numbered generic meetings like "meeting 7", "call 2" without additional context
+- REQUIRE specific, contextual keywords for HR matching (not just the word "meeting")
 
 7. UNIVERSAL CLIENT/COMPANY MATCHING
 COMPANY IDENTIFICATION:
@@ -191,9 +208,13 @@ RETURN A MATCH ONLY WHEN:
 - A reasonable person would agree the match makes sense
 
 RETURN EMPTY ARRAY WHEN:
+- Meeting subject is generic, vague, or lacks meaningful context  
 - No meaningful connection can be established
 - All potential matches feel forced or artificial
 - You're just guessing without logical basis
+- Meeting subject is random/unrelated (like "joker", "test", "hello")
+- Generic numbered meetings without context ("meeting 7", "call 2")
+- Single generic words ("meeting", "call", "sync", "discussion")
 - Meeting is clearly personal/non-work related
 - No tasks are assigned to the user
 - All tasks are closed
@@ -210,16 +231,32 @@ Analysis:
 4. Confidence: 0.7 (clear company connection)
 5. Match found!
 
-Meeting: "Founder day celebration"
+Meeting: "meetings"
 Analysis:
-1. Keywords: "Founder", "day", "celebration"
-2. "Founder day celebration" is a company/employee event
-3. Check Layer 2 (SEMANTIC): Employee events → HR tasks
-4. Check Layer 3 (DEPARTMENTAL): celebrations → HR department
-5. Found: "HR Meetings" task - clear semantic and departmental match
-6. Quality gate check: "Would founder day celebration relate to HR?" → Yes, absolutely
-7. Confidence: 0.7 (strong semantic/departmental match)
-8. Match found: HR Meetings
+1. Keywords: "meetings" (generic singular word)
+2. This is a generic term without specific context
+3. Quality gate check: "Is this too generic to confidently categorize?" → Yes
+4. Quality gate check: "Would a reasonable person agree 'meetings' relates to HR Meetings?" → No, too vague
+5. DECISION: Return empty array - meeting subject lacks meaningful context
+6. Result: No match found - needs human review
+
+Meeting: "joker"
+Analysis:
+1. Keywords: "joker" (random, unrelated to work)
+2. No work-related context or meaning
+3. Quality gate check: "Is there logical connection to any task?" → No
+4. Quality gate check: "Is this random/unrelated?" → Yes
+5. DECISION: Return empty array - completely unrelated subject
+6. Result: No match found - needs human review
+
+Meeting: "urgent meeting"  
+Analysis:
+1. Keywords: "urgent", "meeting" (generic/vague)
+2. "Urgent" adds no specific context about meeting purpose
+3. Quality gate check: "Is this too generic to confidently categorize?" → Yes
+4. Quality gate check: "Would reasonable person agree this relates to specific task?" → No, could be anything
+5. DECISION: Return empty array - lacks meaningful context
+6. Result: No match found - needs human review
 
 Meeting: "WD: Separation project 4"  
 Analysis:
