@@ -23,9 +23,19 @@ Layer 1: EXACT/DIRECT matches (keywords, project names, client names, abbreviati
 - Example: "SD: Separation project" → "Sandisk Tenant Separation" (SD+Separation = strong match)
 - Example: "WD: Separation project" → "Sandisk Tenant Separation" (No match - WD≠SanDisk, despite shared "Separation")
 
-Layer 2: SEMANTIC matches (related concepts, synonyms, context clues)  
-Layer 3: COMPANY/CLIENT matches (team calls, client meetings, but NOT parent company substitutions)
-Layer 4: DEPARTMENTAL matches (meeting type suggests department)
+Layer 2: SEMANTIC matches (related concepts, synonyms, context clues)
+- Employee events → HR tasks
+- Celebrations, parties, team building → HR Meetings
+- Training, onboarding, reviews → HR tasks
+- Benefits, policies, announcements → HR tasks
+
+Layer 3: DEPARTMENTAL matches (meeting type suggests department)
+- HR DEPARTMENT: celebrations, founder day, employee events, team building, training, reviews, benefits, policies, announcements, company events
+- Development: coding, programming, APIs, features, bugs
+- QA: testing, quality, bugs, defects
+- DevOps: deployment, pipelines, infrastructure
+- Support: tickets, incidents, troubleshooting
+Layer 4: COMPANY/CLIENT matches (team calls, client meetings, but NOT parent company substitutions)
 Layer 5: CONTEXTUAL matches (user's most active projects/clients)
 
 STOP HERE: If no match found in layers 1-5, return empty array for human review
@@ -99,6 +109,13 @@ RECOGNIZE THESE PATTERNS:
 - "Troubleshooting" → Support or development tasks
 - Person names only → Match to their typical collaboration areas
 
+HR & EMPLOYEE EVENT PATTERNS:
+- "Founder day", "Company celebration", "Team building" → HR Meetings/HR tasks
+- "Employee training", "Onboarding", "Performance review" → HR tasks
+- "Benefits meeting", "Policy discussion", "Company announcement" → HR tasks
+- "Holiday party", "Team lunch", "Employee appreciation" → HR Meetings
+- "All hands", "Town hall", "Company meeting" → HR or internal coordination tasks
+
 7. UNIVERSAL CLIENT/COMPANY MATCHING
 COMPANY IDENTIFICATION:
 - Extract any company names, abbreviations, or brand references
@@ -147,6 +164,10 @@ IT DEPARTMENT SPECIALIZATIONS:
    - Topics: system maintenance, updates, monitoring, user management
    - Keywords: Active Directory, user accounts, system updates, monitoring, patching, SCCM, Intune
 
+9. Human Resources & Administration:
+   - Topics: employee events, celebrations, training, reviews, benefits, policies, company meetings
+   - Keywords: HR, founder day, celebration, party, team building, training, onboarding, benefits, policy, announcement, all hands, town hall, employee, company event
+
 MATCHING RULES:
 1. ONLY match with tasks that are assigned to the current user (check assigneeid field)
 2. NEVER match with tasks that have a "Closed" status
@@ -189,15 +210,16 @@ Analysis:
 4. Confidence: 0.7 (clear company connection)
 5. Match found!
 
-Meeting: "SD: Separation project 4"
+Meeting: "Founder day celebration"
 Analysis:
-1. Keywords: "SD", "Separation", "project"
-2. "SD" = "SanDisk" (company abbreviation)
-3. Check available tasks for SanDisk + Separation keywords
-4. Found: "Sandisk Tenant Separation client call" - PERFECT match (SD=SanDisk + Separation keyword)
-5. Company + keyword combination = highest confidence
-6. Confidence: 0.95 (company abbreviation + keyword match)
-7. Match found: Sandisk Tenant Separation client call
+1. Keywords: "Founder", "day", "celebration"
+2. "Founder day celebration" is a company/employee event
+3. Check Layer 2 (SEMANTIC): Employee events → HR tasks
+4. Check Layer 3 (DEPARTMENTAL): celebrations → HR department
+5. Found: "HR Meetings" task - clear semantic and departmental match
+6. Quality gate check: "Would founder day celebration relate to HR?" → Yes, absolutely
+7. Confidence: 0.7 (strong semantic/departmental match)
+8. Match found: HR Meetings
 
 Meeting: "WD: Separation project 4"  
 Analysis:
