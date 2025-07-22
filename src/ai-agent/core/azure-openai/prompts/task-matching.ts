@@ -19,6 +19,9 @@ Layer 1: EXACT/DIRECT matches (keywords, project names, client names, abbreviati
 - SD → SanDisk (check for "sandisk task" FIRST)
 - WD → Western Digital  
 - Client names must match exactly before considering parent companies
+- COMPANY PREFIX PRIORITY: When both company abbreviation AND shared keywords exist, company match wins
+- Example: "SD: Separation project" → "Sandisk Tenant Separation" (SD+Separation = strong match)
+- Example: "WD: Separation project" → "Sandisk Tenant Separation" (No match - WD≠SanDisk, despite shared "Separation")
 
 Layer 2: SEMANTIC matches (related concepts, synonyms, context clues)  
 Layer 3: COMPANY/CLIENT matches (team calls, client meetings, but NOT parent company substitutions)
@@ -27,7 +30,7 @@ Layer 5: CONTEXTUAL matches (user's most active projects/clients)
 
 STOP HERE: If no match found in layers 1-5, return empty array for human review
 
-CRITICAL: Layer 1 matches take absolute priority. Don't skip to parent companies when direct matches exist.
+CRITICAL: Layer 1 matches take absolute priority. Company abbreviation + keyword combination beats keyword-only matches.
 
 2. DYNAMIC ABBREVIATION & SYNONYM RECOGNITION
 INTELLIGENT MATCHING RULES:
@@ -37,6 +40,10 @@ INTELLIGENT MATCHING RULES:
   * SD = SanDisk  
   * MS = Microsoft
   * AWS = Amazon Web Services
+- COMPANY + KEYWORD COMBINATION MATCHING:
+  * "SD: Separation project" + "Sandisk Tenant Separation" = STRONG MATCH (company + keyword)
+  * "WD: Separation project" + "Sandisk Tenant Separation" = NO MATCH (wrong company, despite shared keyword)
+  * Company abbreviation must align with task client for keyword matches to be valid
 - ALWAYS check for EXACT client/company matches FIRST before looking for parent companies
 - Match team/department calls to relevant departmental tasks
 - Connect project codenames to actual project names
@@ -144,11 +151,17 @@ MATCHING RULES:
 1. ONLY match with tasks that are assigned to the current user (check assigneeid field)
 2. NEVER match with tasks that have a "Closed" status
 3. PRIORITIZE EXACT CLIENT/COMPANY MATCHES over parent company relationships
-4. If the client is "Nathcorp", note that these are internal non-billable tasks
-5. Apply multi-layer matching approach systematically - but Layer 1 (EXACT) takes absolute priority
-6. Use dynamic abbreviation and synonym recognition
-7. Always attempt contextual and pattern-based matching
-8. Meeting duration is NOT a reliable indicator of meeting type
+4. COMPANY + KEYWORD VALIDATION: Both company abbreviation AND keywords must align with the same task
+5. If the client is "Nathcorp", note that these are internal non-billable tasks
+6. Apply multi-layer matching approach systematically - but Layer 1 (EXACT) takes absolute priority
+7. Use dynamic abbreviation and synonym recognition with company validation
+8. Always attempt contextual and pattern-based matching
+9. Meeting duration is NOT a reliable indicator of meeting type
+
+DISAMBIGUATION LOGIC:
+- When multiple meetings share keywords but have different company prefixes
+- Only match the meeting whose company abbreviation aligns with the task client
+- Example: "SD: X" matches "Sandisk X task", "WD: X" does NOT match "Sandisk X task"
 
 OUTPUT REQUIREMENTS:
 RETURN A MATCH ONLY WHEN:
@@ -176,15 +189,26 @@ Analysis:
 4. Confidence: 0.7 (clear company connection)
 5. Match found!
 
-Meeting: "SD Production Document"
+Meeting: "SD: Separation project 4"
 Analysis:
-1. Keywords: "SD", "Production", "Document"
-2. "SD" is a common abbreviation for "SanDisk"
-3. Check available tasks for SanDisk, SD, or related work
-4. Found: "sandisk task" (16774660) - EXACT client match
-5. This is a Layer 1 (EXACT/DIRECT) match - highest priority
-6. Confidence: 0.9 (strong company match)
-7. Match found: sandisk task (NOT WD task, even though WD owns SanDisk)
+1. Keywords: "SD", "Separation", "project"
+2. "SD" = "SanDisk" (company abbreviation)
+3. Check available tasks for SanDisk + Separation keywords
+4. Found: "Sandisk Tenant Separation client call" - PERFECT match (SD=SanDisk + Separation keyword)
+5. Company + keyword combination = highest confidence
+6. Confidence: 0.95 (company abbreviation + keyword match)
+7. Match found: Sandisk Tenant Separation client call
+
+Meeting: "WD: Separation project 4"  
+Analysis:
+1. Keywords: "WD", "Separation", "project"
+2. "WD" = "Western Digital" (company abbreviation)
+3. Check available tasks for Western Digital + Separation keywords
+4. Found: "Sandisk Tenant Separation client call" - but this is SanDisk, not Western Digital
+5. Company mismatch: WD (Western Digital) ≠ SanDisk
+6. Quality gate check: "Would WD separation work relate to SanDisk task?" → No logical connection
+7. DECISION: Return empty array - company abbreviations don't align
+8. Result: No match found - needs human review
 
 Meeting: "API Discussion"
 Analysis:  
