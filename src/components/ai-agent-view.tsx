@@ -1354,15 +1354,6 @@ export function AIAgentView() {
                     className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
                   />
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearPostedMeetings}
-                  className="h-8"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Clear History
-                </Button>
               </>
             )}
           </div>

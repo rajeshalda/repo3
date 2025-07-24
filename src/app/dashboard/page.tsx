@@ -825,6 +825,10 @@ export default function DashboardPage() {
                   dateRange={dateRange}
                   onDateRangeChange={handleDateRangeChange}
                 />
+                <div className="flex items-center justify-center mt-2">
+                  <span className="inline-flex items-center justify-center mr-1 w-4 h-4 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none" aria-label="info">i</span>
+                  <span className="text-[11px] italic text-muted-foreground">Choose the date range under 30 dates for smooth workflow.</span>
+                </div>
               </div>
             ) : (
               <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
@@ -879,7 +883,7 @@ export default function DashboardPage() {
                         <TableHeader>
                           <TableRow>
                             <TableHead>Meeting Name</TableHead>
-                            <TableHead>Date and Time</TableHead>
+                            <TableHead>Schedule Date and Time</TableHead>
                             <TableHead>Schedule Duration</TableHead>
                             <TableHead>Meeting Attended Duration</TableHead>
                             <TableHead className="text-right pr-8">Attendance</TableHead>
@@ -1229,11 +1233,17 @@ export default function DashboardPage() {
               <div className="flex items-center gap-4 shrink-0">
                 {/* Only show DateRangePicker in header if in dashboard view */}
                 {currentView === 'dashboard' && meetingsData && dateRange?.from && dateRange?.to && (
-                  <div className="hidden sm:block">
+                  <div className="hidden sm:flex items-center">
                     <DateRangePicker
                       dateRange={dateRange}
                       onDateRangeChange={handleDateRangeChange}
                     />
+                    <div className="flex items-center ml-2 max-w-xs">
+                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none" aria-label="info">i</span>
+                      <span className="text-[11px] italic text-muted-foreground ml-1 max-w-[150px]">
+                        Choose the date range under 30 dates for smooth workflow.
+                      </span>
+                    </div>
                   </div>
                 )}
                 
