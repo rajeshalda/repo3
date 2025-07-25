@@ -825,8 +825,8 @@ export default function DashboardPage() {
                   dateRange={dateRange}
                   onDateRangeChange={handleDateRangeChange}
                 />
-                <div className="flex items-center justify-center mt-2">
-                  <span className="inline-flex items-center justify-center mr-1 w-4 h-4 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none" aria-label="info">i</span>
+                <div className="flex items-start justify-center mt-2">
+                  <span className="inline-flex items-center justify-center mr-1 w-3 h-3 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none mt-0.5" aria-label="info">i</span>
                   <span className="text-[11px] italic text-muted-foreground">The selected date range must not exceed 30 days.</span>
                 </div>
               </div>
@@ -1238,8 +1238,8 @@ export default function DashboardPage() {
                       dateRange={dateRange}
                       onDateRangeChange={handleDateRangeChange}
                     />
-                    <div className="flex items-center ml-2 max-w-xs">
-                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none" aria-label="info">i</span>
+                    <div className="flex items-start ml-2 max-w-xs">
+                      <span className="inline-flex items-center justify-center w-3 h-3 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none mt-0.5" aria-label="info">i</span>
                       <span className="text-[11px] italic text-muted-foreground ml-1 max-w-[150px]">
                         The selected date range must not exceed 30 days.
                       </span>
