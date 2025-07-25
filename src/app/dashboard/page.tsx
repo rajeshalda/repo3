@@ -827,7 +827,7 @@ export default function DashboardPage() {
                 />
                 <div className="flex items-center justify-center mt-2">
                   <span className="inline-flex items-center justify-center mr-1 w-4 h-4 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none" aria-label="info">i</span>
-                  <span className="text-[11px] italic text-muted-foreground">Choose the date range under 30 dates for smooth workflow.</span>
+                  <span className="text-[11px] italic text-muted-foreground">The selected date range must not exceed 30 days.</span>
                 </div>
               </div>
             ) : (
@@ -1241,7 +1241,7 @@ export default function DashboardPage() {
                     <div className="flex items-center ml-2 max-w-xs">
                       <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-muted-foreground text-muted-foreground text-[11px] font-bold select-none" aria-label="info">i</span>
                       <span className="text-[11px] italic text-muted-foreground ml-1 max-w-[150px]">
-                        Choose the date range under 30 dates for smooth workflow.
+                        The selected date range must not exceed 30 days.
                       </span>
                     </div>
                   </div>
