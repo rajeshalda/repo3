@@ -22,6 +22,15 @@ class IntervalsAPI {
         const response = await fetch(url, Object.assign(Object.assign({}, options), { headers: Object.assign(Object.assign({}, headers), options.headers) }));
         if (!response.ok) {
             const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+            
+            // Handle specific error cases
+            if (response.status === 503) {
+                throw new Error('Intervals API token is incorrect or expired. Please verify your token in settings.');
+            }
+            if (response.status === 401 || response.status === 403) {
+                throw new Error('Intervals API token is incorrect or expired. Please verify your token in settings.');
+            }
+            
             throw new Error(error.message || `HTTP error! status: ${response.status}`);
         }
         return response.json();

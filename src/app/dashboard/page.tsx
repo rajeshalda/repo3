@@ -200,7 +200,7 @@ function formatDate(dateString: string) {
 
 function formatDuration(seconds: number) {
   if (seconds < 60) {
-    return `${seconds} seconds`;
+    return `${seconds} second${seconds !== 1 ? 's' : ''}`;
   }
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;

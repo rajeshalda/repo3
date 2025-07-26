@@ -147,6 +147,19 @@ export function AIAgentView() {
     direction: 'desc'
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [paginatedMeetings, setPaginatedMeetings] = useState<PostedMeeting[]>([]);
+  
+  // Calculate pagination values
+  const totalPages = Math.ceil(filteredMeetings.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  // Hidden meetings state
+  const [showHiddenMeetings, setShowHiddenMeetings] = useState(false);
+
   // Add sorting options with proper typing
   const sortOptions: { label: string; value: SortField }[] = [
     { label: 'Meeting Date', value: 'date' },
@@ -269,6 +282,18 @@ export function AIAgentView() {
     
     setFilteredMeetings(filtered);
   }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter, sortConfig]);
+
+  // Update paginated meetings when filtered meetings or pagination settings change
+  useEffect(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    setPaginatedMeetings(filteredMeetings.slice(start, end));
+  }, [filteredMeetings, currentPage, pageSize]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter]);
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -453,7 +478,17 @@ export function AIAgentView() {
       const postedIds = new Set((data.meetings || []).map((m: PostedMeeting) => m.meetingId));
       console.log('Posted meeting IDs:', Array.from(postedIds));
       
-      setPostedMeetings(data.meetings || []);
+      // Filter out hidden meetings based on user preference
+      let meetings = data.meetings || [];
+      if (session?.user?.email) {
+        const hiddenMeetingsKey = `hiddenMeetings_${session.user.email}`;
+        const hiddenMeetingIds = JSON.parse(localStorage.getItem(hiddenMeetingsKey) || '[]');
+        meetings = meetings.filter((meeting: PostedMeeting) => 
+          !hiddenMeetingIds.includes(meeting.meetingId)
+        );
+      }
+      
+      setPostedMeetings(meetings);
       setDailyCounts(data.dailyCounts || []);
       
       // Also fetch meetings from reviews.json
@@ -995,36 +1030,59 @@ export function AIAgentView() {
     return formatDateIST(dateString, DEFAULT_DATE_FORMAT);
   };
 
-  // Add clearPostedMeetings handler
+  // Add clearPostedMeetings handler - FRONTEND ONLY (preserves SQLite data)
   const clearPostedMeetings = async () => {
     try {
-      const response = await fetch('/api/ai-agent/clear-meetings', {
-        method: 'POST'
-      });
+      // Only clear the frontend display - DO NOT delete from SQLite database
+      // This preserves data integrity and prevents duplicate processing issues
       
-      if (!response.ok) {
-        throw new Error('Failed to clear meetings');
-      }
-      
-      const data = await response.json();
-      
-      // Only clear the current user's meetings from the local state
       if (session?.user?.email) {
         const userEmail = session.user.email;
+        
+        // Clear only from local state - SQLite data remains intact
         setPostedMeetings(prevMeetings => 
           prevMeetings.filter(meeting => meeting.userId !== userEmail)
         );
+        
+        // Store user preference to hide cleared meetings in localStorage
+        const hiddenMeetingsKey = `hiddenMeetings_${userEmail}`;
+        const currentHidden = JSON.parse(localStorage.getItem(hiddenMeetingsKey) || '[]');
+        const userMeetingIds = postedMeetings
+          .filter(meeting => meeting.userId === userEmail)
+          .map(meeting => meeting.meetingId);
+        
+        const updatedHidden = [...new Set([...currentHidden, ...userMeetingIds])];
+        localStorage.setItem(hiddenMeetingsKey, JSON.stringify(updatedHidden));
+        
+        success('Successfully cleared your posted meetings from view (data preserved in database)');
+        addLog('Cleared posted meetings from view - database data preserved', 'success');
       } else {
-        // Refresh meetings from the server if we can't filter locally
-        await fetchPostedMeetings();
+        throw new Error('User session not found');
       }
-      
-      success('Successfully cleared your posted meetings');
-      addLog('Cleared your posted meetings', 'success');
     } catch (err) {
-      console.error('Error clearing meetings:', err);
-      error('Failed to clear your meetings');
-      addLog('Failed to clear your posted meetings', 'error');
+      console.error('Error clearing meetings view:', err);
+      error('Failed to clear your meetings view');
+      addLog('Failed to clear posted meetings view', 'error');
+    }
+  };
+
+  // Function to restore hidden meetings
+  const restoreHiddenMeetings = async () => {
+    try {
+      if (session?.user?.email) {
+        const hiddenMeetingsKey = `hiddenMeetings_${session.user.email}`;
+        localStorage.removeItem(hiddenMeetingsKey);
+        
+        // Refresh the meetings list to show all data
+        await fetchPostedMeetings();
+        
+        success('Hidden meetings restored successfully');
+        addLog('Restored hidden meetings to view', 'success');
+      }
+    } catch (err) {
+      console.error('Error restoring hidden meetings:', err);
+      error('Failed to restore hidden meetings');
+      addLog('Failed to restore hidden meetings', 'error');
     }
   };
 
@@ -1354,6 +1412,29 @@ export function AIAgentView() {
                     className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
                   />
                 </div>
+                
+                {/* Action Buttons */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearPostedMeetings}
+                  className="h-8"
+                  title="Hide your posted meetings from view (preserves database data)"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear History
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={restoreHiddenMeetings}
+                  className="h-8"
+                  title="Restore previously hidden meetings to view"
+                  disabled={true}
+                >
+                  Restore Hidden
+                </Button>
               </>
             )}
           </div>
@@ -1365,18 +1446,42 @@ export function AIAgentView() {
             </div>
           ) : postedMeetings.length > 0 ? (
             <>
-              <div className="text-xs text-muted-foreground mb-2">
-                Showing {filteredMeetings.length} of {postedMeetings.length} meetings
-                {(filterText || moduleFilter !== "all" || workTypeFilter !== "all" || dateFilter !== "all" || clientFilter !== "all" || projectFilter !== "all") && (
-                  <Button
-                    variant="link"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="h-6 p-0 ml-2"
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-xs text-muted-foreground">
+                  Showing {startIndex + 1}-{Math.min(endIndex, filteredMeetings.length)} of {filteredMeetings.length} meetings
+                  {filteredMeetings.length !== postedMeetings.length && ` (filtered from ${postedMeetings.length} total)`}
+                  {(filterText || moduleFilter !== "all" || workTypeFilter !== "all" || dateFilter !== "all" || clientFilter !== "all" || projectFilter !== "all") && (
+                    <Button
+                      variant="link"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="h-6 p-0 ml-2"
+                    >
+                      Clear filters
+                    </Button>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Rows per page:</span>
+                  <Select
+                    value={pageSize.toString()}
+                    onValueChange={(value) => {
+                      setPageSize(Number(value));
+                      setCurrentPage(1);
+                    }}
                   >
-                    Clear filters
-                  </Button>
-                )}
+                    <SelectTrigger className="h-8 w-16">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">5</SelectItem>
+                      <SelectItem value="10">10</SelectItem>
+                      <SelectItem value="25">25</SelectItem>
+                      <SelectItem value="50">50</SelectItem>
+                      <SelectItem value="100">100</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <Table>
                 <TableHeader>
@@ -1414,7 +1519,7 @@ export function AIAgentView() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredMeetings.map((meeting) => (
+                  {paginatedMeetings.map((meeting) => (
                     <TableRow key={`${meeting.meetingId}-${meeting.timeEntry.time}-${meeting.postedAt}`}>
                       <TableCell>{meeting.timeEntry.date}</TableCell>
                       <TableCell>{decodeHtmlEntities(meeting.timeEntry.description)}</TableCell>
@@ -1436,6 +1541,103 @@ export function AIAgentView() {
                   ))}
                 </TableBody>
               </Table>
+              
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-4">
+                  <div className="text-sm text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="h-8"
+                    >
+                      First
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="h-8"
+                    >
+                      Previous
+                    </Button>
+                    <span className="flex items-center gap-1 text-sm">
+                      {Math.max(1, currentPage - 2) !== 1 && (
+                        <>
+                          <Button
+                            variant={1 === currentPage ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setCurrentPage(1)}
+                            className="h-8 w-8"
+                          >
+                            1
+                          </Button>
+                          {Math.max(1, currentPage - 2) > 2 && <span>...</span>}
+                        </>
+                      )}
+                      
+                      {Array.from(
+                        { length: Math.min(5, totalPages) },
+                        (_, i) => {
+                          const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
+                          if (pageNum <= totalPages) {
+                            return (
+                              <Button
+                                key={pageNum}
+                                variant={pageNum === currentPage ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => setCurrentPage(pageNum)}
+                                className="h-8 w-8"
+                              >
+                                {pageNum}
+                              </Button>
+                            );
+                          }
+                          return null;
+                        }
+                      )}
+                      
+                      {Math.min(totalPages, currentPage + 2) !== totalPages && totalPages > 5 && (
+                        <>
+                          {Math.min(totalPages, currentPage + 2) < totalPages - 1 && <span>...</span>}
+                          <Button
+                            variant={totalPages === currentPage ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setCurrentPage(totalPages)}
+                            className="h-8 w-8"
+                          >
+                            {totalPages}
+                          </Button>
+                        </>
+                      )}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="h-8"
+                    >
+                      Next
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="h-8"
+                    >
+                      Last
+                    </Button>
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <div className="text-center py-4 text-muted-foreground">
