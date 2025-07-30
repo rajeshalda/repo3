@@ -135,7 +135,8 @@ export class AppDatabase {
                 suggested_tasks TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+                UNIQUE(user_id, report_id)
             );
             
             -- Create indexes for performance
@@ -146,6 +147,18 @@ export class AppDatabase {
             CREATE INDEX IF NOT EXISTS idx_reviews_status ON reviews(status);
             CREATE INDEX IF NOT EXISTS idx_reviews_report_id ON reviews(report_id);
         `);
+        
+        // Add unique constraint to reviews table if it doesn't exist
+        try {
+            this.db.exec(`
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_reviews_user_report_unique 
+                ON reviews(user_id, report_id) 
+                WHERE report_id IS NOT NULL
+            `);
+            console.log('✅ Added unique constraint to reviews table');
+        } catch (error) {
+            console.log('ℹ️ Unique constraint already exists or could not be added');
+        }
         
         console.log('✅ Database schema initialized');
     }

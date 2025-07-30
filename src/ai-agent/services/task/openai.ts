@@ -130,7 +130,7 @@ export class TaskService {
         }
         
         const reviewMeeting: ReviewMeeting = {
-            id: meeting.id,
+            id: meeting.id, // This will be the instance ID if the meeting was split into multiple reports
             userId: userId,
             subject: meeting.subject,
             startTime: meeting.start.dateTime,

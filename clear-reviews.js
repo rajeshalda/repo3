@@ -31,7 +31,7 @@ class ReviewCleaner {
     getReviewStats() {
         try {
             const totalReviews = this.db.prepare('SELECT COUNT(*) as count FROM reviews').get();
-            const pendingReviews = this.db.prepare('SELECT COUNT(*) as count FROM reviews WHERE status = "pending"').get();
+            const pendingReviews = this.db.prepare("SELECT COUNT(*) as count FROM reviews WHERE status = 'pending'").get();
             const userBreakdown = this.db.prepare(`
                 SELECT user_id, COUNT(*) as count, status 
                 FROM reviews 

@@ -169,11 +169,26 @@ class StorageManager {
     async storeMeetingForReview(meeting) {
         try {
             // Check if this meeting already exists in the reviews for this user using SQLite
-            const existingReview = database_1.database.getReviewById(meeting.id);
+            // For meetings with report IDs, we need to check both meeting ID and report ID to avoid duplicates
+            let existingReview = null;
             
-            if (existingReview && existingReview.user_id === meeting.userId) {
-                // Meeting already exists for this user, update it
-                console.log(`Meeting with ID ${meeting.id} already exists in reviews for user ${meeting.userId}, updating`);
+            if (meeting.reportId) {
+                // If meeting has a report ID, check for existing review with same meeting ID and report ID
+                const allReviews = database_1.database.getReviewsByUser(meeting.userId);
+                existingReview = allReviews.find(review => 
+                    review.id === meeting.id && review.report_id === meeting.reportId
+                );
+            } else {
+                // If no report ID, check by meeting ID only
+                existingReview = database_1.database.getReviewById(meeting.id);
+                if (existingReview && existingReview.user_id !== meeting.userId) {
+                    existingReview = null; // Different user, so not a duplicate
+                }
+            }
+            
+            if (existingReview) {
+                // Meeting already exists for this user with same report ID, update it
+                console.log(`Meeting with ID ${meeting.id} and report ID ${meeting.reportId} already exists in reviews for user ${meeting.userId}, updating`);
                 database_1.database.saveReview({
                     id: meeting.id,
                     user_id: meeting.userId,
@@ -190,7 +205,7 @@ class StorageManager {
                     report_id: meeting.reportId
                 });
             } else {
-                // Meeting doesn't exist for this user, add it
+                // Meeting doesn't exist for this user with this report ID, add it
                 console.log(`Adding new meeting with ID ${meeting.id} for user ${meeting.userId} to reviews`);
                 database_1.database.saveReview({
                     id: meeting.id,
