@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format, subDays } from "date-fns"
+import { format, subDays, startOfYear, endOfYear } from "date-fns"
 import { Calendar as CalendarIcon, Search, X } from "lucide-react"
 import { DateRange } from "react-day-picker"
 import { cn } from "@/lib/utils"
@@ -28,9 +28,15 @@ export function DateRangePicker({
   className,
   variant = "default",
 }: DateRangePickerProps) {
-  // Calculate date restrictions - only restrict past dates to last 30 days, allow future dates
+  // Calculate date restrictions - restrict to current year only
   const today = new Date()
+  const currentYear = today.getFullYear()
+  const startOfCurrentYear = startOfYear(today)
+  const endOfCurrentYear = endOfYear(today)
+  
+  // For past date restriction, use the later of: 30 days ago OR start of current year
   const thirtyDaysAgo = subDays(today, 30)
+  const minSelectableDate = new Date(Math.max(thirtyDaysAgo.getTime(), startOfCurrentYear.getTime()))
   
   // Internal state for temporary date selections
   const [startDate, setStartDate] = React.useState<Date | undefined>(dateRange?.from)
@@ -92,9 +98,12 @@ export function DateRangePicker({
               mode="single"
               selected={startDate}
               onSelect={setStartDate}
-              fromDate={thirtyDaysAgo}
-              toDate={endDate || today}
-              disabled={{ before: thirtyDaysAgo, after: endDate || today }}
+              fromDate={minSelectableDate}
+              toDate={endDate || endOfCurrentYear}
+              disabled={{ 
+                before: minSelectableDate, 
+                after: endDate || endOfCurrentYear 
+              }}
               initialFocus
             />
           </PopoverContent>
@@ -120,8 +129,12 @@ export function DateRangePicker({
               mode="single"
               selected={endDate}
               onSelect={setEndDate}
-              fromDate={startDate || thirtyDaysAgo}
-              disabled={{ before: startDate || thirtyDaysAgo }}
+              fromDate={startDate || minSelectableDate}
+              toDate={endOfCurrentYear}
+              disabled={{ 
+                before: startDate || minSelectableDate,
+                after: endOfCurrentYear
+              }}
               initialFocus
             />
           </PopoverContent>
@@ -180,9 +193,12 @@ export function DateRangePicker({
                 mode="single"
                 selected={startDate}
                 onSelect={setStartDate}
-                fromDate={thirtyDaysAgo}
-                toDate={endDate || today}
-                disabled={{ before: thirtyDaysAgo, after: endDate || today }}
+                fromDate={minSelectableDate}
+                toDate={endDate || endOfCurrentYear}
+                disabled={{ 
+                  before: minSelectableDate, 
+                  after: endDate || endOfCurrentYear 
+                }}
                 initialFocus
               />
             </PopoverContent>
@@ -213,8 +229,12 @@ export function DateRangePicker({
                 mode="single"
                 selected={endDate}
                 onSelect={setEndDate}
-                fromDate={startDate || thirtyDaysAgo}
-                disabled={{ before: startDate || thirtyDaysAgo }}
+                fromDate={startDate || minSelectableDate}
+                toDate={endOfCurrentYear}
+                disabled={{ 
+                  before: startDate || minSelectableDate,
+                  after: endOfCurrentYear
+                }}
                 initialFocus
               />
             </PopoverContent>
