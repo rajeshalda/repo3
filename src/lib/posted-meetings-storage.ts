@@ -161,7 +161,7 @@ export class PostedMeetingsStorage {
             projectid: taskDetails.projectid || "",
             moduleid: taskDetails.moduleid || "",
             taskid: meeting.taskId || "",
-            worktypeid: "806359",  // Default worktype ID for India-Meeting
+            worktypeid: "807329",  // Default worktype ID for India-Meeting
             personid: email,
             date: new Date(meeting.startTime).toISOString().split('T')[0],
             datemodified: this.getISTFormattedDate(),

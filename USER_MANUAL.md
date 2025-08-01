@@ -1,474 +1,866 @@
 # Meeting Time Tracker - User Manual
-## Complete Guide to Automated Meeting Time Tracking and AI-Powered Task Matching
-
----
-
-## Abstract
-
-Meeting Time Tracker automates the conversion of Microsoft Teams meeting attendance into Intervals time entries using AI-powered task matching. This manual guides users through both manual and automated workflows, from initial setup to advanced features.
-
-The application offers dual operation modes: manual control for precise meeting-to-task matching, and AI agent automation for hands-free time tracking. Key features include real-time attendance tracking, intelligent task suggestions, and automated time entry creation.
-
-**Target Audience**: End users, project managers, and team leads using Microsoft Teams and Intervals for time tracking.
-
-**Prerequisites**: Microsoft 365 account with Teams access and Intervals time tracking account.
-
----
 
 ## Table of Contents
-1. [Getting Started](#getting-started)
-2. [Dashboard Overview](#dashboard-overview)
-3. [Manual Meeting Management](#manual-meeting-management)
-4. [AI Agent Features](#ai-agent-features)
-5. [Settings & Configuration](#settings--configuration)
-6. [Troubleshooting](#troubleshooting)
-7. [Tips for Best Results](#tips-for-best-results)
+
+1. [Overview](#overview)
+   - [What is the App?](#what-is-the-app)
+   - [System Requirements](#system-requirements)
+   - [Permissions](#permissions)
+   - [Prerequisites](#prerequisites)
+
+2. [First-Time Setup](#first-time-setup)
+   - [Steps in Sequence](#steps-in-sequence)
+
+3. [Login to the App](#login-to-the-app)
+
+4. [Login to Intervals for API Access Token](#login-to-intervals-for-api-access-token)
+
+5. [Validation of Setup](#validation-of-setup)
+   - [Overview](#validation-overview)
+   - [Validation Steps](#validation-steps)
+
+6. [Manual Meeting Posting](#manual-meeting-posting)
+
+7. [AI Agent Feature and Steps](#ai-agent-feature-and-steps)
+
+8. [User Preferences and Account Settings](#user-preferences-and-account-settings)
+
+9. [Common Issues and Troubleshooting](#common-issues-and-troubleshooting)
+
+10. [Best Practices for High Performance](#best-practices-for-high-performance)
 
 ---
 
-## Getting Started
+## Overview
 
-### What is Meeting Time Tracker?
+### What is the App?
 
-Meeting Time Tracker is a powerful web application that automatically tracks your Microsoft Teams meeting attendance and creates time entries in Intervals time tracking system. It eliminates the need for manual time entry by:
+The **Meeting Time Tracker** is a comprehensive web application designed to automate time tracking for Microsoft Teams meetings. It integrates with Microsoft Graph API to fetch meeting data and Intervals time tracking service to create time entries automatically.
 
-- **Fetching meetings directly from Microsoft Teams** - Real attendance time tracking
-- **AI-powered task matching** - Intelligent matching of meetings to project tasks
-- **Automated time entry creation** - Seamless integration with Intervals
-- **Two working modes** - Manual control or fully automated AI agent
+**Key Features:**
+- **Automatic Meeting Detection**: Fetches meetings from Microsoft Teams/Outlook calendar
+- **AI-Powered Task Matching**: Uses Azure OpenAI to intelligently match meetings with Intervals tasks
+- **Manual Review System**: Allows users to review and approve AI suggestions
+- **Time Entry Creation**: Automatically creates time entries in Intervals based on meeting attendance
+- **Multi-User Support**: Supports multiple users with isolated data
+- **Real-time Processing**: Processes meetings in real-time with background AI agent
+
+**Supported Meeting Types:**
+- Microsoft Teams meetings
+- Recurring meetings
+- Meetings with attendance records
+- Cross-timezone meetings (IST/UTC support)
 
 ### System Requirements
 
-- **Browser**: Modern web browser (Chrome, Edge, Firefox, Safari)
-- **Accounts Required**:
-  - Microsoft 365 account with Teams access
-  - Intervals time tracking account with API access
-- **Permissions**: Microsoft Teams application access policies (configured by admin)
+**Browser Requirements:**
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- JavaScript enabled
+- Local storage support
+- Minimum screen resolution: 1024x768
 
-### First Time Setup
+**Network Requirements:**
+- Stable internet connection
+- Access to Microsoft Graph API
+- Access to Intervals API
+- Access to Azure OpenAI services
+
+**User Account Requirements:**
+- Microsoft 365 account (NathCorp organization)
+- Intervals account with API access
+- Valid Azure AD authentication
+
+### Permissions
+
+The application requires the following permissions:
+
+**Microsoft Graph API Permissions:**
+- `Calendars.Read` - Read user's calendar events
+- `OnlineMeetings.Read` - Read online meeting details
+- `User.Read` - Read user profile information
+
+**Intervals API Permissions:**
+- Read access to tasks and projects
+- Write access to create time entries
+- Access to user's time tracking data
+
+**Application Permissions:**
+- Local storage for user preferences
+- Session management for authentication
+
+### Prerequisites
+
+Before using the application, ensure you have:
+
+1. **Microsoft 365 Account**: Active account in the NathCorp organization
+2. **Intervals Account**: Active account with API access enabled
+3. **API Access Token**: Valid Intervals API access token (11-character code)
+4. **Meeting Attendance**: Meetings must have attendance records for time tracking
+5. **Valid Tasks**: Intervals account must have tasks available for matching
+
+---
+
+## First-Time Setup
+
+### Steps in Sequence
 
 1. **Access the Application**
-   - Navigate to your Meeting Time Tracker URL
-   - You'll see the login page with Microsoft authentication
+   - Navigate to the Meeting Time Tracker application URL
+   - The application will redirect to the login page
 
-   *[Image Suggestion: Screenshot of login page showing Microsoft authentication button]*
+2. **Microsoft Authentication**
+   - Click "Sign in with NathCorp Organization ID"
+   - Complete Microsoft 365 authentication
+   - Grant necessary permissions when prompted
 
-2. **Sign In with Microsoft**
-   - Click "Sign in with Microsoft" button
-   - Enter your Microsoft 365 credentials
-   - Grant permissions when prompted
+3. **Intervals API Setup**
+   - After successful login, the system will prompt for Intervals API Access Token
+   - Follow the instructions to obtain and enter your token
 
-   *[Image Suggestion: Screenshot of Microsoft OAuth consent screen]*
+4. **Initial Configuration**
+   - Set your preferred date range for meeting retrieval
+   - Configure any user preferences
+   - Test the connection to both Microsoft Graph and Intervals APIs
 
-3. **Configure Intervals API Key**
-   - On first login, you'll see an API key dialog
-   - To get your Intervals API key:
-     - Log into your Intervals account
-     - Go to **My Account** → **API Access** (under Options)
-     - Generate or view your API Access Token (11-character code like: `a78828gq6t4`)
-     - Copy and paste the token into the dialog
-   - Click "Save Key"
-
-   *[Image Suggestion: Screenshot of Intervals API key dialog with example token]*
-
-4. **Verify Setup**
-   - Dashboard should load showing your user profile
-   - Status indicators should show green for Microsoft Graph and Intervals APIs
-
-   *[Image Suggestion: Screenshot of successful dashboard with green status indicators]*
+5. **First Meeting Fetch**
+   - Select a date range to fetch your first set of meetings
+   - Verify that meetings are displayed correctly
+   - Check that attendance records are available
 
 ---
 
-## Dashboard Overview
+## Login to the App
 
-### Main Interface
+### Microsoft 365 Authentication
 
-The dashboard features a clean, modern interface with:
+1. **Access the Login Page**
+   - Open your web browser
+   - Navigate to the Meeting Time Tracker application
+   - You'll see the login page with the NathCorp logo
 
-- **Header Bar**: Logo, app name, date picker, user profile menu
-- **Sidebar**: Navigation between Manual and AI Agent modes
-- **Main Content**: Different views based on selected mode
-- **Footer**: Version information and copyright
+2. **Sign In Process**
+   - Click the "Sign in with NathCorp Organization ID" button
+   - You'll be redirected to Microsoft's authentication page
+   - Enter your NathCorp email address and password
+   - Complete any multi-factor authentication if required
 
-*[Image Suggestion: Full dashboard screenshot with labeled UI elements (header, sidebar, main content, footer)]*
+3. **Permission Granting**
+   - Review the permissions requested by the application
+   - Click "Accept" to grant access to your calendar and meeting data
+   - You'll be redirected back to the application dashboard
 
-### Navigation Options
+4. **Session Management**
+   - Your session will be maintained for the duration of your browser session
+   - You can sign out using the user menu in the top-right corner
+   - Sessions automatically expire after a period of inactivity
 
-**Manual Mode** - Direct control over meeting processing
-**AI Agent Mode** - Automated processing with AI assistance
+### Authentication Troubleshooting
 
-### Status Indicators
-
-Throughout the app, you'll see status indicators for:
-- ✅ **Green**: Service connected and working
-- ⚠️ **Yellow**: Warning or attention needed
-- ❌ **Red**: Error or service unavailable
-- 🔄 **Loading**: Processing in progress
-
----
-
-## Manual Meeting Management
-
-### Selecting Date Range
-
-1. **Choose Your Time Period**
-   - Click the date range picker in the main interface
-   - Select start date (From) and end date (To)
-   - **Important**: Select one day after your intended date due to timezone processing
-   - Click outside the picker to confirm selection
-
-2. **Fetch Meetings**
-   - Meetings automatically load for the selected date range
-   - Loading indicator shows progress
-   - You'll see a summary of total meetings and attendance time
-
-### Understanding Meeting Data
-
-**Meeting Overview Cards**
-- **Total Meetings**: Number of meetings in selected date range
-- **Total Time**: Your actual attendance time (not scheduled time)
-
-*[Image Suggestion: Screenshot of meeting overview cards showing statistics]*
-
-**Meeting List Table** shows:
-- **Meeting Name**: Subject line from Teams
-- **Schedule Date/Time**: When the meeting was scheduled
-- **Schedule Duration**: Originally planned meeting length
-- **Attended Duration**: How long you actually participated
-- **Attendance Status**: Attended (green) or Not Attended (gray)
-
-*[Image Suggestion: Screenshot of meeting list table with sample data showing different attendance statuses]*
-
-### Working with Meetings
-
-**Viewing Meeting Details**
-- Each row shows one meeting attendance record
-- Teams meetings display a "Teams" badge
-- Multiple attendance records for the same meeting are shown separately
-- Scheduled vs. actual times are clearly differentiated
-
-**Meeting Status**
-- **Attended**: Green checkmark - you joined and participated
-- **Not Attended**: Gray X - meeting scheduled but you didn't join
-
-### Task Matching Process
-
-1. **Fetch Your Meetings** (as described above)
-
-2. **Match Tasks**
-   - Click the blue "Match Tasks" button
-   - AI analyzes each meeting and suggests matching Intervals tasks
-   - Progress indicator shows matching in progress
-   - Results appear in the "Task Matches" tab
-
-3. **Review Match Results**
-   - Switch to "Task Matches" tab to see results
-   - Matches are organized by confidence level:
-     - **High Confidence** (80%+): Very likely correct matches
-     - **Medium Confidence** (50-79%): Probably correct, review recommended
-     - **Low Confidence** (1-49%): Uncertain matches, manual review needed
-     - **Unmatched**: No suitable task found
-
-   *[Image Suggestion: Screenshot of Task Matches tab showing confidence level sections with sample meetings]*
-
-4. **Create Time Entries**
-   - Review each suggested match
-   - Modify task selection if needed
-   - Click "Post" to create time entry in Intervals
-   - Successfully posted meetings are removed from the list
+**Common Issues:**
+- **Invalid Credentials**: Ensure you're using your NathCorp email address
+- **Permission Denied**: Contact your administrator if you don't have the required permissions
+- **Multi-Factor Authentication**: Complete MFA if prompted
+- **Session Expired**: Re-authenticate if your session expires
 
 ---
 
-## AI Agent Features
+## Login to Intervals for API Access Token
 
-### What is the AI Agent?
+### Obtaining Your Intervals API Access Token
 
-The AI Agent is an automated system that:
+1. **Access Intervals Account**
+   - Log into your Intervals account at intervals.com
+   - Navigate to your account settings
+
+2. **Generate API Access Token**
+   - Go to "My Account" → "API Access" under Options
+   - Click "Generate API Access Token" or view existing token
+   - Copy the 11-character token (format: a78828gq6t4)
+
+3. **Token Security**
+   - Keep your API token secure and confidential
+   - Don't share it with others
+   - The token provides access to your time tracking data
+
+### Entering the API Token
+
+1. **Token Entry Dialog**
+   - After Microsoft authentication, the system will show the Intervals API Access Token dialog
+   - Enter your 11-character API token in the provided field
+   - Click "Save Key" to validate and store the token
+
+2. **Token Validation**
+   - The system will validate your token against the Intervals API
+   - If valid, the token will be securely stored
+   - If invalid, you'll receive an error message
+
+3. **Token Management**
+   - You can update your token anytime from the user settings menu
+   - The token is stored securely and encrypted
+   - You can regenerate your token in Intervals if needed
+
+### API Token Troubleshooting
+
+**Common Issues:**
+- **Invalid Token**: Ensure you've copied the complete 11-character token
+- **Token Expired**: Generate a new token in Intervals if the current one has expired
+- **API Access Disabled**: Ensure API access is enabled in your Intervals account
+- **Network Issues**: Check your internet connection if validation fails
+
+---
+
+## Validation of Setup
+
+### Validation Overview
+
+After completing the initial setup, the system performs several validation checks to ensure everything is working correctly:
+
+1. **Authentication Validation**: Verifies Microsoft 365 and Intervals authentication
+2. **API Connectivity**: Tests connections to Microsoft Graph and Intervals APIs
+3. **Data Access**: Confirms access to calendar events and time tracking data
+4. **Meeting Retrieval**: Tests the ability to fetch and process meetings
+5. **Task Matching**: Validates the AI-powered task matching functionality
+
+### Validation Steps
+
+1. **Automatic Validation**
+   - The system automatically runs validation checks after setup
+   - Check the status indicators in the dashboard
+   - Look for any error messages or warnings
+
+2. **Manual Validation**
+   - Select a date range to fetch meetings
+   - Verify that meetings are displayed with correct information
+   - Check that attendance records are available
+   - Test the task matching functionality
+
+3. **AI Agent Validation**
+   - Enable the AI agent to test automatic processing
+   - Monitor the processing logs for any errors
+   - Verify that time entries are created correctly
+
+4. **Data Verification**
+   - Check that posted meetings appear in the "Recently Posted Meetings" section
+   - Verify that time entries are created in your Intervals account
+   - Confirm that meeting durations are calculated correctly
+
+### Validation Indicators
+
+**Success Indicators:**
+- ✅ Green checkmarks for all validation steps
+- Meetings displayed in the dashboard
+- Task matching working correctly
+- Time entries created successfully
+
+**Warning Indicators:**
+- ⚠️ Yellow warnings for non-critical issues
+- Some meetings without attendance records
+- Low confidence task matches
+
+**Error Indicators:**
+- ❌ Red errors for critical issues
+- Authentication failures
+- API connection problems
+- Missing required data
+
+---
+
+## Manual Meeting Posting
+
+### Overview
+
+Manual meeting posting allows you to review and manually create time entries for your meetings. This feature is useful when:
+- AI confidence is low
+- You want to review before posting
+- Meetings require manual task selection
+- You need to modify meeting details
+
+### Manual Posting Process
+
+1. **Access Manual Posting**
+   - Navigate to the "Dashboard" view
+   - Select a date range to fetch meetings
+   - Click "Match Tasks" to analyze meetings
+
+2. **Review Meeting Matches**
+   - View meetings categorized by confidence level:
+     - **High Confidence (80%+)**: Green indicators, likely accurate matches
+     - **Medium Confidence (50-79%)**: Yellow indicators, review recommended
+     - **Low Confidence (1-49%)**: Red indicators, manual review required
+     - **Unmatched**: No AI match found, manual selection needed
+
+3. **Select Tasks**
+   - Click "Select Task" for unmatched meetings
+   - Use the search function to find appropriate tasks
+   - Review task details before selection
+   - Change tasks for any meeting as needed
+
+4. **Post Time Entries**
+   - Click "Post" button for each meeting you want to submit
+   - Review the confirmation dialog
+   - Confirm the time entry creation
+   - Monitor the posting status
+
+### Task Selection Interface
+
+**Search Functionality:**
+- Search by task title or project name
+- Real-time filtering as you type
+- Case-insensitive search
+- Partial matching supported
+
+**Task Information Displayed:**
+- Task title and description
+- Associated project
+- Module information
+- Work type classification
+
+**Selection Options:**
+- Single task selection per meeting
+- Change task option for any meeting
+- Bulk selection for similar meetings
+- Clear selection to start over
+
+### Manual Posting Best Practices
+
+1. **Review Before Posting**
+   - Always review AI suggestions before posting
+   - Check meeting duration and attendance
+   - Verify task relevance and accuracy
+
+2. **Use Search Effectively**
+   - Use specific keywords to find tasks
+   - Search by project name for better results
+   - Review multiple options before selecting
+
+3. **Handle Unmatched Meetings**
+   - Manually select appropriate tasks
+   - Consider creating new tasks if needed
+   - Document any patterns for future AI learning
+
+4. **Batch Processing**
+   - Select multiple similar meetings
+   - Apply the same task to multiple meetings
+   - Use bulk operations for efficiency
+
+---
+
+## AI Agent Feature and Steps
+
+### AI Agent Overview
+
+The AI Agent is an automated system that continuously processes your meetings and creates time entries without manual intervention. It runs in the background and can operate even when your browser is closed.
+
+### AI Agent Capabilities
+
+**Automatic Processing:**
+- Fetches meetings every 30 minutes
+- Analyzes meeting content using Azure OpenAI
+- Matches meetings with Intervals tasks
+- Creates time entries automatically
+- Handles recurring meetings and attendance records
+
+**Intelligent Matching:**
+- Uses natural language processing to understand meeting content
+- Considers meeting titles, descriptions, and context
+- Calculates confidence scores for matches
+- Learns from manual corrections
+
+**Background Operation:**
 - Runs continuously in the background
-- Automatically fetches new meetings every 30 minutes  
-- Uses AI to match meetings with tasks
-- Creates time entries for high-confidence matches
-- Queues uncertain matches for your review
+- Processes meetings even when browser is closed
+- Handles network interruptions gracefully
+- Maintains processing state across sessions
 
 ### Enabling the AI Agent
 
-1. **Navigate to AI Agent**
-   - Click "AI Agent" in the sidebar
-   - You'll see the AI Agent Dashboard
+1. **Access AI Agent Dashboard**
+   - Navigate to the "AI Agent" view from the sidebar
+   - Review the AI Agent status and capabilities
 
-2. **Enable Automatic Processing**
-   - Toggle the "Enable AI Agent" switch to ON
-   - The agent will start running in the background
-   - Green power indicator shows it's active
+2. **Enable the Agent**
+   - Toggle the "Enable AI Agent" switch
+   - Confirm the activation
+   - The agent will start processing immediately
 
-3. **Understanding the Status**
-   - **Green Power Icon**: Agent is running
-   - **Red X Icon**: Agent is stopped or has issues
-   - Status text explains current state
+3. **Monitor Processing**
+   - View real-time processing logs
+   - Check the status of posted meetings
+   - Monitor confidence scores and matches
 
-### AI Agent Dashboard
+### AI Agent Processing Workflow
 
-**Key Sections:**
+1. **Meeting Fetching**
+   - Agent fetches meetings for the current IST day
+   - Processes both scheduled and recurring meetings
+   - Extracts attendance records and duration
 
-*[Image Suggestion: Full AI Agent dashboard screenshot showing all three main sections]*
+2. **Content Analysis**
+   - Analyzes meeting titles and descriptions
+   - Uses Azure OpenAI for natural language processing
+   - Identifies key topics and context
 
-**Actions Card**
-- Toggle to enable/disable the AI agent
-- Shows current processing status
-- Manual trigger for immediate processing
+3. **Task Matching**
+   - Compares meeting content with available tasks
+   - Calculates similarity scores
+   - Determines confidence levels
 
-*[Image Suggestion: Close-up of Actions Card with AI Agent toggle in "ON" position]*
+4. **Time Entry Creation**
+   - Creates time entries for high-confidence matches
+   - Queues low-confidence matches for review
+   - Handles errors and retries
 
-**Meeting Review**
-- Shows meetings waiting for your decision
-- Organized by confidence levels (same as manual mode)
-- Allows you to accept, modify, or reject AI suggestions
+### AI Agent Configuration
 
-**Recently Posted Meetings**
-- Table of all time entries created by the AI
-- Advanced filtering and search capabilities
-- Ability to clear your posted meeting history
+**Processing Settings:**
+- **Frequency**: Every 30 minutes (configurable)
+- **Time Range**: Full IST day (00:00 to 23:59)
+- **Confidence Threshold**: 80% for automatic posting
+- **Retry Logic**: Exponential backoff for failures
 
-*[Image Suggestion: Screenshot of Recently Posted Meetings table with filtering options visible]*
+**Matching Criteria:**
+- **Title Similarity**: Exact and partial matches
+- **Project Relevance**: Domain and context matching
+- **Time Relevance**: Meeting timing considerations
+- **Historical Learning**: Previous manual corrections
 
-### Advanced Features
+### AI Agent Monitoring
 
-**Filtering & Search**
-- **Search Box**: Find meetings by name or task
-- **Date Filter**: Show meetings from specific dates
-- **Client/Project Filter**: Filter by business categories
-- **Module/Work Type Filter**: Filter by work categories
-- **Clear Filters**: Reset all filters at once
+**Real-time Logs:**
+- Processing status updates
+- Meeting analysis results
+- Task matching decisions
+- Error messages and warnings
 
-*[Image Suggestion: Screenshot of filter dropdown menu and search box in action]*
+**Performance Metrics:**
+- Processing speed and efficiency
+- Success rates for different meeting types
+- Confidence score distributions
+- Error rates and resolution times
 
-**Sorting Options**
-- Sort by meeting date, duration, client, project, etc.
-- Ascending or descending order
-- Click column headers or use sort controls
+**Status Indicators:**
+- **Active**: Agent is running and processing
+- **Idle**: Agent is waiting for next cycle
+- **Error**: Agent encountered an error
+- **Disabled**: Agent is turned off
 
-**Pagination**
-- Adjust rows per page (5, 10, 25, 50, 100)
-- Navigate between pages with First/Previous/Next/Last buttons
-- Shows current page position and total results
+### AI Agent Best Practices
 
-**History Management**
-- **Clear History**: Hide your posted meetings from view (preserves database)
-- **Restore Hidden**: Show previously hidden meetings again
+1. **Initial Setup**
+   - Start with manual review to establish patterns
+   - Monitor AI suggestions before enabling auto-posting
+   - Adjust confidence thresholds as needed
+
+2. **Ongoing Monitoring**
+   - Regularly review posted meetings
+   - Check for any incorrect matches
+   - Provide feedback through manual corrections
+
+3. **Optimization**
+   - Use clear meeting names for better matching
+   - Maintain consistent task naming in Intervals
+   - Review and update task descriptions regularly
+
+4. **Troubleshooting**
+   - Check processing logs for errors
+   - Verify API connectivity
+   - Monitor confidence scores for patterns
 
 ---
 
-## Settings & Configuration
+## User Preferences and Account Settings
 
-### Intervals API Key Management
+### Account Settings Access
 
-**Updating Your API Key**
-1. Click your profile picture (top right)
-2. Select "Intervals Settings"
-3. Update or verify your API Access Token
-4. Click "Save Key" to confirm
+1. **User Menu**
+   - Click on your avatar in the top-right corner
+   - Access the dropdown menu with account options
 
-*[Image Suggestion: Screenshot of user profile dropdown menu showing "Intervals Settings" option]*
+2. **Available Settings**
+   - Intervals Settings
+   - Theme preferences (Light/Dark mode)
+   - Sign out option
 
-**Getting a New API Key**
-1. Log into Intervals
-2. Go to My Account → API Access
-3. Generate new token if needed
-4. Copy the 11-character code
-5. Paste into the Meeting Time Tracker dialog
+### Intervals Settings Management
 
-### Theme Settings
+1. **Update API Token**
+   - Select "Intervals Settings" from the user menu
+   - Enter your new API access token
+   - Validate the token before saving
 
-**Switch Between Light/Dark Mode**
-1. Click your profile picture (top right)
-2. Select "Light Mode" or "Dark Mode"
-3. Theme changes immediately and is saved for future sessions
+2. **Token Validation**
+   - System tests the token against Intervals API
+   - Confirms access to tasks and time entries
+   - Provides feedback on validation status
+
+3. **Token Security**
+   - Tokens are encrypted and stored securely
+   - Never shared with other users
+   - Can be regenerated in Intervals if compromised
+
+### Theme Preferences
+
+1. **Light Mode**
+   - Clean, bright interface
+   - High contrast for readability
+   - Suitable for well-lit environments
+
+2. **Dark Mode**
+   - Reduced eye strain
+   - Better for low-light conditions
+   - Modern, professional appearance
+
+3. **Theme Switching**
+   - Toggle between light and dark modes
+   - Setting persists across sessions
+   - Automatic switching based on system preference
 
 ### Session Management
 
-**Sign Out**
-1. Click your profile picture (top right)
-2. Select "Sign Out"
-3. You'll be redirected to the login page
-4. All local data is cleared for security
+1. **Session Duration**
+   - Sessions remain active during browser use
+   - Automatic timeout after inactivity
+   - Secure session handling
+
+2. **Sign Out**
+   - Click "Sign Out" from user menu
+   - Clears session data
+   - Redirects to login page
+
+3. **Session Security**
+   - Secure token storage
+   - Automatic session refresh
+   - Protection against unauthorized access
+
+### Data Management
+
+1. **Posted Meetings History**
+   - View all previously posted meetings
+   - Filter by date, client, project, or module
+   - Search functionality for quick access
+
+2. **Data Export**
+   - Export meeting data for reporting
+   - Download time entry summaries
+   - Backup important information
+
+3. **Data Privacy**
+   - User data is isolated
+   - No cross-user data sharing
+   - Secure data transmission
 
 ---
 
-## Troubleshooting
+## Common Issues and Troubleshooting
 
-### Common Issues and Solutions
+### Authentication Issues
 
-**"No meetings found in selected date range"**
-- Try selecting one day after your intended date
-- Verify you attended meetings in the selected period
-- Check your Microsoft Teams permissions
+**Problem: Cannot sign in with Microsoft 365**
+- **Solution**: Verify you're using your NathCorp email address
+- **Solution**: Check your internet connection
+- **Solution**: Clear browser cache and cookies
+- **Solution**: Contact IT support if issues persist
 
-**"Invalid API Access Token"**
-- Verify your Intervals API key is correct (11 characters)
-- Check if your Intervals account has API access enabled
-- Generate a new API key from Intervals if needed
+**Problem: Intervals API token validation fails**
+- **Solution**: Verify the 11-character token is correct
+- **Solution**: Check if API access is enabled in Intervals
+- **Solution**: Generate a new token if current one is expired
+- **Solution**: Ensure you have the necessary Intervals permissions
 
-**"Session expired" message**
-- Sign out and sign back in with Microsoft
-- Clear your browser cache if the issue persists
-- Contact your admin if permissions were revoked
+### Meeting Fetching Issues
 
-**AI Agent not processing meetings**
-- Check that the toggle is enabled (green power icon)
-- Verify Azure OpenAI service is available
-- Try processing manually first to test connections
+**Problem: No meetings displayed**
+- **Solution**: Check your date range selection
+- **Solution**: Verify you have meetings in the selected period
+- **Solution**: Ensure meetings have attendance records
+- **Solution**: Check Microsoft Graph API permissions
 
-**Meetings not appearing after posting**
-- Wait a few seconds and refresh the view
-- Check the "Posted Meetings" section
-- Verify the time entry was created in Intervals
+**Problem: Missing attendance records**
+- **Solution**: Verify you attended the meetings
+- **Solution**: Check if meetings were Teams meetings
+- **Solution**: Wait for attendance data to be available (may take time)
+- **Solution**: Contact meeting organizer for attendance reports
 
-### Error Messages
+**Problem: Incorrect meeting times**
+- **Solution**: Check your timezone settings
+- **Solution**: Verify meeting scheduling in Outlook/Teams
+- **Solution**: Account for timezone differences in recurring meetings
 
-**"Failed to fetch meetings"**
-- Check your internet connection
-- Verify Microsoft Graph API permissions
-- Try signing out and back in
+### Task Matching Issues
 
-**"Rate limiting" errors**
-- Too many requests in a short time
-- Wait a few minutes before trying again
-- AI Agent automatically handles rate limits
+**Problem: Low confidence matches**
+- **Solution**: Use more descriptive meeting names
+- **Solution**: Create more specific tasks in Intervals
+- **Solution**: Review and manually correct matches
+- **Solution**: Provide feedback to improve AI learning
 
-**"Permission denied"**
-- Contact your Microsoft 365 administrator
-- Teams application access policies may need updating
-- Verify your account has calendar access
+**Problem: No matching tasks found**
+- **Solution**: Check if tasks exist in Intervals
+- **Solution**: Verify task naming conventions
+- **Solution**: Create new tasks if needed
+- **Solution**: Use manual task selection
 
-### Performance Tips
+**Problem: Incorrect task assignments**
+- **Solution**: Manually change task assignments
+- **Solution**: Review meeting content for better context
+- **Solution**: Update task descriptions in Intervals
+- **Solution**: Provide feedback for AI improvement
 
-**For Large Date Ranges**
-- Process smaller date ranges if experiencing timeouts
-- Use the AI Agent for automatic batch processing
-- Clear posted meeting history periodically
+### AI Agent Issues
 
-**For Better Matching**
-- Use descriptive meeting names
-- Keep task names similar to meeting names
-- Verify AI suggestions before accepting
+**Problem: AI Agent not processing meetings**
+- **Solution**: Check if agent is enabled
+- **Solution**: Verify API connectivity
+- **Solution**: Check processing logs for errors
+- **Solution**: Restart the AI agent if needed
 
----
+**Problem: Processing errors or failures**
+- **Solution**: Check network connectivity
+- **Solution**: Verify API rate limits
+- **Solution**: Review error logs for specific issues
+- **Solution**: Contact support for persistent issues
 
-## Tips for Best Results
+**Problem: Duplicate time entries**
+- **Solution**: Check for duplicate meetings
+- **Solution**: Verify meeting IDs are unique
+- **Solution**: Review posted meetings history
+- **Solution**: Clear duplicate entries if needed
 
-### Meeting Naming Best Practices
+### Performance Issues
 
-**For Better AI Matching:**
-- Use clear, descriptive meeting names
-- Format: `[Project] - [Meeting Type]` (e.g., "Project Alpha - Sprint Planning")
-- Avoid abbreviations and acronyms
-- Match meeting names with your Intervals task names
-- Be consistent with naming conventions across your organization
+**Problem: Slow loading times**
+- **Solution**: Check internet connection speed
+- **Solution**: Clear browser cache
+- **Solution**: Reduce date range size
+- **Solution**: Close unnecessary browser tabs
 
-**Examples of Good Meeting Names:**
-- ✅ "Website Redesign - Client Review Meeting"
-- ✅ "Mobile App Development - Daily Standup"
-- ✅ "Q4 Planning - Strategy Session"
+**Problem: Browser crashes or freezes**
+- **Solution**: Update browser to latest version
+- **Solution**: Disable browser extensions
+- **Solution**: Clear browser data
+- **Solution**: Try a different browser
 
-**Examples of Poor Meeting Names:**
-- ❌ "Discussion"
-- ❌ "Call"
-- ❌ "Meeting"
-- ❌ "Sync"
+**Problem: Memory usage issues**
+- **Solution**: Close unused browser tabs
+- **Solution**: Restart browser periodically
+- **Solution**: Reduce date range for large datasets
+- **Solution**: Use pagination for large meeting lists
 
-*[Image Suggestion: Side-by-side comparison showing good vs poor meeting names with AI matching confidence scores]*
+### Data Issues
 
-### Workflow Recommendations
+**Problem: Missing posted meetings**
+- **Solution**: Check Intervals account for time entries
+- **Solution**: Verify posting was successful
+- **Solution**: Check for API errors during posting
+- **Solution**: Manually post if needed
 
-**Daily Workflow**
-1. Start your day by checking AI Agent results
-2. Review any meetings requiring manual decision
-3. Let AI Agent handle routine meetings automatically
-4. End-of-day: verify all important meetings were captured
+**Problem: Incorrect time durations**
+- **Solution**: Verify attendance records
+- **Solution**: Check meeting start/end times
+- **Solution**: Review timezone conversions
+- **Solution**: Manually adjust if necessary
 
-**Weekly Workflow**
-1. Review weekly time tracking totals
-2. Handle any missed or incorrectly matched meetings
-3. Update Intervals API key if needed
-4. Clear posted meeting history for better performance
+**Problem: Data synchronization issues**
+- **Solution**: Refresh the application
+- **Solution**: Check API connectivity
+- **Solution**: Clear browser cache
+- **Solution**: Re-authenticate if needed
 
-**Best Practices**
-- Enable AI Agent for hands-off time tracking
-- Use manual mode when you need precise control
-- Review AI suggestions before accepting automatically
-- Keep Intervals task structure organized and up-to-date
-- Regularly verify time entries in Intervals match your actual work
+### Network and Connectivity Issues
 
-### Security & Privacy
+**Problem: API connection failures**
+- **Solution**: Check internet connection
+- **Solution**: Verify firewall settings
+- **Solution**: Check corporate network policies
+- **Solution**: Try from different network
 
-**Data Protection**
-- API keys are stored securely
-- Meeting data is processed locally when possible
-- Session data is cleared on logout
-- Only meetings you attended are processed
+**Problem: Timeout errors**
+- **Solution**: Increase timeout settings
+- **Solution**: Check network stability
+- **Solution**: Reduce data request size
+- **Solution**: Retry the operation
 
-**Access Control**
-- Each user sees only their own data
-- Posted meetings are user-specific
-- Settings and preferences are individual
-
-### Getting Help
-
-**Application Issues**
-- Check the status indicators for service availability
-- Try refreshing the page for temporary issues
-- Use manual mode if AI Agent has problems
-
-**Account Issues**
-- Verify your Microsoft 365 permissions
-- Check Intervals account API access
-- Contact your system administrator for permission issues
-
-**Feature Requests**
-- Document any workflows that could be improved
-- Note any missing features that would help your productivity
-- Share feedback about AI matching accuracy
-
----
-
-## Version Information
-
-**Current Version**: v2.2.4  
-**AI Engine**: GPT-4.1  
-**Copyright**: © 2025 NathCorp Inc.
-
-This user manual covers the core functionality of the Meeting Time Tracker application. For technical support or advanced configuration, contact your system administrator or IT support team.
+**Problem: Rate limiting issues**
+- **Solution**: Wait before retrying
+- **Solution**: Reduce request frequency
+- **Solution**: Check API usage limits
+- **Solution**: Contact support if persistent
 
 ---
 
-## Image Placement Summary
+## Best Practices for High Performance
 
-**Recommended images to enhance user experience:**
+### Meeting Management Best Practices
 
-### Getting Started Section
-1. **Login page** - Microsoft authentication button
-2. **OAuth consent screen** - Microsoft permission dialog
-3. **API key dialog** - Intervals token input with example
-4. **Dashboard success** - Green status indicators
+1. **Meeting Naming Conventions**
+   - Use descriptive, specific meeting names
+   - Include project or client names in titles
+   - Avoid generic names like "Discussion" or "Meeting"
+   - Use consistent naming patterns
 
-### Dashboard Overview
-5. **Full dashboard** - Labeled UI elements (header, sidebar, main content, footer)
+2. **Meeting Scheduling**
+   - Schedule meetings with clear start and end times
+   - Include meeting descriptions when possible
+   - Use Teams meetings for better attendance tracking
+   - Avoid overlapping meetings when possible
 
-### Manual Meeting Management
-6. **Meeting overview cards** - Statistics display
-7. **Meeting list table** - Sample data with attendance statuses
-8. **Task Matches tab** - Confidence level sections with meetings
+3. **Attendance Tracking**
+   - Join meetings on time for accurate tracking
+   - Use Teams for meetings that require time tracking
+   - Ensure meeting organizers enable attendance reports
+   - Wait for attendance data to be available
 
-### AI Agent Features
-9. **AI Agent dashboard** - Full view of all sections
-10. **Actions Card** - Toggle switch in "ON" position
-11. **Posted meetings table** - With filtering options visible
-12. **Filter interface** - Dropdown menus and search box
+### Task Management Best Practices
 
-### Settings & Configuration
-13. **User profile dropdown** - Settings menu options
+1. **Intervals Task Organization**
+   - Create specific, well-named tasks
+   - Use consistent naming conventions
+   - Include project context in task names
+   - Maintain up-to-date task descriptions
 
-### Best Practices
-14. **Meeting names comparison** - Good vs poor examples with confidence scores
+2. **Task Categorization**
+   - Use appropriate project assignments
+   - Maintain consistent module organization
+   - Use work types appropriately
+   - Keep task hierarchies organized
 
-**Total: 14 strategic image placements** to guide users through key workflows and interface elements. 
+3. **Task Maintenance**
+   - Regularly review and update task names
+   - Archive completed or obsolete tasks
+   - Maintain task descriptions
+   - Use consistent terminology
+
+### AI Agent Optimization
+
+1. **Initial Training Period**
+   - Start with manual review for first few weeks
+   - Provide feedback on AI suggestions
+   - Establish patterns for your work style
+   - Gradually increase automation
+
+2. **Confidence Threshold Management**
+   - Set appropriate confidence thresholds
+   - Review low-confidence matches regularly
+   - Adjust thresholds based on accuracy
+   - Balance automation with accuracy
+
+3. **Continuous Improvement**
+   - Regularly review posted meetings
+   - Provide feedback on incorrect matches
+   - Update task names based on patterns
+   - Monitor AI performance metrics
+
+### Data Management Best Practices
+
+1. **Regular Reviews**
+   - Review posted meetings weekly
+   - Check for any incorrect time entries
+   - Verify meeting durations and tasks
+   - Maintain data accuracy
+
+2. **Backup and Export**
+   - Export important data regularly
+   - Keep backups of meeting data
+   - Document any manual corrections
+   - Maintain audit trails
+
+3. **Data Cleanup**
+   - Archive old meetings periodically
+   - Remove duplicate entries
+   - Update outdated information
+   - Maintain data integrity
+
+### Performance Optimization
+
+1. **Browser Optimization**
+   - Use modern, updated browsers
+   - Clear cache regularly
+   - Disable unnecessary extensions
+   - Close unused tabs
+
+2. **Network Optimization**
+   - Use stable internet connections
+   - Avoid public or shared networks
+   - Check firewall settings
+   - Monitor bandwidth usage
+
+3. **Application Usage**
+   - Use appropriate date ranges
+   - Avoid processing too many meetings at once
+   - Use pagination for large datasets
+   - Refresh data periodically
+
+### Security Best Practices
+
+1. **Authentication Security**
+   - Use strong passwords
+   - Enable multi-factor authentication
+   - Keep credentials secure
+   - Sign out when not in use
+
+2. **API Token Security**
+   - Keep API tokens confidential
+   - Regenerate tokens periodically
+   - Don't share tokens with others
+   - Monitor token usage
+
+3. **Data Privacy**
+   - Be aware of data sharing policies
+   - Review privacy settings
+   - Report security concerns
+   - Follow organizational policies
+
+### Troubleshooting Best Practices
+
+1. **Systematic Approach**
+   - Start with simple solutions
+   - Check common issues first
+   - Document problems and solutions
+   - Escalate when needed
+
+2. **Documentation**
+   - Keep notes of issues encountered
+   - Document successful solutions
+   - Share knowledge with team members
+   - Update troubleshooting guides
+
+3. **Support Resources**
+   - Use available documentation
+   - Contact support when needed
+   - Join user communities
+   - Stay updated on new features
+
+### Workflow Optimization
+
+1. **Daily Routine**
+   - Review meetings at the end of each day
+   - Check AI agent status
+   - Verify posted time entries
+   - Plan for next day's meetings
+
+2. **Weekly Reviews**
+   - Review weekly meeting summaries
+   - Check for any missed meetings
+   - Verify task assignments
+   - Update task organization
+
+3. **Monthly Maintenance**
+   - Review and archive old data
+   - Update task structures
+   - Analyze AI performance
+   - Plan improvements
+
+---
+
+## Conclusion
+
+The Meeting Time Tracker application provides a comprehensive solution for automating time tracking from Microsoft Teams meetings. By following this user manual and implementing the best practices outlined, you can maximize the efficiency and accuracy of your time tracking process.
+
+Remember to:
+- Start with manual review to establish patterns
+- Gradually increase automation as confidence grows
+- Regularly review and provide feedback
+- Maintain organized task structures
+- Follow security best practices
+
+For additional support or questions, refer to the troubleshooting section or contact your system administrator. 
