@@ -9,7 +9,7 @@ export function UserManual() {
       asChild
     >
       <a 
-        href="https://nathcorp1-my.sharepoint.com/:w:/g/personal/vishal_kumar_nathcorp_com/EYtUFJiC4hhJiLqtysYmINwBu7-GrdnFsiYUEJSJjE05Pw?e=GbN9Mj" 
+        href="https://nathcorp1-my.sharepoint.com/:w:/g/personal/vishal_kumar_nathcorp_com/ET8dvmUJziBLiGl-7nCIqs4BLUxxMWZiH0BopEovIS8gCQ?e=afd0ip" 
         target="_blank" 
         rel="noopener noreferrer"
         className="flex items-center gap-2"
