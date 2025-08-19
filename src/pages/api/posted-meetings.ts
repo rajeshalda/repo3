@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { database } from '@/lib/database';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
 interface UnmatchedMeeting {
     id: string;
@@ -22,8 +23,8 @@ export default async function handler(
     }
 
     try {
-        console.log('API: Getting session...');
-        const session = await getSession({ req });
+        console.log('API: Getting session (server-side)...');
+        const session = await getServerSession(req, res, authOptions);
         console.log('API: Session:', session);
 
         if (!session) {

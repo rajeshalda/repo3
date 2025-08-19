@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { meetingService } from '../../ai-agent/services/meeting/openai';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
 // Store the current batch ID globally
 let currentBatchId: string | null = null;
@@ -25,7 +26,7 @@ export default async function handler(
   }
 
   try {
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
     if (!session) {
       return res.status(401).json({ 
         error: 'Unauthorized',

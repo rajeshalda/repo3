@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { fetchUserMeetings } from '../../ai-agent/services/meeting/test';
 import { taskService } from '../../ai-agent/services/task/openai';
 import { meetingService } from '../../ai-agent/services/meeting/openai';
@@ -7,6 +7,7 @@ import { timeEntryService } from '../../ai-agent/services/time-entry/intervals';
 import { meetingComparisonService } from '../../ai-agent/services/meeting/comparison';
 import { BatchProcessor } from '../../ai-agent/services/meeting/batch-processor';
 import { setCurrentBatchId } from './batch-status';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
 // Enhanced version of delay that respects AbortSignal
 const delay = (ms: number, signal?: AbortSignal) => new Promise<void>((resolve, reject) => {
@@ -101,7 +102,7 @@ export default async function handler(
     const clientClosed = () => res.writableEnded;
 
     try {
-        const session = await getSession({ req });
+        const session = await getServerSession(req, res, authOptions);
         if (!session) {
             return res.status(401).json({ 
                 success: false,

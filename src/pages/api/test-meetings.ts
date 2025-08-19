@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { fetchUserMeetings } from '../../ai-agent/services/meeting/test';
 import { openAIClient } from '../../ai-agent/core/azure-openai/client';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
 export default async function handler(
     req: NextApiRequest,
@@ -12,7 +13,7 @@ export default async function handler(
     }
 
     try {
-        const session = await getSession({ req });
+        const session = await getServerSession(req, res, authOptions);
         if (!session) {
             return res.status(401).json({ error: 'Unauthorized' });
         }

@@ -36,4 +36,19 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
+  // Use internal URL for API calls when behind reverse proxy
+  ...(process.env.NEXTAUTH_URL_INTERNAL && {
+    useSecureCookies: process.env.NODE_ENV === 'production',
+    cookies: {
+      sessionToken: {
+        name: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
+        options: {
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          secure: process.env.NODE_ENV === 'production',
+        },
+      },
+    },
+  }),
 }; 

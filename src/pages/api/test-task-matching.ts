@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { fetchUserMeetings } from '../../ai-agent/services/meeting/test';
 import { taskService } from '../../ai-agent/services/task/openai';
 import { meetingService } from '../../ai-agent/services/meeting/openai';
 import { IntervalsAPI, Task } from '../../ai-agent/services/task/intervals';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -16,7 +17,7 @@ export default async function handler(
     }
 
     try {
-        const session = await getSession({ req });
+        const session = await getServerSession(req, res, authOptions);
         if (!session) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
