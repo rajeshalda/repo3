@@ -28,6 +28,7 @@ import { useTheme } from "next-themes";
 import { Sidebar } from '@/components/ui/sidebar';
 import { SessionWarning } from '@/components/session-warning';
 import { ReleaseNotes } from '@/components/ReleaseNotes';
+import { UserManual } from '@/components/UserManual';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -1240,6 +1241,7 @@ export default function DashboardPage() {
                   </div>
                 )}
                 
+                <UserManual />
                 <ReleaseNotes />
                 
                 <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
