@@ -30,25 +30,55 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (session?.user) {
-        session.accessToken = token.accessToken;
+      // Log session validation for debugging
+      console.log('Session callback - validating:', {
+        hasSub: !!token.sub,
+        hasUser: !!session?.user,
+        hasEmail: !!session?.user?.email,
+        tokenEmail: token.email,
+        sessionEmail: session?.user?.email
+      });
+
+      // Basic validation - only check if user exists
+      if (!session?.user) {
+        console.error('Session validation failed: no user in session');
+        throw new Error('Invalid session: missing user data');
       }
-      return session;
+
+      // Validate email mismatch only if both exist
+      if (token.email && session.user.email && token.email !== session.user.email) {
+        console.error('Session validation failed: email mismatch', {
+          tokenEmail: token.email,
+          sessionEmail: session.user.email
+        });
+        throw new Error('Session validation failed: user mismatch');
+      }
+
+      // Add access token and ensure proper structure
+      return {
+        ...session,
+        accessToken: token.accessToken,
+        userId: token.sub,
+        user: {
+          ...session.user,
+          id: token.sub,
+        }
+      };
     },
   },
-  // Use internal URL for API calls when behind reverse proxy
-  ...(process.env.NEXTAUTH_URL_INTERNAL && {
-    useSecureCookies: process.env.NODE_ENV === 'production',
-    cookies: {
-      sessionToken: {
-        name: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
-        options: {
-          httpOnly: true,
-          sameSite: 'lax',
-          path: '/',
-          secure: process.env.NODE_ENV === 'production',
-        },
+  // Cookie configuration - always applied for consistent session handling
+  useSecureCookies: process.env.NODE_ENV === 'production',
+  cookies: {
+    sessionToken: {
+      name: process.env.NODE_ENV === 'production'
+        ? '__Secure-next-auth.session-token'
+        : 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
       },
     },
-  }),
+  },
 }; 

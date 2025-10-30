@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { authOptions } from '@/lib/auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 import { getAppGraphToken } from '@/lib/graph-app-auth';
 import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
 import { IST_TIMEZONE } from '@/lib/utils';
@@ -16,12 +16,16 @@ import {
 import path from 'path';
 import fs from 'fs/promises';
 
-// Add session type
+// Add session type - matches our auth.ts session structure
 interface ExtendedSession {
   user?: {
     email?: string | null;
-    accessToken?: string;
+    name?: string | null;
+    image?: string | null;
+    id?: string;
   };
+  accessToken?: string;  // At top level, not inside user
+  userId?: string;
 }
 
 interface GraphMeeting {
@@ -697,8 +701,8 @@ export async function GET(request: Request) {
       utcRangeEnd: utcRange.end
     });
 
-    // Get access token
-    const accessToken = session.user.accessToken;
+    // Get access token (now at top level of session, not inside user)
+    const accessToken = session.accessToken;
     if (!accessToken) {
       return NextResponse.json({ error: 'No access token found' }, { status: 401 });
     }
