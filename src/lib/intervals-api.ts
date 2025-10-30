@@ -362,8 +362,8 @@ export class IntervalsAPI {
         console.log('Task details:', task);
 
         // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-        console.log('Using hardcoded worktype ID 807329 for India-Meeting');
-        const worktypeId = '807329';
+        console.log('Using hardcoded worktype ID 305064 for India-Meeting');
+        const worktypeId = '305064';
 
         // Determine billable status based on client/project
         // Simplified billable status determination:

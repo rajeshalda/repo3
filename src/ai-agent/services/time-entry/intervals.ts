@@ -366,8 +366,8 @@ export class IntervalsTimeEntryService {
             const workTypes = await this.getProjectWorkTypes(taskDetails.projectid, userId);
             
             // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-            console.log(`ℹ️ Using worktype ID 807329 for India-Meeting`);
-            const worktypeId = '807329';
+            console.log(`ℹ️ Using worktype ID 305064 for India-Meeting`);
+            const worktypeId = '305064';
 
             // Handle specific report ID fetching for recurring meetings
             let attendanceRecords = meeting.attendance?.records || [];
