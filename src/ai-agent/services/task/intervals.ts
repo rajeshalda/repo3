@@ -96,60 +96,32 @@ export class IntervalsAPI {
             const currentUser = await this.getCurrentUser();
             console.log('Current user personid:', currentUser.personid);
 
-            // Then fetch all tasks with a limit of 500
-            const response = await fetch(`${this.baseUrl}/task/?limit=500`, {
-                method: 'GET',
-                headers: this.headers
-            });
+            // Fetch tasks using hastaskrelation (includes assigned, owned, and followed tasks)
+            // and excludeclosed=true to filter out closed tasks at the API level
+            const response = await fetch(
+                `${this.baseUrl}/task/?hastaskrelation=${currentUser.personid}&excludeclosed=true&limit=500`,
+                {
+                    method: 'GET',
+                    headers: this.headers
+                }
+            );
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch tasks: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.json();
-            console.log(`Raw tasks API response: Found ${data?.task?.length || 0} total tasks`);
-            
+            console.log(`API response: Found ${data?.task?.length || 0} tasks for user ${currentUser.personid}`);
+
             if (!data?.task || !Array.isArray(data.task)) {
                 console.warn('No tasks found or invalid response format');
                 return [];
             }
 
-            console.log(`Total tasks from API: ${data.task.length}`);
+            console.log(`Successfully retrieved ${data.task.length} open tasks (assigned to, owned by, or followed by user ${currentUser.personid})`);
 
-            // Filter tasks by three criteria:
-            // 1. The current user's ID is in the assigneeid list
-            // 2. Task is not closed (status !== "Closed")
-            const userTasks = data.task.filter((task: IntervalsTaskResponse) => {
-                // Check if task is assigned to user
-                if (!task.assigneeid) return false;
-                
-                // Split by commas AND spaces to handle different formats
-                const assignees = task.assigneeid.split(/[,\s]+/).filter(id => id.trim() !== '');
-                
-                // Try both string and number comparisons because the IDs might be in different formats
-                const isAssignedToUser = assignees.some(id => {
-                    const normalizedId = id.trim();
-                    const normalizedPersonId = currentUser.personid.trim();
-                    return normalizedId === normalizedPersonId || 
-                           Number(normalizedId) === Number(normalizedPersonId);
-                });
-                
-                // Check if task is not closed
-                const isNotClosed = task.status !== "Closed";
-                
-                // Log filtering decisions for debugging
-                if (!isAssignedToUser) {
-                    console.log(`Task ${task.id} (${task.title}) skipped: Not assigned to current user`);
-                } else if (!isNotClosed) {
-                    console.log(`Task ${task.id} (${task.title}) skipped: Task is closed`);
-                }
-                
-                return isAssignedToUser && isNotClosed;
-            });
-
-            console.log(`Found ${userTasks.length} open tasks assigned to user ${currentUser.personid}`);
-
-            return userTasks.map((task: IntervalsTaskResponse) => ({
+            // Map to our Task interface - no filtering needed as API handles it
+            return data.task.map((task: IntervalsTaskResponse) => ({
                 id: task.id,
                 title: task.title,
                 description: task.description,

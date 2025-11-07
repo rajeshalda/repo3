@@ -30,6 +30,14 @@ try {
     const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all();
     tables.forEach(table => console.log(`📄 ${table.name}`));
     
+    // Show users table schema
+    console.log('\n🔍 USERS TABLE SCHEMA:');
+    console.log('=' * 25);
+    const usersSchema = db.prepare("PRAGMA table_info(users)").all();
+    usersSchema.forEach(col => {
+        console.log(`📋 ${col.name} (${col.type})`);
+    });
+
     // Show users data
     console.log('\n👥 USERS DATA:');
     console.log('=' * 20);
@@ -38,9 +46,9 @@ try {
         console.log('❌ No users found');
     } else {
         users.forEach(user => {
-            console.log(`🆔 ID: ${user.id}`);
+            console.log(`\n🆔 ID: ${user.id}`);
             console.log(`📧 Email: ${user.email}`);
-            console.log(`🔑 Has API Key: ${user.intervals_api_key ? '✅ Yes' : '❌ No'}`);
+            console.log(`🔑 Intervals API Key: ${user.intervals_api_key || '❌ No API Key'}`);
             console.log(`📅 Created: ${user.created_at}`);
             console.log(`🔄 Last Sync: ${user.last_sync || 'Never'}`);
             console.log('---');
@@ -62,14 +70,23 @@ try {
         });
     }
     
-    // Show meetings data
-    console.log('\n📅 MEETINGS DATA:');
+    // Show meetings data from last 7 days
+    console.log('\n📅 MEETINGS DATA (Last 7 Days):');
     console.log('=' * 20);
-    const meetings = db.prepare('SELECT * FROM meetings ORDER BY created_at DESC LIMIT 10').all();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgoStr = sevenDaysAgo.toISOString();
+
+    const meetings = db.prepare(`
+        SELECT * FROM meetings
+        WHERE created_at >= ? OR posted_at >= ?
+        ORDER BY created_at DESC
+    `).all(sevenDaysAgoStr, sevenDaysAgoStr);
+
     if (meetings.length === 0) {
-        console.log('❌ No meetings found');
+        console.log('❌ No meetings found in the last 7 days');
     } else {
-        console.log(`📊 Showing latest ${Math.min(meetings.length, 10)} meetings:`);
+        console.log(`📊 Found ${meetings.length} meetings from the last 7 days:`);
         meetings.forEach((meeting, index) => {
             console.log(`\n📋 Meeting ${index + 1}:`);
             console.log(`🆔 ID: ${meeting.id}`);
@@ -93,14 +110,19 @@ try {
         });
     }
     
-    // Show reviews data
-    console.log('\n📝 REVIEWS DATA:');
+    // Show reviews data from last 7 days
+    console.log('\n📝 REVIEWS DATA (Last 7 Days):');
     console.log('=' * 20);
-    const reviews = db.prepare('SELECT * FROM reviews ORDER BY created_at DESC LIMIT 5').all();
+    const reviews = db.prepare(`
+        SELECT * FROM reviews
+        WHERE created_at >= ? OR updated_at >= ?
+        ORDER BY created_at DESC
+    `).all(sevenDaysAgoStr, sevenDaysAgoStr);
+
     if (reviews.length === 0) {
-        console.log('❌ No reviews found');
+        console.log('❌ No reviews found in the last 7 days');
     } else {
-        console.log(`📊 Showing latest ${Math.min(reviews.length, 5)} reviews:`);
+        console.log(`📊 Found ${reviews.length} reviews from the last 7 days:`);
         reviews.forEach((review, index) => {
             console.log(`\n📝 Review ${index + 1}:`);
             console.log(`🆔 ID: ${review.id}`);

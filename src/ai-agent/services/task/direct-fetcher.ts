@@ -89,66 +89,36 @@ export async function fetchTasksDirectly(apiKey: string): Promise<Task[]> {
     // Create base64 encoded credentials from the API key (used for Basic Auth)
     const credentials = Buffer.from(`${apiKey}:x`).toString('base64');
 
-    // Get all tasks with a high limit
+    // Fetch tasks using hastaskrelation (includes assigned, owned, and followed tasks)
+    // and excludeclosed=true to filter out closed tasks at the API level
     const response = await axios.get<{task: IntervalsTaskResponse[]}>(
-      'https://api.myintervals.com/task/', 
+      'https://api.myintervals.com/task/',
       {
         headers: {
           'Authorization': `Basic ${credentials}`,
           'Content-Type': 'application/json'
         },
         params: {
+          hastaskrelation: currentUser.personid, // Filter by user's task relationships
+          excludeclosed: true, // Exclude closed tasks
           limit: 500 // Request up to 500 tasks
         }
       }
     );
 
     console.log('API direct response status:', response.status);
-    
+
     // Extract tasks array from the response
     if (!response.data?.task || !Array.isArray(response.data.task)) {
       console.warn('Direct fetcher: No tasks found or invalid response format');
       return [];
     }
-    
-    const tasks = response.data.task;
-    console.log(`Direct fetcher retrieved ${tasks.length} total tasks from Intervals API`);
-    
-    // Filter tasks by two criteria:
-    // 1. The current user's ID is in the assigneeid list
-    // 2. Task is not closed (status !== "Closed")
-    const userTasks = tasks.filter((task: IntervalsTaskResponse) => {
-      // Check if task is assigned to user
-      if (!task.assigneeid) return false;
-      
-      // Split by commas AND spaces to handle different formats
-      const assignees = task.assigneeid.split(/[,\s]+/).filter(id => id.trim() !== '');
-      
-      // Try both string and number comparisons because the IDs might be in different formats
-      const isAssignedToUser = assignees.some(id => {
-        const normalizedId = id.trim();
-        const normalizedPersonId = currentUser.personid.trim();
-        return normalizedId === normalizedPersonId || 
-               Number(normalizedId) === Number(normalizedPersonId);
-      });
-      
-      // Check if task is not closed
-      const isNotClosed = task.status !== "Closed";
-      
-      // Log filtering decisions for debugging
-      if (!isAssignedToUser) {
-        console.log(`Direct fetcher: Task ${task.id} (${task.title}) skipped: Not assigned to current user`);
-      } else if (!isNotClosed) {
-        console.log(`Direct fetcher: Task ${task.id} (${task.title}) skipped: Task is closed`);
-      }
-      
-      return isAssignedToUser && isNotClosed;
-    });
 
-    console.log(`Direct fetcher: Found ${userTasks.length} open tasks assigned to user ${currentUser.personid} (out of ${tasks.length} total tasks)`);
-    
-    // Return tasks in the expected format
-    return userTasks.map((task: IntervalsTaskResponse) => ({
+    const tasks = response.data.task;
+    console.log(`Direct fetcher: Successfully retrieved ${tasks.length} open tasks (assigned to, owned by, or followed by user ${currentUser.personid})`);
+
+    // Return tasks in the expected format - no filtering needed as API handles it
+    return tasks.map((task: IntervalsTaskResponse) => ({
       id: task.id,
       title: task.title,
       description: task.description,

@@ -636,13 +636,13 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                                     // For now, use the first report ID
                                     reportId = reportsData.value[0].id;
                                     console.log(`Found report ID: ${reportId}`);
-                                    
+
                                     // Check if a meeting with this report ID already exists in storage
                                     const storage = new AIAgentPostedMeetingsStorage();
                                     await storage.loadData();
-                                    
+
                                     const isPosted = await storage.isPosted(userId, meeting.id, 0, '', reportId);
-                                    
+
                                     if (isPosted) {
                                         console.log(`⚠️ Meeting already processed: ${truncatedSubject}`);
                                         continue;
