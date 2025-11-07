@@ -31,17 +31,36 @@ interface Task {
 export async function fetchAllTasksDirectly(apiKey: string): Promise<Task[]> {
   try {
     console.log('Direct fetcher: Fetching tasks with axios...');
-    
+
     // Create base64 encoded credentials from the API key (used for Basic Auth)
     const credentials = Buffer.from(`${apiKey}:x`).toString('base64');
 
-    // Get all tasks with a high limit
+    // First get the current user to get their personid
+    const meResponse = await axios.get<ApiResponse>('https://api.myintervals.com/me', {
+      headers: {
+        'Authorization': `Basic ${credentials}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const personid = meResponse.data?.personid;
+    if (!personid) {
+      console.error('Direct fetcher: Could not get current user personid');
+      return [];
+    }
+
+    console.log('Direct fetcher: Current user personid:', personid);
+
+    // Fetch tasks using hastaskrelation (includes assigned, owned, and followed tasks)
+    // and excludeclosed=true to filter out closed tasks at the API level
     const response = await axios.get<ApiResponse>('https://api.myintervals.com/task/', {
       headers: {
         'Authorization': `Basic ${credentials}`,
         'Content-Type': 'application/json'
       },
       params: {
+        hastaskrelation: personid, // Filter by user's task relationships
+        excludeclosed: true, // Exclude closed tasks
         limit: 500 // Request up to 500 tasks
       }
     });
@@ -65,9 +84,9 @@ export async function fetchAllTasksDirectly(apiKey: string): Promise<Task[]> {
       console.error('Direct fetcher: Unexpected API response format:', Object.keys(response.data).join(', '));
     }
     
-    console.log(`Direct fetcher: Retrieved ${tasks.length} tasks from Intervals API`);
-    
-    // Return tasks in the expected format
+    console.log(`Direct fetcher: Successfully retrieved ${tasks.length} open tasks (assigned to, owned by, or followed by user ${personid})`);
+
+    // Return tasks in the expected format - no filtering needed as API handles it
     return tasks as Task[];
   } catch (error) {
     if (axios.isAxiosError(error)) {

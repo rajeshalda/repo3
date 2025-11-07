@@ -204,9 +204,21 @@ export class IntervalsAPI {
     // Get all tasks
     async getTasks(options?: { bypassCache?: boolean }) {
         try {
-            console.log('Fetching tasks with limit parameter...');
-            // Use direct endpoint with limit parameter already included
-            const response = await this.request('task?limit=500');
+            // First get the current user to get their personid
+            const currentUser = await this.getCurrentUser();
+            const personid = (currentUser as any)?.personid || (currentUser as any)?.id;
+
+            if (!personid) {
+                console.error('Could not get current user personid');
+                return [];
+            }
+
+            console.log('Fetching tasks with hastaskrelation and excludeclosed parameters...');
+            console.log('Current user personid:', personid);
+
+            // Fetch tasks using hastaskrelation (includes assigned, owned, and followed tasks)
+            // and excludeclosed=true to filter out closed tasks at the API level
+            const response = await this.request(`task?hastaskrelation=${personid}&excludeclosed=true&limit=500`);
             console.log('Raw task response:', response ? JSON.stringify(response).substring(0, 300) + '...' : 'null');
             
             // Extract tasks array from the response with better error handling
@@ -235,13 +247,14 @@ export class IntervalsAPI {
                 }
             }
             
-            console.log(`Retrieved ${tasks.length} tasks from Intervals API`);
-            
+            console.log(`Successfully retrieved ${tasks.length} open tasks (assigned to, owned by, or followed by user ${personid})`);
+
             // Log the first task as an example
             if (tasks.length > 0) {
                 console.log('Example task:', JSON.stringify(tasks[0]));
             }
-            
+
+            // No filtering needed as API handles it with hastaskrelation and excludeclosed
             return tasks;
         } catch (error) {
             console.error('Error fetching tasks:', error instanceof Error ? error.message : 'Unknown error');
