@@ -50,14 +50,12 @@ export class AzureOpenAIClient {
         },
         body: JSON.stringify({
           messages: [
-            { 
-              role: 'system', 
-              content: 'You are a task matching expert. Analyze the meeting title and available tasks to find the best match. Return a JSON response with matchedTaskTitle (or null), confidence (0-1), and reason.' 
-            },
-            { role: 'user', content: prompt }
+            {
+              role: 'user',
+              content: prompt
+            }
           ],
-          temperature: 0,
-          max_tokens: 500
+          max_completion_tokens: 5000
         })
       });
 
@@ -81,17 +79,36 @@ export class AzureOpenAIClient {
       }
 
       const data = await response.json();
+      console.log('Full Azure OpenAI response:', JSON.stringify(data, null, 2));
+
+      // Log token usage for monitoring
+      if (data.usage) {
+        console.log('Token usage:', {
+          prompt: data.usage.prompt_tokens,
+          completion: data.usage.completion_tokens,
+          reasoning: data.usage.completion_tokens_details?.reasoning_tokens || 0,
+          total: data.usage.total_tokens
+        });
+      }
+
       const content = data.choices[0].message.content;
-      
+      console.log('Raw content from OpenAI:', content);
+
+      if (!content || content.trim() === '') {
+        console.error('Empty response from OpenAI. Full response:', JSON.stringify(data, null, 2));
+        throw new Error('OpenAI returned empty response');
+      }
+
       // Remove any markdown formatting if present
       const cleanContent = content.replace(/^```json\s*|\s*```$/g, '').trim();
-      
+
       // Validate JSON response
       try {
         JSON.parse(cleanContent);
         return cleanContent;
       } catch (e) {
         console.error('Invalid JSON response from OpenAI:', cleanContent);
+        console.error('Parse error:', e);
         throw new Error('OpenAI returned invalid JSON response');
       }
     } catch (error) {
@@ -106,9 +123,42 @@ export class AzureOpenAIClient {
     }
   }
 
+  async testConnection(): Promise<string> {
+    try {
+      await this.waitForRateLimit();
+
+      const url = `${this.endpoint}/openai/deployments/${this.deploymentName}/chat/completions?api-version=${this.apiVersion}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': this.apiKey
+        },
+        body: JSON.stringify({
+          messages: [
+            { role: 'user', content: 'Respond with just the word "OK" if you can see this.' }
+          ],
+          max_completion_tokens: 100
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(`Azure OpenAI API error: ${response.status} - ${JSON.stringify(error)}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content || 'Connected';
+    } catch (error) {
+      console.error('Azure OpenAI connection test failed:', error);
+      throw error;
+    }
+  }
+
   async isAvailable(): Promise<boolean> {
     try {
-      await this.getCompletion('Test connection');
+      await this.testConnection();
       return true;
     } catch (error) {
       console.error('Azure OpenAI availability check failed:', error);

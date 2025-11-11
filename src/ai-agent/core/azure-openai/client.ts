@@ -72,7 +72,7 @@ class AzureOpenAIClient {
 
         return this.retryWithExponentialBackoff(async () => {
             const response = await fetch(
-                `${AzureOpenAIConfig.endpoint}/openai/deployments/${AzureOpenAIConfig.deployment}/chat/completions?api-version=2024-02-15-preview`,
+                `${AzureOpenAIConfig.endpoint}/openai/deployments/${AzureOpenAIConfig.deployment}/chat/completions?api-version=2025-01-01-preview`,
                 {
                     method: 'POST',
                     headers: {
@@ -81,8 +81,7 @@ class AzureOpenAIClient {
                     },
                     body: JSON.stringify({
                         messages: [{ role: 'user', content: prompt }],
-                        temperature: options.temperature ?? AzureOpenAIConfig.defaultTemperature,
-                        max_tokens: options.maxTokens ?? AzureOpenAIConfig.defaultMaxTokens,
+                        max_completion_tokens: options.maxTokens ?? AzureOpenAIConfig.defaultMaxTokens,
                         model: options.model ?? AzureOpenAIConfig.defaultModel
                     })
                 }
@@ -106,8 +105,7 @@ class AzureOpenAIClient {
     public async analyzeMeeting(meetingData: string): Promise<string> {
         const prompt = generateMeetingAnalysisPrompt(meetingData);
         return this.sendRequest(prompt, {
-            temperature: 0.3, // Lower temperature for more focused analysis
-            maxTokens: 1500  // Increased for detailed analysis
+            maxTokens: 5000  // Increased for GPT-5 reasoning + detailed analysis
         });
     }
     
@@ -137,8 +135,7 @@ class AzureOpenAIClient {
                 .replace('{reports}', JSON.stringify(reports, null, 2));
 
             const response = await this.sendRequest(prompt, {
-                temperature: 0.1,
-                maxTokens: 500
+                maxTokens: 5000
             });
 
             const result = JSON.parse(response);

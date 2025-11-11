@@ -51142,6 +51142,97 @@
       },
       "lastProcessed": "2025-10-30T18:49:10.323Z",
       "userId": "richa.kumari@nathcorp.com"
+    },
+    {
+      "@odata.etag": "W/\"NgYoknoiv0616rfFRFcCswAALeW7vg==\"",
+      "id": "AAMkAGQ3MzI1YTFmLWY3M2EtNDAxZi1iY2MwLTJiYTRiNmU2Njk0NgBGAAAAAAABxkMgd8y8S7A0uh4WM6ssBwA2BiiSeiK-TrXqt8VEVwKzAAAAAAENAAA2BiiSeiK-TrXqt8VEVwKzAAAuBGM8AAA=",
+      "categories": [],
+      "subject": "Internal Test",
+      "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams Need help?\r\nJoin the meeting now\r\nMeeting ID: 217 088 550 389 09\r\nPasscode: Bv3vb63S\r\n________________________________\r\nDial in by phone\r\n+1 972-301-82",
+      "importance": "normal",
+      "isAllDay": false,
+      "isCancelled": false,
+      "seriesMasterId": null,
+      "type": "singleInstance",
+      "start": {
+        "dateTime": "2025-11-11T20:00:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "end": {
+        "dateTime": "2025-11-11T20:30:00.0000000",
+        "timeZone": "India Standard Time"
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Megan Bowen",
+            "address": "MeganB@M365x32917266.OnMicrosoft.com"
+          }
+        }
+      ],
+      "organizer": {
+        "emailAddress": {
+          "name": "Pradeep Gupta",
+          "address": "PradeepG@M365x32917266.OnMicrosoft.com"
+        }
+      },
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NjEzMzBjYzgtNTg0OS00MTUyLTljMzEtN2ZmZWIyY2FlMDhi%40thread.v2/0?context=%7b%22Tid%22%3a%222a966959-ce98-467c-b973-6411912ccf5c%22%2c%22Oid%22%3a%22f3944b79-ecd5-4efd-a711-28dfe4af0a31%22%7d",
+        "conferenceId": "357510081",
+        "tollNumber": "+1 972-301-8269"
+      },
+      "timeEntryDate": "2025-11-11",
+      "analysis": {
+        "keyPoints": [],
+        "suggestedCategories": [],
+        "confidence": 0.5,
+        "context": {
+          "patterns": []
+        }
+      },
+      "attendance": {
+        "records": [
+          {
+            "name": "Pradeep Gupta",
+            "email": "PradeepG@M365x32917266.OnMicrosoft.com",
+            "duration": 65,
+            "role": "Organizer",
+            "attendanceIntervals": [
+              {
+                "joinDateTime": "2025-11-11T14:38:56.4825939Z",
+                "leaveDateTime": "2025-11-11T14:40:01.6473081Z",
+                "durationInSeconds": 65
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "totalDuration": 65,
+          "averageDuration": 65,
+          "totalParticipants": 1
+        },
+        "reportId": "228b62ed-1b82-47e2-9c00-4db107f522d2",
+        "allValidReports": [
+          {
+            "selectedReportId": "228b62ed-1b82-47e2-9c00-4db107f522d2",
+            "confidence": 1,
+            "reason": "Single valid report available",
+            "metadata": {
+              "date": "2025-11-11T00:00:00.0000000",
+              "duration": 68.892,
+              "isRecurring": false,
+              "totalReports": 1
+            }
+          }
+        ]
+      },
+      "lastProcessed": "2025-11-11T15:02:22.302Z",
+      "userId": "pradeepg@m365x32917266.onmicrosoft.com"
     }
   ]
 }

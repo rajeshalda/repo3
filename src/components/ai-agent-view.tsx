@@ -1127,24 +1127,47 @@ export function AIAgentView() {
       {/* Header Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-2xl font-bold">AI Agent Dashboard</CardTitle>
-          <div className="relative w-10 h-10 border-2 border-blue-500 rounded-lg">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-blue-500 font-bold text-sm">AI</span>
-            </div>
-            {/* Chip pins */}
-            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-1/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-2/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -left-1 top-3/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-1/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-2/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -right-1 top-3/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-1/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-2/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -top-1 left-3/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-1/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-2/4"></div>
-            <div className="absolute w-1 h-1 bg-blue-500 -bottom-1 left-3/4"></div>
+          <CardTitle className="text-2xl font-bold flex-shrink-0">AI Agent Dashboard</CardTitle>
+          <div className="relative w-20 h-20 flex-shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+              {/* Large main star (4-pointed) - Samsung Galaxy AI style */}
+              <path
+                d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z"
+                fill="url(#dashboardGalaxyGradient1)"
+                className="opacity-95"
+              />
+
+              {/* Small accompanying star */}
+              <path
+                d="M18 4L18.8 6.2L21 7L18.8 7.8L18 10L17.2 7.8L15 7L17.2 6.2L18 4Z"
+                fill="url(#dashboardGalaxyGradient2)"
+                className="opacity-85"
+              />
+
+              {/* Smallest accent star */}
+              <path
+                d="M19 14L19.5 15.5L21 16L19.5 16.5L19 18L18.5 16.5L17 16L18.5 15.5L19 14Z"
+                fill="url(#dashboardGalaxyGradient3)"
+                className="opacity-75"
+              />
+
+              {/* Gradient definitions with blue colors */}
+              <defs>
+                <linearGradient id="dashboardGalaxyGradient1" x1="4" y1="2" x2="20" y2="18">
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="50%" stopColor="#3b82f6" />
+                  <stop offset="100%" stopColor="#2563eb" />
+                </linearGradient>
+                <linearGradient id="dashboardGalaxyGradient2" x1="15" y1="4" x2="21" y2="10">
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+                <linearGradient id="dashboardGalaxyGradient3" x1="17" y1="14" x2="21" y2="18">
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
         </CardHeader>
         <CardContent>

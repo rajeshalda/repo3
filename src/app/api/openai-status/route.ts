@@ -22,12 +22,13 @@ export async function GET() {
     }
 
     const openai = new AzureOpenAIClient();
-    await openai.getCompletion('Test connection');
-    
+    const response = await openai.testConnection();
+
     return NextResponse.json({
       status: 'success',
       isAvailable: true,
-      message: 'Azure OpenAI is configured and working'
+      message: 'Azure OpenAI is configured and working',
+      testResponse: response
     });
   } catch (error: unknown) {
     console.error('Azure OpenAI Status Check Error:', error);
