@@ -2,7 +2,7 @@ export class AzureOpenAIClient {
   private endpoint: string;
   private apiKey: string;
   private deploymentName: string;
-  private apiVersion: string = '2025-01-01-preview'; // Updated API version
+  private apiVersion: string = '2024-12-01-preview'; // Updated to match Azure OpenAI SDK for GPT-5
   private lastRequestTime: number = 0;
   private minRequestInterval: number = 1000; // Minimum 1 second between requests
   private maxRetries: number = 3;
@@ -56,6 +56,7 @@ export class AzureOpenAIClient {
             }
           ],
           max_completion_tokens: 5000
+          // temperature removed for GPT-5 compatibility (only supports default value 1)
         })
       });
 
@@ -79,11 +80,11 @@ export class AzureOpenAIClient {
       }
 
       const data = await response.json();
-      console.log('Full Azure OpenAI response:', JSON.stringify(data, null, 2));
+      console.log('[Manual Workflow] Full Azure OpenAI response:', JSON.stringify(data, null, 2));
 
       // Log token usage for monitoring
       if (data.usage) {
-        console.log('Token usage:', {
+        console.log('[Manual Workflow] Token usage:', {
           prompt: data.usage.prompt_tokens,
           completion: data.usage.completion_tokens,
           reasoning: data.usage.completion_tokens_details?.reasoning_tokens || 0,
@@ -91,12 +92,18 @@ export class AzureOpenAIClient {
         });
       }
 
-      const content = data.choices[0].message.content;
-      console.log('Raw content from OpenAI:', content);
+      const content = data.choices?.[0]?.message?.content;
+      console.log('[Manual Workflow] Raw content from OpenAI:', content);
 
       if (!content || content.trim() === '') {
-        console.error('Empty response from OpenAI. Full response:', JSON.stringify(data, null, 2));
-        throw new Error('OpenAI returned empty response');
+        console.error('[Manual Workflow] Empty response from OpenAI. Full response:', JSON.stringify(data, null, 2));
+        console.error('[Manual Workflow] Response structure:', {
+          hasChoices: !!data.choices,
+          choicesLength: data.choices?.length,
+          firstChoice: data.choices?.[0],
+          finishReason: data.choices?.[0]?.finish_reason
+        });
+        throw new Error('OpenAI returned empty response - possible token limit reached');
       }
 
       // Remove any markdown formatting if present

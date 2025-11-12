@@ -71,19 +71,34 @@ class AzureOpenAIClient {
         await this.waitForCapacity();
 
         return this.retryWithExponentialBackoff(async () => {
+            const requestBody: any = {
+                messages: [{ role: 'user', content: prompt }],
+                max_completion_tokens: options.maxTokens ?? AzureOpenAIConfig.defaultMaxTokens
+            };
+
+            // GPT-5 only supports temperature = 1 (default), so only include if explicitly set to 1
+            // For other models, include temperature if specified
+            if (options.temperature !== undefined && options.temperature === 1) {
+                requestBody.temperature = 1;
+            } else if (AzureOpenAIConfig.deployment !== 'gpt-5' && options.temperature !== undefined) {
+                requestBody.temperature = options.temperature;
+            }
+
+            console.log('[Azure OpenAI] Request:', {
+                deployment: AzureOpenAIConfig.deployment,
+                endpoint: AzureOpenAIConfig.endpoint,
+                body: requestBody
+            });
+
             const response = await fetch(
-                `${AzureOpenAIConfig.endpoint}/openai/deployments/${AzureOpenAIConfig.deployment}/chat/completions?api-version=2025-01-01-preview`,
+                `${AzureOpenAIConfig.endpoint}/openai/deployments/${AzureOpenAIConfig.deployment}/chat/completions?api-version=2024-12-01-preview`,
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'api-key': AzureOpenAIConfig.apiKey as string
                     },
-                    body: JSON.stringify({
-                        messages: [{ role: 'user', content: prompt }],
-                        max_completion_tokens: options.maxTokens ?? AzureOpenAIConfig.defaultMaxTokens,
-                        model: options.model ?? AzureOpenAIConfig.defaultModel
-                    })
+                    body: JSON.stringify(requestBody)
                 }
             );
 
@@ -93,9 +108,18 @@ class AzureOpenAIClient {
             }
 
             const data: OpenAIResponse = await response.json();
-            
+
+            // Enhanced logging for debugging GPT-5 responses
+            console.log('[Azure OpenAI] Full API Response:', JSON.stringify(data, null, 2));
+
             if (!data.choices?.[0]?.message?.content) {
-                throw new Error('Invalid response format from Azure OpenAI API');
+                console.error('[Azure OpenAI] Invalid response structure:', {
+                    hasChoices: !!data.choices,
+                    choicesLength: data.choices?.length,
+                    firstChoice: data.choices?.[0],
+                    fullResponse: data
+                });
+                throw new Error(`Invalid response format from Azure OpenAI API. Response structure: ${JSON.stringify(data)}`);
             }
 
             return data.choices[0].message.content;

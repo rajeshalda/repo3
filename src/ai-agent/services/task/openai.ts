@@ -228,8 +228,8 @@ export class TaskService {
             console.log('Generated prompt for OpenAI:', prompt);
 
             const matchingResult = await openAIClient.sendRequest(prompt, {
-                temperature: 0.3,
-                maxTokens: 1000
+                // temperature removed for GPT-5 compatibility (only supports default value 1)
+                maxTokens: 3000  // Increased for GPT-5 reasoning tokens + response content
             });
             console.log('OpenAI response:', matchingResult);
 

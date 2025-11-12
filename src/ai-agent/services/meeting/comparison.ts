@@ -257,8 +257,8 @@ export class MeetingComparisonService {
                 const startTime = Date.now();
 
                 const response = await openAIClient.sendRequest(prompt, {
-                    temperature: 0.3,
-                    maxTokens: 1000
+                    // temperature removed for GPT-5 compatibility (only supports default value 1)
+                    maxTokens: 3000  // Increased for GPT-5 reasoning tokens + response content
                 });
                 
                 const processingTime = Date.now() - startTime;

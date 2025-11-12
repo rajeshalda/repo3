@@ -3,13 +3,13 @@ export const AzureOpenAIConfig = {
     apiKey: process.env.AZURE_OPENAI_API_KEY,
     deployment: process.env.AZURE_OPENAI_DEPLOYMENT,
     
-    // Rate limits
-    tokensPerMinute: 8000,
-    requestsPerMinute: 48,
+    // Rate limits (matches Azure GPT-5 deployment)
+    tokensPerMinute: 50000,
+    requestsPerMinute: 500,
     
     // Model settings
     defaultModel: 'gpt-4o',
-    defaultTemperature: 0.7,
+    defaultTemperature: 1, // GPT-5 only supports temperature=1 (default)
     defaultMaxTokens: 8000,
     
     // Retry settings

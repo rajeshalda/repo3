@@ -1176,11 +1176,6 @@ export function AIAgentView() {
               <p className="text-sm text-muted-foreground">
                 Automatically process your meetings and create time entries using AI Agent.
               </p>
-              <div className="text-sm text-muted-foreground mt-2 space-y-2">
-                <p>Fetches meetings for full IST day (Indian Standard Time):</p>
-        
-                <p className="text-sm">All times are processed in UTC and converted to IST for display.</p>
-              </div>
               <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border-2 border-yellow-500 rounded-md relative overflow-hidden">
                 <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#fef9c3,#fef9c3_10px,#fef08a_10px,#fef08a_20px)] opacity-20"></div>
                 <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 z-10" />
