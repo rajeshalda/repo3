@@ -819,8 +819,8 @@ export default function DashboardPage() {
             {!dateRange?.from || !dateRange?.to ? (
               <div className="flex flex-col items-center justify-center py-12 space-y-4">
                 <div className="text-center space-y-2">
-                  <h2 className="text-2xl font-semibold">Add New Meeting</h2>
-                  <p className="text-muted-foreground">Select a date range to fetch your meetings</p>
+                  <h2 className="text-2xl font-semibold">Select A Date Range To Fetch Your Meetings</h2>
+                  
                 </div>
                 <DateRangePicker
                   dateRange={dateRange}
