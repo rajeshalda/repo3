@@ -5,7 +5,8 @@
       "Bash(nul)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []
