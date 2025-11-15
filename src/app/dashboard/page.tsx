@@ -45,7 +45,7 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
-import { formatDateIST, convertDateRangeToUTC } from "@/lib/utils";
+import { formatDateIST, convertDateRangeToUTC, cn } from "@/lib/utils";
 
 interface RawAttendanceRecord {
   identity: {
@@ -820,20 +820,33 @@ export default function DashboardPage() {
               <div className="flex flex-col items-center justify-center py-12 space-y-4">
                 <div className="text-center space-y-2">
                   <h2 className="text-2xl font-semibold">Select A Date Range To Fetch Your Meetings</h2>
-                  
+
                 </div>
                 <DateRangePicker
                   dateRange={dateRange}
                   onDateRangeChange={handleDateRangeChange}
+                  disabled={isMatching}
                 />
+                {isMatching && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Please wait while matching is in progress...</span>
+                  </div>
+                )}
 
               </div>
             ) : (
               <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
+                {isMatching && (
+                  <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <Loader2 className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />
+                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Matching in progress - controls are temporarily disabled</span>
+                  </div>
+                )}
                 <Tabs defaultValue="fetched-meetings" className="w-full">
                   <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
                     <TabsList>
-                      <TabsTrigger value="fetched-meetings" className="flex items-center gap-2">
+                      <TabsTrigger value="fetched-meetings" className="flex items-center gap-2" disabled={isMatching}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
                           <line x1="16" y1="2" x2="16" y2="6" />
@@ -842,7 +855,7 @@ export default function DashboardPage() {
                         </svg>
                         Fetched Meetings
                       </TabsTrigger>
-                      <TabsTrigger value="task-matches" className="flex items-center gap-2">
+                      <TabsTrigger value="task-matches" className="flex items-center gap-2" disabled={isMatching}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="m16 6 4 14" />
                           <path d="M12 6v14" />
@@ -1162,10 +1175,11 @@ export default function DashboardPage() {
     <div className="flex h-screen overflow-hidden">
       <SessionWarning />
       {/* Desktop Sidebar */}
-      <Sidebar 
-        className="hidden lg:flex" 
+      <Sidebar
+        className="hidden lg:flex"
         currentView={currentView}
         onViewChange={setCurrentView}
+        disabled={isMatching}
       />
 
       {/* Mobile Sidebar */}
@@ -1193,13 +1207,14 @@ export default function DashboardPage() {
                   </Button>
                 </div>
               </div>
-              <Sidebar 
+              <Sidebar
                 currentView={currentView}
                 onViewChange={(view) => {
                   setCurrentView(view);
                   setShowMobileSidebar(false);
                 }}
                 className="border-none"
+                disabled={isMatching}
               />
             </div>
           </div>
@@ -1211,11 +1226,15 @@ export default function DashboardPage() {
         {/* Header */}
         <header className="border-b bg-background">
           <div className="flex h-16 items-center gap-4 px-4 sm:px-6">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="lg:hidden shrink-0"
-              onClick={() => setShowMobileSidebar(true)}
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "lg:hidden shrink-0",
+                isMatching && "cursor-not-allowed opacity-50"
+              )}
+              onClick={() => !isMatching && setShowMobileSidebar(true)}
+              disabled={isMatching}
             >
               <Menu className="h-5 w-5" />
             </Button>
@@ -1236,6 +1255,7 @@ export default function DashboardPage() {
                       dateRange={dateRange}
                       onDateRangeChange={handleDateRangeChange}
                       variant="compact"
+                      disabled={isMatching}
                     />
 
                   </div>

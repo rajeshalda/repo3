@@ -20,6 +20,7 @@ interface DateRangePickerProps {
   onDateRangeChange: (range: DateRange | undefined) => void
   className?: string
   variant?: "default" | "compact"
+  disabled?: boolean
 }
 
 export function DateRangePicker({
@@ -27,6 +28,7 @@ export function DateRangePicker({
   onDateRangeChange,
   className,
   variant = "default",
+  disabled = false,
 }: DateRangePickerProps) {
   // Calculate date restrictions - only restrict past dates to last 30 days, allow future dates
   const today = new Date()
@@ -79,9 +81,11 @@ export function DateRangePicker({
               variant={"outline"}
               className={cn(
                 "justify-start text-left font-normal",
-                !startDate && "text-muted-foreground"
+                !startDate && "text-muted-foreground",
+                disabled && "cursor-not-allowed opacity-50"
               )}
               size="sm"
+              disabled={disabled}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {startDate ? format(startDate, "MMM dd, yyyy") : "Start"}
@@ -99,7 +103,7 @@ export function DateRangePicker({
             />
           </PopoverContent>
         </Popover>
-        
+
         {/* End Date */}
         <Popover>
           <PopoverTrigger asChild>
@@ -107,9 +111,11 @@ export function DateRangePicker({
               variant={"outline"}
               className={cn(
                 "justify-start text-left font-normal",
-                !endDate && "text-muted-foreground"
+                !endDate && "text-muted-foreground",
+                disabled && "cursor-not-allowed opacity-50"
               )}
               size="sm"
+              disabled={disabled}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {endDate ? format(endDate, "MMM dd, yyyy") : "End"}
@@ -126,23 +132,24 @@ export function DateRangePicker({
             />
           </PopoverContent>
         </Popover>
-        
+
         {/* Search Button */}
-        <Button 
+        <Button
           onClick={handleSearch}
-          disabled={!startDate}
+          disabled={!startDate || disabled}
           size="sm"
         >
           <Search className="mr-2 h-4 w-4" />
           Search
         </Button>
-        
+
         {/* Clear Button - only show when there's a selected range */}
         {dateRange?.from && (
-          <Button 
+          <Button
             onClick={handleClear}
             variant="outline"
             size="sm"
+            disabled={disabled}
           >
             <X className="mr-2 h-4 w-4" />
             Clear
@@ -168,8 +175,10 @@ export function DateRangePicker({
                 variant={"outline"}
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !startDate && "text-muted-foreground"
+                  !startDate && "text-muted-foreground",
+                  disabled && "cursor-not-allowed opacity-50"
                 )}
+                disabled={disabled}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {startDate ? format(startDate, "MMM dd, yyyy") : "Select start date"}
@@ -188,7 +197,7 @@ export function DateRangePicker({
             </PopoverContent>
           </Popover>
         </div>
-        
+
         {/* End Date */}
         <div className="space-y-2">
           <Label htmlFor="end-date" className="text-sm font-medium">
@@ -201,8 +210,10 @@ export function DateRangePicker({
                 variant={"outline"}
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !endDate && "text-muted-foreground"
+                  !endDate && "text-muted-foreground",
+                  disabled && "cursor-not-allowed opacity-50"
                 )}
+                disabled={disabled}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {endDate ? format(endDate, "MMM dd, yyyy") : "Select end date"}
@@ -220,13 +231,13 @@ export function DateRangePicker({
             </PopoverContent>
           </Popover>
         </div>
-        
+
         {/* Search Button */}
         <div className="space-y-2">
           <Label className="text-sm font-medium opacity-0">Search</Label>
-          <Button 
+          <Button
             onClick={handleSearch}
-            disabled={!startDate}
+            disabled={!startDate || disabled}
             className="w-full"
           >
             <Search className="mr-2 h-4 w-4" />

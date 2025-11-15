@@ -27,9 +27,10 @@ interface SidebarProps {
   currentView: string;
   onViewChange: (view: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
-export function Sidebar({ currentView, onViewChange, className }: SidebarProps) {
+export function Sidebar({ currentView, onViewChange, className, disabled = false }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const navigationItems: NavigationItem[] = [
@@ -80,9 +81,11 @@ export function Sidebar({ currentView, onViewChange, className }: SidebarProps) 
               variant={isActive ? "secondary" : "ghost"}
               className={cn(
                 "w-full justify-start items-center gap-3 py-3",
-                !isExpanded && "justify-center px-2"
+                !isExpanded && "justify-center px-2",
+                disabled && "cursor-not-allowed opacity-50"
               )}
-              onClick={() => onViewChange(item.view)}
+              onClick={() => !disabled && onViewChange(item.view)}
+              disabled={disabled}
             >
               {item.icon === AIChipIcon ? (
                 <Icon className="shrink-0 h-5 w-5" />

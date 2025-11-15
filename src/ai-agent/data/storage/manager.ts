@@ -8,14 +8,10 @@ export class StorageManager {
     private static instance: StorageManager;
     private storagePath: string;
     private meetingsFile: string;
-    private reviewsPath: string;
-    private decisionsPath: string;
 
     private constructor() {
         this.storagePath = path.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json');
         this.meetingsFile = path.join(this.storagePath, 'ai-agent-meetings.json');
-        this.reviewsPath = path.join(this.storagePath, 'reviews.json');
-        this.decisionsPath = path.join(this.storagePath, 'review-decisions.json');
         this.initializeStorage();
     }
 
@@ -30,37 +26,12 @@ export class StorageManager {
         try {
             // Create storage directory if it doesn't exist
             await fs.mkdir(this.storagePath, { recursive: true });
-            
+
             // Create meetings file with empty array if it doesn't exist
             try {
                 await fs.access(this.meetingsFile);
             } catch {
                 await fs.writeFile(this.meetingsFile, JSON.stringify({ meetings: [] }, null, 2), 'utf-8');
-            }
-
-            // Create reviews file with empty array if it doesn't exist
-            try {
-                await fs.access(this.reviewsPath);
-                // Validate and migrate existing reviews
-                const reviews = await this.readReviews();
-                const needsMigration = reviews.some(review => !review.userId);
-                if (needsMigration) {
-                    console.log('Migrating reviews to include userId...');
-                    // Create backup of old reviews
-                    const backupPath = path.join(this.storagePath, `reviews-backup-${Date.now()}.json`);
-                    await fs.writeFile(backupPath, JSON.stringify(reviews, null, 2), 'utf-8');
-                    // Reset reviews to empty array since old format is incompatible
-                    await this.writeReviews([]);
-                }
-            } catch {
-                await fs.writeFile(this.reviewsPath, JSON.stringify([], null, 2), 'utf-8');
-            }
-
-            // Create decisions file with empty array if it doesn't exist
-            try {
-                await fs.access(this.decisionsPath);
-            } catch {
-                await fs.writeFile(this.decisionsPath, JSON.stringify([], null, 2), 'utf-8');
             }
         } catch (error: unknown) {
             console.error('Error initializing storage:', error);
@@ -386,69 +357,6 @@ export class StorageManager {
         }
     }
 
-    public async storeReviewDecision(decision: ReviewDecision): Promise<void> {
-        const decisions = await this.readDecisions();
-        decisions.push(decision);
-        await this.writeDecisions(decisions);
-    }
-
-    // Private helper methods
-    private async readReviews(): Promise<ReviewMeeting[]> {
-        try {
-            const content = await fs.readFile(this.reviewsPath, 'utf-8');
-            const reviews = JSON.parse(content);
-            
-            // Validate that reviews is an array and each review has required fields
-            if (!Array.isArray(reviews)) {
-                console.error('Invalid reviews data structure, resetting to empty array');
-                await this.writeReviews([]);
-                return [];
-            }
-
-            // Filter out invalid reviews
-            const validReviews = reviews.filter(review => {
-                const isValid = review && 
-                    typeof review === 'object' &&
-                    typeof review.id === 'string' &&
-                    typeof review.userId === 'string' &&
-                    typeof review.subject === 'string' &&
-                    typeof review.startTime === 'string' &&
-                    typeof review.endTime === 'string';
-                
-                if (!isValid) {
-                    console.warn('Found invalid review:', review);
-                }
-                return isValid;
-            });
-
-            if (validReviews.length !== reviews.length) {
-                console.warn(`Filtered out ${reviews.length - validReviews.length} invalid reviews`);
-                await this.writeReviews(validReviews);
-            }
-
-            return validReviews;
-        } catch (error) {
-            console.error('Error reading reviews:', error);
-            return [];
-        }
-    }
-
-    private async writeReviews(reviews: ReviewMeeting[]): Promise<void> {
-        await fs.writeFile(this.reviewsPath, JSON.stringify(reviews, null, 2));
-    }
-
-    private async readDecisions(): Promise<ReviewDecision[]> {
-        try {
-            const content = await fs.readFile(this.decisionsPath, 'utf-8');
-            return JSON.parse(content);
-        } catch (error) {
-            return [];
-        }
-    }
-
-    private async writeDecisions(decisions: ReviewDecision[]): Promise<void> {
-        await fs.writeFile(this.decisionsPath, JSON.stringify(decisions, null, 2));
-    }
 }
 
 export const storageManager = StorageManager.getInstance(); 

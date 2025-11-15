@@ -1,6 +1,6 @@
 import { openAIClient } from '../../core/azure-openai/client';
 import { Meeting, MeetingAnalysis, ProcessedMeeting, AttendanceRecord } from '../../../interfaces/meetings';
-import { storageManager } from '../../data/storage/manager';
+import { database } from '../../../lib/database';
 import { QueueManager } from '../queue/queue-manager';
 import { BatchProcessor } from './batch-processor';
 import { RateLimiter } from '../../core/rate-limiter/token-bucket';
@@ -189,16 +189,16 @@ export class MeetingService {
      */
     public async analyzeMeeting(meeting: Meeting, userId: string): Promise<ProcessedMeeting> {
         try {
-            // Check if meeting was already processed
-            const existingMeeting = await storageManager.getMeeting(meeting.id);
-            if (existingMeeting) {
+            // Check if meeting was already processed (SQLite cache)
+            const sqliteCache = database.getMeetingCache(meeting.id, userId);
+            if (sqliteCache) {
                 console.log(`Meeting ${meeting.id} already processed, returning cached result`);
-                return existingMeeting;
+                return sqliteCache.meeting;
             }
 
             // Use the queue manager to handle rate limiting
             return await this.queueManager.queueMeetingAnalysis(
-                meeting, 
+                meeting,
                 userId,
                 (m, uid) => this.analyzeMeetingInternal(m, uid)
             );
@@ -215,8 +215,19 @@ export class MeetingService {
     public async analyzeMeetingInternal(meeting: Meeting, userId: string): Promise<ProcessedMeeting> {
         try {
             // Check if meeting was already processed (double-check in case it was processed while in queue)
-            const existingMeeting = await storageManager.getMeeting(meeting.id);
-            
+            // Load from SQLite cache
+            let existingMeeting = null;
+            let cachedReportCount = 0;
+
+            const sqliteCache = database.getMeetingCache(meeting.id, userId);
+            if (sqliteCache) {
+                existingMeeting = sqliteCache.meeting;
+                cachedReportCount = sqliteCache.reportCount;
+                console.log(`📦 SQLite CACHE HIT: ${meeting.id.substring(0, 15)}... (reports: ${cachedReportCount})`);
+            } else {
+                console.log(`📦 SQLite CACHE MISS: ${meeting.id.substring(0, 15)}... (will process with AI)`);
+            }
+
             // If we have a cached meeting, check if new reports are available
             if (existingMeeting && meeting.onlineMeeting?.joinUrl) {
                 try {
@@ -256,8 +267,8 @@ export class MeetingService {
                             if (reportsResponse.ok) {
                                 const reportsData = await reportsResponse.json();
                                 const currentReportCount = reportsData.value?.length || 0;
-                                const cachedReportCount = existingMeeting.attendance?.allValidReports?.length || 1;
-                                
+                                // cachedReportCount already set above (from SQLite or JSON)
+
                                 console.log(`🔧 CACHE CHECK: Meeting "${meeting.subject}"`);
                                 console.log(`🔧 CACHE CHECK: Current reports: ${currentReportCount}, Cached reports: ${cachedReportCount}`);
                                 
@@ -267,6 +278,15 @@ export class MeetingService {
                                     // Don't return cached result, continue with fresh processing
                                 } else {
                                     console.log(`♻️ USING CACHE: No new reports found, returning cached result`);
+
+                                    // IMPORTANT: Enrich cached meeting with current attendance data
+                                    // The cached meeting might have been created with an older schema
+                                    // We need to ensure it has the current attendance structure
+                                    if (meeting.attendance) {
+                                        existingMeeting.attendance = meeting.attendance;
+                                        console.log(`✅ CACHE ENRICHMENT: Updated cached meeting with current attendance data`);
+                                    }
+
                                     return existingMeeting;
                                 }
                             } else {
@@ -492,8 +512,9 @@ export class MeetingService {
                 userId
             };
 
-            // Save to storage
-            await storageManager.saveMeeting(processedMeeting);
+            // Save to SQLite cache (preserves full attendance data)
+            const reportCount = attendance?.allValidReports?.length || 0;
+            database.saveMeetingCache(meeting.id, userId, processedMeeting, reportCount);
 
             return processedMeeting;
         } catch (error: unknown) {
@@ -527,7 +548,7 @@ export class MeetingService {
 
     public async getProcessedMeeting(meetingId: string): Promise<ProcessedMeeting | null> {
         try {
-            return await storageManager.getMeeting(meetingId);
+            return database.getMeetingCacheById(meetingId);
         } catch (error: unknown) {
             console.error('Error getting processed meeting:', error);
             throw new Error(error instanceof Error ? error.message : 'Failed to get processed meeting');
@@ -536,7 +557,7 @@ export class MeetingService {
 
     public async listProcessedMeetings(userId: string): Promise<ProcessedMeeting[]> {
         try {
-            return await storageManager.listMeetings(userId);
+            return database.listMeetingCacheByUser(userId);
         } catch (error: unknown) {
             console.error('Error listing processed meetings:', error);
             throw new Error(error instanceof Error ? error.message : 'Failed to list processed meetings');

@@ -1176,17 +1176,17 @@ export function AIAgentView() {
               <p className="text-sm text-muted-foreground">
                 Automatically process your meetings and create time entries using AI Agent.
               </p>
-              <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border-2 border-yellow-500 rounded-md relative overflow-hidden">
-                <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#fef9c3,#fef9c3_10px,#fef08a_10px,#fef08a_20px)] opacity-20"></div>
-                <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 z-10" />
-                <p className="text-sm font-bold text-yellow-700 z-10">WARNING: Agent can make mistakes. Read the information below.</p>
+              <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/30 border-2 border-yellow-500 dark:border-yellow-600 rounded-md relative overflow-hidden">
+                <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#fef9c3,#fef9c3_10px,#fef08a_10px,#fef08a_20px)] dark:bg-[repeating-linear-gradient(45deg,#713f12,#713f12_10px,#854d0e_10px,#854d0e_20px)] opacity-20"></div>
+                <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 z-10" />
+                <p className="text-sm font-bold text-yellow-700 dark:text-yellow-300 z-10">WARNING: Agent can make mistakes. Read the information below.</p>
               </div>
             </div>
-            <div className="flex items-start space-x-2 bg-yellow-50 p-3 rounded-md">
-              <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+            <div className="flex items-start space-x-2 bg-yellow-50 dark:bg-yellow-900/30 p-3 rounded-md">
+              <AlertCircle className="h-5 w-5 text-yellow-500 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
               <div>
-                <h4 className="font-medium text-sm text-yellow-800 mb-1">For Better AI Task Matching:</h4>
-                <ul className="text-xs text-yellow-700 space-y-1">
+                <h4 className="font-medium text-sm text-yellow-800 dark:text-yellow-300 mb-1">For Better AI Task Matching:</h4>
+                <ul className="text-xs text-yellow-700 dark:text-yellow-200 space-y-1">
                   <li>• Use clear meeting names (e.g., "Sprint Planning - Project X" instead of "Discussion")</li>
                   <li>• Match meeting names with task names</li>
                   <li>• Use format: [Project] - [Meeting Type]</li>

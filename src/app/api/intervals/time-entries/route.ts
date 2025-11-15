@@ -239,7 +239,8 @@ export async function POST(request: Request) {
 
                 // Check if this meeting ID exists for the same date (this catches rejoined meetings)
                 const meetingExists = postedMeetings.some(m => {
-                    // PRIORITY 1: If both meetings have reportIds, use that for duplicate detection
+                    // PRIORITY 1: If both meetings have reportIds, use ONLY reportId for duplicate detection
+                    // This is the most reliable method for meetings with attendance tracking
                     if (requestReportId && m.reportId) {
                         const sameReportId = requestReportId === m.reportId;
                         if (sameReportId) {
@@ -255,49 +256,66 @@ export async function POST(request: Request) {
 └─────────────────────────────────────────────────────────────────────────────────────┘`);
                             return true;
                         }
-                        // If reportIds don't match, it's definitely NOT a duplicate
+                        // CRITICAL: If BOTH have reportIds but they DON'T match, it's NOT a duplicate
+                        // Even if same meeting ID and date - different reports mean different attendance instances
+                        console.log(`  ℹ️ Different reportIds (${requestReportId.substring(0, 8)}... vs ${m.reportId.substring(0, 8)}...) - NOT a duplicate`);
                         return false;
                     }
-                    
-                    // PRIORITY 2: Fallback to meeting ID + date matching if no reportIds
+
+                    // PRIORITY 2: Only use fallback matching if NEITHER meeting has reportId
+                    // If one has reportId and the other doesn't, they can't be compared reliably
+                    if (requestReportId || m.reportId) {
+                        // One has reportId, one doesn't - can't determine if duplicate
+                        return false;
+                    }
+
+                    // PRIORITY 3: Fallback to meeting ID + date matching ONLY if no reportIds at all
                     const sameId = m.meetingId === standardMeetingId;
                     let sameDate = true;
-                    
+
                     // If date info is available, check if it's the same date
                     if (m.timeEntry?.date && actualMeetingDate) {
                         sameDate = m.timeEntry.date === actualMeetingDate;
                     }
-                    
+
                     const isDuplicate = sameId && sameDate;
-                    
+
                     if (isDuplicate) {
                         console.log(`
 ┌─────────────────────── DUPLICATE DETECTED BY MEETING ID (MANUAL) ───────────────────────┐
 │ 🆔 Meeting ID: ${standardMeetingId.substring(0, 15)}...                              │
 │ 📅 Date: ${actualMeetingDate}                                                        │
 │ ⏱️ Duration: ${durationSeconds}s (${timeInHours} hours)                            │
-│ ✅ Match Method: Meeting ID + Date (fallback)                                        │
+│ ✅ Match Method: Meeting ID + Date (fallback - no reportIds)                        │
 └─────────────────────────────────────────────────────────────────────────────────────┘`);
                     }
-                    
+
                     return isDuplicate;
                 });
                 
                 // Additional check: For manual posts, also check by description for same date
+                // BUT: Only if meetings don't have reportIds (fallback for legacy meetings)
                 let descriptionExists = false;
-                if (description) {
-                    // Check for matching descriptions on the same date
+                if (description && !requestReportId) {
+                    // Only check description-based duplicates if no reportId available
+                    // If reportId exists, we already checked above and that's more reliable
                     descriptionExists = postedMeetings.some(meeting => {
+                        // Skip this check if stored meeting has reportId
+                        // (we already checked reportId-based duplicates above)
+                        if (meeting.reportId) {
+                            return false;
+                        }
+
                         // Same description
-                        const sameDescription = 
+                        const sameDescription =
                             meeting.timeEntry?.description?.toLowerCase() === description.toLowerCase();
-                        
+
                         // Same date (if we have date information)
                         let sameDate = true;
                         if (actualMeetingDate && meeting.timeEntry?.date) {
                             sameDate = meeting.timeEntry.date === actualMeetingDate;
                         }
-                        
+
                         // Same duration (approximately)
                         let similarDuration = true;
                         if (durationSeconds > 0 && meeting.timeEntry?.time) {
@@ -306,17 +324,18 @@ export async function POST(request: Request) {
                             const durationDiff = Math.abs(meetingDurationSeconds - durationSeconds);
                             similarDuration = durationDiff < 60; // Within 1 minute
                         }
-                        
+
                         const isDuplicate = sameDescription && sameDate && similarDuration;
-                        
+
                         if (isDuplicate) {
                             console.log(`
 ┌─────────────────────── DUPLICATE BY DESCRIPTION (MANUAL) ───────────────────────┐
 │ 📝 Description: ${description.substring(0, 25)}...                            │
 │ 📅 Date: ${actualMeetingDate}                                                │
+│ ℹ️ Note: Legacy duplicate check (no reportIds available)                     │
 └───────────────────────────────────────────────────────────────────────────────┘`);
                         }
-                        
+
                         return isDuplicate;
                     });
                 }
@@ -330,9 +349,63 @@ export async function POST(request: Request) {
 ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                                     ║` : ''}
 ║ 🔎 Detected by: ${meetingExists ? 'Meeting ID + Date' : 'Description + Date'} ║
 ╚═══════════════════════════════════════════════════════════════════╝`);
-                    
-                    return NextResponse.json({ 
-                        success: true, 
+
+                    // IMPORTANT: Remove ALL instances from review queue for duplicates
+                    // This handles meetings with multiple attendance reports where one was already posted
+                    // We need to remove all report instances for the same base meeting
+                    try {
+                        const storageManager = StorageManager.getInstance();
+                        const reviewMeetings = await storageManager.getPendingReviews(session.user.email);
+
+                        // Extract base meeting ID (without report suffix)
+                        const baseMeetingId = standardMeetingId;
+
+                        // Find the EXACT review instance for this meeting
+                        // When a report ID is provided, we should only remove that specific instance
+                        // When no report ID, remove all instances with the same base meeting ID
+                        const relatedReviews = reviewMeetings.filter(rm => {
+                            // If we have a report ID, match ONLY that specific report instance
+                            if (requestReportId) {
+                                return rm.reportId === requestReportId;
+                            }
+
+                            // If no report ID, match by base meeting ID
+                            // This catches both exact match and instances with report suffix
+                            return rm.id.startsWith(baseMeetingId);
+                        });
+
+                        if (relatedReviews.length > 0) {
+                            console.log(`
+╔════════════════════════ DUPLICATE - REMOVING FROM REVIEW ═════════════════════╗
+║ 🎯 Found ${relatedReviews.length} related review instance(s) to remove                           ║
+║ 🆔 Base Meeting ID: ${baseMeetingId.substring(0, 20)}...                     ║
+║ 📊 Request Report ID: ${requestReportId || 'N/A'}                            ║
+╚═══════════════════════════════════════════════════════════════════════════════╝`);
+
+                            // Remove all related reviews
+                            for (const reviewMeeting of relatedReviews) {
+                                console.log(`  Removing: ${reviewMeeting.id.substring(0, 30)}... (reportId: ${reviewMeeting.reportId || 'N/A'})`);
+
+                                await storageManager.updateReviewStatus({
+                                    meetingId: reviewMeeting.id,
+                                    status: 'approved',
+                                    decidedAt: new Date().toISOString(),
+                                    decidedBy: session.user.email,
+                                    feedback: `Duplicate - already posted`
+                                });
+                            }
+
+                            console.log(`✅ Removed ${relatedReviews.length} duplicate review instance(s) from queue`);
+                        } else {
+                            console.log(`⚠️ No related review meetings found for ${baseMeetingId.substring(0, 20)}... (may already be removed)`);
+                        }
+                    } catch (error) {
+                        console.error(`❌ Failed to remove duplicates from review queue:`, error);
+                        // Don't fail the request if this fails
+                    }
+
+                    return NextResponse.json({
+                        success: true,
                         message: 'Already posted. Skipping entry.'
                     });
                 }
@@ -602,40 +675,55 @@ ${reportId ? `║ 📊 Report ID: ${reportId}                                   
 ${reportId ? `│ 📊 Report ID: ${reportId}                                │` : ''}
 └─────────────────────────────────────────────────────┘`);
 
-                // Update review status logging
+                // Update review status - Remove the EXACT review instance that was posted
                 try {
                     const storageManager = StorageManager.getInstance();
-                    
-                    // Even if we got the reportId earlier, check again in case it was updated
-                    if (!reportId) {
-                        // Get the meeting from review to retrieve any reportId
-                        const reviewMeeting = await storageManager.getMeetingForReview(primaryMeetingId || '', session.user.email);
-                        
-                        // If we found a review meeting with reportId, log it but don't update storage since we already saved it
-                        if (reviewMeeting && reviewMeeting.reportId) {
-                            reportId = reviewMeeting.reportId;
-                            console.log(`
-╔════════════════════════ REPORT ID FROM REVIEW ═══════════════════════╗
-║ 🧪 Found report ID in review meeting (POST-CREATION)                 ║ 
-║ 📊 Report ID: ${reportId}                                          ║
-║ 🆔 Meeting ID: ${primaryMeetingId?.substring(0, 20)}...            ║
-╚═══════════════════════════════════════════════════════════════════╝`);
+                    const reviewMeetings = await storageManager.getPendingReviews(session.user.email);
+
+                    // Find the EXACT review instance for this meeting
+                    // When a report ID is provided, we should only remove that specific instance
+                    // When no report ID, remove all instances with the same base meeting ID
+                    const baseMeetingId = primaryMeetingId || '';
+                    const relatedReviews = reviewMeetings.filter(rm => {
+                        // If we have a report ID, match ONLY that specific report instance
+                        if (reportId) {
+                            return rm.reportId === reportId;
                         }
-                    }
-                    
-                    await storageManager.updateReviewStatus({
-                        meetingId: primaryMeetingId || '',
-                        status: 'approved',
-                        decidedAt: new Date().toISOString(),
-                        decidedBy: session.user.email,
-                        feedback: 'Meeting successfully posted to Intervals'
+
+                        // If no report ID, match by base meeting ID
+                        // This catches both exact match and instances with report suffix
+                        return rm.id.startsWith(baseMeetingId);
                     });
-                    
-                    console.log(`
+
+                    if (relatedReviews.length > 0) {
+                        console.log(`
+╔════════════════════════ REMOVING FROM REVIEW QUEUE ═══════════════════════╗
+║ 🎯 Found ${relatedReviews.length} review instance(s) to remove after successful post         ║
+║ 🆔 Base Meeting ID: ${baseMeetingId.substring(0, 20)}...                 ║
+║ 📊 Posted Report ID: ${reportId || 'N/A'}                                ║
+╚═══════════════════════════════════════════════════════════════════════════╝`);
+
+                        // Remove all related reviews
+                        for (const reviewMeeting of relatedReviews) {
+                            console.log(`  Approving: ${reviewMeeting.id.substring(0, 30)}... (reportId: ${reviewMeeting.reportId || 'N/A'})`);
+
+                            await storageManager.updateReviewStatus({
+                                meetingId: reviewMeeting.id,
+                                status: 'approved',
+                                decidedAt: new Date().toISOString(),
+                                decidedBy: session.user.email,
+                                feedback: 'Meeting successfully posted to Intervals'
+                            });
+                        }
+
+                        console.log(`
 ┌─────────────────── REVIEW STATUS ───────────────────┐
-│ ✅ Meeting marked as approved                       │
-│ 🔑 ID: ${primaryMeetingId?.substring(0, 15) || 'N/A'}... │
+│ ✅ Removed ${relatedReviews.length} review instance(s) from queue       │
+│ 🔑 Base ID: ${baseMeetingId.substring(0, 15)}... │
 └─────────────────────────────────────────────────────┘`);
+                    } else {
+                        console.log(`⚠️ No review meetings found for ${baseMeetingId.substring(0, 20)}... (may not have been in review queue)`);
+                    }
                 } catch (error) {
                     console.error(`
 ┌─────────────────── ERROR DETAILS ───────────────────┐

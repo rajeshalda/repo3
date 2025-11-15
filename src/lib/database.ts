@@ -51,6 +51,17 @@ interface ReviewData {
     updated_at?: string;
 }
 
+interface MeetingCacheData {
+    id?: number;
+    meeting_id: string;
+    user_id: string;
+    full_meeting_data: string; // JSON string of complete meeting object
+    report_count?: number;
+    has_attendance?: boolean;
+    cached_at?: string;
+    updated_at?: string;
+}
+
 export class AppDatabase {
     private db: Database.Database;
     private static instance: AppDatabase;
@@ -139,6 +150,19 @@ export class AppDatabase {
                 UNIQUE(user_id, report_id)
             );
             
+            -- Meeting cache table (for AI-processed meetings with attendance data)
+            CREATE TABLE IF NOT EXISTS meeting_cache (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                meeting_id TEXT NOT NULL,
+                user_id TEXT NOT NULL,
+                full_meeting_data TEXT NOT NULL,
+                report_count INTEGER DEFAULT 0,
+                has_attendance BOOLEAN DEFAULT 0,
+                cached_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(meeting_id, user_id)
+            );
+
             -- Create indexes for performance
             CREATE INDEX IF NOT EXISTS idx_meetings_user_id ON meetings(user_id);
             CREATE INDEX IF NOT EXISTS idx_meetings_meeting_id ON meetings(meeting_id);
@@ -146,6 +170,8 @@ export class AppDatabase {
             CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id);
             CREATE INDEX IF NOT EXISTS idx_reviews_status ON reviews(status);
             CREATE INDEX IF NOT EXISTS idx_reviews_report_id ON reviews(report_id);
+            CREATE INDEX IF NOT EXISTS idx_meeting_cache_lookup ON meeting_cache(meeting_id, user_id);
+            CREATE INDEX IF NOT EXISTS idx_meeting_cache_user ON meeting_cache(user_id);
         `);
         
         // Add unique constraint to reviews table if it doesn't exist
@@ -371,9 +397,103 @@ export class AppDatabase {
         const stmt = this.db.prepare('DELETE FROM reviews WHERE id = ?');
         stmt.run(reviewId);
     }
-    
+
+    // ===================== MEETING CACHE METHODS =====================
+
+    saveMeetingCache(meetingId: string, userId: string, meetingData: any, reportCount: number = 0): void {
+        try {
+            const hasAttendance = meetingData.attendance ? 1 : 0;
+            const fullData = JSON.stringify(meetingData);
+
+            const stmt = this.db.prepare(`
+                INSERT OR REPLACE INTO meeting_cache
+                (meeting_id, user_id, full_meeting_data, report_count, has_attendance, updated_at)
+                VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            `);
+
+            stmt.run(meetingId, userId, fullData, reportCount, hasAttendance);
+            console.log(`✅ Saved meeting cache: ${meetingId.substring(0, 15)}... (reports: ${reportCount}, attendance: ${hasAttendance})`);
+        } catch (error) {
+            console.error('❌ Error saving meeting cache:', error);
+            // Don't throw - let JSON fallback handle it
+        }
+    }
+
+    getMeetingCache(meetingId: string, userId: string): any | null {
+        try {
+            const stmt = this.db.prepare(`
+                SELECT full_meeting_data, report_count, has_attendance, cached_at
+                FROM meeting_cache
+                WHERE meeting_id = ? AND user_id = ?
+            `);
+
+            const row = stmt.get(meetingId, userId) as MeetingCacheData | undefined;
+
+            if (row) {
+                const meetingData = JSON.parse(row.full_meeting_data);
+                console.log(`✅ Loaded meeting from cache: ${meetingId.substring(0, 15)}... (reports: ${row.report_count}, cached: ${row.cached_at})`);
+                return {
+                    meeting: meetingData,
+                    reportCount: row.report_count || 0,
+                    hasAttendance: Boolean(row.has_attendance)
+                };
+            }
+
+            return null;
+        } catch (error) {
+            console.error('❌ Error loading meeting cache:', error);
+            return null; // Fallback to JSON
+        }
+    }
+
+    getMeetingCacheById(meetingId: string): any | null {
+        try {
+            const stmt = this.db.prepare(`
+                SELECT full_meeting_data FROM meeting_cache
+                WHERE meeting_id = ?
+                LIMIT 1
+            `);
+            const row = stmt.get(meetingId) as MeetingCacheData | undefined;
+            return row ? JSON.parse(row.full_meeting_data) : null;
+        } catch (error) {
+            console.error('❌ Error getting meeting cache by ID:', error);
+            return null;
+        }
+    }
+
+    listMeetingCacheByUser(userId: string): any[] {
+        try {
+            const stmt = this.db.prepare(`
+                SELECT full_meeting_data FROM meeting_cache
+                WHERE user_id = ?
+                ORDER BY updated_at DESC
+            `);
+            const rows = stmt.all(userId) as MeetingCacheData[];
+            return rows.map(row => JSON.parse(row.full_meeting_data));
+        } catch (error) {
+            console.error('❌ Error listing meeting cache:', error);
+            return [];
+        }
+    }
+
+    clearMeetingCache(userId?: string): void {
+        try {
+            if (userId) {
+                const stmt = this.db.prepare('DELETE FROM meeting_cache WHERE user_id = ?');
+                stmt.run(userId);
+                console.log(`🧹 Cleared meeting cache for user: ${userId}`);
+            } else {
+                const stmt = this.db.prepare('DELETE FROM meeting_cache');
+                stmt.run();
+                console.log('🧹 Cleared all meeting cache');
+            }
+        } catch (error) {
+            console.error('❌ Error clearing meeting cache:', error);
+        }
+    }
+
     // ===================== UTILITY METHODS =====================
-    
+
     close(): void {
         this.db.close();
     }
@@ -397,4 +517,4 @@ export class AppDatabase {
 export const database = AppDatabase.getInstance();
 
 // Export types
-export type { UserData, UserSettings, MeetingData, ReviewData }; 
+export type { UserData, UserSettings, MeetingData, ReviewData, MeetingCacheData }; 

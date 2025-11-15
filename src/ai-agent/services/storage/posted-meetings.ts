@@ -96,9 +96,15 @@ export class AIAgentPostedMeetingsStorage {
                 if (isReportPosted) {
                     return true;
                 }
+                // If reportId is provided and not found, this is a NEW instance of a potentially recurring meeting
+                // Don't fall through to the meetingId check - reportId takes precedence
+                // Return false early to allow this new instance to be posted
+                console.log(`Report ID ${reportId} not found - this is a new attendance instance`);
+                return false;
             }
-            
+
             // Additional check for recurring meetings: check by meeting ID to prevent duplicate subjects on same date
+            // This only applies when NO reportId is provided (legacy meetings or meetings without attendance tracking)
             if (meetingId) {
                 console.log(`Checking if meeting ${meetingId} is already posted for user ${userId}`);
                 const isMeetingPosted = database.isMeetingPosted(meetingId, userId);

@@ -54,9 +54,6 @@ class ReviewService {
         }
       }
       
-      // Store the decision for learning
-      await this.storeDecisionForLearning(decision);
-      
       console.log(`Review submitted for meeting ${decision.meetingId}`);
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -93,15 +90,6 @@ class ReviewService {
     // We're disabling confidence-based review - meetings should only go to review
     // if no matching task is found, not because of low confidence
     return false;
-  }
-
-  private async storeDecisionForLearning(decision: ReviewDecision): Promise<void> {
-    try {
-      await storageManager.storeReviewDecision(decision);
-    } catch (error) {
-      console.error('Error storing review decision for learning:', error);
-      // Don't throw here as this is not critical for the main flow
-    }
   }
 }
 
