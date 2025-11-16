@@ -575,6 +575,7 @@ export default function DashboardPage() {
     setIsMatching(true);
     let currentIndex = 0;
     const allResults: MatchResult[] = [];
+    let cumulativeProcessed = 0; // Track cumulative processed count across all batches
 
     try {
       // Expand meetings that have multiple attendance records into separate entries for task matching
@@ -625,16 +626,18 @@ export default function DashboardPage() {
         }
 
         const data: MatchBatchResult = await response.json();
-        
+
         // Merge results
         if (data.matches.high) allResults.push(...data.matches.high);
         if (data.matches.medium) allResults.push(...data.matches.medium);
         if (data.matches.low) allResults.push(...data.matches.low);
         if (data.matches.unmatched) allResults.push(...data.matches.unmatched);
 
-        // Update progress
-        const progress = Math.round((data.summary.processed / data.summary.totalMeetings) * 100);
-        toast(`Processed ${data.summary.processed} of ${data.summary.totalMeetings} meetings (${progress}%)`);
+        // Update cumulative progress - calculate based on total meetings, not just current batch
+        cumulativeProcessed = allResults.length; // Use actual results count for accuracy
+        const totalMeetings = expandedMeetings.length; // Total meetings to process
+        const progress = Math.round((cumulativeProcessed / totalMeetings) * 100);
+        toast(`Processed ${cumulativeProcessed} of ${totalMeetings} meetings (${progress}%)`);
 
         if (data.nextBatch === null) {
           // All meetings processed
