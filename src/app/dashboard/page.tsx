@@ -38,6 +38,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AIAgentView } from '@/components/ai-agent-view';
+import { PostedMeetingsView } from '@/components/posted-meetings-view';
+import { MeetingReviewView } from '@/components/meeting-review-view';
 import { handleApiResponse } from '@/lib/api-helpers';
 import {
   Tabs,
@@ -254,6 +256,8 @@ export default function DashboardPage() {
     let title = 'Dashboard | Meeting Time Tracker';
     if (currentView === 'ai-agent') {
       title = 'AI Agent | Meeting Time Tracker';
+    } else if (currentView === 'meeting-review') {
+      title = 'Meeting Review | Meeting Time Tracker';
     } else if (currentView === 'posted-meetings') {
       title = 'Posted Meetings | Meeting Time Tracker';
     }
@@ -774,6 +778,10 @@ export default function DashboardPage() {
     switch (currentView) {
       case 'ai-agent':
         return <AIAgentView />;
+      case 'meeting-review':
+        return <MeetingReviewView />;
+      case 'posted-meetings':
+        return <PostedMeetingsView />;
       default:
         return (
           <>
@@ -825,7 +833,7 @@ export default function DashboardPage() {
                 <DateRangePicker
                   dateRange={dateRange}
                   onDateRangeChange={handleDateRangeChange}
-                  disabled={isMatching}
+                  disabled={isMatching || meetingsLoading}
                 />
                 {isMatching && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -837,6 +845,12 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
+                {meetingsLoading && (
+                  <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <Loader2 className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />
+                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Loading meetings - controls are temporarily disabled</span>
+                  </div>
+                )}
                 {isMatching && (
                   <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
                     <Loader2 className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />
@@ -867,10 +881,10 @@ export default function DashboardPage() {
                     </TabsList>
                     {/* Match Tasks button for Fetched Meetings tab */}
                     <TabsContent value="fetched-meetings" className="m-0">
-                      <Button 
-                        onClick={matchMeetings} 
-                        disabled={isMatching} 
-                        variant="default" 
+                      <Button
+                        onClick={matchMeetings}
+                        disabled={isMatching || meetingsLoading}
+                        variant="default"
                         size="sm"
                         className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-2.5 rounded-lg flex items-center justify-center gap-2 mr-2"
                       >
@@ -1179,7 +1193,7 @@ export default function DashboardPage() {
         className="hidden lg:flex"
         currentView={currentView}
         onViewChange={setCurrentView}
-        disabled={isMatching}
+        disabled={isMatching || meetingsLoading}
       />
 
       {/* Mobile Sidebar */}
@@ -1214,7 +1228,7 @@ export default function DashboardPage() {
                   setShowMobileSidebar(false);
                 }}
                 className="border-none"
-                disabled={isMatching}
+                disabled={isMatching || meetingsLoading}
               />
             </div>
           </div>
@@ -1231,10 +1245,10 @@ export default function DashboardPage() {
               size="icon"
               className={cn(
                 "lg:hidden shrink-0",
-                isMatching && "cursor-not-allowed opacity-50"
+                (isMatching || meetingsLoading) && "cursor-not-allowed opacity-50"
               )}
-              onClick={() => !isMatching && setShowMobileSidebar(true)}
-              disabled={isMatching}
+              onClick={() => !(isMatching || meetingsLoading) && setShowMobileSidebar(true)}
+              disabled={isMatching || meetingsLoading}
             >
               <Menu className="h-5 w-5" />
             </Button>
@@ -1255,7 +1269,7 @@ export default function DashboardPage() {
                       dateRange={dateRange}
                       onDateRangeChange={handleDateRangeChange}
                       variant="compact"
-                      disabled={isMatching}
+                      disabled={isMatching || meetingsLoading}
                     />
 
                   </div>

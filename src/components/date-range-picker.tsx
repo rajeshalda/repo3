@@ -143,7 +143,7 @@ export function DateRangePicker({
           Search
         </Button>
 
-        {/* Clear Button - only show when there's a selected range */}
+        {/* Clear Dates Button - only show when there's a selected range */}
         {dateRange?.from && (
           <Button
             onClick={handleClear}
@@ -152,7 +152,7 @@ export function DateRangePicker({
             disabled={disabled}
           >
             <X className="mr-2 h-4 w-4" />
-            Clear
+            Clear Dates
           </Button>
         )}
       </div>

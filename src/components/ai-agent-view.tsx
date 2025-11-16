@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useState, useEffect, useRef } from "react";
-import { Loader2, Calendar, AlertCircle, Power, Trash2, X, Clock, Filter, Search } from "lucide-react";
+import { Loader2, Calendar, AlertCircle, Power, Trash2, X, Clock } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -16,21 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import { MeetingMatches } from "./meeting-matches";
 import type { MatchResult } from "@/lib/types";
 import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { PM2Status } from './pm2-status';
-import { formatDateIST, DEFAULT_DATE_FORMAT } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { ScrollArea } from './ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
@@ -126,174 +112,6 @@ export function AIAgentView() {
   const { error, success, toast } = useToast();
   const [isCancelling, setIsCancelling] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-
-  // Add new state for filtering
-  const [filterText, setFilterText] = useState("");
-  const [moduleFilter, setModuleFilter] = useState<string>("all");
-  const [workTypeFilter, setWorkTypeFilter] = useState<string>("all");
-  const [dateFilter, setDateFilter] = useState<string>("all");
-  const [clientFilter, setClientFilter] = useState<string>("all");
-  const [projectFilter, setProjectFilter] = useState<string>("all");
-  const [filteredMeetings, setFilteredMeetings] = useState<PostedMeeting[]>([]);
-  
-  // Update sorting state to be more user-friendly with proper typing
-  type SortField = keyof PostedMeeting['timeEntry'] | 'meetingId' | 'postedAt';
-  
-  const [sortConfig, setSortConfig] = useState<{
-    field: SortField;
-    direction: 'asc' | 'desc';
-  }>({
-    field: 'date',
-    direction: 'desc'
-  });
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [paginatedMeetings, setPaginatedMeetings] = useState<PostedMeeting[]>([]);
-  
-  // Calculate pagination values
-  const totalPages = Math.ceil(filteredMeetings.length / pageSize);
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-
-  // Hidden meetings state
-  const [showHiddenMeetings, setShowHiddenMeetings] = useState(false);
-
-  // Add sorting options with proper typing
-  const sortOptions: { label: string; value: SortField }[] = [
-    { label: 'Meeting Date', value: 'date' },
-    { label: 'Meeting Name', value: 'description' },
-    { label: 'Task Name', value: 'taskTitle' },
-    { label: 'Duration', value: 'time' },
-    { label: 'Client', value: 'client' },
-    { label: 'Project', value: 'project' },
-    { label: 'Module', value: 'module' },
-    { label: 'Work Type', value: 'worktype' },
-    { label: 'Posted Date', value: 'postedAt' }
-  ];
-
-  // Add helper function to normalize worktype values
-  const normalizeWorktype = (meeting: PostedMeeting): string => {
-    // Check for worktype in the timeEntry
-    if (meeting.timeEntry.worktype) {
-      return meeting.timeEntry.worktype;
-    }
-    
-    // If there's no worktype but there's a worktypeid of "305064", return "India-Meeting"
-    if (meeting.timeEntry.worktypeid === "305064") {
-      return "India-Meeting";
-    }
-    
-    // Default fallback
-    return "Meeting";
-  };
-
-  // Update sort handler with proper typing
-  const handleSort = (field: SortField) => {
-    setSortConfig(prev => ({
-      field,
-      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
-    }));
-  };
-
-  // Update sortMeetings function with proper typing and null handling
-  const sortMeetings = (meetings: PostedMeeting[]) => {
-    return [...meetings].sort((a, b) => {
-      let aValue: string = '';
-      let bValue: string = '';
-
-      if (sortConfig.field === 'meetingId' || sortConfig.field === 'postedAt') {
-        aValue = String(a[sortConfig.field] || '');
-        bValue = String(b[sortConfig.field] || '');
-      } else {
-        const field = sortConfig.field as keyof PostedMeeting['timeEntry'];
-        aValue = String(a.timeEntry[field] || '');
-        bValue = String(b.timeEntry[field] || '');
-      }
-
-      // Convert to lowercase for string comparison
-      aValue = aValue.toLowerCase();
-      bValue = bValue.toLowerCase();
-
-      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-  };
-
-  // Extract unique modules and work types for filter dropdowns
-  const uniqueModules = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.module)));
-  const uniqueWorkTypes = Array.from(new Set(postedMeetings.map(meeting => normalizeWorktype(meeting))));
-  const uniqueDates = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.date)));
-  const uniqueClients = Array.from(new Set(postedMeetings.map(meeting => meeting.timeEntry.client).filter(Boolean))) as string[];
-  const uniqueProjects = Array.from(new Set(postedMeetings.map(meeting => 
-    meeting.timeEntry.project || meeting.timeEntry.projectid).filter(Boolean))) as string[];
-
-  // Add helper function to decode HTML entities
-  const decodeHtmlEntities = (text: string) => {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = text;
-    return textarea.value;
-  };
-
-  // Update useEffect dependencies
-  useEffect(() => {
-    let filtered = [...postedMeetings];
-    
-    // Filter by search text
-    if (filterText) {
-      const searchLower = filterText.toLowerCase();
-      filtered = filtered.filter(meeting => 
-        meeting.timeEntry.description.toLowerCase().includes(searchLower) ||
-        (meeting.timeEntry.taskTitle && meeting.timeEntry.taskTitle.toLowerCase().includes(searchLower))
-      );
-    }
-    
-    // Filter by module
-    if (moduleFilter !== "all") {
-      filtered = filtered.filter(meeting => meeting.timeEntry.module === moduleFilter);
-    }
-    
-    // Filter by work type
-    if (workTypeFilter !== "all") {
-      filtered = filtered.filter(meeting => normalizeWorktype(meeting) === workTypeFilter);
-    }
-    
-    // Filter by date
-    if (dateFilter !== "all") {
-      filtered = filtered.filter(meeting => meeting.timeEntry.date === dateFilter);
-    }
-    
-    // Filter by client
-    if (clientFilter !== "all") {
-      filtered = filtered.filter(meeting => meeting.timeEntry.client === clientFilter);
-    }
-    
-    // Filter by project
-    if (projectFilter !== "all") {
-      filtered = filtered.filter(meeting => 
-        meeting.timeEntry.project === projectFilter || meeting.timeEntry.projectid === projectFilter
-      );
-    }
-    
-    // Apply sorting
-    filtered = sortMeetings(filtered);
-    
-    setFilteredMeetings(filtered);
-  }, [postedMeetings, filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter, sortConfig]);
-
-  // Update paginated meetings when filtered meetings or pagination settings change
-  useEffect(() => {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    setPaginatedMeetings(filteredMeetings.slice(start, end));
-  }, [filteredMeetings, currentPage, pageSize]);
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filterText, moduleFilter, workTypeFilter, dateFilter, clientFilter, projectFilter]);
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -416,15 +234,22 @@ export function AIAgentView() {
       
       // Update match summary immediately with the new counts
       setTimeout(() => {
-        setMatchSummary({
+        const summary = {
           highConfidence: updated.high.length,
           mediumConfidence: updated.medium.length,
           lowConfidence: updated.low.length,
           unmatched: updated.unmatched.length,
           total: updated.high.length + updated.medium.length + updated.low.length + updated.unmatched.length
-        });
+        };
+        setMatchSummary(summary);
+
+        // Save to localStorage for Meeting Review view
+        localStorage.setItem('ai_agent_match_results', JSON.stringify({
+          matches: updated,
+          summary: summary
+        }));
       }, 0);
-      
+
       return updated;
     });
     
@@ -860,13 +685,20 @@ export function AIAgentView() {
         });
 
         setMatchResults(results);
-        setMatchSummary({
+        const summary = {
           total: data.data.matchResults.length,
           highConfidence: results.high.length,
           mediumConfidence: results.medium.length,
           lowConfidence: results.low.length,
           unmatched: results.unmatched.length
-        });
+        };
+        setMatchSummary(summary);
+
+        // Save to localStorage for Meeting Review view
+        localStorage.setItem('ai_agent_match_results', JSON.stringify({
+          matches: results,
+          summary: summary
+        }));
       }
 
       if (data.data.timeEntries) {
@@ -1025,81 +857,6 @@ export function AIAgentView() {
     return `${hours}h ${minutes}m`;
   };
 
-  // Add a date formatter function near the other utility functions
-  const formatDateTime = (dateString: string) => {
-    return formatDateIST(dateString, DEFAULT_DATE_FORMAT);
-  };
-
-  // Add clearPostedMeetings handler - FRONTEND ONLY (preserves SQLite data)
-  const clearPostedMeetings = async () => {
-    try {
-      // Only clear the frontend display - DO NOT delete from SQLite database
-      // This preserves data integrity and prevents duplicate processing issues
-      
-      if (session?.user?.email) {
-        const userEmail = session.user.email;
-        
-        // Clear only from local state - SQLite data remains intact
-        setPostedMeetings(prevMeetings => 
-          prevMeetings.filter(meeting => meeting.userId !== userEmail)
-        );
-        
-        // Store user preference to hide cleared meetings in localStorage
-        const hiddenMeetingsKey = `hiddenMeetings_${userEmail}`;
-        const currentHidden = JSON.parse(localStorage.getItem(hiddenMeetingsKey) || '[]');
-        const userMeetingIds = postedMeetings
-          .filter(meeting => meeting.userId === userEmail)
-          .map(meeting => meeting.meetingId);
-        
-        const updatedHidden = [...new Set([...currentHidden, ...userMeetingIds])];
-        localStorage.setItem(hiddenMeetingsKey, JSON.stringify(updatedHidden));
-        
-        success('Successfully cleared your posted meetings from view (data preserved in database)');
-        addLog('Cleared posted meetings from view - database data preserved', 'success');
-      } else {
-        throw new Error('User session not found');
-      }
-    } catch (err) {
-      console.error('Error clearing meetings view:', err);
-      error('Failed to clear your meetings view');
-      addLog('Failed to clear posted meetings view', 'error');
-    }
-  };
-
-  // Function to restore hidden meetings
-  const restoreHiddenMeetings = async () => {
-    try {
-      if (session?.user?.email) {
-        const hiddenMeetingsKey = `hiddenMeetings_${session.user.email}`;
-        localStorage.removeItem(hiddenMeetingsKey);
-        
-        // Refresh the meetings list to show all data
-        await fetchPostedMeetings();
-        
-        success('Hidden meetings restored successfully');
-        addLog('Restored hidden meetings to view', 'success');
-      }
-    } catch (err) {
-      console.error('Error restoring hidden meetings:', err);
-      error('Failed to restore hidden meetings');
-      addLog('Failed to restore hidden meetings', 'error');
-    }
-  };
-
-  // Update clearFilters to include sorting reset
-  const clearFilters = () => {
-    setFilterText("");
-    setModuleFilter("all");
-    setWorkTypeFilter("all");
-    setDateFilter("all");
-    setClientFilter("all");
-    setProjectFilter("all");
-    setSortConfig({
-      field: 'date',
-      direction: 'desc'
-    });
-  };
-
   const [status, setStatus] = useState<string>('');
   
   const handleRefresh = async () => {
@@ -1236,432 +993,6 @@ export function AIAgentView() {
                     : "Click the toggle to enable the AI Agent. AI Agent will automatically check for new meetings every 30 minutes."}
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Meeting Matches */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle>Meeting Review</CardTitle>
-        </CardHeader>
-        <CardContent className="max-h-[350px] overflow-auto">
-          <div className="meeting-matches-component">
-            <MeetingMatches
-              summary={matchSummary}
-              matches={matchResults}
-              onMeetingPosted={handleMeetingPosted}
-              postedMeetingIds={postedMeetings.map(m => m.meetingId)}
-              source="ai-agent"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Recently Posted Meetings */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle>Recently Posted Meetings</CardTitle>
-          <div className="flex space-x-2">
-            {postedMeetings.length > 0 && (
-              <>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8"
-                    >
-                      <Filter className="h-4 w-4 mr-2" />
-                      Filters
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80">
-                    <div className="space-y-4">
-                      <h4 className="font-medium">Filter Meetings</h4>
-                      <div className="space-y-2">
-                        <div>
-                          <label className="text-sm font-medium">Date</label>
-                          <Select
-                            value={dateFilter}
-                            onValueChange={setDateFilter}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select date" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All Dates</SelectItem>
-                              {uniqueDates.map(date => (
-                                <SelectItem key={date} value={date}>{date}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium">Client</label>
-                          <Select
-                            value={clientFilter}
-                            onValueChange={setClientFilter}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select client" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All Clients</SelectItem>
-                              {uniqueClients.map(client => (
-                                <SelectItem key={client} value={client}>{client}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium">Project</label>
-                          <Select
-                            value={projectFilter}
-                            onValueChange={setProjectFilter}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select project" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All Projects</SelectItem>
-                              {uniqueProjects.map(project => (
-                                <SelectItem key={project} value={project}>{project}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium">Module</label>
-                          <Select
-                            value={moduleFilter}
-                            onValueChange={setModuleFilter}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select module" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All Modules</SelectItem>
-                              {uniqueModules.map(module => (
-                                <SelectItem key={module} value={module}>{module}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium">Work Type</label>
-                          <Select
-                            value={workTypeFilter}
-                            onValueChange={setWorkTypeFilter}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select work type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All Work Types</SelectItem>
-                              {uniqueWorkTypes.map(type => (
-                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <Button onClick={clearFilters} variant="outline" size="sm" className="w-full">
-                        Clear Filters
-                      </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8"
-                    >
-                      {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                      Sort
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-60">
-                    <div className="space-y-4">
-                      <h4 className="font-medium">Sort Meetings</h4>
-                      <div className="space-y-2">
-                        <Select
-                          value={sortConfig.field}
-                          onValueChange={(value: SortField) => setSortConfig(prev => ({ 
-                            ...prev, 
-                            field: value
-                          }))}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select field to sort" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {sortOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setSortConfig(prev => ({
-                            ...prev,
-                            direction: prev.direction === 'asc' ? 'desc' : 'asc'
-                          }))}
-                          className="w-full"
-                        >
-                          {sortConfig.direction === 'asc' ? 'Sort Ascending ↑' : 'Sort Descending ↓'}
-                        </Button>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-
-                <div className="relative h-8">
-                  <Search className="h-4 w-4 absolute left-2 top-2 text-muted-foreground" />
-                  <Input
-                    placeholder="Search meetings..."
-                    value={filterText}
-                    onChange={(e) => setFilterText(e.target.value)}
-                    className="h-8 pl-8 pr-4 w-[150px] sm:w-[200px]"
-                  />
-                </div>
-                
-                {/* Action Buttons */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearPostedMeetings}
-                  className="h-8"
-                  title="Hide your posted meetings from view (preserves database data)"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Clear History
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={restoreHiddenMeetings}
-                  className="h-8"
-                  title="Restore previously hidden meetings to view"
-                  disabled={true}
-                >
-                  Restore Hidden
-                </Button>
-              </>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="flex justify-center py-4">
-              <Loader2 className="h-6 w-6 animate-spin" />
-            </div>
-          ) : postedMeetings.length > 0 ? (
-            <>
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-xs text-muted-foreground">
-                  Showing {startIndex + 1}-{Math.min(endIndex, filteredMeetings.length)} of {filteredMeetings.length} meetings
-                  {filteredMeetings.length !== postedMeetings.length && ` (filtered from ${postedMeetings.length} total)`}
-                  {(filterText || moduleFilter !== "all" || workTypeFilter !== "all" || dateFilter !== "all" || clientFilter !== "all" || projectFilter !== "all") && (
-                    <Button
-                      variant="link"
-                      size="sm"
-                      onClick={clearFilters}
-                      className="h-6 p-0 ml-2"
-                    >
-                      Clear filters
-                    </Button>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">Rows per page:</span>
-                  <Select
-                    value={pageSize.toString()}
-                    onValueChange={(value) => {
-                      setPageSize(Number(value));
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <SelectTrigger className="h-8 w-16">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">5</SelectItem>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="25">25</SelectItem>
-                      <SelectItem value="50">50</SelectItem>
-                      <SelectItem value="100">100</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
-                      Meeting Date
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground">
-                      Meeting Name
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground">
-                      Task Name
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
-                      Duration
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground">
-                      Client
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground">
-                      Project
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground">
-                      Module
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
-                      Work Type
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
-                      Billable
-                    </TableHead>
-                    <TableHead className="font-semibold text-sm text-foreground whitespace-nowrap">
-                      Posted Date & Time
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedMeetings.map((meeting) => (
-                    <TableRow key={`${meeting.meetingId}-${meeting.timeEntry.time}-${meeting.postedAt}`}>
-                      <TableCell>{meeting.timeEntry.date}</TableCell>
-                      <TableCell>{decodeHtmlEntities(meeting.timeEntry.description)}</TableCell>
-                      <TableCell>
-                        {meeting.timeEntry.taskTitle ? decodeHtmlEntities(meeting.timeEntry.taskTitle) : (
-                          <span className="text-muted-foreground">
-                            {`No task title available`}
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>{meeting.timeEntry.time}</TableCell>
-                      <TableCell>{meeting.timeEntry.client || "N/A"}</TableCell>
-                      <TableCell>{meeting.timeEntry.project || meeting.timeEntry.projectid || "N/A"}</TableCell>
-                      <TableCell>{decodeHtmlEntities(meeting.timeEntry.module)}</TableCell>
-                      <TableCell>{decodeHtmlEntities(normalizeWorktype(meeting))}</TableCell>
-                      <TableCell>{meeting.timeEntry.billable === 't' ? 'Yes' : 'No'}</TableCell>
-                      <TableCell>{formatDateTime(meeting.postedAt)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
-                  <div className="text-sm text-muted-foreground">
-                    Page {currentPage} of {totalPages}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage(1)}
-                      disabled={currentPage === 1}
-                      className="h-8"
-                    >
-                      First
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="h-8"
-                    >
-                      Previous
-                    </Button>
-                    <span className="flex items-center gap-1 text-sm">
-                      {Math.max(1, currentPage - 2) !== 1 && (
-                        <>
-                          <Button
-                            variant={1 === currentPage ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => setCurrentPage(1)}
-                            className="h-8 w-8"
-                          >
-                            1
-                          </Button>
-                          {Math.max(1, currentPage - 2) > 2 && <span>...</span>}
-                        </>
-                      )}
-                      
-                      {Array.from(
-                        { length: Math.min(5, totalPages) },
-                        (_, i) => {
-                          const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
-                          if (pageNum <= totalPages) {
-                            return (
-                              <Button
-                                key={pageNum}
-                                variant={pageNum === currentPage ? "default" : "outline"}
-                                size="sm"
-                                onClick={() => setCurrentPage(pageNum)}
-                                className="h-8 w-8"
-                              >
-                                {pageNum}
-                              </Button>
-                            );
-                          }
-                          return null;
-                        }
-                      )}
-                      
-                      {Math.min(totalPages, currentPage + 2) !== totalPages && totalPages > 5 && (
-                        <>
-                          {Math.min(totalPages, currentPage + 2) < totalPages - 1 && <span>...</span>}
-                          <Button
-                            variant={totalPages === currentPage ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => setCurrentPage(totalPages)}
-                            className="h-8 w-8"
-                          >
-                            {totalPages}
-                          </Button>
-                        </>
-                      )}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="h-8"
-                    >
-                      Next
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage(totalPages)}
-                      disabled={currentPage === totalPages}
-                      className="h-8"
-                    >
-                      Last
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="text-center py-4 text-muted-foreground">
-              No meetings posted yet
-            </div>
-          )}
         </CardContent>
       </Card>
 

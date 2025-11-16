@@ -43,6 +43,16 @@ export function Sidebar({ currentView, onViewChange, className, disabled = false
       name: 'AI Agent',
       icon: AIChipIcon,
       view: 'ai-agent'
+    },
+    {
+      name: 'Meeting Review',
+      icon: Clock,
+      view: 'meeting-review'
+    },
+    {
+      name: 'Posted Meetings',
+      icon: FileCheck,
+      view: 'posted-meetings'
     }
   ];
 
