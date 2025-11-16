@@ -496,7 +496,7 @@ export function PostedMeetingsView() {
                   variant="outline"
                   size="sm"
                   onClick={restoreHiddenMeetings}
-                  className="h-8"
+                  className="h-8 hidden"
                   title="Restore previously hidden meetings to view"
                   disabled={true}
                 >
