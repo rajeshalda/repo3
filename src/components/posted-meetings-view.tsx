@@ -256,7 +256,7 @@ export function PostedMeetingsView() {
         toast({
           title: "History Cleared",
           description: "Posted meetings hidden from view. Database data preserved.",
-        });
+        } as any);
       }
     } catch (err) {
       console.error('Error clearing posted meetings:', err);
@@ -264,7 +264,7 @@ export function PostedMeetingsView() {
         title: "Error",
         description: "Failed to clear posted meetings",
         variant: "destructive"
-      });
+      } as any);
     }
   };
 
@@ -280,7 +280,7 @@ export function PostedMeetingsView() {
         toast({
           title: "Success",
           description: "Hidden meetings restored successfully",
-        });
+        } as any);
       }
     } catch (err) {
       console.error('Error restoring hidden meetings:', err);
@@ -288,7 +288,7 @@ export function PostedMeetingsView() {
         title: "Error",
         description: "Failed to restore hidden meetings",
         variant: "destructive"
-      });
+      } as any);
     }
   };
 
