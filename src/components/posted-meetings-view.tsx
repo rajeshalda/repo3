@@ -306,8 +306,7 @@ export function PostedMeetingsView() {
   };
 
   return (
-    <div className="space-y-6 px-4 sm:px-6">
-      <Card>
+    <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle>Recently Posted Meetings</CardTitle>
           <div className="flex space-x-2">
@@ -713,6 +712,5 @@ export function PostedMeetingsView() {
           )}
         </CardContent>
       </Card>
-    </div>
   );
 }

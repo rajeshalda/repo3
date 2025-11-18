@@ -20,6 +20,8 @@ import { PM2Status } from './pm2-status';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { ScrollArea } from './ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
+import { MeetingReviewView } from "./meeting-review-view";
+import { PostedMeetingsView } from "./posted-meetings-view";
 
 interface PostedMeeting {
   meetingId: string;
@@ -887,39 +889,28 @@ export function AIAgentView() {
           <CardTitle className="text-2xl font-bold flex-shrink-0">AI Agent Dashboard</CardTitle>
           <div className="relative w-20 h-20 flex-shrink-0">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              {/* Large main star (4-pointed) - Samsung Galaxy AI style */}
+              {/* Main center star (4-pointed) - bigger */}
               <path
-                d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z"
+                d="M14 2L17 11L24 14L17 17L14 23L11 17L4 14L11 11L14 2Z"
                 fill="url(#dashboardGalaxyGradient1)"
                 className="opacity-95"
               />
 
-              {/* Small accompanying star */}
+              {/* North-west star - top left bigger */}
               <path
-                d="M18 4L18.8 6.2L21 7L18.8 7.8L18 10L17.2 7.8L15 7L17.2 6.2L18 4Z"
+                d="M5 1L6 5L10 6L6 7L5 11L4 7L1 6L4 5L5 1Z"
                 fill="url(#dashboardGalaxyGradient2)"
                 className="opacity-85"
               />
 
-              {/* Smallest accent star */}
-              <path
-                d="M19 14L19.5 15.5L21 16L19.5 16.5L19 18L18.5 16.5L17 16L18.5 15.5L19 14Z"
-                fill="url(#dashboardGalaxyGradient3)"
-                className="opacity-75"
-              />
-
               {/* Gradient definitions with blue colors */}
               <defs>
-                <linearGradient id="dashboardGalaxyGradient1" x1="4" y1="2" x2="20" y2="18">
+                <linearGradient id="dashboardGalaxyGradient1" x1="4" y1="2" x2="24" y2="23">
                   <stop offset="0%" stopColor="#60a5fa" />
                   <stop offset="50%" stopColor="#3b82f6" />
                   <stop offset="100%" stopColor="#2563eb" />
                 </linearGradient>
-                <linearGradient id="dashboardGalaxyGradient2" x1="15" y1="4" x2="21" y2="10">
-                  <stop offset="0%" stopColor="#60a5fa" />
-                  <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-                <linearGradient id="dashboardGalaxyGradient3" x1="17" y1="14" x2="21" y2="18">
+                <linearGradient id="dashboardGalaxyGradient2" x1="1" y1="1" x2="10" y2="11">
                   <stop offset="0%" stopColor="#60a5fa" />
                   <stop offset="100%" stopColor="#3b82f6" />
                 </linearGradient>
@@ -1000,6 +991,12 @@ export function AIAgentView() {
       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <PM2Status />
       </div> */}
+
+      {/* Meeting Review Section */}
+      <MeetingReviewView />
+
+      {/* Posted Meetings Section */}
+      <PostedMeetingsView />
     </div>
   );
 } 

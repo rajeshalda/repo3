@@ -4,15 +4,23 @@ import { Menu, X, LayoutDashboard, Calendar, Clock, Settings2, ChevronLeft, Chev
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
 
-// Custom AI Icon component (Single grey star matching Manual icon style)
+// Custom AI Icon component (Two stars - sparkle design)
 const AIChipIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Single 4-pointed star */}
+    {/* Main center star (4-pointed) - bigger */}
     <path
-      d="M12 1L14 9L22 11L14 13L12 21L10 13L2 11L10 9L12 1Z"
+      d="M14 2L17 11L24 14L17 17L14 23L11 17L4 14L11 11L14 2Z"
       fill="#64748b"
       stroke="#64748b"
       strokeWidth="0.5"
+    />
+
+    {/* North-west star - top left bigger */}
+    <path
+      d="M5 1L6 5L10 6L6 7L5 11L4 7L1 6L4 5L5 1Z"
+      fill="#64748b"
+      stroke="#64748b"
+      strokeWidth="0.4"
     />
   </svg>
 );
@@ -43,16 +51,6 @@ export function Sidebar({ currentView, onViewChange, className, disabled = false
       name: 'AI Agent',
       icon: AIChipIcon,
       view: 'ai-agent'
-    },
-    {
-      name: 'Meeting Review',
-      icon: Clock,
-      view: 'meeting-review'
-    },
-    {
-      name: 'Posted Meetings',
-      icon: FileCheck,
-      view: 'posted-meetings'
     }
   ];
 
