@@ -138,7 +138,7 @@ async function processMeetingBatch(
             const matchedTask = foundTask || null;
             
             // Only use cached match if confidence is high enough
-            if (matchedTask && matchData.confidence >= 0.7) {
+            if (matchedTask && matchData.confidence >= 0.5) {
               results.push({
                 meeting,
                 matchedTask,
@@ -198,7 +198,7 @@ async function processMeetingBatch(
           }
           
           // Only consider it a match if confidence is high enough
-          if (matchedTask && adjustedConfidence >= 0.7) {
+          if (matchedTask && adjustedConfidence >= 0.5) {
             results.push({
               meeting,
               matchedTask,

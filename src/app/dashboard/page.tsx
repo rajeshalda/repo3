@@ -76,6 +76,12 @@ interface RawMeetingData {
   onlineMeeting?: {
     joinUrl: string;
   };
+  organizer?: {
+    emailAddress: {
+      name: string;
+      address: string;
+    };
+  };
 }
 
 interface AttendanceRecord {
@@ -213,6 +219,38 @@ function formatDuration(seconds: number) {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   return `${hours} hour${hours !== 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
+}
+
+// Helper function to detect if a meeting is internal or external
+function isMeetingInternal(meeting: Meeting, userEmail: string): boolean {
+  // Extract user's organization domain
+  const userDomain = userEmail.split('@')[1]?.toLowerCase();
+
+  if (!userDomain) return false;
+
+  // If we have attendance records, check all attendees
+  if (meeting.attendanceRecords && meeting.attendanceRecords.length > 0) {
+    // Check ALL attendees - if ANY attendee has a different domain, it's an external meeting
+    // This means client calls are always marked as external, regardless of who organized it
+    const hasExternalAttendee = meeting.attendanceRecords.some(record => {
+      const attendeeDomain = record.email?.split('@')[1]?.toLowerCase();
+      return attendeeDomain && attendeeDomain !== userDomain;
+    });
+
+    // Meeting is internal ONLY if all attendees are from the same organization
+    return !hasExternalAttendee;
+  }
+
+  // Fallback: If no attendance records, check the organizer's domain
+  // This handles meetings that haven't started yet or had no attendance
+  const organizerEmail = meeting.rawData?.organizer?.emailAddress?.address?.toLowerCase();
+  if (organizerEmail) {
+    const organizerDomain = organizerEmail.split('@')[1];
+    return organizerDomain === userDomain;
+  }
+
+  // Default to internal if we can't determine
+  return true;
 }
 
 export default function DashboardPage() {
@@ -911,6 +949,7 @@ export default function DashboardPage() {
                         <TableHeader>
                           <TableRow>
                             <TableHead>Meeting Name</TableHead>
+                            <TableHead>Type</TableHead>
                             <TableHead>Schedule Date and Time</TableHead>
                             <TableHead>Schedule Duration</TableHead>
                             <TableHead>Meeting Attended Duration</TableHead>
@@ -920,7 +959,7 @@ export default function DashboardPage() {
                         <TableBody>
                           {meetingsLoading ? (
                             <TableRow>
-                              <TableCell colSpan={5} className="text-center py-8">
+                              <TableCell colSpan={6} className="text-center py-8">
                                 <div className="flex flex-col items-center justify-center gap-2">
                                   <div className="flex items-center">
                                     <Loader2 className="h-6 w-6 animate-spin mr-2" />
@@ -932,13 +971,13 @@ export default function DashboardPage() {
                             </TableRow>
                           ) : !meetingsData?.meetings.length && !rawMeetingsData?.meetings.length ? (
                             <TableRow>
-                              <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                              <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                                 No meetings found in selected date range
                               </TableCell>
                             </TableRow>
                           ) : !meetingsData?.meetings.length && rawMeetingsData?.meetings.length ? (
                             <TableRow>
-                              <TableCell colSpan={5} className="text-center py-8">
+                              <TableCell colSpan={6} className="text-center py-8">
                                 <div className="flex flex-col items-center justify-center gap-2">
                                   <p className="text-muted-foreground">All meetings in this date range have been posted</p>
                                   <p className="text-sm text-muted-foreground">
@@ -997,7 +1036,8 @@ export default function DashboardPage() {
                                 arrayIndex // Add array index as final disambiguator
                               ];
                               const uniqueKey = keyParts.join('-');
-                              
+                              const isInternal = isMeetingInternal(item.meeting, session?.user?.email || '');
+
                               return (
                                 <TableRow key={uniqueKey}>
                                   <TableCell className="px-4 py-3">
@@ -1011,13 +1051,20 @@ export default function DashboardPage() {
                                         </Badge>
                                       )}
                                       <div className="text-xs text-muted-foreground mt-1 md:hidden">
-                                        {new Date(item.originalStart).toLocaleTimeString([], { 
+                                        {new Date(item.originalStart).toLocaleTimeString([], {
                                           hour: 'numeric',
                                           minute: '2-digit',
                                           hour12: true
                                         })}
                                       </div>
                                     </div>
+                                  </TableCell>
+                                  <TableCell className="px-4 py-3">
+                                    {isInternal ? (
+                                      <Badge variant="default">Internal</Badge>
+                                    ) : (
+                                      <Badge variant="outline">External</Badge>
+                                    )}
                                   </TableCell>
                                   <TableCell className="px-4 py-3 hidden md:table-cell">
                                     <div className="text-sm space-y-1">
@@ -1324,11 +1371,11 @@ export default function DashboardPage() {
         {/* Main Content Area */}
         <main className="flex-1 overflow-hidden px-2 sm:px-0">
           <div className="h-full overflow-y-auto">
-            <div className="space-y-4 pb-16 pt-6 sm:pt-8">
+            <div className="space-y-4 pb-24 pt-6 sm:pt-8">
               {renderCurrentView()}
             </div>
           </div>
-          <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t">
+          <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t z-10">
             <span className="opacity-70">v2.2.5  Powered by GPT-5  © 2025 NathCorp Inc.</span>
           </footer>
         </main>
