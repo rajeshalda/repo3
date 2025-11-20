@@ -113,6 +113,46 @@ export function MeetingReviewView() {
             // Filter for pending reviews only
             const pendingReviews = reviewData.reviews.filter((review: any) => review.status === 'pending');
 
+            // Create a Set of valid reportIds from the API (these are the only meetings that should be in review)
+            const validReportIds = new Set(
+              pendingReviews
+                .filter((review: any) => review.reportId)
+                .map((review: any) => review.reportId)
+            );
+
+            // IMPORTANT: Clean up localStorage by removing meetings that are no longer in pending reviews
+            // This fixes the issue where meetings stay in UI after being approved/posted
+            if (localResults.unmatched.length > 0) {
+              const cleanedUnmatched = localResults.unmatched.filter((m: any) => {
+                const reportId = m.meeting.meetingInfo?.reportId;
+                // Keep meetings that either:
+                // 1. Don't have a reportId (might be from other sources)
+                // 2. Have a reportId that's still in the pending reviews
+                if (!reportId) {
+                  return true; // Keep meetings without reportId for now
+                }
+                return validReportIds.has(reportId);
+              });
+
+              const removedCount = localResults.unmatched.length - cleanedUnmatched.length;
+              if (removedCount > 0) {
+                console.log(`Cleaned up ${removedCount} meetings from localStorage that are no longer in pending reviews`);
+                localResults.unmatched = cleanedUnmatched;
+
+                // Update localStorage immediately with cleaned data
+                localStorage.setItem('ai_agent_match_results', JSON.stringify({
+                  matches: localResults,
+                  summary: {
+                    highConfidence: localResults.high.length,
+                    mediumConfidence: localResults.medium.length,
+                    lowConfidence: localResults.low.length,
+                    unmatched: localResults.unmatched.length,
+                    total: localResults.high.length + localResults.medium.length + localResults.low.length + localResults.unmatched.length
+                  }
+                }));
+              }
+            }
+
             const reviewMatches = pendingReviews.map((review: any) => {
               const startTime = new Date(review.startTime || new Date());
               const endTime = new Date(startTime.getTime() + ((review.duration || 0) * 1000));
@@ -135,7 +175,8 @@ export function MeetingReviewView() {
                       joinDateTime: startTime.toISOString(),
                       leaveDateTime: endTime.toISOString(),
                       durationInSeconds: review.duration || 0
-                    }]
+                    }],
+                    rawRecord: review.reportId ? { reportId: review.reportId } : undefined
                   }]
                 },
                 matchedTask: null,
@@ -175,6 +216,30 @@ export function MeetingReviewView() {
             localSummary.unmatched = localResults.unmatched.length;
             localSummary.total = localResults.high.length + localResults.medium.length +
                                   localResults.low.length + localResults.unmatched.length;
+          } else {
+            // If there are no pending reviews from API, clean up all localStorage entries with reportIds
+            // This handles the case where all reviews have been processed
+            if (localResults.unmatched.length > 0) {
+              const cleanedUnmatched = localResults.unmatched.filter((m: any) => {
+                // Keep only meetings without reportId (they might be from other sources)
+                return !m.meeting.meetingInfo?.reportId;
+              });
+
+              const removedCount = localResults.unmatched.length - cleanedUnmatched.length;
+              if (removedCount > 0) {
+                console.log(`No pending reviews from API - cleaned up ${removedCount} meetings from localStorage`);
+                localResults.unmatched = cleanedUnmatched;
+                localSummary.unmatched = localResults.unmatched.length;
+                localSummary.total = localResults.high.length + localResults.medium.length +
+                                      localResults.low.length + localResults.unmatched.length;
+
+                // Update localStorage immediately with cleaned data
+                localStorage.setItem('ai_agent_match_results', JSON.stringify({
+                  matches: localResults,
+                  summary: localSummary
+                }));
+              }
+            }
           }
         }
       } catch (error) {
