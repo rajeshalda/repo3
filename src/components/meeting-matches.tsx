@@ -228,6 +228,21 @@ function convertSecondsToDecimalHours(seconds: number): number {
   return Number((seconds / 3600).toFixed(2));
 }
 
+// Helper function to format duration
+function formatDuration(seconds: number): string {
+  if (seconds < 60) {
+    return `${seconds} second${seconds !== 1 ? 's' : ''}`;
+  }
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  if (minutes < 60) {
+    return `${minutes} minute${minutes !== 1 ? 's' : ''} ${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''}`;
+  }
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `${hours} hour${hours !== 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
+}
+
 function formatMatchReason(reason: string): string {
   // Remove any trailing ellipsis
   let formatted = reason.replace(/\.{3,}$/, '');
@@ -595,6 +610,15 @@ function MatchRow({
 
   const confidenceInfo = getConfidenceDisplay(result.confidence, result.reason);
 
+  // Get user attendance to calculate meeting attended duration
+  const userAttendance = result.meeting.attendanceRecords.find(
+    record => record.name === session?.user?.name
+  );
+
+  // Get original scheduled times or fallback to current times
+  const originalStart = (result.meeting as any).originalStartTime || result.meeting.startTime;
+  const originalEnd = (result.meeting as any).originalEndTime || result.meeting.endTime;
+
   return (
     <TableRow>
       <TableCell className="py-2 pl-2 sm:pl-4">
@@ -609,6 +633,37 @@ function MatchRow({
             {result.meeting.subject}
           </div>
         </div>
+      </TableCell>
+      <TableCell className="py-2">
+        <div className="text-sm space-y-1">
+          <div>{new Date(originalStart).toLocaleDateString([], {
+            month: 'short',
+            day: 'numeric',
+            timeZone: 'Asia/Kolkata'
+          })}</div>
+          <div className="text-muted-foreground">
+            {new Date(originalStart).toLocaleTimeString([], {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+              timeZone: 'Asia/Kolkata'
+            })} - {new Date(originalEnd).toLocaleTimeString([], {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+              timeZone: 'Asia/Kolkata'
+            })}
+          </div>
+        </div>
+      </TableCell>
+      <TableCell className="py-2">
+        {userAttendance && userAttendance.duration > 0 ? (
+          <div className="text-sm text-muted-foreground">
+            {formatDuration(userAttendance.duration)}
+          </div>
+        ) : (
+          <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Meeting did not start</span>
+        )}
       </TableCell>
       <TableCell className="max-w-[200px] relative z-10">
         {selectedTask ? (
@@ -1154,6 +1209,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                             />
                           </TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
+                          <TableHead className="sticky top-0 bg-background z-10">Schedule Date and Time</TableHead>
+                          <TableHead className="sticky top-0 bg-background z-10">Meeting Attended Duration</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>
@@ -1319,6 +1376,8 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                           />
                         </TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Schedule Date and Time</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">Meeting Attended Duration</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Reason</TableHead>

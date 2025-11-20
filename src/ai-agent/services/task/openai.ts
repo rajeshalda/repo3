@@ -106,14 +106,14 @@ export class TaskService {
         }
     }
 
-    private async queueForReview(meeting: ProcessedMeeting, confidence: number, reason: string, userId: string): Promise<void> {
+    private async queueForReview(meeting: ProcessedMeeting, confidence: number, reason: string, userId: string, suggestedTasks?: TaskMatch[]): Promise<void> {
         // Check if the user actually attended this meeting
         let userDuration = 0;
         if (meeting.attendance?.records) {
-            const userRecord = meeting.attendance.records.find(record => 
+            const userRecord = meeting.attendance.records.find(record =>
                 record.email.toLowerCase() === userId.toLowerCase()
             );
-            
+
             if (userRecord) {
                 userDuration = userRecord.duration;
                 console.log(`Found user's attendance record with duration: ${userDuration} seconds`);
@@ -122,13 +122,13 @@ export class TaskService {
                 return; // Skip queuing for review if user didn't attend
             }
         }
-        
+
         // Skip if user's duration is zero
         if (userDuration <= 0) {
             console.log(`User ${userId} has zero duration for meeting "${meeting.subject}". Skipping review.`);
             return;
         }
-        
+
         const reviewMeeting: ReviewMeeting = {
             id: meeting.id, // This will be the instance ID if the meeting was split into multiple reports
             userId: userId,
@@ -138,7 +138,7 @@ export class TaskService {
             duration: userDuration, // Use the user's actual duration
             participants: meeting.attendees?.map(a => a.email) || [],
             keyPoints: meeting.analysis?.keyPoints,
-            suggestedTasks: [], // Will be populated with low confidence matches if any
+            suggestedTasks: suggestedTasks || [], // Include suggested tasks for low/medium confidence matches
             status: 'pending',
             confidence: confidence,
             reason: reason,
@@ -244,16 +244,25 @@ export class TaskService {
                 return null; // Return null to prevent time entry creation
             }
 
-            // If we have any matches, use the best one regardless of confidence score
             // Find the best match by confidence
-            const bestMatch = result.matchedTasks.reduce((a, b) => 
+            const bestMatch = result.matchedTasks.reduce((a, b) =>
                 a.confidence > b.confidence ? a : b
             );
-            
-            console.log(`Using best match for meeting "${meeting.subject}": Task ${bestMatch.taskId} (${bestMatch.taskTitle}) with confidence ${bestMatch.confidence}`);
-            
-            // Return the result with the best match
-            return result;
+
+            // Only auto-post if confidence >= 0.8 (80%)
+            if (bestMatch.confidence >= 0.8) {
+                console.log(`High confidence match (${bestMatch.confidence}) for meeting "${meeting.subject}": Auto-posting to Intervals - Task ${bestMatch.taskId} (${bestMatch.taskTitle})`);
+                // Return the result with the best match to create time entry automatically
+                return result;
+            } else {
+                console.log(`Low/medium confidence match (${bestMatch.confidence}) for meeting "${meeting.subject}": Queueing for review - Suggested task: ${bestMatch.taskTitle}`);
+                // Pass the matched tasks as suggestions for the user to review
+                await this.queueForReview(meeting, bestMatch.confidence,
+                    `Confidence below 80% threshold. Suggested task: ${bestMatch.taskTitle} (${Math.round(bestMatch.confidence * 100)}% confidence)`,
+                    userId,
+                    result.matchedTasks); // Pass suggested tasks
+                return null; // Return null to prevent automatic time entry creation
+            }
 
         } catch (error) {
             console.error('Error matching tasks to meeting:', error);

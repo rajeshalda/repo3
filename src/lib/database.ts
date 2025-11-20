@@ -177,15 +177,15 @@ export class AppDatabase {
         // Add unique constraint to reviews table if it doesn't exist
         try {
             this.db.exec(`
-                CREATE UNIQUE INDEX IF NOT EXISTS idx_reviews_user_report_unique 
-                ON reviews(user_id, report_id) 
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_reviews_user_report_unique
+                ON reviews(user_id, report_id)
                 WHERE report_id IS NOT NULL
             `);
             console.log('✅ Added unique constraint to reviews table');
         } catch (error) {
             console.log('ℹ️ Unique constraint already exists or could not be added');
         }
-        
+
         console.log('✅ Database schema initialized');
     }
     

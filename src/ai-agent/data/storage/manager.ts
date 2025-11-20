@@ -157,11 +157,11 @@ export class StorageManager {
             // Check if this meeting already exists in the reviews for this user using SQLite
             // For meetings with report IDs, we need to check both meeting ID and report ID to avoid duplicates
             let existingReview = null;
-            
+
             if (meeting.reportId) {
                 // If meeting has a report ID, check for existing review with same meeting ID and report ID
                 const allReviews = database.getReviewsByUser(meeting.userId);
-                existingReview = allReviews.find(review => 
+                existingReview = allReviews.find(review =>
                     review.id === meeting.id && review.report_id === meeting.reportId
                 );
             } else {
@@ -171,7 +171,7 @@ export class StorageManager {
                     existingReview = null; // Different user, so not a duplicate
                 }
             }
-            
+
             if (existingReview) {
                 // Meeting already exists for this user with same report ID, update it
                 console.log(`Meeting with ID ${meeting.id} and report ID ${meeting.reportId} already exists in reviews for user ${meeting.userId}, updating`);
