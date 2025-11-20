@@ -151,8 +151,27 @@ export function MeetingReviewView() {
               };
             });
 
-            // Merge with local unmatched results
-            localResults.unmatched = [...localResults.unmatched, ...reviewMatches];
+            // Merge with local unmatched results, avoiding duplicates
+            // Create a Set of existing meeting keys (meetingId + reportId) for deduplication
+            const existingKeys = new Set(
+              localResults.unmatched.map((m: any) => {
+                const meetingId = m.meeting.meetingInfo?.meetingId || m.meeting.subject;
+                const reportId = m.meeting.meetingInfo?.reportId || '';
+                return `${meetingId}_${reportId}`;
+              })
+            );
+
+            // Only add review matches that don't already exist
+            const newReviewMatches = reviewMatches.filter((reviewMatch: any) => {
+              const meetingId = reviewMatch.meeting.meetingInfo?.meetingId || reviewMatch.meeting.subject;
+              const reportId = reviewMatch.meeting.meetingInfo?.reportId || '';
+              const key = `${meetingId}_${reportId}`;
+              return !existingKeys.has(key);
+            });
+
+            console.log(`Deduplication: ${reviewMatches.length} from API, ${newReviewMatches.length} new after dedup`);
+
+            localResults.unmatched = [...localResults.unmatched, ...newReviewMatches];
             localSummary.unmatched = localResults.unmatched.length;
             localSummary.total = localResults.high.length + localResults.medium.length +
                                   localResults.low.length + localResults.unmatched.length;
