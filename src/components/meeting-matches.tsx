@@ -1164,18 +1164,18 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             <div className="px-4 flex justify-between items-center">
               <TabsList className="h-10 bg-transparent gap-4">
                 {source !== 'ai-agent' && (
-                  <TabsTrigger 
+                  <TabsTrigger
                     value="matched"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
                   >
-                    Matched ({meetings.high.length + meetings.medium.length + meetings.low.length})
+                    Matched ({meetings.high.length})
                   </TabsTrigger>
                 )}
-                <TabsTrigger 
+                <TabsTrigger
                   value="unmatched"
                   className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-10 px-0"
                 >
-                  Unmatched ({meetings.unmatched.length})
+                  Unmatched ({meetings.medium.length + meetings.low.length + meetings.unmatched.length})
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -1185,18 +1185,18 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
             {source !== 'ai-agent' && (
               <TabsContent value="matched" className="p-0 h-full">
                 <div className="rounded-md">
-                  {(meetings.high.length > 0 || meetings.medium.length > 0 || meetings.low.length > 0) ? (
+                  {meetings.high.length > 0 ? (
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead className="w-12 sticky top-0 bg-background z-10">
                             <Checkbox
-                              checked={[...meetings.high, ...meetings.medium, ...meetings.low].every(m => 
+                              checked={meetings.high.every(m =>
                                 selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId))
                               )}
                               onCheckedChange={(checked) => {
                                 const newKeys = new Set(selectedMeetingKeys);
-                                [...meetings.high, ...meetings.medium, ...meetings.low].forEach(m => {
+                                meetings.high.forEach(m => {
                                   const key = generateMeetingKey(m.meeting, userId);
                                   if (checked) {
                                     newKeys.add(key);
@@ -1218,92 +1218,10 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {/* Show high confidence matches first */}
+                        {/* Show only high confidence matches (≥80%) */}
                         {meetings.high.map((result, index) => (
                           <MatchRow
                             key={`high-${generateMeetingKey(result.meeting, userId)}-${index}`}
-                            result={result}
-                            onMeetingPosted={handleMeetingPosted}
-                            postedMeetingIds={Array.from(postedMeetingIds)}
-                            selectedTasks={selectedTasks}
-                            source={source}
-                            index={index}
-                            onTaskSelect={(task) => {
-                              const meetingKey = generateMeetingKey(result.meeting, userId);
-                              const updatedTasks = new Map(selectedTasks);
-                              if (task) {
-                                updatedTasks.set(meetingKey, task);
-                                setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
-                              } else {
-                                updatedTasks.delete(meetingKey);
-                                setSelectedMeetingKeys(prev => {
-                                  const next = new Set(prev);
-                                  next.delete(meetingKey);
-                                  return next;
-                                });
-                              }
-                              setSelectedTasks(updatedTasks);
-                            }}
-                            isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
-                            onSelectChange={(selected) => {
-                              const meetingKey = generateMeetingKey(result.meeting, userId);
-                              setSelectedMeetingKeys(prev => {
-                                const next = new Set(prev);
-                                if (selected) {
-                                  next.add(meetingKey);
-                                } else {
-                                  next.delete(meetingKey);
-                                }
-                                return next;
-                              });
-                            }}
-                          />
-                        ))}
-                        {/* Show medium confidence matches */}
-                        {meetings.medium.map((result, index) => (
-                          <MatchRow
-                            key={`medium-${generateMeetingKey(result.meeting, userId)}-${index}`}
-                            result={result}
-                            onMeetingPosted={handleMeetingPosted}
-                            postedMeetingIds={Array.from(postedMeetingIds)}
-                            selectedTasks={selectedTasks}
-                            source={source}
-                            index={index}
-                            onTaskSelect={(task) => {
-                              const meetingKey = generateMeetingKey(result.meeting, userId);
-                              const updatedTasks = new Map(selectedTasks);
-                              if (task) {
-                                updatedTasks.set(meetingKey, task);
-                                setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
-                              } else {
-                                updatedTasks.delete(meetingKey);
-                                setSelectedMeetingKeys(prev => {
-                                  const next = new Set(prev);
-                                  next.delete(meetingKey);
-                                  return next;
-                                });
-                              }
-                              setSelectedTasks(updatedTasks);
-                            }}
-                            isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
-                            onSelectChange={(selected) => {
-                              const meetingKey = generateMeetingKey(result.meeting, userId);
-                              setSelectedMeetingKeys(prev => {
-                                const next = new Set(prev);
-                                if (selected) {
-                                  next.add(meetingKey);
-                                } else {
-                                  next.delete(meetingKey);
-                                }
-                                return next;
-                              });
-                            }}
-                          />
-                        ))}
-                        {/* Show low confidence matches */}
-                        {meetings.low.map((result, index) => (
-                          <MatchRow
-                            key={`low-${generateMeetingKey(result.meeting, userId)}-${index}`}
                             result={result}
                             onMeetingPosted={handleMeetingPosted}
                             postedMeetingIds={Array.from(postedMeetingIds)}
@@ -1354,16 +1272,16 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
 
             <TabsContent value="unmatched" className="p-0 h-full">
               <div className="rounded-md">
-                {meetings.unmatched.length > 0 ? (
+                {(meetings.medium.length > 0 || meetings.low.length > 0 || meetings.unmatched.length > 0) ? (
                   <Table>
                     <TableHeader>
                       <TableRow>
                         <TableHead className="w-12 sticky top-0 bg-background z-10">
                           <Checkbox
-                            checked={meetings.unmatched.every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
+                            checked={[...meetings.medium, ...meetings.low, ...meetings.unmatched].every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
                             onCheckedChange={(checked) => {
                               const newKeys = new Set(selectedMeetingKeys);
-                              meetings.unmatched.forEach(m => {
+                              [...meetings.medium, ...meetings.low, ...meetings.unmatched].forEach(m => {
                                 const key = generateMeetingKey(m.meeting, userId);
                                 if (checked) {
                                   newKeys.add(key);
@@ -1384,6 +1302,89 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                       </TableRow>
                     </TableHeader>
                     <TableBody>
+                      {/* Show medium confidence matches (50-79%) */}
+                      {meetings.medium.map((result, index) => (
+                        <MatchRow
+                          key={`medium-${generateMeetingKey(result.meeting, userId)}-${index}`}
+                          result={result}
+                          onMeetingPosted={handleMeetingPosted}
+                          postedMeetingIds={Array.from(postedMeetingIds)}
+                          selectedTasks={selectedTasks}
+                          source={source}
+                          index={index}
+                          onTaskSelect={(task) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            const updatedTasks = new Map(selectedTasks);
+                            if (task) {
+                              updatedTasks.set(meetingKey, task);
+                              setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
+                            } else {
+                              updatedTasks.delete(meetingKey);
+                              setSelectedMeetingKeys(prev => {
+                                const next = new Set(prev);
+                                next.delete(meetingKey);
+                                return next;
+                              });
+                            }
+                            setSelectedTasks(updatedTasks);
+                          }}
+                          isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
+                          onSelectChange={(selected) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            setSelectedMeetingKeys(prev => {
+                              const next = new Set(prev);
+                              if (selected) {
+                                next.add(meetingKey);
+                              } else {
+                                next.delete(meetingKey);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                      ))}
+                      {/* Show low confidence matches (<50%) */}
+                      {meetings.low.map((result, index) => (
+                        <MatchRow
+                          key={`low-${generateMeetingKey(result.meeting, userId)}-${index}`}
+                          result={result}
+                          onMeetingPosted={handleMeetingPosted}
+                          postedMeetingIds={Array.from(postedMeetingIds)}
+                          selectedTasks={selectedTasks}
+                          source={source}
+                          index={index}
+                          onTaskSelect={(task) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            const updatedTasks = new Map(selectedTasks);
+                            if (task) {
+                              updatedTasks.set(meetingKey, task);
+                              setSelectedMeetingKeys(prev => new Set([...prev, meetingKey]));
+                            } else {
+                              updatedTasks.delete(meetingKey);
+                              setSelectedMeetingKeys(prev => {
+                                const next = new Set(prev);
+                                next.delete(meetingKey);
+                                return next;
+                              });
+                            }
+                            setSelectedTasks(updatedTasks);
+                          }}
+                          isSelected={selectedMeetingKeys.has(generateMeetingKey(result.meeting, userId))}
+                          onSelectChange={(selected) => {
+                            const meetingKey = generateMeetingKey(result.meeting, userId);
+                            setSelectedMeetingKeys(prev => {
+                              const next = new Set(prev);
+                              if (selected) {
+                                next.add(meetingKey);
+                              } else {
+                                next.delete(meetingKey);
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                      ))}
+                      {/* Show truly unmatched meetings (0% confidence) */}
                       {meetings.unmatched.map((result, index) => (
                         <MatchRow
                           key={`unmatched-${generateMeetingKey(result.meeting, userId)}-${index}`}
@@ -1428,7 +1429,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                   </Table>
                 ) : (
                   <div className="flex items-center justify-center h-32 text-muted-foreground">
-                    No unmatched meetings found
+                    No unmatched or low-confidence meetings found
                   </div>
                 )}
               </div>
