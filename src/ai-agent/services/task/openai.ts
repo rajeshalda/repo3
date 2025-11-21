@@ -85,18 +85,18 @@ export class TaskService {
             console.log('Fetching tasks using standard API implementation...');
             const api = new IntervalsAPI(apiKey);
             const tasks = await api.getTasks();
-            
+
             // If we got a reasonable number of tasks, return them
             if (tasks.length > 0) {
                 console.log(`Standard API returned ${tasks.length} tasks`);
                 return tasks;
             }
-            
+
             // If we didn't get any tasks, try the direct fetcher as backup
             console.log('No tasks found with standard API, trying direct fetcher...');
             const directTasks = await fetchTasksDirectly(apiKey);
             console.log(`Direct fetcher returned ${directTasks.length} tasks`);
-            
+
             return directTasks;
         } catch (error) {
             console.error('Error using standard API, falling back to direct fetcher:', error);
@@ -104,6 +104,54 @@ export class TaskService {
             console.log(`Direct fetcher returned ${directTasks.length} tasks`);
             return directTasks;
         }
+    }
+
+    /**
+     * Prioritize tasks based on user's relationship with the task
+     * Priority order:
+     * 1. Assigned tasks (user is the assignee)
+     * 2. Followed tasks (user is a follower)
+     * 3. Owned tasks (user is the owner)
+     *
+     * This ensures the AI agent matches meetings to the most relevant tasks first
+     */
+    private prioritizeTasksByRelationship(tasks: Task[], userPersonId: string): Task[] {
+        console.log(`\n╔════════════════════ TASK PRIORITIZATION ════════════════════╗`);
+        console.log(`║ Prioritizing ${tasks.length} tasks for user ${userPersonId}`);
+        console.log(`╚═══════════════════════════════════════════════════════════════╝\n`);
+
+        // Separate tasks by relationship type
+        const assignedTasks: Task[] = [];
+        const followedTasks: Task[] = [];
+        const ownedTasks: Task[] = [];
+
+        tasks.forEach(task => {
+            // Priority 1: Assigned tasks (can be comma-separated list)
+            if (task.assigneeid && task.assigneeid.split(',').map(f => f.trim()).includes(userPersonId)) {
+                assignedTasks.push(task);
+                console.log(`✓ [ASSIGNED] ${task.title} (Task ID: ${task.id})`);
+            }
+            // Priority 2: Followed tasks (check if user is in followers list)
+            else if (task.followerid && task.followerid.split(',').map(f => f.trim()).includes(userPersonId)) {
+                followedTasks.push(task);
+                console.log(`👁 [FOLLOWED] ${task.title} (Task ID: ${task.id})`);
+            }
+            // Priority 3: Owned tasks (can be comma-separated list)
+            else if (task.ownerid && task.ownerid.split(',').map(f => f.trim()).includes(userPersonId)) {
+                ownedTasks.push(task);
+                console.log(`👤 [OWNED] ${task.title} (Task ID: ${task.id})`);
+            }
+        });
+
+        console.log(`\n┌─────────────── PRIORITIZATION SUMMARY ───────────────┐`);
+        console.log(`│ Assigned Tasks: ${assignedTasks.length}`);
+        console.log(`│ Followed Tasks: ${followedTasks.length}`);
+        console.log(`│ Owned Tasks: ${ownedTasks.length}`);
+        console.log(`│ Total: ${assignedTasks.length + followedTasks.length + ownedTasks.length}`);
+        console.log(`└──────────────────────────────────────────────────────┘\n`);
+
+        // Return tasks in priority order: assigned → followed → owned
+        return [...assignedTasks, ...followedTasks, ...ownedTasks];
     }
 
     private async queueForReview(meeting: ProcessedMeeting, confidence: number, reason: string, userId: string, suggestedTasks?: TaskMatch[]): Promise<void> {
@@ -180,9 +228,19 @@ export class TaskService {
             // Get Intervals API key and fetch tasks
             const apiKey = await this.getUserIntervalsApiKey(userId);
             console.log('Fetching tasks from Intervals for user:', userId);
-            const availableTasks = await this.fetchTasksFromIntervals(apiKey);
-            console.log(`Found ${availableTasks.length} tasks in Intervals:`, 
-                availableTasks.map(t => `\n- ${t.title} (${t.id})`).join(''));
+            const allTasks = await this.fetchTasksFromIntervals(apiKey);
+            console.log(`Found ${allTasks.length} tasks in Intervals:`,
+                allTasks.map(t => `\n- ${t.title} (${t.id})`).join(''));
+
+            // Get user's personId from Intervals API to prioritize tasks
+            const api = new IntervalsAPI(apiKey);
+            const currentUser = await api.getCurrentUser();
+            const userPersonId = currentUser.personid;
+            console.log(`User's Intervals personId: ${userPersonId}`);
+
+            // Apply task prioritization based on relationship: assigned → followed → owned
+            const availableTasks = this.prioritizeTasksByRelationship(allTasks, userPersonId);
+            console.log(`After prioritization: ${availableTasks.length} tasks to match against`);
 
             // Format meeting analysis data with enhanced context
             const meetingAnalysis = {

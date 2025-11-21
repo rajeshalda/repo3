@@ -21,6 +21,8 @@ interface IntervalsTaskResponse {
   moduleid: string;
   module: string;
   assigneeid?: string;
+  ownerid?: string;
+  followerid?: string; // Comma-separated list of follower person IDs
 }
 
 /**
@@ -130,7 +132,9 @@ export async function fetchTasksDirectly(apiKey: string): Promise<Task[]> {
       client: task.client,
       moduleid: task.moduleid,
       module: task.module,
-      assigneeid: task.assigneeid
+      assigneeid: task.assigneeid,
+      ownerid: task.ownerid,
+      followerid: task.followerid
     }));
   } catch (error) {
     if (axios.isAxiosError(error)) {

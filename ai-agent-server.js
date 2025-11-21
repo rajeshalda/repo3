@@ -36,7 +36,7 @@ const initializeDatabase = () => {
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
-      
+
       CREATE TABLE IF NOT EXISTS user_settings (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           user_id TEXT UNIQUE NOT NULL,
@@ -44,6 +44,15 @@ const initializeDatabase = () => {
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS processing_cycles (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          cycle_id TEXT UNIQUE NOT NULL,
+          status TEXT DEFAULT 'running',
+          started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          completed_at DATETIME,
+          user_id TEXT
       );
     `);
     
@@ -88,7 +97,7 @@ const updateUserEnabled = (userId, enabled) => {
     // Ensure user exists in users table
     const userStmt = db.prepare('SELECT * FROM users WHERE user_id = ?');
     let user = userStmt.get(userId);
-    
+
     if (!user) {
       // Create user if doesn't exist
       const insertUserStmt = db.prepare(`
@@ -97,18 +106,81 @@ const updateUserEnabled = (userId, enabled) => {
       `);
       insertUserStmt.run(userId, userId);
     }
-    
+
     // Update or insert user settings
     const settingsStmt = db.prepare(`
       INSERT OR REPLACE INTO user_settings (user_id, enabled, updated_at)
       VALUES (?, ?, CURRENT_TIMESTAMP)
     `);
     settingsStmt.run(userId, enabled ? 1 : 0);
-    
+
     console.log(`✅ Updated user ${userId} enabled status to: ${enabled}`);
     return true;
   } catch (error) {
     console.error('Error updating user enabled status:', error);
+    return false;
+  }
+};
+
+// Cycle management functions
+const getActiveCycle = () => {
+  try {
+    const stmt = db.prepare(`
+      SELECT * FROM processing_cycles
+      WHERE status = 'running'
+      ORDER BY started_at DESC
+      LIMIT 1
+    `);
+    return stmt.get();
+  } catch (error) {
+    console.error('Error getting active cycle:', error);
+    return null;
+  }
+};
+
+const startCycle = (cycleId, userId = null) => {
+  try {
+    const stmt = db.prepare(`
+      INSERT INTO processing_cycles (cycle_id, status, user_id, started_at)
+      VALUES (?, 'running', ?, CURRENT_TIMESTAMP)
+    `);
+    stmt.run(cycleId, userId);
+    console.log(`✅ Cycle ${cycleId} started in database`);
+    return true;
+  } catch (error) {
+    console.error('Error starting cycle:', error);
+    return false;
+  }
+};
+
+const completeCycle = (cycleId) => {
+  try {
+    const stmt = db.prepare(`
+      UPDATE processing_cycles
+      SET status = 'completed', completed_at = CURRENT_TIMESTAMP
+      WHERE cycle_id = ?
+    `);
+    stmt.run(cycleId);
+    console.log(`✅ Cycle ${cycleId} marked as completed in database`);
+    return true;
+  } catch (error) {
+    console.error('Error completing cycle:', error);
+    return false;
+  }
+};
+
+const forceReleaseCycle = (cycleId) => {
+  try {
+    const stmt = db.prepare(`
+      UPDATE processing_cycles
+      SET status = 'timeout', completed_at = CURRENT_TIMESTAMP
+      WHERE cycle_id = ?
+    `);
+    stmt.run(cycleId);
+    console.log(`⚠️ Cycle ${cycleId} force-released due to timeout`);
+    return true;
+  } catch (error) {
+    console.error('Error force-releasing cycle:', error);
     return false;
   }
 };
@@ -166,10 +238,11 @@ const processMeetingsForUser = async (userId) => {
       });
 
       // Add a timeout to prevent hanging requests
-      req.setTimeout(30000, () => {
+      // Increased to 10 minutes to allow for full meeting processing cycle
+      req.setTimeout(600000, () => {
         console.error(`Request timeout for user: ${userId}`);
         req.abort();
-        reject(new Error('Request timeout after 30 seconds'));
+        reject(new Error('Request timeout after 10 minutes'));
       });
 
       req.end();
@@ -182,19 +255,40 @@ const processMeetingsForUser = async (userId) => {
 
 // Process meetings for all enabled users
 const processAllUsers = async () => {
-  // Skip this cycle if already processing
-  if (global.isProcessingCycle) {
-    console.log('╔════════════════════════════════════════════════════════╗');
-    console.log('║ ⚠️ CYCLE OVERLAP PREVENTED                              ║');
-    console.log('║ Previous cycle still in progress. Skipping new cycle.  ║');
-    console.log('╚════════════════════════════════════════════════════════╝');
+  const cycleId = `cycle_${Date.now()}`;
+  const cycleStartTime = Date.now();
+
+  // Check for active cycle in database
+  const activeCycle = getActiveCycle();
+  if (activeCycle) {
+    const cycleAge = Date.now() - new Date(activeCycle.started_at).getTime();
+    const thirtyMinutes = 30 * 60 * 1000;
+
+    if (cycleAge < thirtyMinutes) {
+      console.log('╔════════════════════════════════════════════════════════╗');
+      console.log('║ ⚠️ CYCLE OVERLAP PREVENTED                              ║');
+      console.log(`║ Cycle ${activeCycle.cycle_id} still in progress.       ║`);
+      console.log(`║ Age: ${(cycleAge / 1000).toFixed(0)}s / ${thirtyMinutes / 1000}s timeout          ║`);
+      console.log('║ Skipping new cycle to prevent duplicates.             ║');
+      console.log('╚════════════════════════════════════════════════════════╝');
+      return;
+    } else {
+      // Force release stuck cycle
+      console.log('╔════════════════════════════════════════════════════════╗');
+      console.log('║ ⚠️ STUCK CYCLE DETECTED                                 ║');
+      console.log(`║ Cycle ${activeCycle.cycle_id} exceeded 30 min timeout. ║`);
+      console.log('║ Force releasing and starting new cycle.               ║');
+      console.log('╚════════════════════════════════════════════════════════╝');
+      forceReleaseCycle(activeCycle.cycle_id);
+    }
+  }
+
+  // Start new cycle in database
+  if (!startCycle(cycleId)) {
+    console.error('❌ Failed to start cycle in database. Aborting.');
     return;
   }
 
-  // Set cycle lock with timestamp
-  global.isProcessingCycle = true;
-  global.cycleStartTime = Date.now();
-  const cycleId = `cycle_${Date.now()}`;
   console.log(`
 ╔════════════════════════════════════════════════════════╗
 ║ 🔄 STARTING NEW PROCESSING CYCLE                       ║
@@ -203,61 +297,42 @@ const processAllUsers = async () => {
 ╚════════════════════════════════════════════════════════╝`);
 
   try {
-    // Add cycle timeout protection (30 minutes)
-    const cycleTimeout = setTimeout(() => {
-      if (global.isProcessingCycle && global.cycleStartTime === cycleStartTime) {
-        console.log(`
-╔════════════════════════════════════════════════════════╗
-║ ⚠️ CYCLE TIMEOUT                                       ║
-║ Cycle ${cycleId} exceeded 30 minute timeout.           ║
-║ Force releasing cycle lock.                            ║
-╚════════════════════════════════════════════════════════╝`);
-        global.isProcessingCycle = false;
-      }
-    }, 30 * 60 * 1000);
-
     // Get enabled users from SQLite database
     const enabledUsers = getAllEnabledUsers();
-    
+
     console.log(`📊 Found ${enabledUsers.length} enabled users in database`);
-    
+
     for (const user of enabledUsers) {
-        try {
+      try {
         await processMeetingsForUser(user.user_id);
-        } catch (error) {
+      } catch (error) {
         console.error(`Failed to process meetings for user ${user.user_id}:`, error);
-          // Continue with next user even if one fails
+        // Continue with next user even if one fails
       }
     }
 
-    clearTimeout(cycleTimeout);
     console.log(`
 ╔════════════════════════════════════════════════════════╗
 ║ ✅ CYCLE COMPLETED SUCCESSFULLY                        ║
 ║ 🆔 Cycle ID: ${cycleId}                               ║
-║ ⏱️ Duration: ${((Date.now() - global.cycleStartTime)/1000).toFixed(2)}s ║
+║ ⏱️ Duration: ${((Date.now() - cycleStartTime)/1000).toFixed(2)}s ║
 ╚════════════════════════════════════════════════════════╝`);
   } catch (error) {
     console.error('Error in processing cycle:', error);
   } finally {
-    // Release the lock when done, regardless of success or failure
-    global.isProcessingCycle = false;
-    global.cycleStartTime = null;
+    // Mark cycle as completed in database
+    completeCycle(cycleId);
   }
 };
 
 // Main function to start the processing cycle
 const startProcessingCycle = () => {
-  console.log('🤖 AI Agent Server started with SQLite backend');
-  
-  // Initialize cycle control variables
-  global.isProcessingCycle = false;
-  global.cycleStartTime = null;
-  
+  console.log('🤖 AI Agent Server started with SQLite backend and DB-based cycle locking');
+
   // Process immediately on startup
   processAllUsers();
-  
-  // Set up interval to process meetings every 30 minutes (increased from 5 minutes)
+
+  // Set up interval to process meetings every 30 minutes
   setInterval(processAllUsers, 30 * 60 * 1000);
 };
 

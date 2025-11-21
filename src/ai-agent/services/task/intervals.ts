@@ -11,6 +11,8 @@ export interface Task {
     moduleid: string;
     module: string;
     assigneeid?: string;
+    ownerid?: string;
+    followerid?: string; // Comma-separated list of follower person IDs
 }
 
 interface IntervalsUser {
@@ -33,6 +35,8 @@ interface IntervalsTaskResponse {
     moduleid: string;
     module: string;
     assigneeid?: string;
+    ownerid?: string;
+    followerid?: string; // Comma-separated list of follower person IDs
 }
 
 export class IntervalsAPI {
@@ -47,7 +51,7 @@ export class IntervalsAPI {
         };
     }
 
-    private async getCurrentUser(): Promise<IntervalsUser> {
+    public async getCurrentUser(): Promise<IntervalsUser> {
         try {
             const response = await fetch(`${this.baseUrl}/me`, {
                 method: 'GET',
@@ -133,7 +137,9 @@ export class IntervalsAPI {
                 client: task.client,
                 moduleid: task.moduleid,
                 module: task.module,
-                assigneeid: task.assigneeid
+                assigneeid: task.assigneeid,
+                ownerid: task.ownerid,
+                followerid: task.followerid
             }));
         } catch (error) {
             console.error('Error fetching tasks from Intervals:', error);

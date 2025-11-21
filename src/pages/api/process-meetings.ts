@@ -62,17 +62,66 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { meetings } = await fetchUserMeetings(userId as string);
       
       console.log(`Found ${meetings.length} meetings for processing`);
-      
+
       if (!meetings || meetings.length === 0) {
-        return res.status(200).json({ 
-          success: true, 
+        return res.status(200).json({
+          success: true,
           message: 'No meetings found to process',
           batchId: null
         });
       }
-      
-      // Start a batch processing job with the correct method
-      const batchId = await meetingService.analyzeMeetingBatch(meetings, userId as string);
+
+      // EARLY DUPLICATE DETECTION: Filter out meetings that are already posted BEFORE batch processing
+      // This prevents race conditions where two cycles process the same meetings
+      console.log('🔍 EARLY DUPLICATE CHECK: Filtering already posted meetings before processing...');
+      const { AIAgentPostedMeetingsStorage } = await import('../../ai-agent/services/storage/posted-meetings');
+      const postedStorage = new AIAgentPostedMeetingsStorage();
+      await postedStorage.loadData();
+
+      const meetingsToProcess = [];
+      let skippedCount = 0;
+
+      for (const meeting of meetings) {
+        // Check if meeting has reportId in attendance data
+        const reportId = meeting.attendance?.reportId;
+
+        if (reportId) {
+          // Check if this reportId is already posted
+          const isAlreadyPosted = await postedStorage.isPosted(
+            userId as string,
+            meeting.id,
+            undefined,
+            undefined,
+            reportId
+          );
+
+          if (isAlreadyPosted) {
+            console.log(`⏭️ EARLY SKIP: "${meeting.subject}" already posted (reportId: ${reportId})`);
+            skippedCount++;
+            continue;
+          }
+        }
+
+        meetingsToProcess.push(meeting);
+      }
+
+      console.log(`📊 EARLY FILTER RESULTS: ${meetings.length} total → ${meetingsToProcess.length} to process (${skippedCount} already posted)`);
+
+      if (meetingsToProcess.length === 0) {
+        return res.status(200).json({
+          success: true,
+          message: 'All meetings have already been posted',
+          batchId: null,
+          data: {
+            totalMeetings: meetings.length,
+            alreadyPosted: skippedCount,
+            newMeetings: 0
+          }
+        });
+      }
+
+      // Start a batch processing job with the filtered meetings
+      const batchId = await meetingService.analyzeMeetingBatch(meetingsToProcess, userId as string);
       console.log(`Started batch processing with ID: ${batchId}`);
       
       // Set the current batch ID for status tracking
@@ -92,9 +141,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       }
       
-      // Get the processed meetings from storage
+      // Get the processed meetings from storage (only for meetings we actually processed)
       const processedMeetings = [];
-      for (const meeting of meetings) {
+      for (const meeting of meetingsToProcess) {
         try {
           const processed = await meetingService.getProcessedMeeting(meeting.id);
           if (processed) {
@@ -313,11 +362,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
       
-      return res.status(200).json({ 
-        success: true, 
-        message: `Successfully processed ${newMeetingsOnly.length} new meetings and ${reviewMeetingsToReprocess.length} review meetings`, 
+      return res.status(200).json({
+        success: true,
+        message: `Successfully processed ${newMeetingsOnly.length} new meetings and ${reviewMeetingsToReprocess.length} review meetings`,
         data: {
-          totalMeetings: meetings.length,
+          totalMeetingsFetched: meetings.length,
+          earlyFilterSkipped: skippedCount,
           processedMeetings: processedMeetings.length,
           uniqueMeetings: uniqueMeetings.length,
           attendedMeetings: attendedMeetings.length,
