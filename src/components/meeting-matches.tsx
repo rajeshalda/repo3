@@ -621,10 +621,11 @@ function MatchRow({
 
   return (
     <TableRow>
-      <TableCell className="py-2 pl-2 sm:pl-4">
+      <TableCell className="py-2 pl-2 sm:pl-4 hidden">
         <Checkbox
           checked={isSelected}
           onCheckedChange={onSelectChange}
+          className="hidden"
         />
       </TableCell>
       <TableCell className="py-2">
@@ -1189,7 +1190,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-12 sticky top-0 bg-background z-10">
+                          <TableHead className="w-12 sticky top-0 bg-background z-10 hidden">
                             <Checkbox
                               checked={meetings.high.every(m =>
                                 selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId))
@@ -1206,6 +1207,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                                 });
                                 setSelectedMeetingKeys(newKeys);
                               }}
+                              className="hidden"
                             />
                           </TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
@@ -1276,7 +1278,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-12 sticky top-0 bg-background z-10">
+                        <TableHead className="w-12 sticky top-0 bg-background z-10 hidden">
                           <Checkbox
                             checked={[...meetings.medium, ...meetings.low, ...meetings.unmatched].every(m => selectedMeetingKeys.has(generateMeetingKey(m.meeting, userId)))}
                             onCheckedChange={(checked) => {
@@ -1291,6 +1293,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                               });
                               setSelectedMeetingKeys(newKeys);
                             }}
+                            className="hidden"
                           />
                         </TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
