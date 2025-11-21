@@ -1,6 +1,6 @@
 {
   "name": "meeting-time-tracker",
-  "version": "2.2.2",
+  "version": "2.2.6",
   "private": true,
   "scripts": {
     "predev": "node scripts/pm2-check.js",

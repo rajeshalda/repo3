@@ -185,6 +185,197 @@ const forceReleaseCycle = (cycleId) => {
   }
 };
 
+// Per-user cycle management functions
+const getActiveCycleForUser = (userId) => {
+  try {
+    const stmt = db.prepare(`
+      SELECT * FROM processing_cycles
+      WHERE user_id = ? AND status = 'running'
+      ORDER BY started_at DESC
+      LIMIT 1
+    `);
+    return stmt.get(userId);
+  } catch (error) {
+    console.error('Error getting active cycle for user:', error);
+    return null;
+  }
+};
+
+const hasActiveCycleForUser = (userId) => {
+  const cycle = getActiveCycleForUser(userId);
+  if (!cycle) return false;
+
+  const cycleAge = Date.now() - new Date(cycle.started_at).getTime();
+  const twoHours = 2 * 60 * 60 * 1000;  // 2 hour timeout per user
+
+  if (cycleAge >= twoHours) {
+    // Force release stuck cycle
+    forceReleaseCycle(cycle.cycle_id);
+    return false;
+  }
+
+  return true;
+};
+
+// ===================== PROCESSING QUEUE SYSTEM =====================
+
+class ProcessingQueue {
+  constructor() {
+    this.userQueues = new Map();  // userId -> { queue: [], processing: false }
+    console.log('✅ Processing queue system initialized');
+  }
+
+  addRequest(userId, source) {
+    if (!userId) {
+      console.error('❌ Cannot add request without userId');
+      return;
+    }
+
+    // Initialize user queue if doesn't exist
+    if (!this.userQueues.has(userId)) {
+      this.userQueues.set(userId, {
+        queue: [],
+        processing: false
+      });
+    }
+
+    const userQueue = this.userQueues.get(userId);
+
+    // Check if user is currently processing
+    if (userQueue.processing) {
+      // Check if this source is already in queue (deduplicate)
+      const existingIndex = userQueue.queue.findIndex(item => item.source === source);
+      if (existingIndex >= 0) {
+        console.log(`🔄 User ${userId} already has "${source}" in queue, updating timestamp`);
+        userQueue.queue[existingIndex].requestedAt = Date.now();
+        return;
+      }
+    }
+
+    // Add request to queue
+    userQueue.queue.push({
+      source,
+      requestedAt: Date.now()
+    });
+
+    console.log(`📥 Queued: ${userId} from "${source}" (queue length: ${userQueue.queue.length})`);
+
+    // Try to start processing for this user
+    this.processUserQueue(userId);
+  }
+
+  async processUserQueue(userId) {
+    const userQueue = this.userQueues.get(userId);
+
+    if (!userQueue) {
+      console.log(`⚠️ No queue found for user ${userId}`);
+      return;
+    }
+
+    // Already processing this user?
+    if (userQueue.processing) {
+      console.log(`⏸️ User ${userId} already processing, request will wait in queue`);
+      return;
+    }
+
+    // Queue empty?
+    if (userQueue.queue.length === 0) {
+      // Clean up empty queue
+      this.userQueues.delete(userId);
+      return;
+    }
+
+    // Check if user has active cycle in database
+    if (hasActiveCycleForUser(userId)) {
+      console.log(`⏸️ User ${userId} has active cycle in DB, will retry in 10 seconds`);
+      setTimeout(() => this.processUserQueue(userId), 10000);
+      return;
+    }
+
+    // Check if user is still enabled
+    const userSettings = getUserSettings(userId);
+    if (!userSettings || !userSettings.enabled) {
+      console.log(`⏭️ User ${userId} is disabled, clearing queue`);
+      userQueue.queue = [];
+      this.userQueues.delete(userId);
+      return;
+    }
+
+    // Mark as processing
+    userQueue.processing = true;
+
+    // Get all queued requests and clear queue
+    const requests = [...userQueue.queue];
+    userQueue.queue = [];
+
+    console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🔄 PROCESSING USER FROM QUEUE                          ║
+║ 👤 User: ${userId}                                     ║
+║ 📊 Requests: ${requests.length}                        ║
+║ 📝 Sources: ${requests.map(r => r.source).join(', ')}  ║
+╚════════════════════════════════════════════════════════╝`);
+
+    const cycleId = `cycle_${userId}_${Date.now()}`;
+
+    try {
+      // Start cycle in database for this user
+      startCycle(cycleId, userId);
+
+      // Process meetings for this user
+      await processMeetingsForUser(userId);
+
+      console.log(`✅ User ${userId} processing completed successfully`);
+    } catch (error) {
+      console.error(`❌ Error processing user ${userId}:`, error);
+    } finally {
+      // Mark cycle as complete
+      completeCycle(cycleId);
+
+      // Mark as not processing
+      userQueue.processing = false;
+
+      // Check if more requests arrived while processing
+      if (userQueue.queue.length > 0) {
+        console.log(`📋 User ${userId} has ${userQueue.queue.length} more requests in queue, processing...`);
+        setTimeout(() => this.processUserQueue(userId), 2000);  // 2 second delay
+      } else {
+        // Clean up empty queue
+        this.userQueues.delete(userId);
+      }
+    }
+  }
+
+  getQueueStats() {
+    const stats = {
+      totalUsers: this.userQueues.size,
+      usersProcessing: 0,
+      totalQueued: 0,
+      details: []
+    };
+
+    for (const [userId, userQueue] of this.userQueues.entries()) {
+      if (userQueue.processing) {
+        stats.usersProcessing++;
+      }
+      stats.totalQueued += userQueue.queue.length;
+
+      if (userQueue.queue.length > 0 || userQueue.processing) {
+        stats.details.push({
+          userId,
+          processing: userQueue.processing,
+          queueLength: userQueue.queue.length
+        });
+      }
+    }
+
+    return stats;
+  }
+}
+
+// Initialize global queue
+const processingQueue = new ProcessingQueue();
+
 // Process meetings for a user
 const processMeetingsForUser = async (userId) => {
   console.log(`Processing meetings for user: ${userId}`);
@@ -253,47 +444,12 @@ const processMeetingsForUser = async (userId) => {
   }
 };
 
-// Process meetings for all enabled users
+// Process meetings for all enabled users (now uses queue system)
 const processAllUsers = async () => {
-  const cycleId = `cycle_${Date.now()}`;
-  const cycleStartTime = Date.now();
-
-  // Check for active cycle in database
-  const activeCycle = getActiveCycle();
-  if (activeCycle) {
-    const cycleAge = Date.now() - new Date(activeCycle.started_at).getTime();
-    const thirtyMinutes = 30 * 60 * 1000;
-
-    if (cycleAge < thirtyMinutes) {
-      console.log('╔════════════════════════════════════════════════════════╗');
-      console.log('║ ⚠️ CYCLE OVERLAP PREVENTED                              ║');
-      console.log(`║ Cycle ${activeCycle.cycle_id} still in progress.       ║`);
-      console.log(`║ Age: ${(cycleAge / 1000).toFixed(0)}s / ${thirtyMinutes / 1000}s timeout          ║`);
-      console.log('║ Skipping new cycle to prevent duplicates.             ║');
-      console.log('╚════════════════════════════════════════════════════════╝');
-      return;
-    } else {
-      // Force release stuck cycle
-      console.log('╔════════════════════════════════════════════════════════╗');
-      console.log('║ ⚠️ STUCK CYCLE DETECTED                                 ║');
-      console.log(`║ Cycle ${activeCycle.cycle_id} exceeded 30 min timeout. ║`);
-      console.log('║ Force releasing and starting new cycle.               ║');
-      console.log('╚════════════════════════════════════════════════════════╝');
-      forceReleaseCycle(activeCycle.cycle_id);
-    }
-  }
-
-  // Start new cycle in database
-  if (!startCycle(cycleId)) {
-    console.error('❌ Failed to start cycle in database. Aborting.');
-    return;
-  }
-
   console.log(`
 ╔════════════════════════════════════════════════════════╗
-║ 🔄 STARTING NEW PROCESSING CYCLE                       ║
-║ 🆔 Cycle ID: ${cycleId}                               ║
-║ ⏰ Start Time: ${new Date().toISOString()}            ║
+║ ⏰ SCHEDULED CYCLE TRIGGERED                           ║
+║ 🕐 Time: ${new Date().toISOString()}                   ║
 ╚════════════════════════════════════════════════════════╝`);
 
   try {
@@ -302,32 +458,46 @@ const processAllUsers = async () => {
 
     console.log(`📊 Found ${enabledUsers.length} enabled users in database`);
 
+    if (enabledUsers.length === 0) {
+      console.log('ℹ️ No enabled users to process');
+      return;
+    }
+
+    // Add all enabled users to their respective queues
     for (const user of enabledUsers) {
       try {
-        await processMeetingsForUser(user.user_id);
+        processingQueue.addRequest(user.user_id, 'scheduled');
       } catch (error) {
-        console.error(`Failed to process meetings for user ${user.user_id}:`, error);
+        console.error(`Failed to queue user ${user.user_id}:`, error);
         // Continue with next user even if one fails
       }
     }
 
+    // Log queue statistics
+    const stats = processingQueue.getQueueStats();
     console.log(`
 ╔════════════════════════════════════════════════════════╗
-║ ✅ CYCLE COMPLETED SUCCESSFULLY                        ║
-║ 🆔 Cycle ID: ${cycleId}                               ║
-║ ⏱️ Duration: ${((Date.now() - cycleStartTime)/1000).toFixed(2)}s ║
+║ 📊 QUEUE STATISTICS                                    ║
+║ 👥 Total Users: ${stats.totalUsers}                    ║
+║ ⚙️ Processing: ${stats.usersProcessing}                ║
+║ 📋 Queued Requests: ${stats.totalQueued}               ║
 ╚════════════════════════════════════════════════════════╝`);
+
   } catch (error) {
-    console.error('Error in processing cycle:', error);
-  } finally {
-    // Mark cycle as completed in database
-    completeCycle(cycleId);
+    console.error('Error in processAllUsers:', error);
   }
 };
 
 // Main function to start the processing cycle
 const startProcessingCycle = () => {
-  console.log('🤖 AI Agent Server started with SQLite backend and DB-based cycle locking');
+  console.log(`
+╔════════════════════════════════════════════════════════╗
+║ 🤖 AI AGENT SERVER STARTED                             ║
+║ ✅ SQLite backend initialized                          ║
+║ ✅ DB-based per-user cycle locking active              ║
+║ ✅ Processing queue system ready                       ║
+║ ⏰ Scheduled interval: Every 30 minutes                ║
+╚════════════════════════════════════════════════════════╝`);
 
   // Process immediately on startup
   processAllUsers();
@@ -377,17 +547,23 @@ const server = http.createServer((req, res) => {
         
         if (success) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ 
-          success: true, 
-          message: `AI agent ${enabled ? 'enabled' : 'disabled'} for user ${userId}` 
+        res.end(JSON.stringify({
+          success: true,
+          message: `AI agent ${enabled ? 'enabled' : 'disabled'} for user ${userId}`
         }));
-        
-        // If enabling, trigger processing immediately
+
+        // If enabling, add to processing queue
         if (enabled) {
-          processMeetingsForUser(userId).catch(error => {
-            console.error(`Error processing meetings after enabling for user ${userId}:`, error);
-          });
+          try {
+            processingQueue.addRequest(userId, 'user_enable');
+            console.log(`✅ User ${userId} added to processing queue after enable`);
+          } catch (error) {
+            console.error(`Error adding user ${userId} to queue:`, error);
           }
+        } else {
+          // If disabling, clear any pending queue items for this user
+          console.log(`🛑 User ${userId} disabled - any pending queue items will be cleared on next check`);
+        }
         } else {
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: false, error: 'Failed to update user settings' }));
@@ -423,14 +599,28 @@ const server = http.createServer((req, res) => {
     const enabledUsers = getAllEnabledUsers().length;
     const allUsersStmt = db.prepare('SELECT COUNT(*) as count FROM users');
     const totalUsers = allUsersStmt.get().count;
-    
+
+    // Get queue statistics
+    const queueStats = processingQueue.getQueueStats();
+
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ 
-      success: true, 
+    res.end(JSON.stringify({
+      success: true,
       status: 'running',
       enabledUsers,
       totalUsers,
-      uptime: process.uptime()
+      uptime: process.uptime(),
+      queue: queueStats
+    }));
+  }
+  // API endpoint to get queue status
+  else if (parsedUrl.pathname === '/api/queue-status' && req.method === 'GET') {
+    const stats = processingQueue.getQueueStats();
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      success: true,
+      queue: stats
     }));
   }
   else {
