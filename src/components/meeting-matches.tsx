@@ -282,7 +282,7 @@ function formatMatchReason(reason: string): string {
 
 function getConfidenceDisplay(confidence: number, reason: string): { value: number, display: string } {
   // Check if it's an exact match based on the reason text
-  const isExactMatch = reason.toLowerCase().includes('exact match') || 
+  const isExactMatch = reason.toLowerCase().includes('exact match') ||
                       reason.toLowerCase().includes('identical') ||
                       reason.toLowerCase().includes('same to same');
 
@@ -293,6 +293,14 @@ function getConfidenceDisplay(confidence: number, reason: string): { value: numb
   // For non-exact matches, cap at 90%
   const adjustedConfidence = Math.min(Math.round(confidence * 100), 90);
   return { value: adjustedConfidence, display: `${adjustedConfidence}%` };
+}
+
+// Helper function to decode HTML entities
+function decodeHtmlEntities(text: string): string {
+  if (!text) return text;
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
 }
 
 function MatchRow({ 
@@ -669,8 +677,8 @@ function MatchRow({
       <TableCell className="max-w-[200px] relative z-10">
         {selectedTask ? (
           <div className="space-y-1 relative">
-            <div className="truncate font-medium text-foreground">{selectedTask.title}</div>
-            <div className="text-xs text-muted-foreground dark:text-gray-400 truncate">{selectedTask.project}</div>
+            <div className="truncate font-medium text-foreground">{decodeHtmlEntities(selectedTask.title)}</div>
+            <div className="text-xs text-muted-foreground dark:text-gray-400 truncate">{decodeHtmlEntities(selectedTask.project)}</div>
             <Button
               variant="outline"
               size="sm"
@@ -745,8 +753,8 @@ function MatchRow({
                           onClick={() => handleTaskChange(task)}
                         >
                           <div className="text-left">
-                            <div className="font-medium">{task.title}</div>
-                            <div className="text-sm text-muted-foreground">{task.project}</div>
+                            <div className="font-medium">{decodeHtmlEntities(task.title)}</div>
+                            <div className="text-sm text-muted-foreground">{decodeHtmlEntities(task.project)}</div>
                           </div>
                         </button>
                       ))}
