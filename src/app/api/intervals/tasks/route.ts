@@ -140,76 +140,144 @@ export async function GET() {
       return NextResponse.json(formattedTasks);
     }
     
-    // Filter tasks to only show those assigned to the current user and not closed
+    // Filter tasks to include those assigned to, followed by, or owned by the current user (and not closed)
     console.log(`Filtering tasks for user with personid: ${currentUser.personid}`);
-    
-    // Log all task assignees for debugging
+
+    // Log all task relationships for debugging
     tasks.forEach((task: any) => {
-      console.log(`Task ${task.id}: "${task.title}" - Assignees: ${task.assigneeid || 'none'}, Status: ${task.status}`);
+      console.log(`Task ${task.id}: "${task.title}" - Assignees: ${task.assigneeid || 'none'}, Followers: ${task.followerid || 'none'}, Owner: ${task.ownerid || 'none'}, Status: ${task.status}`);
     });
-    
+
     const filteredTasks = tasks.filter((task: any) => {
       // Check if task is not closed
       const isNotClosed = task.status !== "Closed";
       if (!isNotClosed) {
         return false;
       }
-      
-      // If task has no assigneeid, don't include it (unassigned tasks)
-      if (!task.assigneeid) {
-        console.log(`Skipping unassigned task: ${task.id} - ${task.title}`);
-        return false;
+
+      const normalizedPersonId = String(currentUser.personid).trim();
+
+      // Check if user is assigned to this task
+      let isAssignedToUser = false;
+      if (task.assigneeid) {
+        const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+        isAssignedToUser = assignees.some((id: string) => {
+          const normalizedId = id.trim();
+          return normalizedId === normalizedPersonId ||
+                 Number(normalizedId) === Number(normalizedPersonId);
+        });
       }
-      
-      // Check if assigneeid is a string containing the user's personid
-      // Split by commas AND spaces to handle different formats
-      const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
-      console.log(`Task ${task.id} assignees:`, assignees, 'Current user personid:', currentUser.personid);
-      
-      // Try both string and number comparisons because the IDs might be in different formats
-      const isAssignedToUser = assignees.some((id: string) => {
-        const normalizedId = id.trim();
-        const normalizedPersonId = String(currentUser.personid).trim();
-        return normalizedId === normalizedPersonId || 
-               Number(normalizedId) === Number(normalizedPersonId);
-      });
-      
-      if (isAssignedToUser) {
-        console.log(`Task ${task.id} is assigned to current user`);
+
+      // Check if user is a follower of this task
+      let isFollower = false;
+      if (task.followerid) {
+        const followers = task.followerid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+        isFollower = followers.some((id: string) => {
+          const normalizedId = id.trim();
+          return normalizedId === normalizedPersonId ||
+                 Number(normalizedId) === Number(normalizedPersonId);
+        });
       }
-      
-      return isAssignedToUser;
+
+      // Check if user is the owner of this task
+      let isOwner = false;
+      if (task.ownerid) {
+        const normalizedOwnerId = String(task.ownerid).trim();
+        isOwner = normalizedOwnerId === normalizedPersonId ||
+                  Number(normalizedOwnerId) === Number(normalizedPersonId);
+      }
+
+      // Include task if user has any relationship to it
+      const hasRelationship = isAssignedToUser || isFollower || isOwner;
+
+      if (hasRelationship) {
+        const relationships = [];
+        if (isAssignedToUser) relationships.push('assigned');
+        if (isFollower) relationships.push('follower');
+        if (isOwner) relationships.push('owner');
+        console.log(`Task ${task.id} - User has relationship: ${relationships.join(', ')}`);
+      }
+
+      return hasRelationship;
     });
 
-    console.log(`Filtered from ${tasks.length} to ${filteredTasks.length} tasks assigned to the current user and not closed`);
+    console.log(`Filtered from ${tasks.length} to ${filteredTasks.length} tasks (assigned/followed/owned by user and not closed)`);
 
     // Count how many tasks are closed vs. open
     const openTasks = tasks.filter((task: any) => task.status !== "Closed");
     const closedTasks = tasks.filter((task: any) => task.status === "Closed");
     console.log(`Total tasks breakdown: ${openTasks.length} open, ${closedTasks.length} closed`);
-    
-    // Count tasks assigned to user (both open and closed)
+
+    // Count tasks by relationship type (both open and closed)
+    const normalizedPersonId = String(currentUser.personid).trim();
+
     const assignedToUser = tasks.filter((task: any) => {
       if (!task.assigneeid) return false;
       const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
-      return assignees.some((id: string) => id.trim() === String(currentUser.personid).trim());
+      return assignees.some((id: string) => {
+        const normalizedId = id.trim();
+        return normalizedId === normalizedPersonId || Number(normalizedId) === Number(normalizedPersonId);
+      });
     });
-    console.log(`Tasks assigned to current user: ${assignedToUser.length} total, ${filteredTasks.length} open`);
 
-    // Transform the response to match our Task interface
-    const formattedTasks = filteredTasks.map((task: { 
-      id: string; 
-      title?: string; 
-      project?: string; 
-      module?: string; 
-      status?: string; 
-    }) => ({
-      id: task.id,
-      title: task.title || 'Untitled Task',
-      project: task.project || 'No Project',
-      module: task.module || 'No Module',
-      status: task.status || 'Unknown'
-    }));
+    const followedByUser = tasks.filter((task: any) => {
+      if (!task.followerid) return false;
+      const followers = task.followerid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+      return followers.some((id: string) => {
+        const normalizedId = id.trim();
+        return normalizedId === normalizedPersonId || Number(normalizedId) === Number(normalizedPersonId);
+      });
+    });
+
+    const ownedByUser = tasks.filter((task: any) => {
+      if (!task.ownerid) return false;
+      const normalizedOwnerId = String(task.ownerid).trim();
+      return normalizedOwnerId === normalizedPersonId || Number(normalizedOwnerId) === Number(normalizedPersonId);
+    });
+
+    console.log(`Tasks by relationship - Assigned: ${assignedToUser.length}, Followed: ${followedByUser.length}, Owned: ${ownedByUser.length}, Total filtered: ${filteredTasks.length}`);
+
+    // Transform the response to match our Task interface and include relationship type
+    const formattedTasks = filteredTasks.map((task: any) => {
+      // Determine relationship types for this task
+      const relationships = [];
+
+      // Check if assigned
+      if (task.assigneeid) {
+        const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+        const isAssigned = assignees.some((id: string) => {
+          const normalizedId = id.trim();
+          return normalizedId === normalizedPersonId || Number(normalizedId) === Number(normalizedPersonId);
+        });
+        if (isAssigned) relationships.push('assigned');
+      }
+
+      // Check if follower
+      if (task.followerid) {
+        const followers = task.followerid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+        const isFollower = followers.some((id: string) => {
+          const normalizedId = id.trim();
+          return normalizedId === normalizedPersonId || Number(normalizedId) === Number(normalizedPersonId);
+        });
+        if (isFollower) relationships.push('follower');
+      }
+
+      // Check if owner
+      if (task.ownerid) {
+        const normalizedOwnerId = String(task.ownerid).trim();
+        const isOwner = normalizedOwnerId === normalizedPersonId || Number(normalizedOwnerId) === Number(normalizedPersonId);
+        if (isOwner) relationships.push('owner');
+      }
+
+      return {
+        id: task.id,
+        title: task.title || 'Untitled Task',
+        project: task.project || 'No Project',
+        module: task.module || 'No Module',
+        status: task.status || 'Unknown',
+        relationships: relationships // ['assigned'], ['follower'], ['owner'], or combinations like ['assigned', 'follower']
+      };
+    });
 
     console.log(`Successfully fetched ${formattedTasks.length} tasks for the current user`);
     return NextResponse.json(formattedTasks);

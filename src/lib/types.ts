@@ -33,6 +33,7 @@ export interface Task {
   project: string;
   module: string;
   status: string;
+  relationships?: ('assigned' | 'follower' | 'owner')[]; // User's relationship to the task
 }
 
 export interface MatchDetails {

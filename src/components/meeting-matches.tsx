@@ -37,6 +37,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { formatDateWithTimezone, formatDateIST, DEFAULT_DATE_FORMAT, TIME_ONLY_FORMAT } from "@/lib/utils";
 import type { Meeting, Task, MatchResult } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { WorktypeWarningDialog } from "@/components/worktype-warning-dialog";
 import type {
   Command as CommandPrimitive,
@@ -764,18 +765,31 @@ function MatchRow({
                     </div>
                   ) : (
                     <div className="p-1">
-                      {filteredTasks.map((task) => (
-                        <button
-                          key={task.id}
-                          className="w-full rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
-                          onClick={() => handleTaskChange(task)}
-                        >
-                          <div className="text-left">
-                            <div className="font-medium">{decodeHtmlEntities(task.title)}</div>
-                            <div className="text-sm text-muted-foreground">{decodeHtmlEntities(task.project)}</div>
-                          </div>
-                        </button>
-                      ))}
+                      {filteredTasks.map((task) => {
+                        return (
+                          <button
+                            key={task.id}
+                            className="w-full rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => handleTaskChange(task)}
+                          >
+                            <div className="text-left">
+                              <div className="font-medium flex items-center gap-1.5 flex-wrap">
+                                <span>{decodeHtmlEntities(task.title)}</span>
+                                {task.relationships?.includes('assigned') && (
+                                  <Badge variant="default" className="text-[10px] px-1.5 py-0">Assigned</Badge>
+                                )}
+                                {task.relationships?.includes('follower') && (
+                                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">Follower</Badge>
+                                )}
+                                {task.relationships?.includes('owner') && (
+                                  <Badge variant="outline" className="text-[10px] px-1.5 py-0">Owner</Badge>
+                                )}
+                              </div>
+                              <div className="text-sm text-muted-foreground">{decodeHtmlEntities(task.project)}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
