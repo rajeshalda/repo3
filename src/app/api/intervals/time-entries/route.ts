@@ -412,14 +412,38 @@ ${requestReportId ? `║ 📊 Report ID: ${requestReportId}                     
             }
             
             // Create time entry with hours
-            const result = await intervalsApi.createTimeEntry({
-                taskId,
-                date: actualMeetingDate, // Use the actual meeting date (corrected for manual posts)
-                time: timeInHours > 0 ? timeInHours : 0.01, // Minimum time entry of 0.01 hours for manual posts
-                description: description || 'No description provided',
-                workType: workType || 'Meeting',
-                billable: billableStr
-            });
+            let result;
+            try {
+                result = await intervalsApi.createTimeEntry({
+                    taskId,
+                    date: actualMeetingDate, // Use the actual meeting date (corrected for manual posts)
+                    time: timeInHours > 0 ? timeInHours : 0.01, // Minimum time entry of 0.01 hours for manual posts
+                    description: description || 'No description provided',
+                    workType: workType || 'Meeting',
+                    billable: billableStr
+                });
+            } catch (error) {
+                // Check if this is a worktype validation error
+                if (error instanceof Error && error.message) {
+                    try {
+                        const errorData = JSON.parse(error.message);
+                        if (errorData.code === 'WORKTYPE_NOT_AVAILABLE') {
+                            console.error('❌ WORKTYPE_NOT_AVAILABLE error:', errorData);
+                            return NextResponse.json({
+                                error: 'WORKTYPE_NOT_AVAILABLE',
+                                taskId: errorData.taskId,
+                                taskTitle: errorData.taskTitle,
+                                projectName: errorData.projectName,
+                                availableWorktypes: errorData.availableWorktypes
+                            }, { status: 400 });
+                        }
+                    } catch (parseError) {
+                        // Not a JSON error, rethrow original
+                    }
+                }
+                // Rethrow if not a worktype error
+                throw error;
+            }
 
             // Fetch the specific task details directly by ID to ensure we have complete data
             console.log('Fetching task directly by ID:', taskId);

@@ -4,6 +4,7 @@ import { meetingService } from '../../ai-agent/services/meeting/openai';
 import { taskService } from '../../ai-agent/services/task/openai';
 import { timeEntryService } from '../../ai-agent/services/time-entry/intervals';
 import { meetingComparisonService } from '../../ai-agent/services/meeting/comparison';
+import { reviewService } from '../../ai-agent/services/review/review-service';
 import { setCurrentBatchId } from './batch-status';
 
 // Enhanced version of delay that respects AbortSignal
@@ -316,6 +317,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
                 userId as string
               );
+
+              // Check if this is a worktype validation error
+              if (timeEntry && typeof timeEntry === 'object' && 'success' in timeEntry && timeEntry.success === false) {
+                if (timeEntry.error === 'WORKTYPE_NOT_AVAILABLE') {
+                  console.error(`⚠️ Worktype validation failed for meeting: ${meeting.subject}`);
+                  console.log(`📋 Sending meeting to review queue due to worktype unavailability`);
+
+                  // Send to review queue with worktype error reason
+                  await reviewService.queueForReview({
+                    id: meeting.id,
+                    userId: userId as string,
+                    subject: meeting.subject,
+                    startTime: meeting.start.dateTime,
+                    endTime: meeting.end.dateTime,
+                    duration: meeting.attendance?.summary?.totalDuration || 0,
+                    confidence: result.matchedTasks[0].confidence || 0,
+                    suggestedTask: {
+                      taskId: result.matchedTasks[0].taskId,
+                      taskTitle: result.matchedTasks[0].taskTitle
+                    },
+                    reason: `Worktype "India-Meeting" not available for task "${(timeEntry as any).validationData?.taskTitle}" (${(timeEntry as any).validationData?.projectName})`,
+                    status: 'pending' as const,
+                    queuedAt: new Date().toISOString(),
+                    meetingInfo: meeting.meetingInfo,
+                    attendance: meeting.attendance,
+                    reportId: meeting.attendance?.reportId
+                  });
+
+                  console.log(`✅ Meeting sent to review queue: ${meeting.subject}`);
+                  continue;
+                }
+              }
+
               timeEntries.push({
                 meetingId: meeting.id,
                 meetingSubject: meeting.subject,

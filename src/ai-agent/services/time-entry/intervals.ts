@@ -364,10 +364,28 @@ export class IntervalsTimeEntryService {
             // Get work types for the project
             console.log(`⏳ Fetching work types for project ${taskDetails.projectid}...`);
             const workTypes = await this.getProjectWorkTypes(taskDetails.projectid, userId);
-            
-            // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-            console.log(`ℹ️ Using worktype ID 305064 for India-Meeting`);
-            const worktypeId = '305064';
+
+            // Validate India-Meeting worktype is available for this project
+            const INDIA_MEETING_WORKTYPE_ID = '305064';
+            const hasIndiaMeeting = workTypes.some(wt => wt.id === INDIA_MEETING_WORKTYPE_ID);
+
+            if (!hasIndiaMeeting) {
+                console.error(`⚠️ India-Meeting worktype not available for project ${taskDetails.project}`);
+                return {
+                    success: false,
+                    error: 'WORKTYPE_NOT_AVAILABLE',
+                    meetingId: meeting.id,
+                    validationData: {
+                        taskId: taskDetails.id,
+                        taskTitle: taskDetails.title,
+                        projectName: taskDetails.project,
+                        availableWorktypes: workTypes.map(wt => wt.name)
+                    }
+                } as any;
+            }
+
+            console.log(`ℹ️ Using worktype ID ${INDIA_MEETING_WORKTYPE_ID} for India-Meeting`);
+            const worktypeId = INDIA_MEETING_WORKTYPE_ID;
 
             // Handle specific report ID fetching for recurring meetings
             let attendanceRecords = meeting.attendance?.records || [];

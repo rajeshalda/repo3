@@ -484,7 +484,7 @@ export function PostedMeetingsView() {
                   variant="outline"
                   size="sm"
                   onClick={clearPostedMeetings}
-                  className="h-8"
+                  className="h-8 hidden"
                   title="Hide your posted meetings from view (preserves database data)"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />

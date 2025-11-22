@@ -37,7 +37,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { formatDateWithTimezone, formatDateIST, DEFAULT_DATE_FORMAT, TIME_ONLY_FORMAT } from "@/lib/utils";
 import type { Meeting, Task, MatchResult } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { 
+import { WorktypeWarningDialog } from "@/components/worktype-warning-dialog";
+import type {
   Command as CommandPrimitive,
   CommandInput as CommandInputPrimitive,
   CommandList as CommandListPrimitive,
@@ -323,6 +324,11 @@ function MatchRow({
   const [searchQuery, setSearchQuery] = useState('');
   const [tasksError, setTasksError] = useState<string | null>(null);
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
+  const [worktypeWarning, setWorktypeWarning] = useState<{
+    show: boolean;
+    taskTitle: string;
+    projectName: string;
+  }>({ show: false, taskTitle: '', projectName: '' });
   
   const meetingKey = generateMeetingKey(result.meeting, session?.user?.email || '');
   const selectedTask = selectedTasks.get(meetingKey) || result.matchedTask || null;
@@ -562,6 +568,18 @@ function MatchRow({
       console.log('Posting meeting with ID:', meetingGraphId);
 
       const postResult = await response.json();
+
+      // Check for worktype validation error
+      if (postResult.error === 'WORKTYPE_NOT_AVAILABLE') {
+        console.error('Worktype not available for task:', postResult);
+        setWorktypeWarning({
+          show: true,
+          taskTitle: postResult.taskTitle || selectedTask.title,
+          projectName: postResult.projectName || ''
+        });
+        return;
+      }
+
       if (postResult.success) {
         // If there's a message about already posted, show that instead of success
         if (postResult.message && postResult.message.includes('Already posted')) {
@@ -810,6 +828,12 @@ function MatchRow({
           </Button>
         )}
       </TableCell>
+      <WorktypeWarningDialog
+        open={worktypeWarning.show}
+        onClose={() => setWorktypeWarning({ show: false, taskTitle: '', projectName: '' })}
+        taskTitle={worktypeWarning.taskTitle}
+        projectName={worktypeWarning.projectName}
+      />
     </TableRow>
   );
 }

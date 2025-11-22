@@ -256,47 +256,29 @@ class IntervalsAPI {
         }
         
         console.log('Task details:', task);
-        /*
-        // First try project-specific work types
-        let workTypes = await this.getProjectWorkTypes(task.projectid);
-        console.log('===== DEBUG: PROJECT WORK TYPES =====');
-        workTypes.forEach((wt: WorkType) => {
-            console.log(`Work Type: "${wt.worktype}", ID: ${wt.worktypeid}, Project ID: ${wt.projectid}`);
-        });
-        
-        // Look for India-Meeting in project work types
-        let indiaMeetingType = workTypes.find((wt: WorkType) =>
-            wt.worktype.toLowerCase() === 'india-meeting'.toLowerCase()
+
+        // Validate India-Meeting worktype is available for this project
+        const INDIA_MEETING_WORKTYPE_ID = '305064';
+
+        // Get project worktypes to validate
+        const projectWorktypes = await this.getProjectWorkTypes(task.projectid);
+        const hasIndiaMeeting = projectWorktypes.some(wt =>
+            wt.worktypeid === INDIA_MEETING_WORKTYPE_ID || wt.id === INDIA_MEETING_WORKTYPE_ID
         );
-        
-        // If not found in project work types, get global work types
-        if (!indiaMeetingType) {
-            console.log('India-Meeting not found in project work types, fetching global work types');
-            const globalWorkTypes = await this.getGlobalWorkTypes();
-            
-            // Look for India-Meeting in global work types
-            indiaMeetingType = globalWorkTypes.find((wt: WorkType) =>
-                wt.worktype.toLowerCase() === 'india-meeting'.toLowerCase()
-            );
-            
-            if (indiaMeetingType) {
-                console.log('Found India-Meeting in global work types:', indiaMeetingType);
-                // Associate it with the current project
-                indiaMeetingType.projectid = task.projectid;
-            }
+
+        if (!hasIndiaMeeting) {
+            console.error(`⚠️ India-Meeting worktype not available for project ${task.project}`);
+            throw new Error(JSON.stringify({
+                code: 'WORKTYPE_NOT_AVAILABLE',
+                taskId: task.id,
+                taskTitle: task.title,
+                projectName: task.project,
+                availableWorktypes: projectWorktypes.map(wt => wt.worktype || wt.name)
+            }));
         }
-        
-        if (!indiaMeetingType) {
-            console.log('Work type we are looking for: India-Meeting');
-            console.log('Available project work types:', workTypes.map((wt: WorkType) => wt.worktype).join(', '));
-            throw new Error('India-Meeting work type not found. Please ensure this work type is available in your Intervals account.');
-        }
-        
-        console.log('Using India-Meeting work type:', indiaMeetingType);
-        */
-        // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-        console.log('Using hardcoded worktype ID 305064 for India-Meeting');
-        const worktypeId = '305064'; // Hardcoded ID for India-Meeting
+
+        console.log(`Using worktype ID ${INDIA_MEETING_WORKTYPE_ID} for India-Meeting`);
+        const worktypeId = INDIA_MEETING_WORKTYPE_ID;
         // Ensure time is always a string with 2 decimal places to match AI agent format
         const timeValue = typeof payload.time === 'number' ? payload.time.toFixed(2) : String(payload.time);
         

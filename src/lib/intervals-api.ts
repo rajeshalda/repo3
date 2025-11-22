@@ -374,9 +374,28 @@ export class IntervalsAPI {
         
         console.log('Task details:', task);
 
-        // TEMPORARY FIX: Use hardcoded worktype ID for India-Meeting
-        console.log('Using hardcoded worktype ID 305064 for India-Meeting');
-        const worktypeId = '305064';
+        // Validate India-Meeting worktype is available for this project
+        const INDIA_MEETING_WORKTYPE_ID = '305064';
+
+        // Get project worktypes to validate
+        const projectWorktypes = await this.getProjectWorkTypes(task.projectid);
+        const hasIndiaMeeting = projectWorktypes.some((wt: any) =>
+            wt.worktypeid === INDIA_MEETING_WORKTYPE_ID || wt.id === INDIA_MEETING_WORKTYPE_ID
+        );
+
+        if (!hasIndiaMeeting) {
+            console.error(`⚠️ India-Meeting worktype not available for project ${task.project}`);
+            throw new Error(JSON.stringify({
+                code: 'WORKTYPE_NOT_AVAILABLE',
+                taskId: task.id,
+                taskTitle: task.title,
+                projectName: task.project,
+                availableWorktypes: projectWorktypes.map((wt: any) => wt.worktype || wt.name)
+            }));
+        }
+
+        console.log(`Using worktype ID ${INDIA_MEETING_WORKTYPE_ID} for India-Meeting`);
+        const worktypeId = INDIA_MEETING_WORKTYPE_ID;
 
         // Determine billable status based on client/project
         // Simplified billable status determination:
