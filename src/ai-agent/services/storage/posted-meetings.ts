@@ -56,7 +56,7 @@ export class AIAgentPostedMeetingsStorage {
 
             // Save to SQLite database
             database.saveMeeting(meetingData);
-            
+
             console.log('Meeting saved to SQLite database:', meeting.meetingId);
         } catch (error) {
             console.error('Error saving meeting to database:', error);

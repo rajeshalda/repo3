@@ -90,7 +90,7 @@ export class AppDatabase {
     private initializeSchema() {
         // Enable foreign keys
         this.db.exec('PRAGMA foreign_keys = ON');
-        
+
         // Create tables
         this.db.exec(`
             -- Users table
@@ -103,7 +103,7 @@ export class AppDatabase {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
-            
+
             -- User settings table
             CREATE TABLE IF NOT EXISTS user_settings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -113,7 +113,7 @@ export class AppDatabase {
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
             );
-            
+
             -- Posted meetings table
             CREATE TABLE IF NOT EXISTS meetings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -281,7 +281,7 @@ export class AppDatabase {
             INSERT INTO meetings (meeting_id, user_id, time_entry, raw_response, posted_at, task_name, report_id)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `);
-        
+
         const result = stmt.run(
             meeting.meeting_id,
             meeting.user_id,
@@ -291,7 +291,7 @@ export class AppDatabase {
             meeting.task_name || null,
             meeting.report_id || null
         );
-        
+
         const newMeeting = this.db.prepare('SELECT * FROM meetings WHERE id = ?').get(result.lastInsertRowid as number);
         return newMeeting as MeetingData;
     }
@@ -329,7 +329,7 @@ export class AppDatabase {
         const stmt = this.db.prepare('DELETE FROM meetings WHERE user_id = ?');
         stmt.run(userId);
     }
-    
+
     // ===================== REVIEW METHODS =====================
     
     saveReview(review: ReviewData): ReviewData {
