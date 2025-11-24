@@ -154,8 +154,9 @@ export function MeetingReviewView() {
             }
 
             const reviewMatches = pendingReviews.map((review: any) => {
-              const startTime = new Date(review.startTime || new Date());
-              const endTime = new Date(startTime.getTime() + ((review.duration || 0) * 1000));
+              // Use the actual meeting times directly from the review data
+              const startTime = new Date(review.startTime);
+              const endTime = new Date(review.endTime);
 
               return {
                 meeting: {
