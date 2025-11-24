@@ -39,6 +39,13 @@ import type { Meeting, Task, MatchResult } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { WorktypeWarningDialog } from "@/components/worktype-warning-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 import type {
   Command as CommandPrimitive,
   CommandInput as CommandInputPrimitive,
@@ -245,10 +252,77 @@ function formatDuration(seconds: number): string {
   return `${hours} hour${hours !== 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
 }
 
+// Helper function to extract short reason label for tooltip
+function getShortReason(reason: string): string {
+  const lowerReason = reason.toLowerCase();
+
+  // Check for keyword match
+  if (lowerReason.includes('keyword')) {
+    const keywordMatch = reason.match(/['"]([^'"]+)['"]/);
+    if (keywordMatch) {
+      return `Keyword: "${keywordMatch[1]}"`;
+    }
+    return 'Keyword Match';
+  }
+
+  // Check for ambiguous/billable cases
+  if (lowerReason.includes('ambiguous') || lowerReason.includes('could match')) {
+    if (lowerReason.includes('billable') || lowerReason.includes('non-billable')) {
+      return 'Ambiguous';
+    }
+    if (lowerReason.includes('assigned') || lowerReason.includes('followed')) {
+      return 'Multiple Tasks';
+    }
+    return 'Ambiguous';
+  }
+
+  // Check for generic/too short
+  if (lowerReason.includes('too generic') || lowerReason.includes('generic')) {
+    return 'Generic Title';
+  }
+
+  if (lowerReason.includes('too short') || lowerReason.includes('ambiguous')) {
+    return 'Too Short';
+  }
+
+  // Check for multiple matches
+  if (lowerReason.includes('multiple') || lowerReason.includes('several')) {
+    return 'Multi-Match';
+  }
+
+  // Check for exact match
+  if (lowerReason.includes('exact match') || lowerReason.includes('identical')) {
+    return 'Exact Match';
+  }
+
+  // Check for company/client match
+  if (lowerReason.includes('company match') || lowerReason.includes('client match')) {
+    return 'Company Match';
+  }
+
+  // Check for semantic match
+  if (lowerReason.includes('semantic') || lowerReason.includes('contextually relevant')) {
+    return 'Context Match';
+  }
+
+  // Check for partial match
+  if (lowerReason.includes('partial')) {
+    return 'Partial Match';
+  }
+
+  // Check for info/social
+  if (lowerReason.includes('informational') || lowerReason.includes('social')) {
+    return 'Info Only';
+  }
+
+  // Default: return first 30 characters
+  return reason.substring(0, 30) + (reason.length > 30 ? '...' : '');
+}
+
 function formatMatchReason(reason: string): string {
   // Remove any trailing ellipsis
   let formatted = reason.replace(/\.{3,}$/, '');
-  
+
   // Extract the key information based on common patterns
   if (formatted.toLowerCase().includes('exact match')) {
     return 'Exact match';
@@ -808,19 +882,22 @@ function MatchRow({
           <span className="text-sm text-muted-foreground dark:text-gray-400">{confidenceInfo.display}</span>
         </div>
       </TableCell>
-      <TableCell className="max-w-[300px]">
-        <div 
-          className="text-sm text-foreground dark:text-gray-100 relative group cursor-help"
-          title={result.reason} // Show full text on hover
-        >
-          <div className="line-clamp-2 hover:text-clip">
-            {formatMatchReason(result.reason)}
-          </div>
-          {/* Show tooltip on hover for truncated text */}
-          <div className="hidden group-hover:block absolute z-50 p-2 bg-popover text-popover-foreground rounded shadow-lg border max-w-[400px] whitespace-normal left-0 mt-1">
-            {formatMatchReason(result.reason)}
-          </div>
-        </div>
+      <TableCell className="max-w-[200px]">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1.5 cursor-help text-sm">
+                <span className="text-foreground dark:text-gray-100">
+                  {getShortReason(result.reason)}
+                </span>
+                <Info className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-md p-3" side="left">
+              <p className="text-sm whitespace-normal">{result.reason}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </TableCell>
       <TableCell>
         {(result.matchedTask || selectedTask) && (
