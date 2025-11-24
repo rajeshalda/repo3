@@ -174,7 +174,7 @@ export class IntervalsTimeEntryService {
 
     private async getProjectWorkTypes(projectId: string, userId: string): Promise<WorkType[]> {
         try {
-            const data = await this.makeRequest('/projectworktype/', {}, userId);
+            const data = await this.makeRequest('/projectworktype/?limit=500', {}, userId);
 
             if (!data.projectworktype || !Array.isArray(data.projectworktype)) {
                 throw new Error('Invalid work types response format');
@@ -368,6 +368,17 @@ export class IntervalsTimeEntryService {
             // Validate India-Meeting worktype is available for this project
             const INDIA_MEETING_WORKTYPE_ID = '305064';
             const hasIndiaMeeting = workTypes.some(wt => wt.id === INDIA_MEETING_WORKTYPE_ID);
+
+            console.log(`🔍 WORKTYPE VALIDATION DEBUG:`, {
+                taskId: taskDetails.id,
+                taskTitle: taskDetails.title,
+                projectId: taskDetails.projectid,
+                projectName: taskDetails.project,
+                totalWorkTypes: workTypes.length,
+                workTypeIds: workTypes.map(wt => `${wt.name}:${wt.id}`),
+                lookingFor: INDIA_MEETING_WORKTYPE_ID,
+                hasIndiaMeeting
+            });
 
             if (!hasIndiaMeeting) {
                 console.error(`⚠️ India-Meeting worktype not available for project ${taskDetails.project}`);
