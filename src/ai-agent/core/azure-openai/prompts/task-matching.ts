@@ -201,6 +201,197 @@ DISAMBIGUATION LOGIC:
 - Only match the meeting whose company abbreviation aligns with the task client
 - Example: "SD: X" matches "Sandisk X task", "WD: X" does NOT match "Sandisk X task"
 
+═══════════════════════════════════════════════════════════════
+CRITICAL RULE: TASK AMBIGUITY DETECTION
+═══════════════════════════════════════════════════════════════
+
+PROBLEM: Multiple similar tasks exist and the meeting could match more than one.
+
+TYPES OF AMBIGUITY:
+
+1. BILLABLE VS NON-BILLABLE:
+   - Same company/client name in multiple tasks
+   - One task in client project (billable)
+   - One task in internal project (non-billable)
+   - Meeting lacks clear "Internal" or "External" indicators
+
+2. ASSIGNED VS FOLLOWED VS OWNED:
+   - Multiple tasks with similar names or same project
+   - Tasks differ only in relationship (assigned to you, followed by you, owned by you)
+   - Meeting name doesn't indicate which specific task it relates to
+
+DECISION RULE:
+When ambiguous between multiple similar tasks → ALWAYS send to review
+Accuracy is MORE important than automation speed.
+
+═══════════════════════════════════════════════════════════════
+STEP-BY-STEP DECISION PROCESS:
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Identify if task ambiguity exists
+
+  Check for AMBIGUITY TYPE 1 - Billable vs Non-Billable:
+  - Multiple tasks match the same keyword but have different projects
+  - Task A: Client project (billable - external client)
+  - Task B: Internal project (non-billable - NathCorp client)
+
+  Check for AMBIGUITY TYPE 2 - Relationship Type (Assigned/Followed/Owned):
+  - Multiple tasks with similar/same names
+  - Tasks differ in relationship: assigned to user vs followed by user vs owned by user
+  - Example: Same "Project X Task" but user is assigned to one and follows another
+
+  IF EITHER AMBIGUITY TYPE EXISTS → Continue to STEP 2
+  IF NO AMBIGUITY → Use normal matching logic
+
+STEP 2: Check for CLEAR keywords in MEETING TITLE and TASK NAME
+
+  FOR AMBIGUITY TYPE 1 (Billable vs Non-Billable):
+
+  EXTERNAL/BILLABLE keywords (choose external task with confidence 0.85):
+  ✓ Meeting title contains: "Client", "External", "Customer", "Partner", "Vendor"
+  ✓ Task name contains: "External", "Client", "Customer"
+
+  INTERNAL/NON-BILLABLE keywords (choose internal task with confidence 0.85):
+  ✓ Meeting title contains: "Internal", "Team", "Prep", "Planning", "Discussion", "Sync", "Standup"
+  ✓ Task name contains: "Internal", "Team", "Internal Project"
+
+  FOR AMBIGUITY TYPE 2 (Assigned vs Followed vs Owned):
+
+  TASK RELATIONSHIP keywords (indicate which task to prefer):
+  ✓ Meeting title contains task-specific identifiers (unique task name, module, specific project details)
+  ✓ Meeting references work you personally own vs work you're following
+
+  PRIORITY ORDER when no clear indicator:
+  1. ASSIGNED tasks (you're directly responsible) - Highest priority
+  2. OWNED tasks (you own the task)
+  3. FOLLOWED tasks (you're just observing) - Lowest priority
+
+STEP 3: Apply the decision rule (BASED ON NAMES ONLY)
+
+  FOR AMBIGUITY TYPE 1 (Billable vs Non-Billable):
+
+  IF Meeting title contains "External"/"Client" OR Task name contains "External":
+    → Choose external/billable task
+    → Confidence: 0.85
+    → Reason: "Clear external indicator: [explain what keyword was found]"
+
+  ELSE IF Meeting title contains "Internal"/"Team" OR Task name contains "Internal":
+    → Choose internal/non-billable task
+    → Confidence: 0.85
+    → Reason: "Clear internal indicator: [explain what keyword was found]"
+
+  ELSE (NO clear keywords in meeting title or task name):
+    → SEND TO REVIEW - Set confidence to 0.4 or lower
+    → Return ONE task (prefer internal as safer default)
+    → Reason: "Ambiguous: Could match '[External Task Name]' (billable) or '[Internal Task Name]' (non-billable). Meeting title '[Meeting Name]' lacks clear 'Internal' or 'External' keywords. Please review to ensure correct billing."
+
+  FOR AMBIGUITY TYPE 2 (Assigned vs Followed vs Owned):
+
+  IF Meeting title has specific task identifiers:
+    → Choose the most specific matching task
+    → Confidence: 0.85
+    → Reason: "Clear task identifier: [explain what was found]"
+
+  ELSE (NO clear identifier, multiple similar tasks exist):
+    → SEND TO REVIEW - Set confidence to 0.4 or lower
+    → Return ASSIGNED task if available (highest priority), otherwise OWNED, then FOLLOWED
+    → Reason: "Ambiguous: Multiple similar tasks found - '[Task A]' (assigned to you), '[Task B]' (followed by you). Meeting title '[Meeting Name]' doesn't specify which task. Please review to select correct task."
+
+═══════════════════════════════════════════════════════════════
+EXAMPLES OF CORRECT BEHAVIOR:
+═══════════════════════════════════════════════════════════════
+
+Example 1: CLEAR EXTERNAL KEYWORD IN MEETING TITLE
+Meeting: "Dell Client Strategy Call"
+Available tasks: Dell External Call (Dell Project, billable), Dell Internal Call (Internal, non-billable)
+DECISION: Match Dell External Call, Confidence 0.85
+Reason: "Clear external indicator: Meeting title contains 'Client' keyword, matching external/billable task."
+
+Example 2: CLEAR INTERNAL KEYWORD IN MEETING TITLE
+Meeting: "Dell Internal Planning"
+Available tasks: Dell External Call (Dell Project, billable), Dell Internal Call (Internal, non-billable)
+DECISION: Match Dell Internal Call, Confidence 0.85
+Reason: "Clear internal indicator: Meeting title contains 'Internal' keyword, matching internal/non-billable task."
+
+Example 3: CLEAR INTERNAL KEYWORD - TEAM
+Meeting: "Dell Team Call"
+Available tasks: Dell External Call (Dell Project, billable), Dell Internal Call (Internal, non-billable)
+DECISION: Match Dell Internal Call, Confidence 0.85
+Reason: "Clear internal indicator: Meeting title contains 'Team' keyword, indicating internal meeting."
+
+Example 4: AMBIGUOUS - NO CLEAR KEYWORDS ⭐
+Meeting: "Dell Discussion Meet"
+Available tasks: Dell External Call (Dell Project, billable), Dell Internal Call (Internal, non-billable)
+DECISION: Match Dell Internal Call (safer default), Confidence 0.3
+Reason: "Ambiguous: Could match 'Dell External Call' (billable) or 'Dell Internal Call' (non-billable). Meeting title 'Dell Discussion Meet' lacks clear 'Internal' or 'External' keywords. Please review to ensure correct billing."
+
+Example 5: AMBIGUOUS - GENERIC MEETING NAME ⭐
+Meeting: "Dell Project Sync"
+Available tasks: Dell External Call (Dell Project, billable), Dell Internal Call (Internal, non-billable)
+DECISION: Match Dell Internal Call (safer default), Confidence 0.85
+Reason: "Clear internal indicator: Meeting title contains 'Sync' keyword, indicating internal coordination meeting."
+
+Example 6: AMBIGUOUS - NO KEYWORDS AT ALL ⭐
+Meeting: "Dell Call"
+Available tasks: Dell External Call (Dell Project, billable), Dell Internal Call (Internal, non-billable)
+DECISION: Match Dell Internal Call (safer default), Confidence 0.4
+Reason: "Ambiguous: Could match 'Dell External Call' (billable) or 'Dell Internal Call' (non-billable). Meeting title 'Dell Call' lacks clear 'Internal' or 'External' keywords. Please review to ensure correct billing."
+
+Example 7: AMBIGUOUS - ASSIGNED VS FOLLOWED TASK ⭐
+Meeting: "UMG Client Update call"
+Available tasks:
+  - UMG Client Update call (Task ID: 17002530, followed by user)
+  - UMG Client Update call (Task ID: 17002531, assigned to user)
+DECISION: Match Task 17002531 (assigned), Confidence 0.4
+Reason: "Ambiguous: Multiple tasks match 'UMG Client Update call' - one assigned to you (#17002531) and one followed by you (#17002530). Meeting title doesn't specify which task. Please review to select correct task."
+
+Example 8: AMBIGUOUS - MULTIPLE SIMILAR TASKS ⭐
+Meeting: "Project Standup"
+Available tasks:
+  - Project X Standup (assigned to user)
+  - Project Y Standup (followed by user)
+  - Project Z Standup (owned by user)
+DECISION: Match Project X Standup (assigned, highest priority), Confidence 0.3
+Reason: "Ambiguous: Multiple similar tasks found - 'Project X Standup' (assigned), 'Project Y Standup' (followed), 'Project Z Standup' (owned). Meeting title 'Project Standup' doesn't specify which project. Please review to select correct task."
+
+═══════════════════════════════════════════════════════════════
+KEY PRINCIPLES:
+═══════════════════════════════════════════════════════════════
+
+1. MEETING NAME & TASK NAME ARE PRIMARY INDICATORS
+   Only use keywords in meeting title and task name to decide
+
+2. TWO TYPES OF AMBIGUITY TO DETECT:
+   a) Billable vs Non-billable (same company, different projects)
+   b) Assigned vs Followed vs Owned (similar tasks, different relationships)
+
+3. CLEAR KEYWORDS → HIGH CONFIDENCE (0.85)
+   "Client", "External", "Customer", "Partner" → External/Billable task
+   "Internal", "Team", "Prep", "Planning", "Discussion", "Sync" → Internal/Non-billable task
+
+4. NO CLEAR KEYWORDS → LOW CONFIDENCE (≤ 0.4) → REVIEW
+   When meeting title lacks clear distinguishing keywords
+   → Send to review for human decision
+
+5. TASK RELATIONSHIP PRIORITY (when ambiguous):
+   1st: ASSIGNED tasks (you're responsible)
+   2nd: OWNED tasks (you own it)
+   3rd: FOLLOWED tasks (you're observing)
+
+6. DEFAULT TO SAFER OPTION
+   Billable vs Non-billable: Prefer internal/non-billable
+   Assigned vs Followed: Prefer assigned task
+
+7. EXPLICIT REASONING
+   Always explain ALL matching tasks in reason field when ambiguous
+   Example: "Could match '[Task A]' or '[Task B]'. [Why unclear]. Please review."
+
+8. ACCURACY > AUTOMATION SPEED
+   When in doubt → confidence ≤ 0.4 → human review
+   Never guess on ambiguous task decisions
+
+═══════════════════════════════════════════════════════════════
+
 OUTPUT REQUIREMENTS:
 RETURN A MATCH ONLY WHEN:
 - There's a logical connection between meeting and task
