@@ -200,6 +200,12 @@ export class IntervalsTimeEntryService {
     }
 
     private convertSecondsToDecimalHours(seconds: number): number {
+        // For very short meetings (< 30 seconds), use minimum billable time of 0.01 hours
+        if (seconds < 30) {
+            console.log(`⚡ Meeting duration ${seconds}s is less than 30s. Using minimum billable time: 0.01 hours`);
+            return 0.01;
+        }
+
         // Convert seconds to decimal hours with 2 decimal places
         // Formula: seconds / (60 * 60) = hours
         return Number((seconds / 3600).toFixed(2));

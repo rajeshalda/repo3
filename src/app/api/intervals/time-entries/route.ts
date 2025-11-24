@@ -153,8 +153,15 @@ export async function POST(request: Request) {
             }
 
             // Convert seconds to decimal hours for Intervals API
-            const timeInHours = timeToUse ? Number((timeToUse / 3600).toFixed(2)) : 0;
-            
+            // For meetings under 30 seconds, use minimum billable time of 0.01 hours
+            let timeInHours: number;
+            if (timeToUse < 30 && timeToUse > 0) {
+                timeInHours = 0.01;
+                console.log(`⚡ Meeting duration ${timeToUse}s is less than 30s. Using minimum billable time: 0.01 hours`);
+            } else {
+                timeInHours = timeToUse ? Number((timeToUse / 3600).toFixed(2)) : 0;
+            }
+
             console.log('Time conversion:', {
                 timeToUseSeconds: timeToUse,
                 calculatedHours: timeInHours,

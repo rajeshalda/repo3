@@ -48,6 +48,7 @@ import {
   TabsContent,
 } from "@/components/ui/tabs";
 import { formatDateIST, convertDateRangeToUTC, cn } from "@/lib/utils";
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
 
 interface RawAttendanceRecord {
   identity: {
@@ -750,9 +751,20 @@ export default function DashboardPage() {
       setMatchResults(newMatchResults);
     }
 
-    // Add a small delay before refreshing meetings to ensure the backend is updated
-    await new Promise(resolve => setTimeout(resolve, 500));
-    await fetchMeetings();
+    // Update meetingsData to mark the meeting as posted
+    if (meetingsData) {
+      const updatedMeetingsData = {
+        ...meetingsData,
+        meetings: meetingsData.meetings.map((meeting: Meeting) => {
+          const meetingKey = meeting.meetingInfo?.meetingId || meeting.subject;
+          if (meetingKey === meetingId) {
+            return { ...meeting, isPosted: true };
+          }
+          return meeting;
+        })
+      };
+      setMeetingsData(updatedMeetingsData);
+    }
   };
 
   // Add reset handler after other handlers
@@ -886,18 +898,6 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
-                {meetingsLoading && (
-                  <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
-                    <Loader2 className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />
-                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Loading meetings - controls are temporarily disabled</span>
-                  </div>
-                )}
-                {isMatching && (
-                  <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
-                    <Loader2 className="h-5 w-5 animate-spin text-blue-600 dark:text-blue-400" />
-                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Matching in progress - controls are temporarily disabled</span>
-                  </div>
-                )}
                 <Tabs defaultValue="fetched-meetings" className="w-full">
                   <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
                     <TabsList>
@@ -957,19 +957,7 @@ export default function DashboardPage() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {meetingsLoading ? (
-                            <TableRow>
-                              <TableCell colSpan={6} className="text-center py-8">
-                                <div className="flex flex-col items-center justify-center gap-2">
-                                  <div className="flex items-center">
-                                    <Loader2 className="h-6 w-6 animate-spin mr-2" />
-                                    <span>Loading meetings...</span>
-                                  </div>
-                                  <span className="text-sm text-muted-foreground">This might take a moment if you have many meetings</span>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ) : !meetingsData?.meetings.length && !rawMeetingsData?.meetings.length ? (
+                          {!meetingsData?.meetings.length && !rawMeetingsData?.meetings.length ? (
                             <TableRow>
                               <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                                 No meetings found in selected date range
@@ -1394,6 +1382,16 @@ export default function DashboardPage() {
           isManualOpen={manualDialogOpen}
         />
       )}
+
+      {/* Loading Overlay */}
+      <LoadingOverlay isLoading={meetingsLoading} />
+
+      {/* Matching Overlay */}
+      <LoadingOverlay
+        isLoading={isMatching}
+        title="Matching meetings with tasks..."
+        extendedMessage="Analyzing meeting titles and finding best matches..."
+      />
 
       {/* Toaster */}
       <Toaster />
