@@ -1,11 +1,9 @@
 import { Meeting } from '../../../interfaces/meetings';
 import { openAIClient } from '../../core/azure-openai/client';
 import { DateTime } from 'luxon';
-import { readJsonFile, writeJsonFile } from '../../utils/file';
-import path from 'path';
 import { AIAgentPostedMeetingsStorage } from '../storage/posted-meetings';
 
-const STORAGE_FILE_PATH = path.join(__dirname, '../../data/storage/json/ai-agent-meetings.json');
+// All storage now uses SQLite - no JSON files
 
 async function getGraphToken(): Promise<string> {
     try {
@@ -880,13 +878,14 @@ function calculateDuration(meeting: Meeting): number {
     return end.diff(start, 'hours').hours;
 }
 
-// Get existing meeting entry from storage
+// DEPRECATED: These functions are no longer used
+// All meeting storage is now handled by SQLite database in posted-meetings.ts
 async function getMeetingEntry(uniqueStorageId: string): Promise<any> {
-    const storage = await readJsonFile(STORAGE_FILE_PATH);
-    return storage.meetings.find((entry: any) => entry.uniqueStorageId === uniqueStorageId);
+    console.warn('⚠️ getMeetingEntry() is deprecated - storage is handled by database');
+    return null;
 }
 
-// Store meeting entry with unique ID
+// DEPRECATED: Meeting storage is now handled by SQLite database
 async function storeMeetingEntry(entry: {
     meetingId: string;
     uniqueStorageId: string;
@@ -896,9 +895,8 @@ async function storeMeetingEntry(entry: {
     postedAt: string;
     reportId?: string;
 }): Promise<void> {
-    const storage = await readJsonFile(STORAGE_FILE_PATH);
-    storage.meetings.push(entry);
-    await writeJsonFile(STORAGE_FILE_PATH, storage);
+    console.warn('⚠️ storeMeetingEntry() is deprecated - storage is handled by database');
+    // No-op - all storage is now in SQLite via posted-meetings.ts
 }
 
 // Generate unique storage ID for the meeting

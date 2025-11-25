@@ -2,7 +2,6 @@ import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 import { getAppGraphToken } from '@/lib/graph-app-auth';
-import { PostedMeetingsStorage } from '@/lib/posted-meetings-storage';
 import { IST_TIMEZONE } from '@/lib/utils';
 import { AIAgentPostedMeetingsStorage } from '@/ai-agent/services/storage/posted-meetings';
 import { database } from '@/lib/database';

@@ -1,18 +1,13 @@
 import { ProcessedMeeting } from '../../../interfaces/meetings';
-import fs from 'fs/promises';
-import path from 'path';
 import { ReviewMeeting, ReviewDecision, ReviewStatus } from '../../services/review/types';
 import { database } from '../../../lib/database';
 
 export class StorageManager {
     private static instance: StorageManager;
-    private storagePath: string;
-    private meetingsFile: string;
 
     private constructor() {
-        this.storagePath = path.join(process.cwd(), 'src', 'ai-agent', 'data', 'storage', 'json');
-        this.meetingsFile = path.join(this.storagePath, 'ai-agent-meetings.json');
-        this.initializeStorage();
+        // All storage now uses SQLite database - no JSON files
+        console.log('✅ StorageManager initialized - using SQLite database only');
     }
 
     public static getInstance(): StorageManager {
@@ -22,133 +17,35 @@ export class StorageManager {
         return StorageManager.instance;
     }
 
-    private async initializeStorage(): Promise<void> {
-        try {
-            // Create storage directory if it doesn't exist
-            await fs.mkdir(this.storagePath, { recursive: true });
-
-            // Create meetings file with empty array if it doesn't exist
-            try {
-                await fs.access(this.meetingsFile);
-            } catch {
-                await fs.writeFile(this.meetingsFile, JSON.stringify({ meetings: [] }, null, 2), 'utf-8');
-            }
-        } catch (error: unknown) {
-            console.error('Error initializing storage:', error);
-            throw new Error('Failed to initialize storage');
-        }
-    }
-
-    private getFilePath(fileName: string): string {
-        return path.join(this.storagePath, fileName);
-    }
-
+    // DEPRECATED: All meeting cache operations now use SQLite via database.ts
+    // These methods are kept for backward compatibility but are no-ops
     public async loadMeetings(): Promise<ProcessedMeeting[]> {
-        try {
-            const data = await fs.readFile(this.meetingsFile, 'utf-8');
-            try {
-                // Clean the data before parsing
-                const cleanData = data.trim().replace(/^\uFEFF/, ''); // Remove BOM if present
-                const parsedData = JSON.parse(cleanData);
-                return parsedData.meetings || [];
-            } catch (parseError) {
-                console.error('Error parsing meetings JSON:', parseError);
-                // If JSON is invalid, backup the corrupted file and create a new empty one
-                const backupPath = path.join(this.storagePath, `corrupted-meetings-${Date.now()}.json`);
-                await fs.writeFile(backupPath, data, 'utf-8');
-                await fs.writeFile(this.meetingsFile, JSON.stringify({ meetings: [] }, null, 2), 'utf-8');
-                return [];
-            }
-        } catch (error) {
-            if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-                // If file doesn't exist, create it with empty array
-                await fs.writeFile(this.meetingsFile, JSON.stringify({ meetings: [] }, null, 2), 'utf-8');
-                return [];
-            }
-            console.error('Error loading meetings:', error);
-            throw new Error('Failed to load meetings');
-        }
+        console.warn('⚠️ loadMeetings() is deprecated - use database.listMeetingCacheByUser() instead');
+        return [];
     }
 
     public async saveMeeting(meeting: ProcessedMeeting): Promise<void> {
-        try {
-            const meetings = await this.loadMeetings();
-            const existingIndex = meetings.findIndex(m => m.id === meeting.id);
-
-            if (existingIndex >= 0) {
-                meetings[existingIndex] = meeting;
-            } else {
-                meetings.push(meeting);
-            }
-
-            // Save with the correct structure
-            const data = {
-                meetings: meetings
-            };
-
-            // Ensure clean JSON output
-            const cleanJson = JSON.stringify(data, null, 2).trim() + '\n';
-            await fs.writeFile(this.meetingsFile, cleanJson, 'utf-8');
-        } catch (error: unknown) {
-            console.error('Error saving meeting:', error);
-            throw new Error('Failed to save meeting');
-        }
+        console.warn('⚠️ saveMeeting() is deprecated - use database.saveMeetingCache() instead');
+        // No-op - all meeting caching is done via SQLite in the MeetingService
     }
 
     public async getMeeting(id: string): Promise<ProcessedMeeting | null> {
-        try {
-            const meetings = await this.loadMeetings();
-            return meetings.find(m => m.id === id) || null;
-        } catch (error: unknown) {
-            console.error('Error getting meeting:', error);
-            throw new Error('Failed to get meeting');
-        }
+        console.warn('⚠️ getMeeting() is deprecated - use database.getMeetingCacheById() instead');
+        return database.getMeetingCacheById(id);
     }
 
     public async listMeetings(userId: string): Promise<ProcessedMeeting[]> {
-        try {
-            const meetings = await this.loadMeetings();
-            return meetings.filter(m => m.userId === userId);
-        } catch (error: unknown) {
-            console.error('Error listing meetings:', error);
-            throw new Error('Failed to list meetings');
-        }
+        console.warn('⚠️ listMeetings() is deprecated - use database.listMeetingCacheByUser() instead');
+        return database.listMeetingCacheByUser(userId);
     }
 
-    private async saveMeetings(meetings: ProcessedMeeting[]): Promise<void> {
-        try {
-            const data = {
-                meetings: meetings
-            };
-            await fs.writeFile(this.meetingsFile, JSON.stringify(data, null, 2));
-        } catch (error: unknown) {
-            console.error('Error saving meetings:', error);
-            throw new Error('Failed to save meetings');
-        }
-    }
-
-    // Backup functionality
+    // Backup functionality removed - SQLite database is backed up via database file
     public async createBackup(): Promise<void> {
-        try {
-            const meetings = await this.loadMeetings();
-            const backupPath = this.getFilePath(`backup-${new Date().toISOString()}.json`);
-            await fs.writeFile(backupPath, JSON.stringify(meetings, null, 2));
-        } catch (error: unknown) {
-            console.error('Error creating backup:', error);
-            throw new Error('Failed to create backup');
-        }
+        console.warn('⚠️ createBackup() is deprecated - SQLite database is automatically persisted');
     }
 
     public async restoreFromBackup(backupFileName: string): Promise<void> {
-        try {
-            const backupPath = this.getFilePath(backupFileName);
-            const backupData = await fs.readFile(backupPath, 'utf-8');
-            const meetings = JSON.parse(backupData);
-            await this.saveMeetings(meetings);
-        } catch (error: unknown) {
-            console.error('Error restoring from backup:', error);
-            throw new Error('Failed to restore from backup');
-        }
+        console.warn('⚠️ restoreFromBackup() is deprecated - restore SQLite database file directly');
     }
 
     // Review-related methods
