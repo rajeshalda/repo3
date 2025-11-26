@@ -174,7 +174,7 @@ export class IntervalsTimeEntryService {
 
     private async getProjectWorkTypes(projectId: string, userId: string): Promise<WorkType[]> {
         try {
-            const data = await this.makeRequest('/projectworktype/?limit=500', {}, userId);
+            const data = await this.makeRequest('/projectworktype/?limit=10000', {}, userId);
 
             if (!data.projectworktype || !Array.isArray(data.projectworktype)) {
                 throw new Error('Invalid work types response format');

@@ -81,23 +81,23 @@ export class AttendanceReportManager {
         const allSelections: AttendanceReportSelection[] = [];
         
         for (const report of validReports) {
-            const duration = (new Date(report.meetingEndDateTime).getTime() - 
+            const duration = (new Date(report.meetingEndDateTime).getTime() -
                             new Date(report.meetingStartDateTime).getTime()) / 1000;
-            
+
             const selection: AttendanceReportSelection = {
                 selectedReportId: report.id,
                 confidence: 1, // All reports are valid, so confidence is high
                 reason: `Valid report instance from ${report.meetingStartDateTime}`,
                 metadata: {
-                    date: meetingDate,
+                    date: report.meetingStartDateTime, // Use actual report meeting start date
                     duration,
                     isRecurring,
                     totalReports: reports.length
                 }
             };
-            
+
             allSelections.push(selection);
-            
+
             console.log(`✅ Report ${report.id}: ${Math.floor(duration/60)}m ${duration%60}s`);
         }
 

@@ -399,17 +399,77 @@ export class MeetingService {
                                         
                                         if (allReportSelections.length > 0) {
                                             console.log(`🔄 Found ${allReportSelections.length} valid reports for meeting (${isRecurring ? 'recurring' : 'user rejoined multiple times'})`);
-                                            
+
                                             // Store all valid reports for later processing
                                             allValidReports = allReportSelections;
-                                            
-                                            // For the main meeting object, use the most recent report
-                                            const latestReport = allReportSelections.sort((a, b) => 
-                                                new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime()
-                                            )[0];
-                                            
-                                            selectedReportId = latestReport.selectedReportId;
-                                            console.log('Using latest report for main meeting object:', selectedReportId);
+
+                                            // For the main meeting object, find the report that matches the scheduled meeting date
+                                            // Parse the scheduled meeting date to get just the date part in IST (YYYY-MM-DD)
+                                            const scheduledDate = new Date(meeting.start.dateTime);
+                                            const scheduledDateStr = scheduledDate.toLocaleDateString('en-CA', {
+                                                timeZone: 'Asia/Kolkata',
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit'
+                                            }); // YYYY-MM-DD in IST
+
+                                            // Find the report whose meeting start date matches the scheduled date (in IST)
+                                            let matchingReport = allReportSelections.find(report => {
+                                                const reportDate = new Date(report.metadata.date);
+                                                const reportDateStr = reportDate.toLocaleDateString('en-CA', {
+                                                    timeZone: 'Asia/Kolkata',
+                                                    year: 'numeric',
+                                                    month: '2-digit',
+                                                    day: '2-digit'
+                                                }); // YYYY-MM-DD in IST
+                                                return reportDateStr === scheduledDateStr;
+                                            });
+
+                                            // If no exact match found, fall back to the most recent report
+                                            if (!matchingReport) {
+                                                console.log(`⚠️ No report found matching scheduled date ${scheduledDateStr}, using most recent report`);
+                                                matchingReport = allReportSelections.sort((a, b) =>
+                                                    new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime()
+                                                )[0];
+                                            } else {
+                                                console.log(`✅ Found report matching scheduled date ${scheduledDateStr}`);
+                                            }
+
+                                            selectedReportId = matchingReport.selectedReportId;
+                                            console.log('Using report for main meeting object:', selectedReportId, 'with date:', matchingReport.metadata.date);
+
+                                            // Override the meeting date but keep the scheduled time
+                                            // Extract the date from the report (when attended) and time from the schedule
+                                            const reportDate = new Date(matchingReport.metadata.date);
+                                            const reportDateStr = reportDate.toLocaleDateString('en-CA', {
+                                                timeZone: 'Asia/Kolkata',
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit'
+                                            });
+
+                                            const scheduledTime = new Date(meeting.start.dateTime);
+                                            const scheduledTimeStr = scheduledTime.toLocaleTimeString('en-US', {
+                                                timeZone: 'Asia/Kolkata',
+                                                hour12: false,
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit'
+                                            });
+
+                                            const scheduledEndTime = new Date(meeting.end.dateTime);
+                                            const scheduledEndTimeStr = scheduledEndTime.toLocaleTimeString('en-US', {
+                                                timeZone: 'Asia/Kolkata',
+                                                hour12: false,
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit'
+                                            });
+
+                                            // Combine report date with scheduled time
+                                            meeting.start.dateTime = `${reportDateStr}T${scheduledTimeStr}.0000000`;
+                                            meeting.end.dateTime = `${reportDateStr}T${scheduledEndTimeStr}.0000000`;
+                                            console.log(`📅 Combined date/time: ${meeting.start.dateTime} (date from attendance, time from schedule)`);
                                         }
                                     } else {
                                         // For single report meetings, use the existing single report selection
@@ -423,6 +483,38 @@ export class MeetingService {
                                             selectedReportId = reportSelection.selectedReportId;
                                             allValidReports = [reportSelection];
                                             console.log('Selected single report ID:', selectedReportId, 'Reason:', reportSelection.reason);
+
+                                            // Override the meeting date but keep the scheduled time
+                                            const reportDate = new Date(reportSelection.metadata.date);
+                                            const reportDateStr = reportDate.toLocaleDateString('en-CA', {
+                                                timeZone: 'Asia/Kolkata',
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit'
+                                            });
+
+                                            const scheduledTime = new Date(meeting.start.dateTime);
+                                            const scheduledTimeStr = scheduledTime.toLocaleTimeString('en-US', {
+                                                timeZone: 'Asia/Kolkata',
+                                                hour12: false,
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit'
+                                            });
+
+                                            const scheduledEndTime = new Date(meeting.end.dateTime);
+                                            const scheduledEndTimeStr = scheduledEndTime.toLocaleTimeString('en-US', {
+                                                timeZone: 'Asia/Kolkata',
+                                                hour12: false,
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit'
+                                            });
+
+                                            // Combine report date with scheduled time
+                                            meeting.start.dateTime = `${reportDateStr}T${scheduledTimeStr}.0000000`;
+                                            meeting.end.dateTime = `${reportDateStr}T${scheduledEndTimeStr}.0000000`;
+                                            console.log(`📅 Combined date/time: ${meeting.start.dateTime} (date from attendance, time from schedule)`);
                                         }
                                     }
                                     
