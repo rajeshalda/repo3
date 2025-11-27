@@ -2,6 +2,7 @@ import { AzureOpenAIConfig, validateConfig } from '../../config/azure-openai';
 import { RateLimiter } from '../rate-limiter/token-bucket';
 import { generateMeetingAnalysisPrompt } from './prompts/meeting-analysis';
 import { reportSelectionPrompt } from './prompts/report-selection';
+import { logDebug } from '../../../lib/ndjson-logger';
 
 interface OpenAIResponse {
     choices: {
@@ -89,6 +90,11 @@ class AzureOpenAIClient {
                 endpoint: AzureOpenAIConfig.endpoint,
                 body: requestBody
             });
+            logDebug('azure_openai_request', '[Azure OpenAI] Request:', {
+                deployment: AzureOpenAIConfig.deployment,
+                endpoint: AzureOpenAIConfig.endpoint,
+                requestBody: requestBody
+            });
 
             const response = await fetch(
                 `${AzureOpenAIConfig.endpoint}/openai/deployments/${AzureOpenAIConfig.deployment}/chat/completions?api-version=2024-12-01-preview`,
@@ -111,6 +117,7 @@ class AzureOpenAIClient {
 
             // Enhanced logging for debugging GPT-5 responses
             console.log('[Azure OpenAI] Full API Response:', JSON.stringify(data, null, 2));
+            logDebug('azure_openai_response', '[Azure OpenAI] Full API Response:', { apiResponse: data });
 
             if (!data.choices?.[0]?.message?.content) {
                 console.error('[Azure OpenAI] Invalid response structure:', {

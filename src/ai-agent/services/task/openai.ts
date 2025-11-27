@@ -9,6 +9,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { DateTime } from 'luxon';
 import { database } from '../../../lib/database';
+import { logDebug } from '../../../lib/ndjson-logger';
 
 interface TaskMatch {
     taskId: string;
@@ -186,7 +187,14 @@ export class TaskService {
             duration: userDuration, // Use the user's actual duration
             participants: meeting.attendees?.map(a => a.email) || [],
             keyPoints: meeting.analysis?.keyPoints,
-            suggestedTasks: suggestedTasks || [], // Include suggested tasks for low/medium confidence matches
+            suggestedTasks: suggestedTasks?.map(task => ({
+                id: task.taskId,
+                title: task.taskTitle,
+                project: '', // TaskMatch doesn't have project, set empty
+                module: '', // TaskMatch doesn't have module, set empty
+                confidence: task.confidence,
+                reason: task.reason
+            })) || [], // Convert TaskMatch to SuggestedTask format
             status: 'pending',
             confidence: confidence,
             reason: reason,
@@ -284,12 +292,14 @@ export class TaskService {
                 JSON.stringify(tasksData, null, 2)
             );
             console.log('Generated prompt for OpenAI:', prompt);
+            logDebug('task_matching_prompt', 'Generated prompt for OpenAI:', { prompt, meeting: meeting.subject });
 
             const matchingResult = await openAIClient.sendRequest(prompt, {
                 // temperature removed for GPT-5 compatibility (only supports default value 1)
                 maxTokens: 3000  // Increased for GPT-5 reasoning tokens + response content
             });
             console.log('OpenAI response:', matchingResult);
+            logDebug('task_matching_response', 'OpenAI response:', { matchingResult, meeting: meeting.subject });
 
             // Parse the matching result
             const result = this.parseMatchingResult(matchingResult, meeting.subject);
@@ -351,6 +361,7 @@ export class TaskService {
             console.log('Raw OpenAI response:', result);
             console.log('Extracted JSON:', jsonMatch[0]);
             console.log('Parsed tasks:', JSON.stringify(matchedTasks, null, 2));
+            logDebug('task_matching_parsed', 'Parsed matching result:', { rawResponse: result, extractedJSON: jsonMatch[0], parsedTasks: matchedTasks });
 
             return {
                 meetingSubject,
