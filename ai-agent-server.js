@@ -4,6 +4,9 @@ const http = require('http');
 const { promisify } = require('util');
 require('dotenv').config({ path: '.env.local' }); // Load environment variables
 
+// Import NDJSON Logger
+const { setLogUser, logInfo, logError, clearLogUser } = require('./ndjson-logger');
+
 // Import SQLite database
 const Database = require('better-sqlite3');
 
@@ -318,6 +321,14 @@ class ProcessingQueue {
 
     const cycleId = `cycle_${userId}_${Date.now()}`;
 
+    // Set logging context for this user
+    setLogUser(userId);
+    logInfo('agent_started', `Processing user from queue`, {
+      cycleId,
+      requests: requests.length,
+      sources: requests.map(r => r.source).join(', ')
+    });
+
     try {
       // Start cycle in database for this user
       startCycle(cycleId, userId);
@@ -326,11 +337,16 @@ class ProcessingQueue {
       await processMeetingsForUser(userId);
 
       console.log(`✅ User ${userId} processing completed successfully`);
+      logInfo('agent_completed', `User processing completed successfully`, { cycleId });
     } catch (error) {
       console.error(`❌ Error processing user ${userId}:`, error);
+      logError('agent_error', `Error processing user`, error);
     } finally {
       // Mark cycle as complete
       completeCycle(cycleId);
+
+      // Clear logging context
+      clearLogUser();
 
       // Mark as not processing
       userQueue.processing = false;

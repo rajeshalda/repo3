@@ -6,6 +6,7 @@ import { timeEntryService } from '../../ai-agent/services/time-entry/intervals';
 import { meetingComparisonService } from '../../ai-agent/services/meeting/comparison';
 import { reviewService } from '../../ai-agent/services/review/review-service';
 import { setCurrentBatchId } from './batch-status';
+import { setLogUser, logInfo, logError, logDebug, clearLogUser } from '../../lib/ndjson-logger';
 
 // Enhanced version of delay that respects AbortSignal
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
@@ -55,14 +56,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ success: false, message: 'userId is required' });
     }
 
+    // Set user context for logging
+    setLogUser(userId as string);
+
     console.log(`Processing meetings for user ${userId} from source: ${source || 'api'}`);
+    logInfo('processing_started', `Processing meetings for user from source: ${source || 'api'}`, { source });
 
     try {
       // Get meetings for the user using fetchUserMeetings function
       console.log('Fetching meetings for user:', userId);
+      logInfo('fetching_meetings', 'Fetching meetings for user');
+
       const { meetings } = await fetchUserMeetings(userId as string);
-      
+
       console.log(`Found ${meetings.length} meetings for processing`);
+      logInfo('meetings_fetched', `Found ${meetings.length} meetings for processing`, {
+        totalMeetings: meetings.length
+      });
 
       if (!meetings || meetings.length === 0) {
         return res.status(200).json({
@@ -75,6 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // EARLY DUPLICATE DETECTION: Filter out meetings that are already posted BEFORE batch processing
       // This prevents race conditions where two cycles process the same meetings
       console.log('🔍 EARLY DUPLICATE CHECK: Filtering already posted meetings before processing...');
+      logDebug('early_duplicate_check', '🔍 EARLY DUPLICATE CHECK: Filtering already posted meetings before processing...');
       const { AIAgentPostedMeetingsStorage } = await import('../../ai-agent/services/storage/posted-meetings');
       const postedStorage = new AIAgentPostedMeetingsStorage();
       await postedStorage.loadData();
@@ -97,7 +108,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           );
 
           if (isAlreadyPosted) {
-            console.log(`⏭️ EARLY SKIP: "${meeting.subject}" already posted (reportId: ${reportId})`);
+            const skipMsg = `⏭️ EARLY SKIP: "${meeting.subject}" already posted (reportId: ${reportId})`;
+            console.log(skipMsg);
+            logDebug('early_skip', skipMsg, { subject: meeting.subject, reportId });
             skippedCount++;
             continue;
           }
@@ -106,9 +119,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         meetingsToProcess.push(meeting);
       }
 
-      console.log(`📊 EARLY FILTER RESULTS: ${meetings.length} total → ${meetingsToProcess.length} to process (${skippedCount} already posted)`);
+      const filterResultsMsg = `📊 EARLY FILTER RESULTS: ${meetings.length} total → ${meetingsToProcess.length} to process (${skippedCount} already posted)`;
+      console.log(filterResultsMsg);
+      logDebug('filter_results', filterResultsMsg, { total: meetings.length, toProcess: meetingsToProcess.length, skipped: skippedCount });
+      logInfo('duplicate_filter', `Early filter results`, {
+        totalMeetings: meetings.length,
+        toProcess: meetingsToProcess.length,
+        skipped: skippedCount
+      });
 
       if (meetingsToProcess.length === 0) {
+        logInfo('all_meetings_posted', 'All meetings have already been posted', {
+          totalMeetings: meetings.length,
+          alreadyPosted: skippedCount
+        });
+        clearLogUser();
         return res.status(200).json({
           success: true,
           message: 'All meetings have already been posted',
@@ -124,6 +149,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Start a batch processing job with the filtered meetings
       const batchId = await meetingService.analyzeMeetingBatch(meetingsToProcess, userId as string);
       console.log(`Started batch processing with ID: ${batchId}`);
+      logInfo('batch_started', `Started batch processing with ID: ${batchId}`, {
+        batchId,
+        meetingsCount: meetingsToProcess.length
+      });
       
       // Set the current batch ID for status tracking
       setCurrentBatchId(batchId);
@@ -156,9 +185,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       
       console.log(`Successfully processed ${processedMeetings.length} meetings`);
+      logDebug('processed_count', `Successfully processed ${processedMeetings.length} meetings`, { count: processedMeetings.length });
 
       // Filter out already processed meetings and meetings the user didn't attend
       console.log('Filtering out already processed meetings and meetings the user didn\'t attend...');
+      logDebug('filtering_meetings', 'Filtering out already processed meetings and meetings the user didn\'t attend...');
       const uniqueMeetings = await meetingComparisonService.filterNewMeetings(processedMeetings);
       
       // Further filter to only include meetings the user actually attended
@@ -191,21 +222,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       
       console.log(`Found ${uniqueMeetings.length} unique meetings, ${attendedMeetings.length} of which were attended by the user`);
+      logDebug('unique_attended', `Found ${uniqueMeetings.length} unique meetings, ${attendedMeetings.length} attended`, { unique: uniqueMeetings.length, attended: attendedMeetings.length });
 
       // IMPORTANT: Check review queue first to avoid double-processing meetings
       console.log('Checking review queue for meetings that might now have matching tasks...');
+      logDebug('review_queue_check', 'Checking review queue for meetings that might now have matching tasks...');
       const { storageManager } = await import('../../ai-agent/data/storage/manager');
       const reviewMeetings = await storageManager.getPendingReviews(userId as string);
       console.log(`Found ${reviewMeetings.length} meetings in review queue for user ${userId}`);
-      
+      logDebug('review_queue_count', `Found ${reviewMeetings.length} meetings in review queue`, { count: reviewMeetings.length, reviewMeetings });
+
       // Get the reportIds of meetings that are in the review queue (more reliable than meeting IDs)
       const reviewReportIds = new Set(
         reviewMeetings
           .filter(rm => rm.reportId) // Only include meetings with reportId
           .map(rm => rm.reportId)
       );
-      
+
       console.log(`Review queue reportIds: [${Array.from(reviewReportIds).join(', ')}]`);
+      logDebug('review_report_ids', `Review queue reportIds`, { reportIds: Array.from(reviewReportIds) });
       
       // CRITICAL: Remove meetings from calendar processing if their reportId is already in review queue
       // This prevents double-processing the same meeting attendance instance
@@ -219,7 +254,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       
       console.log(`Filtered meetings: ${attendedMeetings.length} total → ${newMeetingsOnly.length} new (${attendedMeetings.length - newMeetingsOnly.length} already in review)`);
-      
+      logDebug('filtered_meetings', `Filtered meetings`, { total: attendedMeetings.length, new: newMeetingsOnly.length, inReview: attendedMeetings.length - newMeetingsOnly.length });
+
       // Convert review meetings back to ProcessedMeeting format for task matching
       // Use the meetings we already fetched from calendar that match the review queue
       const reviewMeetingsToReprocess = [];
@@ -242,6 +278,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Combine NEW meetings with review meetings for task matching
       const allMeetingsToProcess = [...newMeetingsOnly, ...reviewMeetingsToReprocess];
       console.log(`Total meetings to process (new: ${newMeetingsOnly.length} + review: ${reviewMeetingsToReprocess.length}): ${allMeetingsToProcess.length}`);
+      logDebug('all_meetings_to_process', `Total meetings to process`, { new: newMeetingsOnly.length, review: reviewMeetingsToReprocess.length, total: allMeetingsToProcess.length, meetings: allMeetingsToProcess });
 
       if (allMeetingsToProcess.length === 0) {
         return res.status(200).json({
@@ -396,6 +433,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
       
+      // Log complete summary with all details
+      logInfo('processing_completed', `Successfully processed ${newMeetingsOnly.length} new meetings and ${reviewMeetingsToReprocess.length} review meetings`, {
+        totalMeetingsFetched: meetings.length,
+        earlyFilterSkipped: skippedCount,
+        processedMeetings: processedMeetings.length,
+        uniqueMeetings: uniqueMeetings.length,
+        attendedMeetings: attendedMeetings.length,
+        newMeetingsOnly: newMeetingsOnly.length,
+        reviewMeetingsInQueue: reviewMeetings.length,
+        reviewMeetingsReprocessed: reviewMeetingsToReprocess.length,
+        totalProcessed: allMeetingsToProcess.length,
+        timeEntriesCreated: timeEntries.length,
+        matchedTasksCount: matchResults.filter(r => r.matchedTasks && r.matchedTasks.length > 0).length
+      });
+
+      clearLogUser();
+
       return res.status(200).json({
         success: true,
         message: `Successfully processed ${newMeetingsOnly.length} new meetings and ${reviewMeetingsToReprocess.length} review meetings`,
@@ -415,12 +469,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     } catch (processingError) {
       console.error(`Error processing meetings:`, processingError);
+      logError('processing_error', 'Error processing meetings', processingError as Error);
+      clearLogUser();
       throw processingError;
     }
   } catch (error) {
     console.error('Error in process-meetings API:', error);
-    return res.status(500).json({ 
-      success: false, 
+    logError('api_error', 'Error in process-meetings API', error as Error);
+    clearLogUser();
+    return res.status(500).json({
+      success: false,
       message: 'Failed to process meetings',
       error: error instanceof Error ? error.message : 'Unknown error'
     });

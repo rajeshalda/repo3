@@ -553,8 +553,11 @@ function MatchRow({
         return;
       }
 
-      const meetingDate = new Date(result.meeting.startTime).toISOString().split('T')[0];
-      
+      // Convert to IST before extracting date to ensure correct date for Indian timezone
+      const startTimeUTC = new Date(result.meeting.startTime);
+      const startTimeIST = new Date(startTimeUTC.getTime() + (5.5 * 60 * 60 * 1000));
+      const meetingDate = startTimeIST.toISOString().split('T')[0];
+
       // Calculate total duration in seconds from attendance intervals
       const totalDurationInSeconds = userAttendance.intervals.reduce(
         (total, interval) => total + interval.durationInSeconds,

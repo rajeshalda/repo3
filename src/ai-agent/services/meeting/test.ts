@@ -2,6 +2,7 @@ import { Meeting } from '../../../interfaces/meetings';
 import { openAIClient } from '../../core/azure-openai/client';
 import { DateTime } from 'luxon';
 import { AIAgentPostedMeetingsStorage } from '../storage/posted-meetings';
+import { logDebug } from '../../../lib/ndjson-logger';
 
 // All storage now uses SQLite - no JSON files
 
@@ -92,12 +93,14 @@ function extractMeetingInfo(joinUrl: string): { meetingId: string | undefined; o
         // First decode the URL
         const decodedUrl = decodeURIComponent(joinUrl);
         console.log('Decoded URL:', decodedUrl);
+        logDebug('decoded_url', 'Decoded URL:', { decodedUrl });
 
         // Extract meeting ID using regex - exactly as in graph-meetings.ts
         const meetingMatch = decodedUrl.match(/19:meeting_([^@]+)@thread\.v2/);
         if (meetingMatch) {
             result.meetingId = `19:meeting_${meetingMatch[1]}@thread.v2`;
             console.log('Extracted Meeting ID:', result.meetingId);
+            logDebug('extracted_meeting_id', 'Extracted Meeting ID:', { meetingId: result.meetingId });
         }
 
         // Extract Organizer ID (Oid) from the context parameter
@@ -105,6 +108,7 @@ function extractMeetingInfo(joinUrl: string): { meetingId: string | undefined; o
         if (organizerMatch) {
             result.organizerId = organizerMatch[1];
             console.log('Extracted Organizer ID:', result.organizerId);
+            logDebug('extracted_organizer_id', 'Extracted Organizer ID:', { organizerId: result.organizerId });
         }
     } catch (error) {
         console.error('Error extracting meeting info:', error);
@@ -118,8 +122,10 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
         // Format string exactly as in graph-meetings.ts
         const formattedString = `1*${organizerId}*0**${meetingId}`;
         console.log('Formatted string:', formattedString);
+        logDebug('formatted_string', 'Formatted string:', { formattedString });
         const base64MeetingId = Buffer.from(formattedString).toString('base64');
         console.log('Base64 Meeting ID:', base64MeetingId);
+        logDebug('base64_meeting_id', 'Base64 Meeting ID:', { base64MeetingId });
 
         // First get the user info
         const userResponse = await fetch(
@@ -158,6 +164,7 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
         const reportsData = await reportsResponse.json();
         console.log('Reports data:', JSON.stringify(reportsData, null, 2));
+        logDebug('attendance_reports_api', 'Reports data:', { reportsData });
 
         if (!reportsData.value || reportsData.value.length === 0) {
             return [];
@@ -263,6 +270,7 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
             const recordsData = await recordsResponse.json();
             console.log('Records data:', JSON.stringify(recordsData, null, 2));
+            logDebug('attendance_records_api', 'Records data:', { recordsData });
             
             // Process and filter attendance records by IST day
             const records = (recordsData.value || []).map((record: any) => {
@@ -346,6 +354,7 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
             const recordsData = await recordsResponse.json();
             console.log('Records data:', JSON.stringify(recordsData, null, 2));
+            logDebug('attendance_records_api', 'Records data:', { recordsData });
             
             // Process and filter attendance records by IST day
             const records = (recordsData.value || []).map((record: any) => {
@@ -399,11 +408,15 @@ async function getAttendanceRecords(userId: string, meetingId: string, organizer
 
 export async function fetchUserMeetings(userId: string): Promise<{ meetings: Meeting[], attendanceReport: AttendanceReport }> {
     try {
-        console.log(`\n╔════════════════════════════════════════════════════════╗\n║ 🚀 MEETING FETCH STARTED                                \n║ 👤 User: ${userId.substring(0, 15)}...                            \n╚════════════════════════════════════════════════════════╝`);
-        
+        const headerMsg = `\n╔════════════════════════════════════════════════════════╗\n║ 🚀 MEETING FETCH STARTED                                \n║ 👤 User: ${userId.substring(0, 15)}...                            \n╚════════════════════════════════════════════════════════╝`;
+        console.log(headerMsg);
+        logDebug('meeting_fetch_header', headerMsg);
+
         console.log(`🔑 Getting Graph API access token...`);
+        logDebug('token_request', '🔑 Getting Graph API access token...');
         const accessToken = await getGraphToken();
         console.log(`✅ Access token acquired successfully`);
+        logDebug('token_acquired', '✅ Access token acquired successfully');
         
         // Get current time in IST
         const istNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
@@ -435,7 +448,9 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         const startDateString = utcStart.toISOString();
         const endDateString = utcEnd.toISOString();
 
-        console.log(`\n┌─────────────────────────────────────────────────┐\n│ 📅 FETCHING MEETINGS FOR EXTENDED WINDOW         │\n│ 📆 IST range: ${istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to              │\n│             ${istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}              │\n│ 🌐 UTC range: ${startDateString} to              │\n│             ${endDateString}              │\n└─────────────────────────────────────────────────┘`);
+        const timeWindowMsg = `\n┌─────────────────────────────────────────────────┐\n│ 📅 FETCHING MEETINGS FOR EXTENDED WINDOW         │\n│ 📆 IST range: ${istStartDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })} to              │\n│             ${istEndDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}              │\n│ 🌐 UTC range: ${startDateString} to              │\n│             ${endDateString}              │\n└─────────────────────────────────────────────────┘`;
+        console.log(timeWindowMsg);
+        logDebug('time_window', timeWindowMsg, { istStart: istStartDate, istEnd: istEndDate, utcStart: startDateString, utcEnd: endDateString });
         // Using calendarView endpoint for better handling of recurring meetings
         const baseUrl = `https://graph.microsoft.com/v1.0/users/${userId}/calendarView?startDateTime=${startDateString}&endDateTime=${endDateString}&$select=id,subject,start,end,organizer,attendees,bodyPreview,importance,isAllDay,isCancelled,categories,onlineMeeting,type,seriesMasterId&$orderby=start/dateTime desc`;
         // Function to fetch all meetings using pagination
@@ -477,10 +492,16 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
         // Fetch all meetings using pagination
         const allMeetings = await fetchAllMeetings(baseUrl);
         // Post-filter meetings based on IST day
-        console.log(`\n┌─────────────────────────────────────────────────┐\n│ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │\n│ 📊 Total meetings before filtering: ${allMeetings.length}            │\n└─────────────────────────────────────────────────┘`);
+        const filterHeaderMsg = `\n┌─────────────────────────────────────────────────┐\n│ 🔍 FILTERING MEETINGS FOR EXTENDED WINDOW         │\n│ 📊 Total meetings before filtering: ${allMeetings.length}            │\n└─────────────────────────────────────────────────┘`;
+        console.log(filterHeaderMsg);
+        logDebug('filtering_header', filterHeaderMsg, { totalMeetings: allMeetings.length });
+
         allMeetings.forEach((meeting: Meeting, idx: number) => {
-            console.log(`\n[RAW MEETING ${idx + 1}]`);
+            const rawHeader = `\n[RAW MEETING ${idx + 1}]`;
+            console.log(rawHeader);
             console.log(JSON.stringify(meeting, null, 2));
+            // CRITICAL: Log full meeting object to -full.ndjson
+            logDebug('raw_meeting', rawHeader, { meetingIndex: idx + 1, meeting: meeting });
         });
 
         // Define UTC window boundaries based on IST window
@@ -503,8 +524,10 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
             // Check if meeting is scheduled within the requested date range
             const targetDateStr = istStartDateTime.toFormat('yyyy-MM-dd');
             const isScheduledInRange = meetingDateStr === targetDateStr;
-            
-            console.log(`📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', isScheduledInRange: ${isScheduledInRange} }`);
+
+            const dateFilterMsg = `📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', isScheduledInRange: ${isScheduledInRange} }`;
+            console.log(dateFilterMsg);
+            logDebug('date_filter', dateFilterMsg, { subject: meeting.subject, scheduled: meetingDateStr, target: targetDateStr, isScheduledInRange });
             
             // For now, include all meetings scheduled in range
             // The attendance filtering will happen during attendance record processing
@@ -515,16 +538,10 @@ export async function fetchUserMeetings(userId: string): Promise<{ meetings: Mee
                 meeting.timeEntryDate = meetingDateStr;
                 return true;
             }
-            
-            // For meetings scheduled outside the range, we'll still process them if they have online meeting info
-            // This handles the case where a meeting was scheduled on a different date but attended on the target date
-            if (meeting.onlineMeeting?.joinUrl) {
-                console.log(`📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', hasOnlineMeeting: true, willCheckAttendance: true }`);
-                meeting.timeEntryDate = undefined; // Will be set during attendance processing
-                return true;
-            }
-            
-            console.log(`📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', excluded: true }`);
+
+            const excludedMsg = `📅 AGENT DATE FILTER: ${meeting.subject || 'Untitled'} { scheduled: '${meetingDateStr}', target: '${targetDateStr}', excluded: true }`;
+            console.log(excludedMsg);
+            logDebug('date_filter_excluded', excludedMsg, { subject: meeting.subject, scheduled: meetingDateStr, target: targetDateStr });
             return false;
         });
 
