@@ -1337,7 +1337,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                             />
                           </TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
-                          <TableHead className="sticky top-0 bg-background z-10">Schedule Date and Time</TableHead>
+                          <TableHead className="sticky top-0 bg-background z-10">{source === 'ai-agent' ? 'Attended Meeting Date' : 'Schedule Date and Time'}</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Meeting Attended Duration</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                           <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>
@@ -1423,7 +1423,7 @@ export function MeetingMatches({ summary, matches, onMeetingPosted, postedMeetin
                           />
                         </TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Name</TableHead>
-                        <TableHead className="sticky top-0 bg-background z-10">Schedule Date and Time</TableHead>
+                        <TableHead className="sticky top-0 bg-background z-10">{source === 'ai-agent' ? 'Attended Meeting Date' : 'Schedule Date and Time'}</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Meeting Attended Duration</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Intervals Task</TableHead>
                         <TableHead className="sticky top-0 bg-background z-10">Confidence</TableHead>

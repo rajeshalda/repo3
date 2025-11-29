@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/use-toast"
 
 interface DateRangePickerProps {
   dateRange: DateRange | undefined
@@ -30,28 +31,29 @@ export function DateRangePicker({
   variant = "default",
   disabled = false,
 }: DateRangePickerProps) {
+  const { toast } = useToast()
+
   // Calculate date restrictions - only restrict past dates to last 30 days, allow future dates
   const today = new Date()
   const thirtyDaysAgo = subDays(today, 30)
-  
+
   // Internal state for temporary date selections
   const [startDate, setStartDate] = React.useState<Date | undefined>(dateRange?.from)
   const [endDate, setEndDate] = React.useState<Date | undefined>(dateRange?.to)
-  
+
   // Update internal state when external dateRange changes
   React.useEffect(() => {
     setStartDate(dateRange?.from)
     setEndDate(dateRange?.to)
   }, [dateRange])
-  
+
   const handleSearch = () => {
-    if (startDate && endDate) {
-      onDateRangeChange({ from: startDate, to: endDate })
-    } else if (startDate) {
-      onDateRangeChange({ from: startDate, to: undefined })
-    } else {
-      onDateRangeChange(undefined)
+    if (!startDate || !endDate) {
+      toast.error("Please select both Start Date and End Date to search for meetings.")
+      return
     }
+
+    onDateRangeChange({ from: startDate, to: endDate })
   }
   
   const handleClear = () => {
@@ -136,7 +138,7 @@ export function DateRangePicker({
         {/* Search Button */}
         <Button
           onClick={handleSearch}
-          disabled={!startDate || disabled}
+          disabled={!startDate || !endDate || disabled}
           size="sm"
         >
           <Search className="mr-2 h-4 w-4" />
@@ -166,7 +168,7 @@ export function DateRangePicker({
         {/* Start Date */}
         <div className="space-y-2">
           <Label htmlFor="start-date" className="text-sm font-medium">
-            Start Date
+            Start Date <span className="text-red-500">*</span>
           </Label>
           <Popover>
             <PopoverTrigger asChild>
@@ -201,7 +203,7 @@ export function DateRangePicker({
         {/* End Date */}
         <div className="space-y-2">
           <Label htmlFor="end-date" className="text-sm font-medium">
-            End Date
+            End Date <span className="text-red-500">*</span>
           </Label>
           <Popover>
             <PopoverTrigger asChild>
@@ -237,7 +239,7 @@ export function DateRangePicker({
           <Label className="text-sm font-medium opacity-0">Search</Label>
           <Button
             onClick={handleSearch}
-            disabled={!startDate || disabled}
+            disabled={!startDate || !endDate || disabled}
             className="w-full"
           >
             <Search className="mr-2 h-4 w-4" />
