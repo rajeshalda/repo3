@@ -111,9 +111,12 @@ export function AIAgentView() {
     unmatched: 0
   });
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { error, success, toast } = useToast();
+  const { error, success, toast, dismiss } = useToast();
   const [isCancelling, setIsCancelling] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Toast ID for AI Agent status notifications to prevent duplicates
+  const AI_AGENT_TOAST_ID = 'ai-agent-status';
 
   const addLog = (message: string, type: 'info' | 'error' | 'success' = 'info') => {
     setLogs(currentLogs => [...currentLogs, {
@@ -774,12 +777,15 @@ export function AIAgentView() {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
+        // Dismiss previous AI Agent notification before showing new one
+        dismiss(AI_AGENT_TOAST_ID);
+
         if (enabled) {
           addLog('AI Agent enabled - will run continuously in the background', 'success');
-          success('AI Agent enabled and will run even when browser is closed');
+          success('AI Agent enabled and will run even when browser is closed', { id: AI_AGENT_TOAST_ID });
         } else {
           addLog('AI Agent disabled', 'info');
-          success('AI Agent disabled');
+          success('AI Agent disabled', { id: AI_AGENT_TOAST_ID });
         }
       } else {
         error(`Failed to ${enabled ? 'enable' : 'disable'} AI Agent: ${data.error}`);
