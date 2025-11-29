@@ -390,7 +390,7 @@ export async function POST(request: Request) {
     }
     console.log('Total available tasks:', allTasks.length);
     
-    // Filter tasks to only show those assigned to the current user and not closed
+    // Filter tasks to include those assigned to, followed by, or owned by the current user (and not closed)
     console.log(`Filtering tasks for user with personid: ${currentUser.personid}`);
     const tasks = allTasks.filter((task: any) => {
       // Check if task is not closed
@@ -398,26 +398,54 @@ export async function POST(request: Request) {
       if (!isNotClosed) {
         return false;
       }
-      
-      // Skip tasks with no assigneeid
-      if (!task.assigneeid) {
-        return false;
+
+      const normalizedPersonId = String(currentUser.personid).trim();
+
+      // Check if user is assigned to this task
+      let isAssignedToUser = false;
+      if (task.assigneeid) {
+        const assignees = task.assigneeid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+        isAssignedToUser = assignees.some((id: string) => {
+          const normalizedId = id.trim();
+          return normalizedId === normalizedPersonId ||
+                 Number(normalizedId) === Number(normalizedPersonId);
+        });
       }
-      
-      // Check if assigneeid is a string containing the user's personid
-      const assignees = task.assigneeid.split(',');
-      
-      // Try different matching methods for personid comparison
-      const isAssignedToUser = assignees.some((id: string) => {
-        return id.trim() === currentUser.personid || 
-               id.trim() === String(currentUser.personid) || 
-               Number(id.trim()) === Number(currentUser.personid);
-      });
-      
-      return isAssignedToUser;
+
+      // Check if user is a follower of this task
+      let isFollower = false;
+      if (task.followerid) {
+        const followers = task.followerid.split(/[,\s]+/).filter((id: string) => id.trim() !== '');
+        isFollower = followers.some((id: string) => {
+          const normalizedId = id.trim();
+          return normalizedId === normalizedPersonId ||
+                 Number(normalizedId) === Number(normalizedPersonId);
+        });
+      }
+
+      // Check if user is the owner of this task
+      let isOwner = false;
+      if (task.ownerid) {
+        const normalizedOwnerId = String(task.ownerid).trim();
+        isOwner = normalizedOwnerId === normalizedPersonId ||
+                  Number(normalizedOwnerId) === Number(normalizedPersonId);
+      }
+
+      // Include task if user has any relationship to it
+      const hasRelationship = isAssignedToUser || isFollower || isOwner;
+
+      if (hasRelationship) {
+        const relationships = [];
+        if (isAssignedToUser) relationships.push('assigned');
+        if (isFollower) relationships.push('follower');
+        if (isOwner) relationships.push('owner');
+        console.log(`Task ${task.id} - User has relationship: ${relationships.join(', ')}`);
+      }
+
+      return hasRelationship;
     });
     
-    console.log(`Filtered from ${allTasks.length} to ${tasks.length} tasks assigned to the current user and not closed`);
+    console.log(`Filtered from ${allTasks.length} to ${tasks.length} tasks (assigned to, followed by, or owned by the current user and not closed)`);
 
     // Initialize Azure OpenAI
     const openai = new AzureOpenAIClient();
