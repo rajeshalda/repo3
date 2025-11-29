@@ -1364,7 +1364,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <footer className="fixed bottom-0 left-0 right-0 py-2 text-center text-xs text-muted-foreground bg-background border-t z-10">
-            <span className="opacity-70">v2.2.6  Powered by GPT-5  © 2025 NathCorp Inc.</span>
+            <span className="opacity-70">v2.2.7  Powered by GPT-5  © 2025 NathCorp Inc.</span>
           </footer>
         </main>
       </div>
